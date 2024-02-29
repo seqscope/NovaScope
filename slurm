@@ -1,1 +1,0 @@
-../../from_nge_to_cartoscope/ScopeFlow/slurm/
