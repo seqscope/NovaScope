@@ -15,8 +15,8 @@ import logging.handlers
 
 # snakemake dir and job dir
 smk_name="Novascope"
-#smk_dir = os.path.dirname(workflow.snakefile)  
-smk_dir="/nfs/turbo/sph-hmkang/index/data/weiqiuc/from_fastq_to_nge/NovaScope"
+smk_dir = os.path.dirname(workflow.snakefile)  
+#smk_dir="/nfs/turbo/sph-hmkang/index/data/weiqiuc/NovaScope"
 job_dir = os.getcwd()
 
 local_scripts   = os.path.join(smk_dir,"scripts")

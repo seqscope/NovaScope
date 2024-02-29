@@ -1,0 +1,40 @@
+
+job:
+  output_path: "/nfs/turbo/umms-leeju/v5"
+  specie: "mouse"
+
+input_data:
+  - uid: "N3-B08C_mouse_testrun_default"
+    source:
+      - flowcell: N3-HG5MC
+        section: B08Ctest
+        lane: 3     #If null, the pipeline will impute lane by the last letter in {section} as A:1, B:2, C:3, D:4.
+        seq1st:
+          - prefix: null  # When missing, the prefix will be filled with f"L{lane}"
+            fastq: "/nfs/turbo/umms-leeju/NGST/1stSeq/AGC-NOVASEQ.fastqs/9203-AP/230914_A00437_0746_AHG5MCDSX7/Undetermined_S0_L003_R1_001.fastq.gz"
+        seq2nd:
+          - prefix: N3_B08C_v1_filt4test
+            fastq_R1: "/nfs/turbo/sph-hmkang/index/tmp/testdata/filt4test.9748-YK-3_CGAGGCTG_S3_R1_001.fastq.gz"
+            fastq_R2: "/nfs/turbo/sph-hmkang/index/tmp/testdata/filt4test.9748-YK-3_CGAGGCTG_S3_R2_001.fastq.gz"
+          - prefix: N3_B08C_v2a_filt4test
+            fastq_R1: "/nfs/turbo/sph-hmkang/index/tmp/testdata/filt4test.9952-AP-1_S14_R1_001.fastq.gz"
+            fastq_R2: "/nfs/turbo/sph-hmkang/index/tmp/testdata/filt4test.9952-AP-1_S14_R2_001.fastq.gz"
+        seq2_version: "v12a"  # For versioning different input seq2 data.
+
+preprocess:
+  fastq2sbcd:
+    format: DraI31  #Use DraI31 for N3 and DraI32 for the rest.
+    layout: "/nfs/turbo/sph-hmkang/index/data/weiqiuc/NovaScope_local/testrun/nova6000.section.info.v2-for_B08C_test.tsv"
+  nmatch:
+    skip_sbcd: 0
+  #visualization:
+  #  drawxy:
+  #    coord_per_pixel: 1000
+  #    intensity_per_obs: 50
+  #    icol_x: 3
+  #    icol_y: 4
+  #  rgb:
+  #    max_scale: 50
+  #    resolution: 1000
+
+env: /nfs/turbo/sph-hmkang/index/data/weiqiuc/env
