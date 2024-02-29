@@ -1,0 +1,1 @@
+../versions/stable/from_fastq_to_nge.smk
