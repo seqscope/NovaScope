@@ -1,0 +1,52 @@
+#============================
+#
+# This configure file is used for `snakemake --profile`.
+#
+# * Note, the option --cluster-config is deprecated.
+# * This config file is based on [smk-simple-slurm](https://github.com/jdblischak/smk-simple-slurm) instead of the 
+#   the more comprehensive [official Snakemake Slurm profile](https://github.com/Snakemake-Profiles/slurm).
+# * It was suggested to pass a simple script (see extras/) to --cluster-status to handle the job statuses TIMEOUT and CANCELED
+
+# use mem for align step, given the other two only used 1 cpu per task.
+cluster:
+  mkdir -p logs/{rule}/ &&
+  sbatch
+    --job-name={rule}_{wildcards}
+    --output=logs/{rule}/{rule}___{wildcards}___%j.out
+    --error=logs/{rule}/{rule}___{wildcards}___%j.err
+    --account={resources.account}
+    --partition={resources.partition}
+    --mem={resources.mem}
+    --time={resources.time}
+    --cpus-per-task={threads}
+    --parsable
+    --nodes={resources.nodes}
+
+default-resources:
+  - partition="standard"
+  - mem="6500MB"
+  - time="05:00:00"
+  - nodes=1
+  - account="leeju0" 
+
+jobs: 9                        # the max num of jobs to be submitted at a time
+latency-wait: 120               # wait given seconds if an output file of a job is not present after the job finished. The default val is 5(s) but my tests show 5s does not work so well. Try 60 or more.
+local-cores: 20                 # use at most 10 cores on the head node
+restart-times: 0
+max-jobs-per-second: 20
+keep-going: True
+rerun-incomplete: True
+printshellcmds: True
+
+#scheduler: greedy
+
+use-conda: True
+conda-frontend: conda
+
+# Slurm status monitor
+# Snakemake should be able to track your jobs by default. However, there is a potential that your jobs will fail silently. 
+# So, this is a preventative measure that monitors the task status with a custom script (from smk-simple-slurm).
+# To make this work, you'll need to add `--parsable` to your sbatch command.
+#cluster-status: /nfs/turbo/sph-hmkang/index/data/weiqiuc/slurm/status-sacct.sh
+#cluster-status: /nfs/turbo/sph-hmkang/index/data/weiqiuc/slurm/slurm-status.py
+#max-status-checks-per-second: 30

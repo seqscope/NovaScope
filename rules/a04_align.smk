@@ -55,7 +55,7 @@ rule a04_align:
         dge_vl_amb  = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{specie_with_seq2v}","sttoolsSolo.out", "Velocyto", "raw", "ambiguous.mtx.gz"),
     params:
         bam_dir        = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{specie_with_seq2v}"),
-        skip_sbcd      = config.get("preprocess", {}).get("nmatch", {}).get('skip_sbcd', 0), # Set 1 for N3-HG5MC, 0 for others.
+        skip_sbcd      = get_skip_sbcd(config), 
         match_len      = config.get("preprocess", {}).get("nmatch", {}).get('match_len', 27), 
         len_sbcd       = config.get("preprocess", {}).get("align", {}).get('len_sbcd', 30),
         min_match_len  = config.get("preprocess", {}).get("align", {}).get('min_match_len', 30),
@@ -71,8 +71,11 @@ rule a04_align:
     run:
         shell(
         """
+        set -euo pipefail
+
         source {py39_env}/bin/activate
-        command time -v {py39} {sttools2}/scripts/align-reads.py \
+
+        command time -v {py39} {local_scripts}/rule_a4.align-reads.py \
             --skip-sbcd {params.skip_sbcd} \
             --spatula {spatula} \
             --fq1 {input.seq2_fqr1} \

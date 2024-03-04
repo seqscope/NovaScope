@@ -1,0 +1,14 @@
+tools:
+  spatula: "/nfs/turbo/sph-hmkang/tools/dev/spatula/bin/spatula" #"/nfs/turbo/sph-hmkang/weiqiuc/tools/spatula/bin/spatula"
+  samtools: "/nfs/turbo/sph-hmkang/bin/samtools"
+  star: "/nfs/turbo/sph-hmkang/bin/STAR_2_7_11a"
+ref:
+  align:
+    mouse: "/nfs/turbo/sph-hmkang/ref/cellranger/refdata-gex-mm39-ensembl110-custom/star_2_7_11a"
+    human: "/nfs/turbo/sph-hmkang/ref/cellranger/refdata-gex-GRCh38-2020-A/star_2_7_10a"
+    human_mouse: "/nfs/turbo/sph-hmkang/ref/cellranger/refdata-gex-GRCh38-and-mm10-2020-A/star_2_7_10a"
+    rat: "/nfs/turbo/sph-hmkang/ref/cellranger/refdata-gex-mRatBN7-custom/star_2_7_10a"
+    worm: "/nfs/turbo/sph-hmkang/ref/cellranger/refdata-gex-WBcel235-custom/star_2_7_10a"
+  geneinfo:
+    mouse: "/nfs/turbo/sph-hmkang/weiqiuc/tools/ficture/info/Mus_musculus.GRCm39.107.names.tsv.gz"
+    human: "/nfs/turbo/sph-hmkang/weiqiuc/tools/ficture/info/Homo_sapiens.GRCh38.107.names.tsv.gz"

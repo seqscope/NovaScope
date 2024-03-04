@@ -36,9 +36,6 @@ def end_logging():
 # 2. Load configs func:
 def load_configs(job_dir, config_files):
     """
-    Load configuration files from a list of tuples specifying the file names
-    and whether they are required or optional.
-
     Parameters:
     - job_dir (str): The directory where configuration files are located.
     - config_files (list of tuples): Each tuple contains:
@@ -70,8 +67,6 @@ def load_configs(job_dir, config_files):
 # 2. Check input func:
 def check_input(value, valid_options, label, lower=True):
     """
-    Validate if the given value, set of values, or DataFrame column exists in the set of valid options.
-
     Parameters:
     value (str, set, pd.Series): The value, set of values, or DataFrame column to be validated.
     valid_options (set): A set of valid options.
@@ -111,6 +106,33 @@ def check_input(value, valid_options, label, lower=True):
     else:
         raise TypeError(f"Unsupported type for 'value': {type(value)}")
 
+def check_path(file_path, work_dir, strict_mode=True):
+    """    
+    Parameters:
+    - file_path (str): The path to check.
+    - job_dir (str): The directory to consider as the base for relative paths.
+    - strict_mode (bool): If True, raise an error if the path doesn't exist.
+    
+    Returns:
+    - str: The validated path if exists.
+    
+    Raises:
+    - FileNotFoundError: If the path does not exist as either an absolute or a relative path.
+    """
+    if file_path is not None:
+        # Check if file_path is an absolute path and exists
+        if os.path.exists(file_path):
+            return os.path.realpath(file_path)
+        # Construct the full path if file_path is relative to job_dir
+        full_path = os.path.join(work_dir, file_path)
+        if os.path.exists(full_path):
+            return os.path.realpath(full_path)
+    # when the file path is not a valid full / relative path or is None 
+    if strict_mode:
+        raise FileNotFoundError(f"The path '{file_path}' does not exist as either an absolute or a relative path.")
+    else:
+        return None
+
 # 3. Create dict func:
 def create_dict(df, key_col, val_cols, dict_type, val_type):
     if isinstance(val_cols, list):
@@ -145,7 +167,7 @@ def create_dict(df, key_col, val_cols, dict_type, val_type):
     return my_dict2
 
 # 4. Create symlink func:
-def create_symlink(input_path, output_path, handle_missing_input="warn", handle_existing_output="replace"):
+def create_symlink(input_path, output_path, handle_missing_input="warn", handle_existing_output="replace", silent=False):
     """
     Create a symlink based on the provided parameters.
     - input_path: The source path for the symlink. If it doesn't exist, behavior is controlled by handle_missing_input.
@@ -155,39 +177,39 @@ def create_symlink(input_path, output_path, handle_missing_input="warn", handle_
     Returns:
         None
     """
+    def log_info(message):
+        if not silent:
+            logging.info(message)
+    
     # Check for missing input path
     if not os.path.exists(input_path):
         message = f"Missing input path: {input_path} for output {output_path}."
         if handle_missing_input == "warn":
-            logging.error("Error: " + message)
             raise ValueError(message)
         elif handle_missing_input == "skip":
-            logging.info("Skipping symlink creation: " + message)
+            log_info("Skipping symlink creation: " + message)
             return
         else:
-            logging.error("Invalid option for handle_missing_input.")
-            return
+            ValueError("Invalid option for handle_missing_input.")
+
     # Handle existing output path
     def handle_existing_symlink():
         if os.path.realpath(output_path) == os.path.realpath(input_path):
-            logging.info(f"Symlink '{output_path}' already exists with the same target. No action needed.")
+            log_info(f"Symlink '{output_path}' already exists with the same target. No action needed.")
             return True  # Indicates no further action is needed
         if handle_existing_output == "replace":
             os.unlink(output_path)
             return False  # Indicates further action is needed (symlink creation)
         elif handle_existing_output == "warn":
-            logging.error(f"Output symlink '{output_path}' points to a different target. Cannot replace without explicit instruction.")
-            raise ValueError("Different target for existing symlink.")
+            raise ValueError("Output symlink '{output_path}' points to a different target.")
         elif handle_existing_output == "skip":
-            logging.info("Existing symlink points to a different target. Skipping creation.")
+            log_info("Existing symlink points to a different target. Skipping creation.")
             return True
         else:
-            logging.error("Invalid option for handle_existing_output.")
             raise ValueError("Invalid handle_existing_output option.")
-
+        
     def handle_existing_non_symlink():
-        logging.error(f"Output path '{output_path}' exists and is not a symlink. Consider revising the output path.")
-        raise ValueError("Output path exists and is not a symlink.")
+        raise ValueError("Output path exists '{output_path}' and is not a symlink.")
 
     if os.path.exists(output_path):
         if os.path.islink(output_path):
@@ -196,12 +218,12 @@ def create_symlink(input_path, output_path, handle_missing_input="warn", handle_
         else:
             handle_existing_non_symlink()
             return
-    # Create symlink if all checks pass
+
     try:
         os.symlink(input_path, output_path)
-        logging.info(f"Created symlink from '{input_path}' to '{output_path}'.")
+        log_info(f"Created symlink from '{input_path}' to '{output_path}'.")
     except Exception as e:
-        logging.error(f"Failed to create symlink: {e}")
+        raise ValueError(f"Failed to create symlink: {e}")
 
 
 def create_symlinks_by_list(input_path, output_path, items, match_by_suffix=False):
@@ -240,9 +262,10 @@ def expand(path_pattern, product_args):
     return [path_pattern.format(**dict(zip(product_args.keys(), values)))
             for values in itertools.product(*product_args.values())]
 
-def expand_output_to_filenames(root, subfolders_patterns, product_args, required_output_flag, require_output):
+def expand_output_to_filenames(root, subfolders_patterns, product_args, required_output_flag, require_output, debug=False):
     expanded_lists = []
-    logging.info(f" - {required_output_flag}: ")
+    if debug:
+        logging.info(f" - {required_output_flag}: ")
     if required_output_flag in require_output:
         for pattern, extra_condition in subfolders_patterns:
             expanded_paths = []
@@ -250,36 +273,35 @@ def expand_output_to_filenames(root, subfolders_patterns, product_args, required
                 # Format each path with the correct combination of arguments
                 expanded_paths = list(set(expand(os.path.join(root, *pattern), product_args)))
                 expanded_lists.extend(expanded_paths)
-                logging.info(f"   - Fulfill the extra condition {extra_condition}, including {expanded_paths} in the output list.")
+                if debug: logging.info(f"   - Fulfill the extra condition {extra_condition}. Including {expanded_paths}...")
             else:
-                logging.info(f"   - Do not fulfill the extra condition {extra_condition}, skipping {expanded_paths}.")
+                if debug: logging.info(f"   - Do not fulfill the extra condition {extra_condition}. Skipping...")
     else:
-        logging.info(f"   - Not in the required output, skipping...")  # For debugging
-    logging.info(f"   => Returning: {expanded_lists if expanded_lists else None}")  # For debugging
+        if debug: logging.info(f"   - Not in the required output, skipping...")  # For debugging
+    if debug: logging.info(f"   => Returning: {expanded_lists if expanded_lists else None}")  # For debugging
     return expanded_lists if expanded_lists else None
 
-def list_outputfn_by_request(output_filename_conditions, request):
+def list_outputfn_by_request(output_filename_conditions, request, debug=False):
     requested_files = [
         output
         for cond in output_filename_conditions
-        for output in (expand_output_to_filenames(cond['root'], cond['subfolders_patterns'], cond['zip_args'], cond['flag'], request) or [])
+        for output in (expand_output_to_filenames(cond['root'], cond['subfolders_patterns'], cond['zip_args'], cond['flag'], request, debug=debug) or [])
     ]
 
     requested_files=list(set(requested_files))
+    # sort the list by alphabetical order
+    requested_files.sort()
 
-    logging.info(f' - The required output files includes: ')
+    #logging.info(f'\n')
+    logging.info(f'Summarizing required output files: ')
     for output_file_i in requested_files:
-        logging.info(f'    - {output_file_i}')
+        logging.info(f' - {output_file_i}')
     
     return requested_files
 
 
 # 6. Download file
 def download_file(url, local_path):
-    """
-    Download a file from a URL to a local path using wget.
-    Efficiently checks if the file already exists before downloading.
-    """
     if not os.path.exists(local_path):
         subprocess.run(["wget", "-O", local_path, url], check=True)
 
@@ -290,39 +312,8 @@ def configure_pandas_display():
     pd.set_option('display.width', None)        # auto-detect the display width for wrapping
     pd.set_option('display.max_colwidth', None) # display all content of each cell
 
-# 8. Get mu_scale (not in use)
-def get_mu_scale(platform):
-    """
-    Determine the mu_scale value based on the sequencing platform.
-    Parameters:
-    - platform (str): The name of the sequencing platform.
-    Returns:
-    - int or float: The mu_scale value corresponding to the given platform.
-    Raises:
-    - ValueError: If the platform is not recognized.
-    """
-    # Dictionary mapping platforms to their mu_scale values
-    platform_scales = {
-        "seqscope,hiseq": 1000,   # or 26.67 for sge-based pipeline, currently set for nge-based
-        "seqscope,novaseq": 1000,
-        "salus": 4000,
-        "stereoseq": 2,
-    }
-    # Check if platform is in the dictionary
-    if platform in platform_scales:
-        return platform_scales[platform]
-    else:
-        raise ValueError(f"Error: The current platform {platform} is not supported to provide a fixed mu_scale.")
-
 # 9. Create dirs and get paths
 def create_dirs_and_get_paths(main_dir, sub_dirnames):
-    """
-    Create subdirectories under the main root directory if they don't exist and return their paths.
-
-    :param main_dir: The main root directory path.
-    :param sub_dirnames: A list of subdirectory names to create under the main root.
-    :return: A dictionary with subdirectory names as keys and their full paths as values.
-    """
     sub_dirpaths = {}
     os.makedirs(main_dir, exist_ok=True)
     for sub_dirname_i in sub_dirnames:

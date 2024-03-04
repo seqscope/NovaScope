@@ -14,18 +14,20 @@ import datetime
 import logging.handlers
 
 # snakemake dir and job dir
-smk_name="Novascope"
+smk_name="NovaScope"
 smk_dir = os.path.dirname(workflow.snakefile)  
 #smk_dir="/nfs/turbo/sph-hmkang/index/data/weiqiuc/NovaScope"
 job_dir = os.getcwd()
 
 local_scripts   = os.path.join(smk_dir,"scripts")
 sys.path.append(local_scripts)
-from bricks import setup_logging, end_logging, load_configs, configure_pandas_display, create_symlink, list_outputfn_by_request, create_dirs_and_get_paths, create_dict
+from bricks import setup_logging, end_logging, configure_pandas_display, load_configs
+from bricks import check_input, check_path, create_dict, create_symlink, create_dirs_and_get_paths
+from bricks import list_outputfn_by_request
 
+# Set up display and log
 configure_pandas_display()
 
-# Set up Log
 setup_logging(job_dir,smk_name+"-preprocess")
 
 logging.info(f"1. Reading input:")
@@ -56,11 +58,8 @@ py39      = os.path.join(py39_env,  "bin",   "python")
 
 # - tools
 spatula         = os.path.join(env_dir, "tools", "spatula")
-sttools2        = os.path.join(env_dir, "tools", "sttools2")
 samtools        = os.path.join(env_dir, "tools", "samtools")
 star            = os.path.join(env_dir, "tools", "star")
-#cart            = os.path.join(env_dir, "tools", "cart") # Not used?
-
 
 #==============================================
 #
@@ -68,83 +67,137 @@ star            = os.path.join(env_dir, "tools", "star")
 #
 #==============================================
 logging.info(f"\n")
-logging.info(f"2. Basic config.")
+logging.info(f"2. Processing Config files.")
 
-def create_dirs_and_get_paths(main_dir, sub_dirnames):
-    """
-    Create subdirectories under the main root directory if they don't exist and return their paths.
-
-    :param main_dir: The main root directory path.
-    :param sub_dirnames: A list of subdirectory names to create under the main root.
-    :return: A dictionary with subdirectory names as keys and their full paths as values.
-    """
-    sub_dirpaths = {}
-    os.makedirs(main_dir, exist_ok=True)
-    for sub_dirname_i in sub_dirnames:
-        sub_dir = os.path.join(main_dir, sub_dirname_i)
-        os.makedirs(sub_dir, exist_ok=True)
-        sub_dirpaths[sub_dirname_i] = sub_dir
-    return sub_dirpaths
-
-main_root = config["job"]["output_path"]
-main_dirs = create_dirs_and_get_paths(main_root, ["seq1st", "seq2nd", "align"])
+# Output
+main_root = config["output"]
+main_dirs = create_dirs_and_get_paths(main_root, ["seq1st", "seq2nd", "align", "histology"])
 logging.info(f" - Output root: {main_root}")
 
-# Basic info
-specie = config["job"]["specie"]
+# Flowcell
+flowcell = config["input"]["flowcell"]
+assert flowcell is not None, "Provide a valid Flowcell."
+logging.info(f" - Flowcell: {flowcell}")
 
-# Seq1 and Seq2
-seq1_data = [
-    (item['uid'], source['flowcell'], source['section'], source.get('lane',None),seq1.get('prefix'), seq1.get('fastq'))
-    for item in config['input_data']
-    for source in item['source']
-    for seq1 in source.get('seq1st', [])
-]
-df_seq1 = pd.DataFrame(seq1_data, columns=['uid', 'flowcell', 'section', 'lane', 'seq1_prefix', 'seq1_fq_raw'])
-df_seq1["lane"] = df_seq1.apply(lambda row: row["lane"] if pd.notna(row["lane"]) else   # impute lane by section
-                                {"A": "1", "B": "2", "C": "3", "D": "4"}.get(row["section"][-1], pd.NA),
-                                axis=1)
-if df_seq1.loc[df_seq1["lane"].isna(), "section"].any(): 
-    raise ValueError(f"There are sections missing lane.")
-df_seq1["lane"] = df_seq1["lane"].astype(str)
-df_seq1["seq1_prefix"] = df_seq1["seq1_prefix"].fillna("L" + df_seq1["lane"].astype(str)) # impute prefix by lane
+# Section
+section = config["input"]["section"]
+assert section is not None, "Provide a valid Section."
+logging.info(f" - Section: {section}")
 
-sc2ln       = create_dict(df_seq1, key_col="section", val_cols="lane",         dict_type="val", val_type="str")
-sc2seq1     = create_dict(df_seq1, key_col="section", val_cols="seq1_prefix",  dict_type="val", val_type="str")
+# Specie
+specie = check_input(config["input"]["specie"], {"human","human_mouse","mouse","rat","worm"}, "specie", lower=False)
+logging.info(f" - Specie: {specie}")
 
-seq2_data = [
-    (item['uid'], source['flowcell'], source['section'], source['seq2_version'], seq2.get('prefix'), seq2.get('fastq_R1'), seq2.get('fastq_R2'))
-    for item in config['input_data']
-    for source in item['source']
-    for seq2 in source.get('seq2nd', [])
-]
-df_seq2 = pd.DataFrame(seq2_data, columns=['uid', 'flowcell', 'section', 'seq2_version', 'seq2_prefix', 'seq2_fqr1_raw', 'seq2_fqr2_raw'])
-df_seq2["specie_with_seq2v"] = df_seq2.apply(lambda row: specie if pd.isna(row["seq2_version"]) else f"{specie}_{row['seq2_version']}", axis=1)
+# Request
+request=check_input(config.get("request",["nge-per-section"]),{"nge-per-section","hist-per-section"}, "request", lower=False)
+logging.info(f" - Request: {request}")
+
+# Label: if not provided, use specie as label, else use {specie}_{label}
+label = config["input"].get("label", None)
+label = f"{specie}_{label}" if label is not None else specie
+logging.info(f" - Label: {label}")
+
+# Seq1 
+logging.info(f" - Seq1")
+
+df_seq1 = pd.DataFrame({
+    'flowcell': [flowcell],
+    'section': [section],
+    'seq1_prefix': [config.get('input', {}).get('seq1st', {}).get('prefix', pd.NA)],
+    'seq1_fq_raw': [config.get('input', {}).get('seq1st', {}).get('fastq', pd.NA)],
+})
+
+if pd.isna(df_seq1["seq1_prefix"]).any():
+    df_seq1["lane"] = config.get('input', {}).get('lane', {"A": "1", "B": "2", "C": "3", "D": "4"}.get(section[-1], pd.NA))
+    if pd.isna(df_seq1["lane"]).any():
+        raise ValueError("There are sections missing lane.")
+    df_seq1["seq1_prefix"] = df_seq1["seq1_prefix"].fillna("L" + df_seq1["lane"].astype(str)) # Prefix, imputed by lane
+
+df_seq1['seq1_fq_raw'] = df_seq1['seq1_fq_raw'].apply(lambda x: check_path(x, job_dir)) # Check path for each fastq file and update the path when it is a relative path. 
+
+sc2seq1     = create_dict(df_seq1, key_col="section", val_cols="seq1_prefix", dict_type="val", val_type="str")
+
+logging.info("     Seq1 input summary table:\n%s", df_seq1)
+
+# Seq2
+logging.info(f" - Seq2")
+df_seq2 = pd.DataFrame({
+    'flowcell': flowcell,
+    'section': section,
+    'seq2_prefix': [seq2.get('prefix') for seq2 in config.get('input', {}).get('seq2nd', [])],
+    'seq2_fqr1_raw': [check_path(seq2.get('fastq_R1'), job_dir) for seq2 in config.get('input', {}).get('seq2nd', [])],
+    'seq2_fqr2_raw': [check_path(seq2.get('fastq_R2'), job_dir) for seq2 in config.get('input', {}).get('seq2nd', [])],
+    "specie_with_seq2v": label
+})
 
 sc2seq2 = create_dict(df_seq2, key_col="section", val_cols="seq2_prefix",  dict_type="set", val_type="str")
 
-##==============================================
-##
-## Tentative code
-##
-##==============================================
+logging.info("     Seq2 input summary table:\n%s", df_seq2)
 
-df_seq1["seq1_fq_std"] = df_seq1.apply(lambda row: os.path.join(main_dirs["seq1st"], row["flowcell"], "fastqs", row["seq1_prefix"]+".fastq.gz"), axis=1)
-for _, row in df_seq1.iterrows():
-    os.makedirs(os.path.dirname(row["seq1_fq_std"]), exist_ok=True)
-    create_symlink(row["seq1_fq_raw"], row["seq1_fq_std"])
-logging.info(df_seq1)
+# STD fq files 
+if "nge-per-section" in request:
+    logging.info(f" - Standardzing fastq file names.")
 
-df_seq2["seq2_fqr1_std"]=df_seq2.apply(lambda row: os.path.join(main_dirs["seq2nd"],row["seq2_prefix"], row["seq2_prefix"]+".R1.fastq.gz"), axis=1)
-df_seq2["seq2_fqr2_std"]=df_seq2.apply(lambda row: os.path.join(main_dirs["seq2nd"],row["seq2_prefix"], row["seq2_prefix"]+".R2.fastq.gz"), axis=1)
-for _, row in df_seq2.iterrows():
-    os.makedirs(os.path.dirname(row["seq2_fqr1_std"]), exist_ok=True)
-    create_symlink(row["seq2_fqr1_raw"], row["seq2_fqr1_std"])
-    create_symlink(row["seq2_fqr2_raw"], row["seq2_fqr2_std"])
+    logging.info("     Creating symlinks to standardize the file names for seq1.")
+    df_seq1["seq1_fq_std"] = df_seq1.apply(lambda row: os.path.join(main_dirs["seq1st"], row["flowcell"], "fastqs", row["seq1_prefix"]+".fastq.gz"), axis=1)
+    for _, row in df_seq1.iterrows():
+        os.makedirs(os.path.dirname(row["seq1_fq_std"]), exist_ok=True)
+        create_symlink(row["seq1_fq_raw"], row["seq1_fq_std"],silent=True)
 
-logging.info(df_seq2)
+    logging.info("     Creating symlinks to standardize the file names for seq2.")
+    df_seq2["seq2_fqr1_std"]=df_seq2.apply(lambda row: os.path.join(main_dirs["seq2nd"],row["seq2_prefix"], row["seq2_prefix"]+".R1.fastq.gz"), axis=1)
+    df_seq2["seq2_fqr2_std"]=df_seq2.apply(lambda row: os.path.join(main_dirs["seq2nd"],row["seq2_prefix"], row["seq2_prefix"]+".R2.fastq.gz"), axis=1)
+    for _, row in df_seq2.iterrows():
+        os.makedirs(os.path.dirname(row["seq2_fqr1_std"]), exist_ok=True)
+        create_symlink(row["seq2_fqr1_raw"], row["seq2_fqr1_std"],silent=True)
+        create_symlink(row["seq2_fqr2_raw"], row["seq2_fqr2_std"],silent=True)
 
-request="test-per-task"
+    # prepare the layout file for rgb figure if it is not provided.
+    rgb_layout=check_path(config.get("preprocess", {}).get("dge2sdge", {}).get('layout', "layout.1x1.tsv"), job_dir, strict_mode=False)
+    if rgb_layout is None:
+        rgb_layout=os.path.join(job_dir,"layout.1x1.tsv")
+        with open(rgb_layout, "w") as f:
+            f.write("lane\ttile\trow\tcol\n")
+            f.write(f"1\t1\t1\t1\n")
+    assert os.path.exists(rgb_layout), f"Please provide a valid layout file for rgb figure at {rgb_layout}."
+else:
+    rgb_layout=None
+
+# Histology
+# std e.g. 10XN3-B09A-human-hne.tif
+hist_res = config.get("histology",{}).get("resolution","10")
+flowcell_abbr = config.get("input",{}).get("flowcell").split("-")[0]
+hist_type = check_input(config.get("histology",{}).get("figtype","hne"), ["hne","dapi","fl"], "Histology figure type")
+
+hist_std_fn = f"{hist_res}X{flowcell_abbr}-{section}-{specie}-{hist_type}.tif"
+hist_std_dir = os.path.join(main_dirs["histology"], flowcell, section, specie)
+os.makedirs(hist_std_dir, exist_ok=True)
+
+hist_std_tif = os.path.join(main_dirs["histology"], flowcell, section, specie, hist_std_fn)
+
+if "hist-per-section" in request:
+    logging.info(f" - Histology file: Loading")
+    
+    # raw tif
+    hist_raw_tif = config.get("input",{}).get('histology', None)
+
+    if hist_raw_tif is not None:
+        hist_raw_tif = check_path(hist_raw_tif,job_dir)
+        logging.info(f"     Histology file: {os.path.realpath(hist_raw_tif)}")
+        create_symlink(hist_raw_tif, hist_std_tif, handle_existing_output="replace", silent=True)
+    elif os.path.exists(hist_std_tif):
+        logging.info(f"     Histology file: {os.path.realpath(hist_std_tif)}")
+    else:
+        raise ValueError(f"Please provide a valid histology file.")
+
+    sc2hist = {section: hist_std_tif}
+
+else:
+    hist_std_tif=None
+    sc2hist = {}
+    logging.info(f" - Histology file: Skipping.")
+
+#hist_request = lambda: "hist-per-section" in request
 #==============================================
 #
 # 3. A dummy rule to collect results
@@ -152,16 +205,13 @@ request="test-per-task"
 # - Please note that The order of results affects the order of execution.
 #
 #==============================================
+logging.info(f"\n")
 logging.info(f"3. Required output filenames.")
 
-# Log the entire DataFrame
-lda_train = lambda: train_model == "LDA"
-histology_request = lambda: histology_type is not None
-
 output_filename_conditions = [
-    # test run
+    # nge-per-section
     {
-        'flag': 'test-per-task',
+        'flag': 'nge-per-section',
         'root': main_dirs["align"],
         'subfolders_patterns': [
                                 (["{flowcell}", "{section}", "sge",   "{specie_with_seq2v}", "barcodes.tsv.gz"], None),
@@ -169,18 +219,33 @@ output_filename_conditions = [
                                 (["{flowcell}", "{section}", "sge",   "{specie_with_seq2v}", "matrix.mtx.gz"], None),
                                 (["{flowcell}", "{section}", "sge",   "{specie_with_seq2v}", "{flowcell}"+"."+"{section}"+"."+"{specie_with_seq2v}"+".gene_full_mito.png"], None),
                                 (["{flowcell}", "{section}", "sge",   "{specie_with_seq2v}", "{flowcell}"+"."+"{section}"+"."+"{specie_with_seq2v}"+".sge_match_sbcd.png"], None),
-                                (["{flowcell}", "{section}", "sge",   "{specie_with_seq2v}", "gene_visual.tar.gz"], None)
+                                (["{flowcell}", "{section}", "sge",   "{specie_with_seq2v}", "{flowcell}"+"."+"{section}"+"."+"{specie_with_seq2v}"+".gene_visual.tar.gz"], None),
+                                #(["{flowcell}", "{section}", "histology", "{specie_with_seq2v}", hist_std_tif], hist_request),
         ],
         'zip_args': {
             'flowcell':         df_seq1["flowcell"].values,
             'section':          df_seq1["section"].values,
-            'specie_with_seq2v': df_seq2["specie_with_seq2v"].values,
+            'specie_with_seq2v': df_seq2["specie_with_seq2v"].values,  
+            #'hist_std_tif':     hist_std_tif,     
         },
     },
+    # hist-per-section
+    {
+        'flag': 'hist-per-section',
+        'root': main_dirs["align"],
+        'subfolders_patterns': [
+                                (["{flowcell}", "{section}", "histology", "{specie_with_seq2v}", hist_std_fn], None),
+        ],
+        'zip_args': {
+            'flowcell':         df_seq1["flowcell"].values,
+            'section':          df_seq1["section"].values,
+            'specie_with_seq2v': df_seq2["specie_with_seq2v"].values,  
+            'hist_std_tif':     hist_std_fn,          
+        },
+    }
 ]
 
-requested_files=list_outputfn_by_request(output_filename_conditions, request)
-
+requested_files=list_outputfn_by_request(output_filename_conditions, request, debug=True)
 
 rule all:
     input:
@@ -193,6 +258,7 @@ end_logging()
 # 4. include all rules here
 #
 #==============================================
+
 include: "rules/a01_fastq2sbcd.smk"
 include: "rules/a02_sbcd2nbcd.smk"
 include: "rules/a03_nmatch.smk"
@@ -200,4 +266,7 @@ include: "rules/a04_align.smk"
 include: "rules/a05_dge2sdge.smk"
 
 include: "rules/b01_gene_visual.smk"
+
+if "hist-per-section" in request:
+    include: "rules/b02_hist_align.smk"
 

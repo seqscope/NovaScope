@@ -9,7 +9,7 @@ rule a05_dge2sdge:
         dge_gf_bcd    = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{specie_with_seq2v}","sttoolsSolo.out", "GeneFull", "raw", "barcodes.tsv.gz"),
         dge_gf_ftr    = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{specie_with_seq2v}","sttoolsSolo.out", "GeneFull", "raw", "features.tsv.gz"),
         dge_gf_mtx    = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{specie_with_seq2v}","sttoolsSolo.out", "GeneFull", "raw", "matrix.mtx.gz"),
-        dge_gn_mtx    = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{specie_with_seq2v}","sttoolsSolo.out", "Gene", "raw", "matrix.mtx.gz"),
+        dge_gn_mtx    = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{specie_with_seq2v}","sttoolsSolo.out", "Gene",     "raw", "matrix.mtx.gz"),
         dge_vl_spl    = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{specie_with_seq2v}","sttoolsSolo.out", "Velocyto", "raw", "spliced.mtx.gz"),
         dge_vl_uns    = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{specie_with_seq2v}","sttoolsSolo.out", "Velocyto", "raw", "unspliced.mtx.gz"),
         dge_vl_amb    = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{specie_with_seq2v}","sttoolsSolo.out", "Velocyto", "raw", "ambiguous.mtx.gz"),
@@ -17,10 +17,10 @@ rule a05_dge2sdge:
         sdge_bcd      = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "sge", "{specie_with_seq2v}", "barcodes.tsv.gz"),
         sdge_ftr      = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "sge", "{specie_with_seq2v}", "features.tsv.gz"),
         sdge_mtx      = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "sge", "{specie_with_seq2v}", "matrix.mtx.gz"),
-        sdge_rgb_png = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "sge", "{specie_with_seq2v}", "{flowcell}"+"."+"{section}"+"."+"{specie_with_seq2v}"+".gene_full_mito.png"),
+        sdge_rgb_png  = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "sge", "{specie_with_seq2v}", "{flowcell}"+"."+"{section}"+"."+"{specie_with_seq2v}"+".gene_full_mito.png"),
         sdge_3in1_png = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "sge", "{specie_with_seq2v}", "{flowcell}"+"."+"{section}"+"."+"{specie_with_seq2v}"+".sge_match_sbcd.png"),
     params:
-        layout            = config.get("preprocess", {}).get("dge2sdge", {}).get('layout', "/nfs/turbo/umms-leeju/experimental/nova/nbcds/layout.1x1.tsv"),
+        rgb_layout       = rgb_layout,
         visual_max_scale = config.get("preprocess", {}).get("visualization", {}).get("rgb",{}).get("max_scale", 50),
         visual_res       = config.get("preprocess", {}).get("visualization", {}).get("rgb",{}).get("resolution", 1000),
     resources: 
@@ -57,8 +57,8 @@ rule a05_dge2sdge:
             --out {output.sdge_3in1_png} 
 
         echo -e "Creating rgb image...\\n"
-        command time -v {py39} {sttools2}/scripts/rgb-gene-image.py \
-            --layout {params.layout} \
+        command time -v {py39} {local_scripts}/rgb-gene-image.py \
+            --layout {params.rgb_layout} \
             --sdge {sdge_dir} \
             --out {output.sdge_rgb_png} \
             -r _all:1:2 \

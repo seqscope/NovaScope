@@ -1,6 +1,5 @@
 rule a02_sbcd2nbcd:
     input:
-        sbcd_dir         = lambda wildcards: os.path.join(main_dirs["seq1st"], wildcards.flowcell, "sbcds", sc2seq1[wildcards.section]),
         sbcd_mnfst       = lambda wildcards: os.path.join(main_dirs["seq1st"], wildcards.flowcell, "sbcds", sc2seq1[wildcards.section], "manifest.tsv"),
     output:
         nbcd_tsv         = os.path.join(main_dirs["seq1st"], "{flowcell}", "nbcds", "{section}", "1_1.sbcds.sorted.tsv.gz"),
@@ -10,14 +9,14 @@ rule a02_sbcd2nbcd:
         # general params
         section          = lambda wildcards: wildcards.section,
         # sbcd.part
-        sbcd_part_layout = lambda wildcards: os.path.join(main_dirs["seq1st"], wildcards.flowcell, "sbcds.part", "L" + sc2ln[wildcards.section], wildcards.section, wildcards.section+".layout.tsv"),
-        sbcd_part_mnfst  = lambda wildcards: os.path.join(main_dirs["seq1st"], wildcards.flowcell, "sbcds.part", "L" + sc2ln[wildcards.section], wildcards.section, "manifest.tsv"),
+        input_sbcd_part_layout = check_path(config.get('input', {}).get('seq1st', {}).get('sbcd_layout', None), job_dir, strict_mode=False),
+        sbcd_part_layout       = lambda wildcards: os.path.join(main_dirs["seq1st"], wildcards.flowcell, "sbcds.part", sc2seq1[wildcards.section], wildcards.section, wildcards.section+".layout.tsv"),
+        sbcd_part_mnfst        = lambda wildcards: os.path.join(main_dirs["seq1st"], wildcards.flowcell, "sbcds.part", sc2seq1[wildcards.section], wildcards.section, "manifest.tsv"),
         # combine 
-        layout           = config.get("preprocess", {}).get("sbcd2nbcd", {}).get('layout', "/nfs/turbo/sph-hmkang/index/data/nova6000.section.info.v2.tsv"),  #Deprecated: /nfs/turbo/sph-hmkang/index/data/nova.part.dict.tsv
-        gap_row          = config.get("preprocess", {}).get("sbcd2nbcd", {}).get('gap_row', 0.0517),
-        gap_col          = config.get("preprocess", {}).get("sbcd2nbcd", {}).get('gap_col', 0.0048),
-        dup_maxnum       = config.get("preprocess", {}).get("sbcd2nbcd", {}).get('dup_maxnum', 1),
-        dup_maxdist      = config.get("preprocess", {}).get("sbcd2nbcd", {}).get('dup_maxdist', 1),
+        gap_row             = config.get("preprocess", {}).get("sbcd2nbcd", {}).get('gap_row', 0.0517),
+        gap_col             = config.get("preprocess", {}).get("sbcd2nbcd", {}).get('gap_col', 0.0048),
+        dup_maxnum          = config.get("preprocess", {}).get("sbcd2nbcd", {}).get('dup_maxnum', 1),
+        dup_maxdist         = config.get("preprocess", {}).get("sbcd2nbcd", {}).get('dup_maxdist', 1),
         # visualization
         visual_coord_per_pixel    = config.get("preprocess", {}).get("visualization", {}).get("drawxy",{}).get("coord_per_pixel", 1000),
         visual_intensity_per_obs  = config.get("preprocess", {}).get("visualization", {}).get("drawxy",{}).get("intensity_per_obs", 50),
@@ -27,22 +26,39 @@ rule a02_sbcd2nbcd:
         time = "5:00:00",
         mem  = "6500m"
     run:
+        sbcd_dir         = os.path.dirname(input.sbcd_mnfst)
         nbcd_dir         = os.path.dirname(output.nbcd_tsv)
         sbcd_part_dir    = os.path.dirname(params.sbcd_part_layout)
+
+        os.makedirs(sbcd_part_dir, exist_ok=True)
+
+        # s1a
+        if params.input_sbcd_part_layout is not None:
+            assert os.path.exists(params.input_sbcd_part_layout), f"Provided sbcd layout file does not exist: {params.input_sbcd_part_layout}."
+            print(f"Using the provided sbcd lay out file: {params.input_sbcd_part_layout}.")
+            print(f"Linking {params.sbcd_part_layout} to {params.sbcd_part_layout}.")
+            create_symlink( input_path=params.input_sbcd_part_layout, 
+                            output_path=params.sbcd_part_layout,  
+                            handle_missing_input="warn",  
+                            handle_existing_output="replace",  
+                            silent=True)
+            args_layout_input = f"--input {params.input_sbcd_part_layout} --input_type layout "
+        else:
+            sbcd_layout_summary = check_path(config.get("preprocess", {}).get("sbcd2nbcd", {}).get('sbcd_layout_summary',"nova6000.section.info.v2.tsv"),job_dir),
+            args_layout_input = f"--input {sbcd_layout_summary} --input_type summary "
+            print(f"Using the provided sbcd lay out summary file: {sbcd_layout_summary}")
         shell(
         """
-        #module load python/3.9.12
         module load imagemagick/7.1.0-25.lua
-
         source {py39_env}/bin/activate
     
-        echo -e "Creating sbcd.part for the section.\\n"
-        command time -v {py39} {local_scripts}/rule-a2_sbcd_section_from_lane.py \
-            --input_layout {params.layout} \
-            --sbcd_dir {input.sbcd_dir} \
+        # s1b
+        command time -v {py39} {local_scripts}/rule_a2.sbcd_section_from_lane.py \
+            --sbcd_dir {sbcd_dir} \
             --sbcd_part_dir {sbcd_part_dir} \
-            --section {params.section}
+            --section {params.section} {args_layout_input}
 
+        # s2
         echo -e "Combinding sbcds.part to ncbds.\\n"
         command time -v  {spatula} combine-sbcds \
             --layout {params.sbcd_part_layout} \
@@ -54,6 +70,7 @@ rule a02_sbcd2nbcd:
             --max-dup {params.dup_maxnum} \
             --max-dup-dist-nm {params.dup_maxdist}
 
+        # s3
         echo -e "Runing draw-xy...\\n"
         command time -v  {spatula} draw-xy \
             --tsv {output.nbcd_tsv} \
