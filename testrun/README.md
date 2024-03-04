@@ -1,18 +1,49 @@
-# NovaScope Pipeline Test Run Guide
 
-This guide outlines the steps for a test run of the NovaScope pipeline using a small region from NovaSeq data.
+## 1 Download Input Data
 
-## 1: Download Sequencing Data
-Download the first and second sequencing data sets for the test run.
+### Example 1 - Regional Section Test Run
 
-Note: This is a tentative link.
+The input data originates from a specific, limited region of a section. 
 
+Download the first and second sequencing data sets from [here](https://www.dropbox.com/scl/fi/3egsr9nqc559e9hb45vik/B08Csub_20240301_raw.tar.gz?rlkey=z06xwb3v6ku19dp6br6mlsgkm&dl=0).
 
-## 2: Configure config_job.yaml
+No histology files is provided for this testrun.
 
-Prepare the config_job.yaml file to specify all inputs, outputs, and parameters. Modify the existing config_job.yaml file to suit your specific task and input data requirements.
+```
+# Define the $job_dir, with config_job.yaml and the downloaded input data.
+job_dir="$smk_dir/testrun/regional_section"  
 
-## 3: Execute NovaScope Pipeline
+mkdir -p  $job_dir && cd $job_dir
+
+```
+
+### Example 2 - Full Section Shallow Sequencing Test Run 
+
+The input data is from a full section.
+
+Download the first and second sequencing data sets from here. *TBC: Add the download link*
+
+```
+# Define the $job_dir, with config_job.yaml and the downloaded input data.
+job_dir="$smk_dir/testrun/full_section_shallow"  
+
+mkdir -p  $job_dir && cd $job_dir
+
+# Download histology file
+wget https://historef-sample-data.s3.amazonaws.com/sample/b08c/histology.tif
+```
+
+### Example 3 - Full Section Deep Sequencing Test Run 
+
+The input data is from a full section and it has been deeply sequenced.
+
+Download the first and second sequencing data sets from here. *TBC: Add the download link*
+
+## 2 Configure config_job.yaml
+
+Prepare the `config_job.yaml` file to specify all inputs, outputs, and parameters. Modify the existing `config_job.yaml` file to suit your specific task and input data requirements.
+
+## 3 Execute NovaScope Pipeline
 
 ### 3.1 Preliminary Steps
 
@@ -23,9 +54,6 @@ Performing a dry run and generating a rule graph are essential preliminary steps
     smk_dir=/nfs/turbo/sph-hmkang/index/data/weiqiuc/NovaScope
 
     cd $smk_dir
-
-    # Define the $job_dir, which has the config_job.yaml file created at the 2nd step. This will be used to store the log files.
-    job_dir="$smk_dir/testrun"  
 
     # (Optional but recommended) Give a dry run first.
     snakemake --dry-run -p --latency-wait 120 -s NovaScope.smk --rerun-triggers mtime --rerun-incomplete -d $job_dir

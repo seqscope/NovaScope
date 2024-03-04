@@ -167,61 +167,55 @@ def create_dict(df, key_col, val_cols, dict_type, val_type):
     return my_dict2
 
 # 4. Create symlink func:
-def create_symlink(input_path, output_path, handle_missing_input="warn", handle_existing_output="replace", silent=False):
-    """
-    Create a symlink based on the provided parameters.
-    - input_path: The source path for the symlink. If it doesn't exist, behavior is controlled by handle_missing_input.
-    - output_path: The destination path for the symlink.
-    - handle_missing_input: Determines action if input_path doesn't exist ('warn' to raise an error, 'skip' to ignore).
-    - handle_existing_output: Determines action if output_path exists and is a different symlink ('replace' to recreate, 'warn' to raise an error, 'skip' to ignore).
-    Returns:
-        None
-    """
-    def log_info(message):
-        if not silent:
-            logging.info(message)
-    
-    # Check for missing input path
-    if not os.path.exists(input_path):
-        message = f"Missing input path: {input_path} for output {output_path}."
-        if handle_missing_input == "warn":
-            raise ValueError(message)
-        elif handle_missing_input == "skip":
-            log_info("Skipping symlink creation: " + message)
-            return
-        else:
-            ValueError("Invalid option for handle_missing_input.")
+def log_info(message, silent):
+    """Log a message unless silenced."""
+    if not silent:
+        logging.info(message)
 
-    # Handle existing output path
-    def handle_existing_symlink():
-        if os.path.realpath(output_path) == os.path.realpath(input_path):
-            log_info(f"Symlink '{output_path}' already exists with the same target. No action needed.")
-            return True  # Indicates no further action is needed
-        if handle_existing_output == "replace":
-            os.unlink(output_path)
-            return False  # Indicates further action is needed (symlink creation)
-        elif handle_existing_output == "warn":
-            raise ValueError("Output symlink '{output_path}' points to a different target.")
-        elif handle_existing_output == "skip":
-            log_info("Existing symlink points to a different target. Skipping creation.")
+def check_missing_input(input_path, action_if_missing, output_path, silent):
+    """Handle scenarios where the input path is missing."""
+    if not os.path.exists(input_path):
+        message = f"Missing input path: {input_path}."
+        if action_if_missing == "warn":
+            raise ValueError(message)
+        elif action_if_missing == "skip":
+            log_info("Skipping symlink creation: " + message, silent)
             return True
         else:
-            raise ValueError("Invalid handle_existing_output option.")
-        
-    def handle_existing_non_symlink():
-        raise ValueError("Output path exists '{output_path}' and is not a symlink.")
+            raise ValueError("Invalid option for handle_missing_input.")
+    return False
 
-    if os.path.exists(output_path):
+def check_and_handle_existing_output(output_path, input_path, action_if_existing, silent):
+    """Handle scenarios where the output path already exists."""
+    if os.path.exists(output_path) or os.path.islink(output_path):
         if os.path.islink(output_path):
-            if handle_existing_symlink():
-                return  # Symlink exists with the same target or skipping creation
+            if os.readlink(output_path) != input_path or not os.path.exists(os.readlink(output_path)):
+                if action_if_existing == "replace":
+                    os.unlink(output_path)
+                    return False  # Indicates action is needed: recreate the symlink
+                elif action_if_existing == "warn":
+                    raise ValueError(f"Output symlink '{output_path}' exists and points to a different or missing target.")
+                elif action_if_existing == "skip":
+                    log_info(f"Skipping creation as existing symlink '{output_path}' points to a different or missing target.", silent)
+                    return True
+                else:
+                    raise ValueError("Invalid option for handle_existing_output.")
         else:
-            handle_existing_non_symlink()
-            return
+            raise ValueError(f"Output path '{output_path}' exists and is not a symlink.")
+        return False
+    return False  # Indicates action is needed: create the symlink
+
+def create_symlink(input_path, output_path, handle_missing_input="warn", handle_existing_output="replace", silent=False):
+    """Creates a symbolic link pointing from output_path to input_path."""
+    if check_missing_input(input_path, handle_missing_input, output_path, silent):
+        return  # Missing input is handled as specified; skip further actions
+
+    if check_and_handle_existing_output(output_path, input_path, handle_existing_output, silent):
+        return  # Existing output is handled as specified; skip creating the symlink
 
     try:
         os.symlink(input_path, output_path)
-        log_info(f"Created symlink from '{input_path}' to '{output_path}'.")
+        log_info(f"Created symlink from '{input_path}' to '{output_path}'.", silent)
     except Exception as e:
         raise ValueError(f"Failed to create symlink: {e}")
 

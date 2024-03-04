@@ -1,4 +1,6 @@
-## 1. Install snakemake 
+## 1. Install Snakemake 
+
+It is recommended to install Snakemake via Conda/Mamba. See more details at [Snakemake official guidance](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html)
 
 ## 2. Set up your environment
 
@@ -46,7 +48,7 @@ Provide the above files in a YAML file, for example `env_setup.yaml`. Then run
 
 ### 2.4 Create python environment. 
 
-2.4.1 Install python external libraries.
+#### 2.4.1 Install python external libraries.
 
 Option 1. Use an existing python environment with the required external libraries (see [py39_req.txt](py39_req.txt)).
 
@@ -76,7 +78,7 @@ Option 2. Install a python environment for Novascope.
 	pip install -r $smk_dir/installation/py39_req.txt
 	```
 
-2.4.2 Install the historef package using the whl file
+#### 2.4.2 Install the historef package using the whl file
 
     ```
 	source $pyenv/py39/bin/activate

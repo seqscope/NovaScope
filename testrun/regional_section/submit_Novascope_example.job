@@ -2,7 +2,7 @@
 ####  Job name
 #SBATCH --account=leeju0                # SLURM account name  
 #SBATCH --partition=standard            # SLURM partition
-#SBATCH --job-name=testrun1             # Job name
+#SBATCH --job-name=regional_section             # Job name
 #SBATCH --nodes=1                       # Number of nodes
 #SBATCH --ntasks-per-node=1             # Number of Tasks per node
 #SBATCH --cpus-per-task=1               # Number of CPUs per task
@@ -14,7 +14,7 @@
 
 # Paths
 smk_dir="/nfs/turbo/sph-hmkang/index/data/weiqiuc/NovaScope" # Path to the NovaScope pipeline repo.
-job_dir="$smk_dir/testrun"  # Path to your Job directory, which should have a config_job.yaml file and will be used to save the log files.
+job_dir="$smk_dir/testrun/regional_section"  # Path to your Job directory, which should have a config_job.yaml file and will be used to save the log files.
 slurm_params="--profile $smk_dir/slurm" # Path to the SLURM parameter directory, which should include a config.yaml file.
 
 # Execute the NovaScope pipeline
