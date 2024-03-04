@@ -36,7 +36,7 @@ logging.info(f" - Current job path: {job_dir}")
 # Config
 logging.info(f" - Loading config files.")
 config_files = [
-    ("config_job.yaml", True),      # True  indicates this file is required
+    ("config_job.yaml", True),              # True indicates this file is required
 ]
 config = load_configs(job_dir, config_files)
 
@@ -48,7 +48,7 @@ if not os.path.exists(env_dir):
 logging.info(f" - Environment path: {env_dir}")
 
 # - ref 
-ref_dir = os.path.join(env_dir, "ref")
+ref_dir   = os.path.join(env_dir, "ref")
 
 # - python env (py3.10 and py3.9)
 py310_env = os.path.join(env_dir,   "pyenv", "py310")
@@ -57,9 +57,9 @@ py39_env  = os.path.join(env_dir,   "pyenv", "py39")
 py39      = os.path.join(py39_env,  "bin",   "python")
 
 # - tools
-spatula         = os.path.join(env_dir, "tools", "spatula")
-samtools        = os.path.join(env_dir, "tools", "samtools")
-star            = os.path.join(env_dir, "tools", "star")
+spatula   = os.path.join(env_dir, "tools", "spatula")
+samtools  = os.path.join(env_dir, "tools", "samtools")
+star      = os.path.join(env_dir, "tools", "star")
 
 #==============================================
 #
@@ -164,37 +164,33 @@ else:
     rgb_layout=None
 
 # Histology
-# std e.g. 10XN3-B09A-human-hne.tif
+# std dir
+hist_std_dir = os.path.join(main_dirs["histology"], flowcell, section, specie)
+
+# std fn, e.g. 10XN3-B09A-human-hne.tif
 hist_res = config.get("histology",{}).get("resolution","10")
 flowcell_abbr = config.get("input",{}).get("flowcell").split("-")[0]
 hist_type = check_input(config.get("histology",{}).get("figtype","hne"), ["hne","dapi","fl"], "Histology figure type")
-
 hist_std_fn = f"{hist_res}X{flowcell_abbr}-{section}-{specie}-{hist_type}.tif"
-hist_std_dir = os.path.join(main_dirs["histology"], flowcell, section, specie)
-os.makedirs(hist_std_dir, exist_ok=True)
-
-hist_std_tif = os.path.join(main_dirs["histology"], flowcell, section, specie, hist_std_fn)
 
 if "hist-per-section" in request:
-    logging.info(f" - Histology file: Loading")
     
-    # raw tif
-    hist_raw_tif = config.get("input",{}).get('histology', None)
+    logging.info(f" - Histology file: Loading")
+    os.makedirs(hist_std_dir, exist_ok=True)    
 
-    if hist_raw_tif is not None:
-        hist_raw_tif = check_path(hist_raw_tif,job_dir)
+    hist_std_tif = os.path.join(hist_std_dir, hist_std_fn)
+    hist_raw_tif = check_path(config.get("input",{}).get('histology', None), job_dir, strict_mode=False) # Update the path when it is a relative path, and return None if it is not provided.
+
+    if hist_raw_tif is not None: # If histology file is provided, create a symlink to the standard folder.
         logging.info(f"     Histology file: {os.path.realpath(hist_raw_tif)}")
         create_symlink(hist_raw_tif, hist_std_tif, handle_existing_output="replace", silent=True)
-    elif os.path.exists(hist_std_tif):
+    elif os.path.exists(hist_std_tif): # When not provided, check if the standard file exists.
         logging.info(f"     Histology file: {os.path.realpath(hist_std_tif)}")
     else:
         raise ValueError(f"Please provide a valid histology file.")
 
-    sc2hist = {section: hist_std_tif}
-
 else:
     hist_std_tif=None
-    sc2hist = {}
     logging.info(f" - Histology file: Skipping.")
 
 #hist_request = lambda: "hist-per-section" in request

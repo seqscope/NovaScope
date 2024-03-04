@@ -186,27 +186,39 @@ def check_missing_input(input_path, action_if_missing, output_path, silent):
     return False
 
 def check_and_handle_existing_output(output_path, input_path, action_if_existing, silent):
-    """Handle scenarios where the output path already exists."""
-    if os.path.exists(output_path) or os.path.islink(output_path):
+    """Handle scenarios where the output path already exists. action_if_existing valid options: replace, warn. (update: I deleted the skip option)"""
+    if os.path.exists(output_path):
         if os.path.islink(output_path):
-            if os.readlink(output_path) != input_path or not os.path.exists(os.readlink(output_path)):
-                if action_if_existing == "replace":
-                    os.unlink(output_path)
-                    return False  # Indicates action is needed: recreate the symlink
-                elif action_if_existing == "warn":
-                    raise ValueError(f"Output symlink '{output_path}' exists and points to a different or missing target.")
-                elif action_if_existing == "skip":
-                    log_info(f"Skipping creation as existing symlink '{output_path}' points to a different or missing target.", silent)
+            output_path=os.path.realpath(os.readlink(output_path))
+            # if output_path points to a missing target, remove the symlink
+            if not os.path.exists(output_path):
+                os.unlink(output_path)
+                log_info(f"Removing broken symlink '{output_path}'.", silent)
+                return False
+            else:
+                # if output_path points to the same target as input_path, skip creating the symlink
+                if output_path == input_path:
+                    log_info(f"Skipping creation as existing symlink '{output_path}' points to the same target.", silent)
                     return True
                 else:
-                    raise ValueError("Invalid option for handle_existing_output.")
+                    if action_if_existing == "replace":
+                        log_info(f"Replacing existing symlink '{output_path}' pointing to a different target.", silent)
+                        os.unlink(output_path)
+                        return False
+                    elif action_if_existing == "warn":
+                        raise ValueError(f"Output symlink '{output_path}' exists and points to a different target.")
+                    else:
+                        raise ValueError("Invalid option for handle_existing_output.")
         else:
             raise ValueError(f"Output path '{output_path}' exists and is not a symlink.")
-        return False
     return False  # Indicates action is needed: create the symlink
 
 def create_symlink(input_path, output_path, handle_missing_input="warn", handle_existing_output="replace", silent=False):
     """Creates a symbolic link pointing from output_path to input_path."""
+    # If input_path is a symbolic link, update it to the target path
+    if os.path.islink(input_path):
+        input_path = os.path.realpath(os.readlink(input_path))
+    
     if check_missing_input(input_path, handle_missing_input, output_path, silent):
         return  # Missing input is handled as specified; skip further actions
 
