@@ -49,7 +49,7 @@ preprocess:
   fastq2sbcd:
     format: DraI31 # DraI31 for N3 and DraI32 for the rest.
   sbcd2nbcd:
-    layout: nova6000.section.info.v2.tsv
+    sbcd_layout_summary: nova6000.section.info.v2.tsv
   #nmatch:
   #  skip_sbcd: 0
 
