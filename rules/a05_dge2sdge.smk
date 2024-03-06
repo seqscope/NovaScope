@@ -20,7 +20,7 @@ rule a05_dge2sdge:
         sdge_rgb_png  = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "sge", "{specie_with_seq2v}", "{flowcell}"+"."+"{section}"+"."+"{specie_with_seq2v}"+".gene_full_mito.png"),
         sdge_3in1_png = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "sge", "{specie_with_seq2v}", "{flowcell}"+"."+"{section}"+"."+"{specie_with_seq2v}"+".sge_match_sbcd.png"),
     params:
-        rgb_layout       = rgb_layout,
+        rgb_layout       = check_path(config.get("preprocess", {}).get("dge2sdge", {}).get('layout', None), job_dir, strict_mode=False),
         visual_max_scale = config.get("preprocess", {}).get("visualization", {}).get("rgb",{}).get("max_scale", 50),
         visual_res       = config.get("preprocess", {}).get("visualization", {}).get("rgb",{}).get("resolution", 1000),
     resources: 
@@ -28,12 +28,22 @@ rule a05_dge2sdge:
         time          = "3:00:00"  
     run:
         sdge_dir = os.path.dirname(output.sdge_bcd)
-        # Generate smatch_csvjoin
+
+        # Generate smatch_csvjoin.
         nmatch_tsv_warg_match  = " --match ".join(expand(input.nmatch_tsv))
         nmatch_tsv_warg_nmatch = " --nmatch ".join(expand(input.nmatch_tsv))
+
+        # Check the layout for rgb-gene-image.
+        rgb_layout = setup_rgb_layout(params.rgb_layout, sdge_dir)
+       
         shell(
-        """
-        module load imagemagick/7.1.0-25.lua
+        r"""
+        set -euo pipefail
+
+        if [[ "{exe_mode}" == "HPC" ]]; then
+            module load imagemagick/7.1.0-25.lua
+        fi
+        
         source {py39_env}/bin/activate
         
         echo -e "Creating sdge files...\\n"
@@ -58,7 +68,7 @@ rule a05_dge2sdge:
 
         echo -e "Creating rgb image...\\n"
         command time -v {py39} {local_scripts}/rgb-gene-image.py \
-            --layout {params.rgb_layout} \
+            --layout {rgb_layout} \
             --sdge {sdge_dir} \
             --out {output.sdge_rgb_png} \
             -r _all:1:2 \

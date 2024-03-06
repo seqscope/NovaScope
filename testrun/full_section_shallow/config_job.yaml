@@ -1,11 +1,19 @@
+## ================================================
+##
+## Mandatory fields:
+##
+## ================================================
 
+# Input
 input:
   flowcell: N3-HG5MC
   section: B08C
   specie: "mouse"
+  #lane: 3        ## If absent, auto-assigned based on section's last letter if missing (A->1, B->2, C->3, D->4).
   seq1st:
-    prefix: null
+    prefix: null  ## Defaults to "L{lane}".
     fastq: "/nfs/turbo/umms-leeju/NGST/1stSeq/AGC-NOVASEQ.fastqs/9203-AP/230914_A00437_0746_AHG5MCDSX7/Undetermined_S0_L003_R1_001.fastq.gz"
+    sbcd_layout_summary: nova6000.section.info.v2.tsv ## Provide sbcd_layout_summary or sbcd_layout.
   seq2nd:
     - prefix: N3_B08C_v1
       fastq_R1: "/nfs/turbo/umms-leeju/NGST/1stSeq/AGC-NOVASEQ/9748-YK/fastqs_9748-YK/9748-YK-3_CGAGGCTG_S3_R1_001.fastq.gz"
@@ -34,23 +42,54 @@ input:
   label: v123
   histology: histology.tif
 
+# Output
 output: "/nfs/turbo/umms-leeju/v5"
 
 request:
   - nge-per-section
   - hist-per-section
 
+# Environment
+env: /nfs/turbo/sph-hmkang/index/data/weiqiuc/NovaScope_local/env ## If absent, the pipeline will check if a "env" directory exists in the Novascope directory.
+
+execution: "HPC"   ## Options: HPC and Local
+
+
+## ================================================
+##
+##  Optional fields:
+##    Enable the following parameters only if you wish to utilize values different than the default.
+##
+## ================================================
+
 #histology:
 #  resolution: 10
-#  type: hne # option: hne, dapi, fl
-
+#  type: hne                ## Options: hne, dapi, fl
 
 preprocess:
   fastq2sbcd:
-    format: DraI31 # DraI31 for N3 and DraI32 for the rest.
-  sbcd2nbcd:
-    sbcd_layout_summary: nova6000.section.info.v2.tsv
-  #nmatch:
-  #  skip_sbcd: 0
-
-env: /nfs/turbo/sph-hmkang/index/data/weiqiuc/env
+    format: DraI31          ## Default: DraI32.
+#  sbcd2nbcd:
+#    gap_row: 0.0517
+#    gap_col: 0.0048
+#    dup_maxnum: 1
+#    dup_maxdist: 0.1
+#  nmatch:
+#    skip_sbcd: 1
+#    match_len: 27
+#  align:
+#    len_sbcd: 30
+#    min_match_len: 30
+#    min_match_frac: 0.66
+#    resource:
+#      assign_type: stdin    ## Options: filesize, stdin. If filesize, no need to specify the three value below.
+#      partition: standard
+#      threads: 10
+#      memory: 70000m
+#  gene_visual: None         ## Specify the file name containing a list of gene names (one per line) here if you have a specific set of genes to visualize. By default, the top five genes with the highest expression are visualized.
+#  visualization:
+#    drawxy:
+#      coord_per_pixel: 1000
+#      intensity_per_obs: 50
+#      icol_x: 3
+#      icol_y: 4

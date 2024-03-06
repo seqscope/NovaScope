@@ -24,6 +24,7 @@ sys.path.append(local_scripts)
 from bricks import setup_logging, end_logging, configure_pandas_display, load_configs
 from bricks import check_input, check_path, create_dict, create_symlink, create_dirs_and_get_paths
 from bricks import list_outputfn_by_request
+from rule_general import setup_rgb_layout, get_skip_sbcd, assign_resource_for_align
 
 # Set up display and log
 configure_pandas_display()
@@ -41,18 +42,21 @@ config_files = [
 config = load_configs(job_dir, config_files)
 
 # Env
-env_dir=config.get("env", os.path.join(smk_dir, "env"))
+env_dir = config.get("env", os.path.join(smk_dir, "env"))
 if not os.path.exists(env_dir):
     raise ValueError(f"The environment path ({env_dir}) does not exist. Please provide a valid environment path in the config file or create a environment directory within the pipeline directory.")
 
 logging.info(f" - Environment path: {env_dir}")
 
-# - ref 
+exe_mode = check_input(config.get("execution", "HPC"), {"HPC", "local"}, "execuation mode", lower=False)
+logging.info(f"   Execution mode: {exe_mode}")
+
+# - ref  
 ref_dir   = os.path.join(env_dir, "ref")
 
 # - python env (py3.10 and py3.9)
-py310_env = os.path.join(env_dir,   "pyenv", "py310")
-py310     = os.path.join(py310_env, "bin",   "python")
+#py310_env = os.path.join(env_dir,   "pyenv", "py310")
+#py310     = os.path.join(py310_env, "bin",   "python")
 py39_env  = os.path.join(env_dir,   "pyenv", "py39")
 py39      = os.path.join(py39_env,  "bin",   "python")
 
@@ -71,6 +75,7 @@ logging.info(f"2. Processing Config files.")
 
 # Output
 main_root = config["output"]
+assert main_root is not None, "Provide a valid output directory."
 main_dirs = create_dirs_and_get_paths(main_root, ["seq1st", "seq2nd", "align", "histology"])
 logging.info(f" - Output root: {main_root}")
 
@@ -89,7 +94,7 @@ specie = check_input(config["input"]["specie"], {"human","human_mouse","mouse","
 logging.info(f" - Specie: {specie}")
 
 # Request
-request=check_input(config.get("request",["nge-per-section"]),{"nge-per-section","hist-per-section"}, "request", lower=False)
+request=check_input(config.get("request",["nge-per-section"]),{"nbcd-per-section", "nmatch-per-section", "align-per-section", "nge-per-section","hist-per-section"}, "request", lower=False)
 logging.info(f" - Request: {request}")
 
 # Label: if not provided, use specie as label, else use {specie}_{label}
@@ -134,8 +139,8 @@ sc2seq2 = create_dict(df_seq2, key_col="section", val_cols="seq2_prefix",  dict_
 
 logging.info("     Seq2 input summary table:\n%s", df_seq2)
 
-# STD fq files 
-if "nge-per-section" in request:
+# STD fq files  (TO-DO: do this only when the std file is needed)
+if any(task in request for task in ["nbcd-per-section", "nmatch-per-section", "align-per-section", "nge-per-section"]):
     logging.info(f" - Standardzing fastq file names.")
 
     logging.info("     Creating symlinks to standardize the file names for seq1.")
@@ -152,16 +157,6 @@ if "nge-per-section" in request:
         create_symlink(row["seq2_fqr1_raw"], row["seq2_fqr1_std"],silent=True)
         create_symlink(row["seq2_fqr2_raw"], row["seq2_fqr2_std"],silent=True)
 
-    # prepare the layout file for rgb figure if it is not provided.
-    rgb_layout=check_path(config.get("preprocess", {}).get("dge2sdge", {}).get('layout', "layout.1x1.tsv"), job_dir, strict_mode=False)
-    if rgb_layout is None:
-        rgb_layout=os.path.join(job_dir,"layout.1x1.tsv")
-        with open(rgb_layout, "w") as f:
-            f.write("lane\ttile\trow\tcol\n")
-            f.write(f"1\t1\t1\t1\n")
-    assert os.path.exists(rgb_layout), f"Please provide a valid layout file for rgb figure at {rgb_layout}."
-else:
-    rgb_layout=None
 
 # Histology
 # std dir
@@ -174,7 +169,6 @@ hist_type = check_input(config.get("histology",{}).get("figtype","hne"), ["hne",
 hist_std_fn = f"{hist_res}X{flowcell_abbr}-{section}-{specie}-{hist_type}.tif"
 
 if "hist-per-section" in request:
-    
     logging.info(f" - Histology file: Loading")
     os.makedirs(hist_std_dir, exist_ok=True)    
 
@@ -205,6 +199,55 @@ logging.info(f"\n")
 logging.info(f"3. Required output filenames.")
 
 output_filename_conditions = [
+    # nbcd-per-section
+    {
+        'flag': 'nbcd-per-section',
+        'root': main_dirs["seq1st"],
+        'subfolders_patterns': [
+                                (["{flowcell}", "nbcds", "{section}", "1_1.sbcds.sorted.tsv.gz"], None),
+                                (["{flowcell}", "nbcds", "{section}", "manifest.tsv"], None),
+                                (["{flowcell}", "nbcds", "{section}", "1_1.sbcds.sorted.png"], None),
+        ],
+        'zip_args': {
+            'flowcell':         df_seq1["flowcell"].values,
+            'section':          df_seq1["section"].values,
+        },
+    },
+    # nmatch-per-section
+    {
+        'flag': 'nmatch-per-section',
+        'root': main_dirs["align"],
+        'subfolders_patterns': [
+                                (["{flowcell}", "{section}", "match", "{seq2_prefix}"+".R1.match.sorted.uniq.tsv.gz"], None),
+                                (["{flowcell}", "{section}", "match", "{seq2_prefix}"+".R1.summary.tsv"], None),
+                                (["{flowcell}", "{section}", "match", "{seq2_prefix}"+".R1.counts.tsv"], None),
+                                (["{flowcell}", "{section}", "match", "{seq2_prefix}"+".R1.match.png"], None),
+        ],
+        'zip_args': {
+            'flowcell':          df_seq2["flowcell"].values,
+            'section':           df_seq2["section"].values,
+            'seq2_prefix':       df_seq2["seq2_prefix"].values,  
+        },
+    },
+   # align-per-section
+    {
+        'flag': 'align-per-section',
+        'root': main_dirs["align"],
+        'subfolders_patterns': [
+                                (["{flowcell}", "{section}", "bam",  "{specie_with_seq2v}", "sttoolsSolo.out", "GeneFull", "raw", "barcodes.tsv.gz"], None),
+                                (["{flowcell}", "{section}", "bam",  "{specie_with_seq2v}", "sttoolsSolo.out", "GeneFull", "raw", "features.tsv.gz"], None),
+                                (["{flowcell}", "{section}", "bam",  "{specie_with_seq2v}", "sttoolsSolo.out", "GeneFull", "raw", "matrix.mtx.gz"], None),
+                                (["{flowcell}", "{section}", "bam",  "{specie_with_seq2v}", "sttoolsSolo.out", "Gene",     "raw", "matrix.mtx.gz"], None),
+                                (["{flowcell}", "{section}", "bam",  "{specie_with_seq2v}", "sttoolsSolo.out", "Velocyto", "raw", "spliced.mtx.gz"], None),
+                                (["{flowcell}", "{section}", "bam",  "{specie_with_seq2v}", "sttoolsSolo.out", "Velocyto", "raw", "unspliced.mtx.gz"], None),
+                                (["{flowcell}", "{section}", "bam",  "{specie_with_seq2v}", "sttoolsSolo.out", "Velocyto", "raw", "ambiguous.mtx.gz"], None),
+        ],
+        'zip_args': {
+            'flowcell':          df_seq2["flowcell"].values,
+            'section':           df_seq2["section"].values,
+            'specie_with_seq2v': df_seq2["specie_with_seq2v"].values,  
+        },
+    },
     # nge-per-section
     {
         'flag': 'nge-per-section',
@@ -216,13 +259,11 @@ output_filename_conditions = [
                                 (["{flowcell}", "{section}", "sge",   "{specie_with_seq2v}", "{flowcell}"+"."+"{section}"+"."+"{specie_with_seq2v}"+".gene_full_mito.png"], None),
                                 (["{flowcell}", "{section}", "sge",   "{specie_with_seq2v}", "{flowcell}"+"."+"{section}"+"."+"{specie_with_seq2v}"+".sge_match_sbcd.png"], None),
                                 (["{flowcell}", "{section}", "sge",   "{specie_with_seq2v}", "{flowcell}"+"."+"{section}"+"."+"{specie_with_seq2v}"+".gene_visual.tar.gz"], None),
-                                #(["{flowcell}", "{section}", "histology", "{specie_with_seq2v}", hist_std_tif], hist_request),
         ],
         'zip_args': {
-            'flowcell':         df_seq1["flowcell"].values,
-            'section':          df_seq1["section"].values,
+            'flowcell':          df_seq2["flowcell"].values,
+            'section':           df_seq2["section"].values,
             'specie_with_seq2v': df_seq2["specie_with_seq2v"].values,  
-            #'hist_std_tif':     hist_std_tif,     
         },
     },
     # hist-per-section
@@ -233,10 +274,10 @@ output_filename_conditions = [
                                 (["{flowcell}", "{section}", "histology", "{specie_with_seq2v}", hist_std_fn], None),
         ],
         'zip_args': {
-            'flowcell':         df_seq1["flowcell"].values,
-            'section':          df_seq1["section"].values,
+            'flowcell':          df_seq2["flowcell"].values,
+            'section':           df_seq2["section"].values,
             'specie_with_seq2v': df_seq2["specie_with_seq2v"].values,  
-            'hist_std_tif':     hist_std_fn,          
+            'hist_std_tif':      hist_std_fn,          
         },
     }
 ]

@@ -14,9 +14,13 @@ rule b02_hist_align:
         hist_std_tif   = hist_std_tif
     run:
         shell(
-        """
-        set -e 
-        module load gcc/10.3.0 gdal/3.5.1
+        r"""
+        set -euo pipefail
+
+        if [[ "{exe_mode}" == "HPC" ]]; then
+            module load gcc/10.3.0 gdal/3.5.1
+        fi
+        
         source {py39_env}/bin/activate
 
         {py39} -m historef.referencer \

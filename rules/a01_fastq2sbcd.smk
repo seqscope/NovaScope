@@ -11,8 +11,13 @@ rule a01_fastq2sbcd:
     run:
         sbcd_dir         = os.path.dirname(output.sbcd_mnfst)
         shell(
-        """
+        r"""
         set -euo pipefail
+
+        if [[ "{exe_mode}" == "HPC" ]]; then
+            module load python/3.9.12
+        fi
+
         source {py39_env}/bin/activate
                 
         command time -v {py39} {local_scripts}/rule_a1.build-spatial-barcode-dict.py \

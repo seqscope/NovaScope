@@ -1,15 +1,3 @@
-def get_skip_sbcd(config):
-    sbcd_format = config.get("preprocess", {}).get("fastq2sbcd", {}).get('format', "DraI32") 
-    skip_sbcd   = config.get("preprocess", {}).get("nmatch", {}).get('skip_sbcd', None)
-    if skip_sbcd is None:
-        if sbcd_format == "DraI31":
-            skip_sbcd = 0
-        elif sbcd_format == "DraI32":
-            skip_sbcd = 1
-        else:
-            raise ValueError(f"Missing skip_sbcd and cannot infer from sbcd_format: {sbcd_format}")
-    return skip_sbcd
-
 rule a03_nmatch:
     input:
         seq2_fqr1        = os.path.join(main_dirs["seq2nd"], "{seq2_prefix}", "{seq2_prefix}" + ".R1.fastq.gz"),
@@ -37,10 +25,13 @@ rule a03_nmatch:
         nbcd_dir            = os.path.dirname(input.nbcd_tsv)
         nmatch_prefix_w_dir = output.nmatch_tsv.replace(".match.sorted.uniq.tsv.gz", "")
         shell(
-        """
+        r"""
         set -euo pipefail
         
-        module load imagemagick/7.1.0-25.lua
+        if [[ "{exe_mode}" == "HPC" ]]; then
+            module load imagemagick/7.1.0-25.lua
+        fi
+
         source {py39_env}/bin/activate
 
         echo "Runing step1 match-sbcds.\\n"

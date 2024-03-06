@@ -9,9 +9,10 @@ rule a02_sbcd2nbcd:
         # general params
         section          = lambda wildcards: wildcards.section,
         # sbcd.part
-        input_sbcd_part_layout = check_path(config.get('input', {}).get('seq1st', {}).get('sbcd_layout', None), job_dir, strict_mode=False),
-        sbcd_part_layout       = lambda wildcards: os.path.join(main_dirs["seq1st"], wildcards.flowcell, "sbcds.part", sc2seq1[wildcards.section], wildcards.section, wildcards.section+".layout.tsv"),
-        sbcd_part_mnfst        = lambda wildcards: os.path.join(main_dirs["seq1st"], wildcards.flowcell, "sbcds.part", sc2seq1[wildcards.section], wildcards.section, "manifest.tsv"),
+        input_sbcd_part_layout    = check_path(config.get('input', {}).get('seq1st', {}).get('sbcd_layout', None), job_dir, strict_mode=False),
+        input_sbcd_layout_summary = check_path(config.get("input", {}).get("seq1st", {}).get('sbcd_layout_summary',None),job_dir, strict_mode=False),
+        sbcd_part_layout          = lambda wildcards: os.path.join(main_dirs["seq1st"], wildcards.flowcell, "sbcds.part", sc2seq1[wildcards.section], wildcards.section, wildcards.section+".layout.tsv"),
+        sbcd_part_mnfst           = lambda wildcards: os.path.join(main_dirs["seq1st"], wildcards.flowcell, "sbcds.part", sc2seq1[wildcards.section], wildcards.section, "manifest.tsv"),
         # combine 
         gap_row             = config.get("preprocess", {}).get("sbcd2nbcd", {}).get('gap_row', 0.0517),
         gap_col             = config.get("preprocess", {}).get("sbcd2nbcd", {}).get('gap_col', 0.0048),
@@ -21,7 +22,7 @@ rule a02_sbcd2nbcd:
         visual_coord_per_pixel    = config.get("preprocess", {}).get("visualization", {}).get("drawxy",{}).get("coord_per_pixel", 1000),
         visual_intensity_per_obs  = config.get("preprocess", {}).get("visualization", {}).get("drawxy",{}).get("intensity_per_obs", 50),
         visual_icol_x             = config.get("preprocess", {}).get("visualization", {}).get("drawxy",{}).get("icol_x", 3),
-        visual_icol_y             = config.get("preprocess", {}).get("visualization", {}).get("drawxy",{}).get("col_y", 4),
+        visual_icol_y             = config.get("preprocess", {}).get("visualization", {}).get("drawxy",{}).get("icol_y", 4),
     resources:
         time = "5:00:00",
         mem  = "6500m"
@@ -43,13 +44,21 @@ rule a02_sbcd2nbcd:
                             handle_existing_output="replace",  
                             silent=True)
             args_layout_input = f"--input {params.input_sbcd_part_layout} --input_type layout "
+        elif params.input_sbcd_layout_summary is not None:
+            assert os.path.exists(params.input_sbcd_layout_summary), f"Provided sbcd layout summary file does not exist: {params.input_sbcd_layout_summary}."
+            print(f"Using the provided sbcd lay out summary file: {params.input_sbcd_layout_summary}")
+            args_layout_input = f"--input {params.input_sbcd_layout_summary} --input_type summary "
         else:
-            sbcd_layout_summary = check_path(config.get("preprocess", {}).get("sbcd2nbcd", {}).get('sbcd_layout_summary',"nova6000.section.info.v2.tsv"),job_dir),
-            args_layout_input = f"--input {sbcd_layout_summary} --input_type summary "
-            print(f"Using the provided sbcd lay out summary file: {sbcd_layout_summary}")
+            raise ValueError("No sbcd layout file or layout summary is provided.")
+        
         shell(
-        """
-        module load imagemagick/7.1.0-25.lua
+        r"""
+        set -euo pipefail
+
+        if [[ "{exe_mode}" == "HPC" ]]; then
+            module load imagemagick/7.1.0-25.lua
+        fi
+        
         source {py39_env}/bin/activate
     
         # s1b
