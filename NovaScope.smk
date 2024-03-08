@@ -167,6 +167,7 @@ hist_res = config.get("histology",{}).get("resolution","10")
 flowcell_abbr = config.get("input",{}).get("flowcell").split("-")[0]
 hist_type = check_input(config.get("histology",{}).get("figtype","hne"), ["hne","dapi","fl"], "Histology figure type")
 hist_std_fn = f"{hist_res}X{flowcell_abbr}-{section}-{specie}-{hist_type}.tif"
+hist_fit_fn = f"{hist_res}X{flowcell_abbr}-{section}-{specie}-{hist_type}-fit.tif"
 
 if "hist-per-section" in request:
     logging.info(f" - Histology file: Loading")
@@ -272,12 +273,14 @@ output_filename_conditions = [
         'root': main_dirs["align"],
         'subfolders_patterns': [
                                 (["{flowcell}", "{section}", "histology", "{specie_with_seq2v}", hist_std_fn], None),
+                                (["{flowcell}", "{section}", "histology", "{specie_with_seq2v}", hist_fit_fn], None),
         ],
         'zip_args': {
             'flowcell':          df_seq2["flowcell"].values,
             'section':           df_seq2["section"].values,
             'specie_with_seq2v': df_seq2["specie_with_seq2v"].values,  
-            'hist_std_tif':      hist_std_fn,          
+            'hist_std_tif':      [hist_std_fn],
+            'hist_fit_tif':      [hist_fit_fn],
         },
     }
 ]
