@@ -40,7 +40,7 @@ input:
       fastq_R1: "/nfs/turbo/umms-leeju/NGST/1stSeq/AGC-NOVASEQ/10310-YK/fastqs_10310-YK/10310-YK-1_S1_L002_R1_001.fastq.gz"
       fastq_R2: "/nfs/turbo/umms-leeju/NGST/1stSeq/AGC-NOVASEQ/10310-YK/fastqs_10310-YK/10310-YK-1_S1_L002_R2_001.fastq.gz"
   label: v123
-  histology: histology.tif
+#  histology: histology.tif
 
 # Output
 output: "/nfs/turbo/umms-leeju/v5"

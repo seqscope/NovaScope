@@ -23,6 +23,8 @@ rule a05_dge2sdge:
         rgb_layout       = check_path(config.get("preprocess", {}).get("dge2sdge", {}).get('layout', None), job_dir, strict_mode=False),
         visual_max_scale = config.get("preprocess", {}).get("visualization", {}).get("rgb",{}).get("max_scale", 50),
         visual_res       = config.get("preprocess", {}).get("visualization", {}).get("rgb",{}).get("resolution", 1000),
+        # module
+        module_cmd       = get_envmodules_for_rule(["python", "imagemagick"], module_config, exe_mode)
     resources: 
         mem           = "24000MB", 
         time          = "3:00:00"  
@@ -39,11 +41,8 @@ rule a05_dge2sdge:
         shell(
         r"""
         set -euo pipefail
+        {params.module_cmd}
 
-        if [[ "{exe_mode}" == "HPC" ]]; then
-            module load imagemagick/7.1.0-25.lua
-        fi
-        
         source {py39_env}/bin/activate
         
         echo -e "Creating sdge files...\\n"

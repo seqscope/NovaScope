@@ -4,20 +4,18 @@ rule a01_fastq2sbcd:
     output:
         sbcd_mnfst = os.path.join(main_dirs["seq1st"], "{flowcell}", "sbcds", "{seq1_prefix}", "manifest.tsv"),
     params:
-        sbcd_format = config.get("preprocess", {}).get("fastq2sbcd", {}).get('format', "DraI32"),  #? format=${3:Gen32}
+        sbcd_format = config.get("preprocess", {}).get("fastq2sbcd", {}).get('format', "DraI32"),  
+        # module
+        module_cmd        = get_envmodules_for_rule(["python"], module_config, exe_mode)
     resources:
         time = "50:00:00",
-        mem  = "6500m"
+        mem  = "70g",
     run:
         sbcd_dir         = os.path.dirname(output.sbcd_mnfst)
         shell(
         r"""
         set -euo pipefail
-
-        if [[ "{exe_mode}" == "HPC" ]]; then
-            module load python/3.9.12
-        fi
-
+        {params.module_cmd}
         source {py39_env}/bin/activate
                 
         command time -v {py39} {local_scripts}/rule_a1.build-spatial-barcode-dict.py \
@@ -28,7 +26,7 @@ rule a01_fastq2sbcd:
             --skip-sort
 
         tail -n +2 {output.sbcd_mnfst} | cut -f 1 | xargs -I {{}} -P 20 bash -c ' \
-            sort -S 1G {sbcd_dir}/{{}}.sbcds.unsorted.tsv | gzip -c > {sbcd_dir}/{{}}.sbcds.sorted.tsv.gz; \
+            sort -S 2G {sbcd_dir}/{{}}.sbcds.unsorted.tsv | gzip -c > {sbcd_dir}/{{}}.sbcds.sorted.tsv.gz; \
             rm {sbcd_dir}/{{}}.sbcds.unsorted.tsv \
         '
 

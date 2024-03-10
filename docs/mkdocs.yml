@@ -1,0 +1,46 @@
+site_name: Novascope
+site_url: https://github.com/seqscope/NovaScope
+
+# Repository
+repo_name: seqscope/NovaScope
+repo_url: https://github.com/seqscope/NovaScope
+
+# Theme configuration
+theme:
+  name: 'mkdocs'
+  palette:
+    primary: 'deep purple'
+    accent: 'lime'
+  font:
+    text: 'Roboto'
+    code: 'Roboto Mono'
+
+# Plugin configuration
+plugins:
+  - search
+  - include-markdown 
+
+# Navigation structure
+nav:
+  - Home: index.md
+  - Installation: installation.md
+  - Usage:
+      - Advanced Features: slurm.md
+      - Prepare input data: 
+      - Customizing Workflows: configuration/customizing-workflows.md
+  - Output:
+      - Understanding Output: output/understanding-output.md
+      - Visualization: output/visualization.md
+
+# (Optional) Markdown Extensions
+markdown_extensions:
+  - admonition
+  - codehilite:
+      guess_lang: false
+  - toc:
+      permalink: true
+
+# (Optional) Configuration for the built-in search plugin
+search:
+  lang: 'en'
+  separator: '[\s\-]+'

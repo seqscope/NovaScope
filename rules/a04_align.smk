@@ -24,6 +24,8 @@ rule a04_align:
         refidx         = os.path.join(env_dir, "ref", "align", specie),
         # resource
         ram            = lambda wildcards: assign_resource_for_align(wildcards.section, config, sc2seq2, main_dirs)["ram"],
+        # module
+        module_cmd        = get_envmodules_for_rule(["python"], module_config, exe_mode)
     threads: 
         lambda wildcards:  assign_resource_for_align(wildcards.section, config, sc2seq2, main_dirs)["threads"], 
     resources: 
@@ -34,7 +36,7 @@ rule a04_align:
         shell(
         r"""
         set -euo pipefail
-
+        {params.module_cmd}
         source {py39_env}/bin/activate
 
         command time -v {py39} {local_scripts}/rule_a4.align-reads.py \

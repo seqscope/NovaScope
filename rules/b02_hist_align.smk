@@ -12,16 +12,14 @@ rule b02_hist_align:
         hist_aligned   = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "histology", "{specie_with_seq2v}", hist_std_fn),
         hist_fit       = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "histology", "{specie_with_seq2v}", hist_fit_fn),
     params:
-        hist_std_tif   = hist_std_tif
+        hist_std_tif   = hist_std_tif,
+        module_cmd     = get_envmodules_for_rule(["python", "gcc", "gdal"], module_config, exe_mode)
     run:
         shell(
         r"""
         set -euo pipefail
+        {params.module_cmd}
 
-        if [[ "{exe_mode}" == "HPC" ]]; then
-            module load gcc/10.3.0 gdal/3.5.1
-        fi
-        
         source {py39_env}/bin/activate
 
         # aligned histology
@@ -29,27 +27,25 @@ rule b02_hist_align:
             --nge  {input.sdge_3in1_png}\
             --hne {params.hist_std_tif} \
             --aligned {output.hist_aligned}
-
       
         # fit histology
         INFO=$(gdalinfo "{input.sdge_3in1_png}" 2>&1)
 
         if [[ $INFO =~ Size\ is\ ([0-9]+),\ ([0-9]+) ]]; then
-            WIDTH=${BASH_REMATCH[1]}
-            HEIGHT=${BASH_REMATCH[2]}
-            echo "Extracted dimensions: WIDTH=${WIDTH}, HEIGHT=${HEIGHT}"
+            WIDTH=${{BASH_REMATCH[1]}}
+            HEIGHT=${{BASH_REMATCH[2]}}
+            echo "Extracted dimensions: WIDTH=${{WIDTH}}, HEIGHT=${{HEIGHT}}"
         else
             echo "Failed to extract image dimensions."
             exit 1
         fi
 
-        # Step 3: Run gdalwarp with the extracted width and height
         gdalwarp \
         "{output.hist_aligned}" "{output.hist_fit}" -ct "+proj=pipeline +step +proj=axisswap +order=2,-1" \
         -overwrite \
         -te 0 -$HEIGHT $WIDTH 0 -ts $WIDTH $HEIGHT
 
-        echo "gdalwarp command executed with dimensions: width=${WIDTH}, height=${HEIGHT}"
+        echo "gdalwarp command executed with dimensions: width=${{WIDTH}}, height=${{HEIGHT}}"
         """
         )
 

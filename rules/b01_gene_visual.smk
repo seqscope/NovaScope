@@ -11,6 +11,8 @@ rule b01_gene_visual:
         visual_max_scale  = config.get("preprocess", {}).get("visualization", {}).get("rgb",{}).get("max_scale", 50),
         visual_res        = config.get("preprocess", {}).get("visualization", {}).get("rgb",{}).get("resolution", 1000),
         visual_gene_scale = config.get("preprocess", {}).get("visualization", {}).get("rgb",{}).get("gene_scale", 20),
+        # module
+        module_cmd        = get_envmodules_for_rule(["python", "imagemagick"], module_config, exe_mode)
     resources: 
         mem           = "13000MB", 
         time          = "5:00:00"  
@@ -36,12 +38,8 @@ rule b01_gene_visual:
 
         shell(
         r"""
-        ## set -euo pipefail
-
-        if [[ "{exe_mode}" == "HPC" ]]; then
-            module load imagemagick/7.1.0-25.lua
-        fi
-
+        set -euo pipefail
+        {params.module_cmd}
         source {py39_env}/bin/activate
 
         #  ## 1:gene 2:genefull 3:spliced 4:unspliced 5:ambiguous

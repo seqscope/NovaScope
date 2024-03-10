@@ -34,7 +34,6 @@ env: /nfs/turbo/sph-hmkang/index/data/weiqiuc/NovaScope_local/env ## If absent, 
 
 execution: "HPC"   ## Options: HPC and Local.
 
-
 ## ================================================
 ##
 ##  Optional fields:

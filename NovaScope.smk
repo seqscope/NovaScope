@@ -24,7 +24,7 @@ sys.path.append(local_scripts)
 from bricks import setup_logging, end_logging, configure_pandas_display, load_configs
 from bricks import check_input, check_path, create_dict, create_symlink, create_dirs_and_get_paths
 from bricks import list_outputfn_by_request
-from rule_general import setup_rgb_layout, get_skip_sbcd, assign_resource_for_align
+from rule_general import setup_rgb_layout, get_skip_sbcd, assign_resource_for_align, get_envmodules_for_rule
 
 # Set up display and log
 configure_pandas_display()
@@ -48,9 +48,6 @@ if not os.path.exists(env_dir):
 
 logging.info(f" - Environment path: {env_dir}")
 
-exe_mode = check_input(config.get("execution", "HPC"), {"HPC", "local"}, "execuation mode", lower=False)
-logging.info(f"   Execution mode: {exe_mode}")
-
 # - ref  
 ref_dir   = os.path.join(env_dir, "ref")
 
@@ -64,6 +61,22 @@ py39      = os.path.join(py39_env,  "bin",   "python")
 spatula   = os.path.join(env_dir, "tools", "spatula")
 samtools  = os.path.join(env_dir, "tools", "samtools")
 star      = os.path.join(env_dir, "tools", "star")
+
+# - exe mode and modules
+
+exe_mode = check_input(config.get("execution", "HPC"), {"HPC", "local"}, "execuation mode", lower=False)
+logging.info(f" - Execution mode: {exe_mode}")
+
+# if exe_mode is "HPC":
+if exe_mode == "HPC":
+    logging.info(f" - Reading envmodules.")
+    module_config = load_configs(env_dir, [("envmodules.yaml", True)])
+    # print out each module in module_config
+    for module_k, module_v in module_config.items():
+        logging.info(f"   {module_k}: {module_v}")
+else:
+    module_config = None
+    logging.info(f" - Skipping envmodules for local mode.")
 
 #==============================================
 #

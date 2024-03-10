@@ -18,6 +18,8 @@ rule a03_nmatch:
         visual_intensity_per_obs  = config.get("preprocess", {}).get("visualization", {}).get("drawxy",{}).get("intensity_per_obs", 50),
         visual_icol_x             = config.get("preprocess", {}).get("visualization", {}).get("drawxy",{}).get("icol_x", 3),
         visual_icol_y             = config.get("preprocess", {}).get("visualization", {}).get("drawxy",{}).get("col_y", 4),
+        # module
+        module_cmd        = get_envmodules_for_rule(["python", "imagemagick"], module_config, exe_mode)
     resources:
         time = "50:00:00",
         mem  = "13000m"
@@ -27,11 +29,7 @@ rule a03_nmatch:
         shell(
         r"""
         set -euo pipefail
-        
-        if [[ "{exe_mode}" == "HPC" ]]; then
-            module load imagemagick/7.1.0-25.lua
-        fi
-
+        {params.module_cmd}
         source {py39_env}/bin/activate
 
         echo "Runing step1 match-sbcds.\\n"

@@ -64,6 +64,7 @@ def load_configs(job_dir, config_files):
                 raise
     return config
 
+
 # 2. Check input func:
 def check_input(value, valid_options, label, lower=True):
     """
@@ -185,32 +186,37 @@ def check_missing_input(input_path, action_if_missing, output_path, silent):
             raise ValueError("Invalid option for handle_missing_input.")
     return False
 
+
 def check_and_handle_existing_output(output_path, input_path, action_if_existing, silent):
     """Handle scenarios where the output path already exists. action_if_existing valid options: replace, warn. (update: I deleted the skip option)"""
-    if os.path.exists(output_path):
-        if os.path.islink(output_path):
-            output_path=os.path.realpath(os.readlink(output_path))
-            # if output_path points to a missing target, remove the symlink
-            if not os.path.exists(output_path):
-                os.unlink(output_path)
-                log_info(f"Removing broken symlink '{output_path}'.", silent)
-                return False
-            else:
-                # if output_path points to the same target as input_path, skip creating the symlink
-                if output_path == input_path:
-                    log_info(f"Skipping creation as existing symlink '{output_path}' points to the same target.", silent)
-                    return True
-                else:
-                    if action_if_existing == "replace":
-                        log_info(f"Replacing existing symlink '{output_path}' pointing to a different target.", silent)
-                        os.unlink(output_path)
-                        return False
-                    elif action_if_existing == "warn":
-                        raise ValueError(f"Output symlink '{output_path}' exists and points to a different target.")
-                    else:
-                        raise ValueError("Invalid option for handle_existing_output.")
+    # - link
+    if os.path.islink(output_path):
+        output_realpath=os.path.realpath(os.readlink(output_path))
+        # broken link
+        if not os.path.exists(output_realpath):
+            os.unlink(output_path)
+            log_info(f"Removing broken symlink '{output_path}'.", silent)
+            return False     
         else:
-            raise ValueError(f"Output path '{output_path}' exists and is not a symlink.")
+            if output_realpath == input_path: # link to the same target
+                log_info(f"Skipping creation as existing symlink '{output_path}' points to the same target.", silent)
+                return True
+            else:                             # link to a different target  
+                if action_if_existing == "replace":
+                    log_info(f"Replacing existing symlink '{output_path}' pointing to a different target.", silent)
+                    os.unlink(output_path)
+                    return False
+                elif action_if_existing == "warn":
+                    raise ValueError(f"Output symlink '{output_path}' exists and points to a different target.")
+                else:
+                    raise ValueError("Invalid option for handle_existing_output.")
+    # - file 
+    elif os.path.isfile(output_path):
+        raise ValueError(f"Output path '{output_path}' exists as a valid file.")
+    # - dir
+    elif os.path.isdir(output_path):
+        raise ValueError(f"Output path '{output_path}' exists as a valid directory.")
+    # - else: not exist,?
     return False  # Indicates action is needed: create the symlink
 
 def create_symlink(input_path, output_path, handle_missing_input="warn", handle_existing_output="replace", silent=False):

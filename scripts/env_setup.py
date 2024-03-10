@@ -7,12 +7,11 @@ from bricks import create_symlink
 
 parser = argparse.ArgumentParser(description='''
                                  Setup environment based on a YAML configuration file. For example: 
-                                 python env_setup.py --yaml_file /nfs/turbo/sph-hmkang/index/data/weiqiuc/NovaScope/installation/env_setup.yaml --env_dir /nfs/turbo/sph-hmkang/index/data/weiqiuc/env_test
+                                 python env_setup.py --yaml_file /nfs/turbo/sph-hmkang/index/data/weiqiuc/NovaScope/installation/env_setup.yaml --env_dir /nfs/turbo/sph-hmkang/index/data/weiqiuc/NovaScope_local/env
                                  ''')
 parser.add_argument('--yaml_file', type=str, help='Path to the YAML configuration file')
 parser.add_argument('--env_dir', type=str, help='Path to the environment directory.')
 args = parser.parse_args()
-
 
 
 print("Loading YAML file...")
@@ -25,7 +24,6 @@ with open(args.yaml_file, 'r') as file:
 
 print(f"Creating directory: {args.env_dir}")
 os.makedirs(args.env_dir, exist_ok=True)
-
 
 def process_item(key, value, parent_dir):
     os.makedirs(parent_dir, exist_ok=True)
@@ -46,4 +44,9 @@ def process_item(key, value, parent_dir):
 print("Processing items from YAML ...")
 for main_key, main_value in data.items():
     print(f" - {main_key}")
-    process_item(main_key, main_value, args.env_dir)
+    # if the main_key is  "envmodules", store the content in the envmodules as a yaml file in the env_dir
+    if main_key == "envmodules":
+        with open(os.path.join(args.env_dir, "envmodules.yaml"), 'w') as file:
+            yaml.dump(main_value, file)
+    else:
+        process_item(main_key, main_value, args.env_dir)

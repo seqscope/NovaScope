@@ -1,84 +1,86 @@
-## 1. Install Snakemake 
+# Installation Guide
 
-It is recommended to install Snakemake via Conda/Mamba. See more details at [Snakemake official guidance](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html)
+## 1. Install NovaScope.
 
-## 2. Set up your environment
+```
+git clone git@github.com:seqscope/NovaScope.git
+```
 
-### 2.1 Install the following softwares.	
+## 2. Install Snakemake 
+
+Snakemake orchestrates the workflow of this pipeline. We recommend installing Snakemake using Conda or Mamba. For detailed installation instructions, please refer to the [official Snakemake documentation](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html).
+
+## 3. Environment Setup
+
+### 3.1 Software Installation	
+
+The required software tools are listed below. The versions specified for each software tool have been verified for compatibility with our pipeline, though other versions may also be compatible.
+
 	* STAR (v2.7.11)
 	* Samtools (v1.14)
-	* Python (v3.9)
 	* spatula
-	* imagemagick()
-	* gcc(v10.3.0) 
-	* gdal(v3.5.1)
+	* Python (v3.9.12)
+	* imagemagick (7.1.0-25.lua)
+	* gcc (v10.3.0) 
+	* gdal (v3.5.1)
 		
-### 2.2 Download the reference datasets.
+### 3.2 Reference Datasets
 	
-	(1) Reference dataset for STARsolo alignment in NovaScope:
+Please download the necessary reference datasets for STARsolo alignment. The versions listed below are those we utilized in our setup.
 
 	* mouse: mm39
 	* human: GRCh38
 	* rat: mRatBN7
 	* worm: WBcel235
 
-	(2) (Optional) Reference dataset for gene information for downstream analysis:
-	 
-	* mouse: Mus_musculus.GRCm39.107
-	* human: Homo_sapiens.GRCh38.107
-
 	
-### 2.3 Set up the environment directory.
+### 2.3 Setup Environment Directory
 
-Provide the above files in a YAML file, for example `env_setup.yaml`. Then run 
+Create a `env_setup.yaml` file for the environment setup, see our example at `${smk_dir}/installation/env_setup.yaml`. Use the following commands to configure your environment:
 
 	```	
-	# $smk_dir is the location of NovaScope repository
-	smk_dir=/nfs/turbo/sph-hmkang/index/data/weiqiuc/NovaScope
+	# Define paths
+	smk_dir=<path_to_NovaScope_repository>
+	env_dir=<path_to_environment_directory>
+	env_yml=<path_to_environment_setup_yaml_file>
 
-	# $env_dir is the location of the environment for Novascope
-	env_dir=/nfs/turbo/sph-hmkang/index/data/weiqiuc/env_test
-
+	# Run setup script
 	python ${smk_dir}/scripts/env_setup.py \
-		--yaml_file ${smk_dir}/installation/env_setup.yaml \
-		--work_path ${env_dir} 
+		--yaml_file ${env_yml} \
+		--work_path ${env_dir}
 	``` 
-	The env_setup.py will store all above environmental information using soft links.
 
 
-### 2.4 Create python environment. 
+### 3. Configure Python Environment
 
-#### 2.4.1 Install python external libraries.
+#### 3.1 Install python external libraries.
 
-Option 1. Use an existing python environment with the required external libraries (see [py39_req.txt](py39_req.txt)).
+**Option 1: Use an Existing Environment**
+
+If you have an existing Python environment:
 
 	```
 	pyenv=$env_dir/pyenv
 	mkdir -p $pyenv
-	
-	# define your existing python environment below
-	existing_pyenv=/nfs/turbo/sph-hmkang/index/data/weiqiuc/misc/smk_env_39
-	
+	existing_pyenv=<path_to_existing_environment>
 	ln -s $existing_pyenv $pyenv/py39
 	```
 
-Option 2. Install a python environment for Novascope.
-		
-	* Install external Libraries.
+**Option 2: Create a New Environment**
 
+To set up a new environment for NovaScope:
+		
 	```
 	pyenv=$env_dir/pyenv
 	mkdir -p $pyenv
-
 	cd $pyenv
 
 	python -m venv py39
 	source py39/bin/activate
-	
 	pip install -r $smk_dir/installation/py39_req.txt
 	```
 
-#### 2.4.2 Install the historef package using the whl file
+#### 3.2 Install the historef package using the whl file
 
     ```
 	source $pyenv/py39/bin/activate

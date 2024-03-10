@@ -16,8 +16,8 @@ def setup_rgb_layout(rgb_layout_path, sdge_dir):
         # Check if the default layout file does not exist and create it
         if not os.path.exists(default_layout_file):
             with open(default_layout_file, "w") as f:
-                f.write("name\trow\tcol\n")
-                f.write("all\t1\t1\n")
+                f.write("lane\ttile\t\trow\tcol\n")
+                f.write("1\t1\t1\t1\n")
         return default_layout_file
     else:
         # Ensure the specified layout file exists
@@ -99,3 +99,19 @@ def assign_resource_for_align(section, config, sc2seq2, main_dirs):
     resources["ram"] = str(ram)
 
     return resources
+
+
+# Define a function to handle environment modules based on execution mode
+def get_envmodules_for_rule(required_modules, module_config, exe_mode):
+    if exe_mode == "HPC":
+        if module_config:
+            # Environment with module system and configuration is available
+            module_list=[module_config[module] for module in required_modules if module in module_config]
+            
+        else:
+            # Fallback to generic module load commands
+            module_list=[f"module load {module}" for module in required_modules]
+        return " ".join([f"module load {module}" for module in module_list])
+    else:
+        # For local execution or HPC without a modules system, return an empty list
+        return ""
