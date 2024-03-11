@@ -8,11 +8,9 @@ In NovaScope, we used a configuration profile to specify the sbatch information.
 
 Using a configuration profile is recommended for its consistency and time-saving benefits. 
 
- To implement this, start by creating a configuration profile with all settings, for example, `<path_to_NovaScope_repository>/slurm/config.yaml`. Then, apply this configuration by referencing its parent directory in your Snakemake command like so: `snakemake --profile <path_to_NovaScope_repository>/slurm`.
+To implement this, start by creating a configuration profile with all settings, for example, `<path_to_NovaScope_repository>/slurm/config.yaml`. Then, apply this configuration by referencing its parent directory in your Snakemake command like so: `snakemake --profile <path_to_NovaScope_repository>/slurm`. The configuration profile utilized in NovaScope is provide [here](https://github.com/seqscope/NovaScope/blob/main/slurm/config.yaml) as an example. This file was crafted with inspiration from the [smk-simple-slurm](https://github.com/jdblischak/smk-simple-slurm) repository. 
 
-The configuration profile utilized in NovaScope was crafted with inspiration from the [smk-simple-slurm](https://github.com/jdblischak/smk-simple-slurm) repository. Below are the specifics of our settings. 
-
-Please substitute the placeholders below, marked with <>, to suit your specific case.
+Below are the specifics of our settings. Please substitute the placeholders below, marked with <>, to suit your specific case.
 
 ```
 ## Cluster Configuration
