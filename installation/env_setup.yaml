@@ -1,16 +1,16 @@
 tools:
-  spatula: "/nfs/turbo/sph-hmkang/tools/dev/spatula/bin/spatula" 
+  spatula: "/nfs/turbo/sph-hmkang/tools/dev/spatula/bin/spatula"
   samtools: "/nfs/turbo/sph-hmkang/bin/samtools"
   star: "/nfs/turbo/sph-hmkang/bin/STAR_2_7_11a"
 
-# HPC-specific configuration: 
-# Use this section exclusively for HPC execution mode to load the required software tools as modules. 
+# HPC-specific configuration:
+# Use this section exclusively for HPC execution mode to load the required software tools as modules.
 # This setup is not necessary for local executions; you may skip this section if running the pipeline on your local machine.
 envmodules:
   python: "python/3.9.12"
   gcc: "gcc/10.3.0"
   gdal: "gdal/3.5.1"
-  imagemagic: "imagemagic/7.1.0-25.lua"
+  imagemagick: "imagemagick/7.1.0-25.lua"
 
 ref:
   align:

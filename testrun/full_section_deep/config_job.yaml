@@ -18,7 +18,28 @@ input:
     - prefix: N3_B08C_v1
       fastq_R1: "/nfs/turbo/umms-leeju/NGST/1stSeq/AGC-NOVASEQ/9748-YK/fastqs_9748-YK/9748-YK-3_CGAGGCTG_S3_R1_001.fastq.gz"
       fastq_R2: "/nfs/turbo/umms-leeju/NGST/1stSeq/AGC-NOVASEQ/9748-YK/fastqs_9748-YK/9748-YK-3_CGAGGCTG_S3_R2_001.fastq.gz"
-  label: v1
+    - prefix: N3_B08C_v2a
+      fastq_R1: "/nfs/turbo/umms-leeju/NGST/1stSeq/AGC-NOVASEQ/9952-AP/fastqs_9952-AP/9952-AP-1_S14_R1_001.fastq.gz"
+      fastq_R2: "/nfs/turbo/umms-leeju/NGST/1stSeq/AGC-NOVASEQ/9952-AP/fastqs_9952-AP/9952-AP-1_S14_R2_001.fastq.gz"
+    - prefix: N3_B08C_v2b
+      fastq_R1: "/nfs/turbo/umms-leeju/NGST/1stSeq/AGC-NOVASEQ/9952-AP_resequenced-withindexreads/fastqs_9952-AP/9952-AP-1_S1_R1_001.fastq.gz"
+      fastq_R2: "/nfs/turbo/umms-leeju/NGST/1stSeq/AGC-NOVASEQ/9952-AP_resequenced-withindexreads/fastqs_9952-AP/9952-AP-1_S1_R2_001.fastq.gz"
+    - prefix: N3_B08C_v2bu
+      fastq_R1: "/nfs/turbo/umms-leeju/NGST/1stSeq/AGC-NOVASEQ/9952-AP_resequenced-withindexreads/custom_demux/9952-AP_resequenced-withindexreads.Undetermined.9952-AP-1.R1.fastq.gz"
+      fastq_R2: "/nfs/turbo/umms-leeju/NGST/1stSeq/AGC-NOVASEQ/9952-AP_resequenced-withindexreads/custom_demux/9952-AP_resequenced-withindexreads.Undetermined.9952-AP-1.R2.fastq.gz"
+    - prefix: N3_B08C_v2c
+      fastq_R1: "/nfs/turbo/umms-leeju/NGST/1stSeq/AGC-NOVASEQ/9952-AP_resequenced_2nd-withindexreads/fastqs_9952-AP/2nd_9952-AP-1_S1_R1_001.fastq.gz"
+      fastq_R2: "/nfs/turbo/umms-leeju/NGST/1stSeq/AGC-NOVASEQ/9952-AP_resequenced_2nd-withindexreads/fastqs_9952-AP/2nd_9952-AP-1_S1_R2_001.fastq.gz"
+    - prefix: N3_B08C_v2cu
+      fastq_R1: "/nfs/turbo/umms-leeju/NGST/1stSeq/AGC-NOVASEQ/9952-AP_resequenced_2nd-withindexreads/custom_demux/9952-AP_resequenced_2nd-withindexreads.Undetermined.9952-AP-1.R1.fastq.gz"
+      fastq_R2: "/nfs/turbo/umms-leeju/NGST/1stSeq/AGC-NOVASEQ/9952-AP_resequenced_2nd-withindexreads/custom_demux/9952-AP_resequenced_2nd-withindexreads.Undetermined.9952-AP-1.R2.fastq.gz"
+    - prefix: N3_B08C_v3a
+      fastq_R1: "/nfs/turbo/umms-leeju/NGST/1stSeq/AGC-NOVASEQ/10310-YK/fastqs_10310-YK/10310-YK-1_S1_L001_R1_001.fastq.gz"
+      fastq_R2: "/nfs/turbo/umms-leeju/NGST/1stSeq/AGC-NOVASEQ/10310-YK/fastqs_10310-YK/10310-YK-1_S1_L001_R2_001.fastq.gz"
+    - prefix: N3_B08C_v3b
+      fastq_R1: "/nfs/turbo/umms-leeju/NGST/1stSeq/AGC-NOVASEQ/10310-YK/fastqs_10310-YK/10310-YK-1_S1_L002_R1_001.fastq.gz"
+      fastq_R2: "/nfs/turbo/umms-leeju/NGST/1stSeq/AGC-NOVASEQ/10310-YK/fastqs_10310-YK/10310-YK-1_S1_L002_R2_001.fastq.gz"
+  label: v123
 #  histology: histology.tif
 
 # Output

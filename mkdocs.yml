@@ -1,0 +1,35 @@
+site_name: Novascope
+#site_url: https://seqscope.github.io/NovaScope/
+
+# Repository
+repo_name: seqscope/NovaScope
+repo_url: https://github.com/seqscope/NovaScope
+
+# Theme configuration
+theme:
+  name: 'mkdocs'
+  palette:
+    primary: 'deep purple'
+    accent: 'lime'
+  font:
+    text: 'Roboto'
+    code: 'Roboto Mono'
+
+# Navigation structure
+nav:
+  - Home: index.md
+  - Installation:
+      - Requirements: installation/requirement.md
+      - Environment Setup: installation/env_setup.md
+      - Slurm: installation/slurm.md
+  - Preparing Input: prep_input.md
+  - Execute NovaScope Pipeline: execute.md
+  - Output: output.md
+
+# Markdown Extensions
+markdown_extensions:
+  - admonition
+  - codehilite:
+      guess_lang: false
+  - toc:
+      permalink: true
