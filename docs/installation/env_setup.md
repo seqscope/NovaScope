@@ -1,6 +1,6 @@
 # Setup Environment YAML file
 
-Create a `env_setup.yaml` file for the environment setup, see our example at `${smk_dir}/installation/env_setup.yaml`. 
+Create a `config_env.yaml` file for the environment setup, see our example [here](https://github.com/seqscope/NovaScope/blob/main/config_env.yaml).
 
 Substitute the placeholders with your specific input variables to tailor it to your requirements.
 
