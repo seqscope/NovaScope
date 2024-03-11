@@ -34,7 +34,6 @@ wget https://historef-sample-data.s3.amazonaws.com/sample/b08c/histology.tif
 
 ## 2. Prepare Input Config Files
 
-
 The pipeline necessitates a `config_job.yaml` file to define all inputs, outputs, and parameters. Separate example `config_job.yaml` files for the [regionsal](https://github.com/seqscope/NovaScope/blob/main/testrun/regional_section/config_job.yaml) and [full](https://github.com/seqscope/NovaScope/blob/main/testrun/full_section_shallow/config_job.yaml) section test runs are provided.  
 
 Below, you'll find explanations for each item specified in the config_job.yaml.
@@ -42,14 +41,14 @@ Below, you'll find explanations for each item specified in the config_job.yaml.
 ```
 ## ================================================
 ##
-## Mandatory fields:
+## Mandatory Fields:
 ##
 ## ================================================
 
 ## Input Section
 input:
   flowcell: <flowcell_id>
-  section: <section_id>
+  section: <section_chip_id>
   specie: <specie_info>
   lane: <lane_id>             ## Optional. Auto-assigned based on section's last letter if absent (A->1, B->2, C->3, D->4).
   seq1st:
@@ -69,7 +68,7 @@ input:
 ## Output Section
 output: <output_directory>
 
-request:                      ## Specify what output files are required. Options: nbcd-per-section, nmatch-per-section, align-per-section, nge-per-section, hist-per-section,
+request:                      ## Required output files. Options: "nbcd-per-section", "nmatch-per-section", "align-per-section", "nge-per-section", "hist-per-section"
   - <required_output1>
   - <required_output2>
   # ...
@@ -77,24 +76,26 @@ request:                      ## Specify what output files are required. Options
 ## Environment Section
 env: /nfs/turbo/sph-hmkang/index/data/weiqiuc/NovaScope_local/env ## If absent, the pipeline will check if a "env" directory exists in the Novascope directory.
 
-execution: "HPC"              ## Specify the execution mode. Options: HPC and Local. When HPC, the envmodules will be loaded.
+execution: "HPC"              ## Execution mode. Options: "HPC" and "Local". When HPC, the envmodules will be loaded.
 
 ## ================================================
 ##
-##  Optional fields:
-##    Enable the following parameters only if you wish to utilize values different than the default.
+##  Optional Fields:
+## 
+##    "preprocess" and "histology" are included below, along side the default value for each parameter.
+##    Revise and enable the following parameters only if you wish to utilize values different than the default.
 ##
 ## ================================================
 
-preprocess:
-  fastq2sbcd:
-    format: DraI31           ## Default: "DraI32".
-#  sbcd2nbcd:
+#preprocess:
+#  fastq2sbcd:
+#    format: DraI32
+#  sbcd2chip:
 #    gap_row: 0.0517
 #    gap_col: 0.0048
 #    dup_maxnum: 1
 #    dup_maxdist: 0.1
-#  nmatch:
+#  smatch:
 #    skip_sbcd: 1            ## If absent, skip_sbcd can be calculated follows the fastq2sbcd format: 1 for DraI31 and 0 for DraI32.
 #    match_len: 27
 #  align:
@@ -102,7 +103,7 @@ preprocess:
 #    min_match_len: 30
 #    min_match_frac: 0.66
 #    resource:
-#      assign_type: stdin    ## Options: filesize, stdin. If filesize, the resource will be calculated from no need to specify the three value below.
+#      assign_type: stdin    ## Options: "filesize", "stdin". If "filesize", there's no need to input the three values below, as the resources will be automatically determined based on the total size of the second set of sequencing FASTQ files. 
 #      partition: standard
 #      threads: 10
 #      memory: 70000m
@@ -113,4 +114,8 @@ preprocess:
 #      intensity_per_obs: 50
 #      icol_x: 3
 #      icol_y: 4
+#
+#histology:
+#    resolution: 10
+#    figtype: "hne"          ## Options: "hne","dapi","fl"
 ```

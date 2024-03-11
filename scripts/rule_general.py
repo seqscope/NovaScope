@@ -16,7 +16,7 @@ def setup_rgb_layout(rgb_layout_path, sdge_dir):
         # Check if the default layout file does not exist and create it
         if not os.path.exists(default_layout_file):
             with open(default_layout_file, "w") as f:
-                f.write("lane\ttile\t\trow\tcol\n")
+                f.write("lane\ttile\trow\tcol\n")
                 f.write("1\t1\t1\t1\n")
         return default_layout_file
     else:
@@ -30,7 +30,7 @@ def setup_rgb_layout(rgb_layout_path, sdge_dir):
     
 def get_skip_sbcd(config):
     sbcd_format = config.get("preprocess", {}).get("fastq2sbcd", {}).get('format', "DraI32") 
-    skip_sbcd   = config.get("preprocess", {}).get("nmatch", {}).get('skip_sbcd', None)
+    skip_sbcd   = config.get("preprocess", {}).get("smatch", {}).get('skip_sbcd', None)
     if skip_sbcd is None:
         if sbcd_format == "DraI31":
             skip_sbcd = 1

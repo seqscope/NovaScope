@@ -6,16 +6,18 @@ In NovaScope, we used a configuration profile to specify the sbatch information.
 
 ## Integrating a configuration profile with snakemake
 
-Using a configuration profile is recommended for its consistency and time-saving benefits. To implement this, start by creating a configuration profile with all settings, for example, `<path_to_NovaScope_repository>/slurm/config.yaml`. Then, apply this configuration by referencing its parent directory in your Snakemake command like so: `snakemake --profile <path_to_NovaScope_repository>/slurm`.
+Using a configuration profile is recommended for its consistency and time-saving benefits. 
+
+ To implement this, start by creating a configuration profile with all settings, for example, `<path_to_NovaScope_repository>/slurm/config.yaml`. Then, apply this configuration by referencing its parent directory in your Snakemake command like so: `snakemake --profile <path_to_NovaScope_repository>/slurm`.
 
 The configuration profile utilized in NovaScope was crafted with inspiration from the [smk-simple-slurm](https://github.com/jdblischak/smk-simple-slurm) repository. Below are the specifics of our settings. 
 
 Please substitute the placeholders below, marked with <>, to suit your specific case.
 
-Utilizing SLURM for job management is recommended due to the extended duration of steps. Additionally, SLURM aids in organizing log files by creating rule-specific subdirectories within the job's log directory, each holding its own output and error files.
-
 ```
 ## Cluster Configuration
+## The following setting also aids in organizing log files by creating rule-specific subdirectories within the job's log directory, each holding its own output and error files.
+
 cluster:
   mkdir -p logs/{rule}/ &&
   sbatch
@@ -30,7 +32,9 @@ cluster:
     --parsable
     --nodes={resources.nodes}
 
+
 ## Default Resources for Jobs
+
 default-resources:
   - partition=<your_default_partition>    # Replace <your_default_partition> with your actual partition name
   - mem=<default_memory_allocation>       # Replace <default_memory_allocation> with memory, e.g., "4G"
@@ -38,7 +42,9 @@ default-resources:
   - nodes=<default_number_of_nodes>       # Replace <default_number_of_nodes> with nodes, e.g., "1"
   - account=<default_account_information> # Replace <default_account_information> with your account info
 
+
 ## General Snakemake settings
+
 jobs: <max_number_of_jobs>               # Replace <max_number_of_jobs> with your desired maximum number of concurrent jobs, e.g., 10
 latency-wait: <latency_seconds>          # Replace <latency_seconds> with the number of seconds to wait if job output is not present, e.g., 120
 local-cores: <local_core_count>          # Replace <local_core_count> with the max number of cores to use locally, e.g., "20"
@@ -50,9 +56,12 @@ printshellcmds: <print_commands>         # Replace <print_commands> with True or
 
 
 ## Scheduler settings
+
 #scheduler: greedy      
 
+
 ## Conda environment settings
+
 use-conda: <True_or_False>               # Enable use of Conda environments
 conda-frontend: conda                    # Specify Conda as the package manager frontend
 ```

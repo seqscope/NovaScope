@@ -107,7 +107,7 @@ specie = check_input(config["input"]["specie"], {"human","human_mouse","mouse","
 logging.info(f" - Specie: {specie}")
 
 # Request
-request=check_input(config.get("request",["nge-per-section"]),{"nbcd-per-section", "nmatch-per-section", "align-per-section", "nge-per-section","hist-per-section"}, "request", lower=False)
+request=check_input(config.get("request",["nge-per-section"]),{"sbcd-per-section", "smatch-per-section", "align-per-section", "nge-per-section","hist-per-section"}, "request", lower=False)
 logging.info(f" - Request: {request}")
 
 # Label: if not provided, use specie as label, else use {specie}_{label}
@@ -153,7 +153,7 @@ sc2seq2 = create_dict(df_seq2, key_col="section", val_cols="seq2_prefix",  dict_
 logging.info("     Seq2 input summary table:\n%s", df_seq2)
 
 # STD fq files  (TO-DO: do this only when the std file is needed)
-if any(task in request for task in ["nbcd-per-section", "nmatch-per-section", "align-per-section", "nge-per-section"]):
+if any(task in request for task in ["sbcd-per-section", "smatch-per-section", "align-per-section", "nge-per-section"]):
     logging.info(f" - Standardzing fastq file names.")
 
     logging.info("     Creating symlinks to standardize the file names for seq1.")
@@ -213,9 +213,9 @@ logging.info(f"\n")
 logging.info(f"3. Required output filenames.")
 
 output_filename_conditions = [
-    # nbcd-per-section
+    # sbcd-per-section
     {
-        'flag': 'nbcd-per-section',
+        'flag': 'sbcd-per-section',
         'root': main_dirs["seq1st"],
         'subfolders_patterns': [
                                 (["{flowcell}", "nbcds", "{section}", "1_1.sbcds.sorted.tsv.gz"], None),
@@ -227,9 +227,9 @@ output_filename_conditions = [
             'section':          df_seq1["section"].values,
         },
     },
-    # nmatch-per-section
+    # smatch-per-section
     {
-        'flag': 'nmatch-per-section',
+        'flag': 'smatch-per-section',
         'root': main_dirs["align"],
         'subfolders_patterns': [
                                 (["{flowcell}", "{section}", "match", "{seq2_prefix}"+".R1.match.sorted.uniq.tsv.gz"], None),
@@ -313,13 +313,13 @@ end_logging()
 #==============================================
 
 include: "rules/a01_fastq2sbcd.smk"
-include: "rules/a02_sbcd2nbcd.smk"
-include: "rules/a03_nmatch.smk"
+include: "rules/a02_sbcd2chip.smk"
+include: "rules/a03_smatch.smk"
 include: "rules/a04_align.smk"
 include: "rules/a05_dge2sdge.smk"
 
 include: "rules/b01_gene_visual.smk"
 
 if "hist-per-section" in request:
-    include: "rules/b02_hist_align.smk"
+    include: "rules/b02_historef.smk"
 

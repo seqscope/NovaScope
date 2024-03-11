@@ -12,6 +12,7 @@ git clone git@github.com:seqscope/NovaScope.git
 
 Snakemake orchestrates the workflow of this pipeline. We recommend installing Snakemake using Conda or Mamba. For detailed installation instructions, please refer to the [official Snakemake documentation](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html).
 
+The NovaScope is created and tested using Snakemake v7.29.0.
 
 ### 1.3 Other required Software 
 

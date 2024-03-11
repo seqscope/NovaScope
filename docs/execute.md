@@ -1,31 +1,36 @@
 
 # Execute NovaScope Pipeline
 
-## 1 Preliminary Steps
+## 1 Preliminary Steps 
 
-Performing a dry run and generating a rule graph are essential preliminary steps. They ensure your config_job.yaml is correctly set up, visualize the workflow's structure, and summarize required jobs.
+Executing a dry run is a critical initial step. It verifies that your config_job.yaml is properly configured and outlines the necessary jobs to be executed. Additionally, you can use dot -Tpdf to create a rule graph that visually represents the structure of the workflow.
 
 ```
-## First, define $smk_dir is the location of NovaScope repository
-smk_dir=/nfs/turbo/sph-hmkang/index/data/weiqiuc/NovaScope
-
-cd $smk_dir
+# Paths
+smk_dir="<path_to_NovaScope_repo>"    # Replace <path_to_NovaScope_repo> with the path to the NovaScope repository
+job_dir="<job_directory>"             # Replace <job_directory> with your specific job directory path, which has the `config_job.yaml` file.
 
 ## (Recommended) Start with a dry run
 ## - View all information:
-snakemake --dry-run -p --latency-wait 120 -s NovaScope.smk --rerun-triggers mtime --rerun-incomplete -d $job_dir
+snakemake -s $smk_dir/NovaScope.smk --rerun-incomplete -d $job_dir --dry-run -p
+
 ## - Simply summarize the jobs to be executed without other information:
-snakemake --dry-run -p --latency-wait 120 -s NovaScope.smk --rerun-triggers mtime --rerun-incomplete -d $job_dir --quiet -n
+snakemake -s $smk_dir/NovaScope.smk --rerun-incomplete -d $job_dir --dry-run --quiet
 
-## (Optional) Visualize the required steps and their dependencies:
-snakemake --rulegraph -s NovaScope.smk --rerun-triggers mtime --rerun-incomplete -d $job_dir | dot -Tpdf > rulegraph.pdf
+## (Optional) Visualization.
+## Snakemake can generate two types of graphs to help visualize the dependencies and execution flow within a workflow: DAG (Directed Acyclic Graph) and Rulegraph. Overall, Rulegraph is typically much simpler and less dense than the DAG, making it easier to grasp the overall design and logic of the workflow, especially for workflows with many files and rules.
 
+## - (1) Rulegraph: A high-level overview of the workflow structure.
+snakemake --rulegraph  -s $smk_dir/NovaScope.smk --rerun-incomplete -d $job_dir | dot -Tpdf > rulegraph.pdf
+
+## - (2) DAG: An overview of all jobs and their actual dependency structure. 
+snakemake --dag  -s $smk_dir/NovaScope.smk --rerun-incomplete -d $job_dir | dot -Tpdf > dag.pdf
 ```
 
 ## 2 Execution Options
 
 ### Option A: SLURM using a Master Job
-This approach involves utilizing a master SLURM job to oversee and manage the status of all other jobs. Initially, you need to establish the master job. Typically, this job requires minimal memory because its primary role is to monitor the progress of all tasks, handle job submissions based on dependencies and available resources. However, it's crucial for the master job to have an extended time limit, ensuring it remains active longer than the total time required to complete all associated jobs.
+This approach involves utilizing a master SLURM job to oversee and manage the status of all other jobs. First, you need to establish the master job. Typically, this job requires minimal memory because its primary role is to monitor the progress of all tasks, handle job submissions based on dependencies and available resources. However, it's crucial for the master job to have an extended time limit, ensuring it remains active longer than the total time required to complete all associated jobs.
 
 ```
 #!/bin/bash
@@ -44,20 +49,18 @@ This approach involves utilizing a master SLURM job to oversee and manage the st
 
 # Paths
 smk_dir="<path_to_NovaScope_repo>"             # Replace <path_to_NovaScope_repo> with the path to the NovaScope repository
-job_dir="$smk_dir/<job_directory>"             # Replace <job_directory> with your specific job directory path
+job_dir="<job_directory>"                      # Replace <job_directory> with your specific job directory path
 slurm_params="--profile $smk_dir/slurm"        # Directory of the SLURM configuration file, adjust if your config.yaml is located elsewhere
 
 # Execute the NovaScope pipeline
 snakemake $slurm_params --latency-wait 120 -s $smk_dir/NovaScope.smk --rerun-triggers
-
 ```
 
-Create a file with the above information, e.g. submit_Novascope_example.job, and then submit this file to SLURM using the following command:
+Create a file with the above information, e.g. submit_Novascope_example.job, and then submit this file:
 
 ```
 sbatch submit_Novascope_example.job
 ```
-  
 
 ### Option B: SLURM via Command Line
 
@@ -69,7 +72,7 @@ smk_dir="<path_to_NovaScope_repo>"             # Replace <path_to_NovaScope_repo
 job_dir="$smk_dir/<job_directory>"             # Replace <job_directory> with your specific job directory path
 slurm_params="--profile $smk_dir/slurm"        # Directory of the SLURM configuration file, adjust if your config.yaml is located elsewhere
 
-snakemake $slurm_params --latency-wait 120 -s ${smk_dir}/NovaScope.smk --rerun-triggers mtime --rerun-incomplete -d $job_dir
+snakemake $slurm_params --latency-wait 120 -s ${smk_dir}/NovaScope.smk --rerun-incomplete -d $job_dir
 ```
 
 ### Option C: Local Execution
@@ -82,5 +85,5 @@ slurm_params="--profile $smk_dir/slurm"        # Directory of the SLURM configur
 
 Ncores=1 # Number of CPU cores
 
-snakemake --latency-wait 120 -s ${smk_dir}/NovaScope.smk --rerun-triggers mtime --rerun-incomplete -d $job_dir --cores $Ncores
+snakemake --latency-wait 120 -s ${smk_dir}/NovaScope.smk --rerun-incomplete -d $job_dir --cores $Ncores
 ```

@@ -1,17 +1,19 @@
-# NovaScope
+# Welcome to NovaScope documantation
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+This is the documentation for the NovaScope, a pipeline to preprocess the spatial transcriptomics data from Novaseq.
 
-## Commands
+## Documentation Overview
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
+The current documentation include the following:
 
-## Project layout
+* Installation:
+    * Requirements: Instructions on how to install necessary software tools and obtain reference datasets.
+    * Environment Setup: A quick guide to configure your environment.
+    * Slurm: (Optional) Instructions for creating a configuration file for the SLURM scheduler.
+* Preparing Input: How to ready your input data and configuration file.
+* Execute NovaScope: Three options to execute the pipeline.
+* Output: Details on the structure of the output directory and the usage of the produced data.
 
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+## An overview of the workflow structure
+![rulegraph](rulegraph.png)
+*Figure 1: The overall flow and dependencies between rules.*

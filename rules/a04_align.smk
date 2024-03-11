@@ -2,7 +2,7 @@ rule a04_align:
     input:
         seq2_fqr1  = lambda wildcards: [os.path.join(main_dirs["seq2nd"], seq2_prefix, seq2_prefix + ".R1.fastq.gz" ) for seq2_prefix in sc2seq2[wildcards.section]],
         seq2_fqr2  = lambda wildcards: [os.path.join(main_dirs["seq2nd"], seq2_prefix, seq2_prefix + ".R2.fastq.gz" ) for seq2_prefix in sc2seq2[wildcards.section]],
-        nmatch_tsv = lambda wildcards: [os.path.join(main_dirs["align"],  "{flowcell}", wildcards.section, "match", seq2_prefix+".R1.match.sorted.uniq.tsv.gz") for seq2_prefix in sc2seq2[wildcards.section]],
+        smatch_tsv = lambda wildcards: [os.path.join(main_dirs["align"],  "{flowcell}", wildcards.section, "match", seq2_prefix+".R1.match.sorted.uniq.tsv.gz") for seq2_prefix in sc2seq2[wildcards.section]],
     output:
         dge_gf_bcd  = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{specie_with_seq2v}", "sttoolsSolo.out", "GeneFull", "raw", "barcodes.tsv.gz"),
         dge_gf_ftr  = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{specie_with_seq2v}", "sttoolsSolo.out", "GeneFull", "raw", "features.tsv.gz"),
@@ -16,7 +16,7 @@ rule a04_align:
         bam_dir        = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{specie_with_seq2v}"),
         # params
         skip_sbcd      = get_skip_sbcd(config), 
-        match_len      = config.get("preprocess", {}).get("nmatch", {}).get('match_len', 27), 
+        match_len      = config.get("preprocess", {}).get("smatch", {}).get('match_len', 27), 
         len_sbcd       = config.get("preprocess", {}).get("align", {}).get('len_sbcd', 30),
         min_match_len  = config.get("preprocess", {}).get("align", {}).get('min_match_len', 30),
         min_match_frac = config.get("preprocess", {}).get("align", {}).get('min_match_frac', 0.66),
@@ -44,8 +44,8 @@ rule a04_align:
             --spatula {spatula} \
             --fq1 {input.seq2_fqr1} \
             --fq2 {input.seq2_fqr2} \
-            --whitelist-match {input.nmatch_tsv} \
-            --filter-match {input.nmatch_tsv} \
+            --whitelist-match {input.smatch_tsv} \
+            --filter-match {input.smatch_tsv} \
             --star-index {params.refidx} \
             --star-bin {star} \
             --samtools {samtools} \

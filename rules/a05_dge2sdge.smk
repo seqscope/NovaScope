@@ -3,8 +3,8 @@ rule a05_dge2sdge:
         #nbcds
         nbcd_tsv      = os.path.join(main_dirs["seq1st"], "{flowcell}", "nbcds", "{section}", "1_1.sbcds.sorted.tsv.gz"),
         nbcd_mnfst    = os.path.join(main_dirs["seq1st"], "{flowcell}", "nbcds", "{section}", "manifest.tsv"),
-        #nmatch
-        nmatch_tsv    = lambda wildcards: [os.path.join(main_dirs["align"],  "{flowcell}", wildcards.section, "match", seq2_prefix+".R1.match.sorted.uniq.tsv.gz") for seq2_prefix in sc2seq2[wildcards.section]],
+        #smatch
+        smatch_tsv    = lambda wildcards: [os.path.join(main_dirs["align"],  "{flowcell}", wildcards.section, "match", seq2_prefix+".R1.match.sorted.uniq.tsv.gz") for seq2_prefix in sc2seq2[wildcards.section]],
         #align
         dge_gf_bcd    = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{specie_with_seq2v}","sttoolsSolo.out", "GeneFull", "raw", "barcodes.tsv.gz"),
         dge_gf_ftr    = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{specie_with_seq2v}","sttoolsSolo.out", "GeneFull", "raw", "features.tsv.gz"),
@@ -32,8 +32,8 @@ rule a05_dge2sdge:
         sdge_dir = os.path.dirname(output.sdge_bcd)
 
         # Generate smatch_csvjoin.
-        nmatch_tsv_warg_match  = " --match ".join(expand(input.nmatch_tsv))
-        nmatch_tsv_warg_nmatch = " --nmatch ".join(expand(input.nmatch_tsv))
+        smatch_tsv_warg_match  = " --match ".join(expand(input.smatch_tsv))
+        smatch_tsv_warg_smatch = " --smatch ".join(expand(input.smatch_tsv))
 
         # Check the layout for rgb-gene-image.
         rgb_layout = setup_rgb_layout(params.rgb_layout, sdge_dir)
@@ -55,13 +55,13 @@ rule a05_dge2sdge:
             --mtx {input.dge_vl_uns} \
             --mtx {input.dge_vl_amb} \
             --out {sdge_dir}/ \
-            --match {nmatch_tsv_warg_match}
+            --match {smatch_tsv_warg_match}
         
         echo -e "Creating 3in1 image...\\n"
         command time -v {spatula} draw-3way \
             --manifest {input.nbcd_mnfst} \
             --nbcd {input.nbcd_tsv} \
-            --nmatch {nmatch_tsv_warg_nmatch} \
+            --nmatch {smatch_tsv_warg_smatch} \
             --ngebcd {output.sdge_bcd} \
             --out {output.sdge_3in1_png} 
 

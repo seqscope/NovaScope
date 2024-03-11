@@ -5,7 +5,7 @@
 #
 #==============================================
 
-rule b02_hist_align:
+rule b02_historef:
     input:
         sdge_3in1_png  = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "sge", "{specie_with_seq2v}", "{flowcell}"+"."+"{section}"+"."+"{specie_with_seq2v}"+".sge_match_sbcd.png"),
     output:

@@ -1,4 +1,4 @@
-rule a02_sbcd2nbcd:
+rule a02_sbcd2chip:
     input:
         sbcd_mnfst       = lambda wildcards: os.path.join(main_dirs["seq1st"], wildcards.flowcell, "sbcds", sc2seq1[wildcards.section], "manifest.tsv"),
     output:
@@ -14,10 +14,10 @@ rule a02_sbcd2nbcd:
         sbcd_part_layout          = lambda wildcards: os.path.join(main_dirs["seq1st"], wildcards.flowcell, "sbcds.part", sc2seq1[wildcards.section], wildcards.section, wildcards.section+".layout.tsv"),
         sbcd_part_mnfst           = lambda wildcards: os.path.join(main_dirs["seq1st"], wildcards.flowcell, "sbcds.part", sc2seq1[wildcards.section], wildcards.section, "manifest.tsv"),
         # combine 
-        gap_row             = config.get("preprocess", {}).get("sbcd2nbcd", {}).get('gap_row', 0.0517),
-        gap_col             = config.get("preprocess", {}).get("sbcd2nbcd", {}).get('gap_col', 0.0048),
-        dup_maxnum          = config.get("preprocess", {}).get("sbcd2nbcd", {}).get('dup_maxnum', 1),
-        dup_maxdist         = config.get("preprocess", {}).get("sbcd2nbcd", {}).get('dup_maxdist', 1),
+        gap_row             = config.get("preprocess", {}).get("sbcd2chip", {}).get('gap_row', 0.0517),
+        gap_col             = config.get("preprocess", {}).get("sbcd2chip", {}).get('gap_col', 0.0048),
+        dup_maxnum          = config.get("preprocess", {}).get("sbcd2chip", {}).get('dup_maxnum', 1),
+        dup_maxdist         = config.get("preprocess", {}).get("sbcd2chip", {}).get('dup_maxdist', 1),
         # visualization
         visual_coord_per_pixel    = config.get("preprocess", {}).get("visualization", {}).get("drawxy",{}).get("coord_per_pixel", 1000),
         visual_intensity_per_obs  = config.get("preprocess", {}).get("visualization", {}).get("drawxy",{}).get("intensity_per_obs", 50),
