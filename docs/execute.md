@@ -3,8 +3,9 @@
 
 ## 1 Preliminary Steps 
 
-Executing a dry run is a critical initial step. It verifies that your config_job.yaml is properly configured and outlines the necessary jobs to be executed. Additionally, you can use dot -Tpdf to create a rule graph that visually represents the structure of the workflow.
+Executing a dry run is a critical initial step. It verifies that your `config_job.yaml` is properly configured and outlines the necessary jobs to be executed. 
 
+Additionally, you can use dot -Tpdf to create a rule graph that visually represents the structure of the workflow or a DAG (Directed Acyclic Graph) to view all jobs and their actual dependency structure. 
 ```
 # Paths
 smk_dir="<path_to_NovaScope_repo>"    # Replace <path_to_NovaScope_repo> with the path to the NovaScope repository
@@ -18,12 +19,12 @@ snakemake -s $smk_dir/NovaScope.smk --rerun-incomplete -d $job_dir --dry-run -p
 snakemake -s $smk_dir/NovaScope.smk --rerun-incomplete -d $job_dir --dry-run --quiet
 
 ## (Optional) Visualization.
-## Snakemake can generate two types of graphs to help visualize the dependencies and execution flow within a workflow: DAG (Directed Acyclic Graph) and Rulegraph. Overall, Rulegraph is typically much simpler and less dense than the DAG, making it easier to grasp the overall design and logic of the workflow, especially for workflows with many files and rules.
+## Snakemake can generate two types of graphs to help visualize the dependencies and execution flow within a workflow: DAG and Rulegraph. Overall, Rulegraph is typically much simpler and less dense than the DAG, making it easier to grasp the overall design and logic of the workflow, especially for workflows with many files and rules.
 
-## - (1) Rulegraph: A high-level overview of the workflow structure.
+## - (1) Rulegraph
 snakemake --rulegraph  -s $smk_dir/NovaScope.smk --rerun-incomplete -d $job_dir | dot -Tpdf > rulegraph.pdf
 
-## - (2) DAG: An overview of all jobs and their actual dependency structure. 
+## - (2) DAG
 snakemake --dag  -s $smk_dir/NovaScope.smk --rerun-incomplete -d $job_dir | dot -Tpdf > dag.pdf
 ```
 

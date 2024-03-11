@@ -1,7 +1,7 @@
 
 # Preparing Input
 
-## 1. Download Input Data
+## 1. Input Data
 
 ### Example 1 - Regional Section Test Run
 
