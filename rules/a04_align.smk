@@ -21,11 +21,11 @@ rule a04_align:
         min_match_len  = config.get("preprocess", {}).get("align", {}).get('min_match_len', 30),
         min_match_frac = config.get("preprocess", {}).get("align", {}).get('min_match_frac', 0.66),
         # ref
-        refidx         = os.path.join(env_dir, "ref", "align", specie),
+        refidx         = sp2alignref[specie],
         # resource
         ram            = lambda wildcards: assign_resource_for_align(wildcards.section, config, sc2seq2, main_dirs)["ram"],
         # module
-        module_cmd        = get_envmodules_for_rule(["python"], module_config, exe_mode)
+        module_cmd        = get_envmodules_for_rule(["python"], module_config, exe_mode),
     threads: 
         lambda wildcards:  assign_resource_for_align(wildcards.section, config, sc2seq2, main_dirs)["threads"], 
     resources: 

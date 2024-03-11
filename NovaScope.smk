@@ -35,45 +35,43 @@ logging.info(f"1. Reading input:")
 logging.info(f" - Current job path: {job_dir}")
 
 # Config
-logging.info(f" - Loading config files.")
+logging.info(f" - Loading config file:")
 config_files = [
     ("config_job.yaml", True),              # True indicates this file is required
 ]
 config = load_configs(job_dir, config_files)
 
 # Env
-env_dir = config.get("env", os.path.join(smk_dir, "env"))
-if not os.path.exists(env_dir):
-    raise ValueError(f"The environment path ({env_dir}) does not exist. Please provide a valid environment path in the config file or create a environment directory within the pipeline directory.")
+#env_dir = config.get("env", os.path.join(smk_dir, "env"))
+#if not os.path.exists(env_dir):
+#    raise ValueError(f"The environment path ({env_dir}) does not exist. Please provide a valid environment path in the config file or create a environment directory within the pipeline directory.")
+#logging.info(f" - Environment path: {env_dir}")
 
-logging.info(f" - Environment path: {env_dir}")
+# Env config
+env_configfile = check_path(config.get("env_yml", os.path.join(smk_dir, "config_env.yaml")),job_dir, strict_mode=True, flag="The environment config file")
+env_config = load_configs(None, [(env_configfile, True)])
 
 # - ref  
-ref_dir   = os.path.join(env_dir, "ref")
+sp2alignref=env_config.get("ref", None).get("align", None)
 
 # - python env (py3.10 and py3.9)
-#py310_env = os.path.join(env_dir,   "pyenv", "py310")
-#py310     = os.path.join(py310_env, "bin",   "python")
-py39_env  = os.path.join(env_dir,   "pyenv", "py39")
-py39      = os.path.join(py39_env,  "bin",   "python")
+py39_env  = env_config.get("pyenv", {}).get("py39", None)
+py39      = os.path.join(py39_env, "bin", "python")
 
 # - tools
-spatula   = os.path.join(env_dir, "tools", "spatula")
-samtools  = os.path.join(env_dir, "tools", "samtools")
-star      = os.path.join(env_dir, "tools", "star")
+# 
+spatula   = env_config.get("tools", {}).get("spatula", "spatula")
+samtools  = env_config.get("tools", {}).get("samtools", "samtools")
+star      = env_config.get("tools", {}).get("star", "STAR")
 
 # - exe mode and modules
-
 exe_mode = check_input(config.get("execution", "HPC"), {"HPC", "local"}, "execuation mode", lower=False)
 logging.info(f" - Execution mode: {exe_mode}")
 
 # if exe_mode is "HPC":
 if exe_mode == "HPC":
     logging.info(f" - Reading envmodules.")
-    module_config = load_configs(env_dir, [("envmodules.yaml", True)])
-    # print out each module in module_config
-    for module_k, module_v in module_config.items():
-        logging.info(f"   {module_k}: {module_v}")
+    module_config = env_config.get("envmodules", None)
 else:
     module_config = None
     logging.info(f" - Skipping envmodules for local mode.")

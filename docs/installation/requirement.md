@@ -38,10 +38,12 @@ Please download the necessary reference datasets for STARsolo alignment. The ver
 
 If you already have an existing python environment with all required packages (see `./installation/py39_req.txt`), skip 3.1.
 
-## 3.1 Create a New Environment**
+## 3.1 Create a New Environment
 		
 ```
-pyenv=$env_dir/pyenv
+pyenv=<path_to_python_environment>
+smk_dir=<path_to_NovaScope_repository>
+
 mkdir -p $pyenv
 cd $pyenv
 
@@ -59,3 +61,4 @@ source $pyenv/py39/bin/activate
 wget -P $smk_dir/installation https://github.com/seqscope/historef/releases/download/v0.1.1/historef-0.1.1-py3-none-any.whl
 pip install $smk_dir/installation/historef-0.1.1-py3-none-any.whl
 ```
+

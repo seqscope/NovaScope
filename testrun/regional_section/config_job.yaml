@@ -23,7 +23,7 @@ request:
   - align-per-section
   - nge-per-section
 
-env: /nfs/turbo/sph-hmkang/index/data/weiqiuc/NovaScope_local/env
+env_yml: /nfs/turbo/sph-hmkang/index/data/weiqiuc/NovaScope/config_env.yaml
 
 execution: "HPC"
 

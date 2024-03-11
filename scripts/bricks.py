@@ -47,7 +47,10 @@ def load_configs(job_dir, config_files):
     """
     config = {}
     for filename, is_required in config_files:
-        file_path = os.path.join(job_dir, filename)
+        if job_dir is not None:
+            file_path = os.path.join(job_dir, filename)
+        else:
+            file_path = filename
         try:
             with open(file_path) as config_file:
                 config.update(yaml.safe_load(config_file))
@@ -107,7 +110,7 @@ def check_input(value, valid_options, label, lower=True):
     else:
         raise TypeError(f"Unsupported type for 'value': {type(value)}")
 
-def check_path(file_path, work_dir, strict_mode=True):
+def check_path(file_path, work_dir, strict_mode=True, flag="The path"):
     """    
     Parameters:
     - file_path (str): The path to check.
@@ -130,7 +133,7 @@ def check_path(file_path, work_dir, strict_mode=True):
             return os.path.realpath(full_path)
     # when the file path is not a valid full / relative path or is None 
     if strict_mode:
-        raise FileNotFoundError(f"The path '{file_path}' does not exist as either an absolute or a relative path.")
+        raise FileNotFoundError(f" '{flag}' '{file_path}' does not exist as either an absolute or a relative path.")
     else:
         return None
 

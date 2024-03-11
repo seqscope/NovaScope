@@ -1,26 +1,36 @@
-# Setup Environment Directory
+# Setup Environment YAML file
 
 Create a `env_setup.yaml` file for the environment setup, see our example at `${smk_dir}/installation/env_setup.yaml`. 
 
+Substitute the placeholders with your specific input variables to tailor it to your requirements.
 
-Use the following commands to configure your environment. The `env_setup.py` will help organize all softwares and reference datasets you provided. 
-
-```	
-## Define paths
-smk_dir=<path_to_NovaScope_repository>
-env_dir=<path_to_environment_directory>
-env_yml=<path_to_environment_setup_yaml_file>
-
-## Run setup script
-python ${smk_dir}/scripts/env_setup.py \
-	--yaml_file ${env_yml} \
-	--work_path ${env_dir}
-
-## If you are using an existing python environment, link it to this $env_dir.
-# pyenv=$env_dir/pyenv
-# mkdir -p $pyenv
-# existing_pyenv=<path_to_existing_environment>
-# ln -s $existing_pyenv $pyenv/py39
 ```
+## Tools 
+## For tools that are not explicitly defined, the pipeline will automatically check if they are installed and include them in the system path for use. 
+## This allows the pipeline to utilize these tools without needing manual configuration for each one.
+tools:
+  spatula: <path_to_the_spatula_bin_file> 		## Default: "spatula"
+  samtools: <path_to_the_samtools_bin_file>		## Default: "samtools"
+  star: <path_to_the_starsolo_bin_file> 		## Default: "STAR"
 
+## HPC-specific configuration:
+## Use this section exclusively for HPC execution mode to load the required software tools as modules.
+## This setup is not necessary for local executions; you may skip this section if running the pipeline on your local machine.
+envmodules:
+  python: "python/3.9.12"
+  gcc: "gcc/10.3.0"
+  gdal: "gdal/3.5.1"
+  imagemagick: "imagemagick/7.1.0-25.lua"
 
+## Reference database for the alignment
+## List all reference files you need here:
+ref:
+  align:
+    <specie1>: <path_to_the_reference_genome_index_for_specie1>
+	<specie2>: <path_to_the_reference_genome_index_for_specie2>
+   #...
+
+## Python environment
+pyenv:
+  <python_env1>: <path_to_the_python_environment1>
+```
