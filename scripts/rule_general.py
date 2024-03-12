@@ -102,15 +102,15 @@ def assign_resource_for_align(section, config, sc2seq2, main_dirs):
 
 
 # Define a function to handle environment modules based on execution mode
-def get_envmodules_for_rule(required_modules, module_config, exe_mode):
-    if exe_mode == "HPC":
-        if module_config:
-            # Environment with module system and configuration is available
-            module_list_in_a_string=" ".join([module_config[module] for module in required_modules if module in module_config])
-        else:
-            # Fallback to generic module load commands
-            module_list_in_a_string=" ".join([f"{module}" for module in required_modules])
+def get_envmodules_for_rule(required_modules, module_config):
+    if module_config:
+        # Environment with module system and configuration is available
+        module_list_in_a_string=" ".join([module_config[module] for module in required_modules if module in module_config])
         return f"module load {module_list_in_a_string}"
+        #else:
+            # Fallback to generic module load commands
+            #module_list_in_a_string=" ".join([f"{module}" for module in required_modules])    
+            #return f"module load {module_list_in_a_string}"
     else:
         # For local execution or HPC without a modules system, return an empty list
         return ""

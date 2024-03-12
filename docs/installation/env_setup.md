@@ -2,35 +2,49 @@
 
 Create a `config_env.yaml` file for the environment setup, see our example [here](https://github.com/seqscope/NovaScope/blob/main/config_env.yaml).
 
-Substitute the placeholders with your specific input variables to tailor it to your requirements.
+Below is a brief description of all the items in the YAML file. Replace the placeholders with your specific input variables to customize it according to your needs.
 
-```
 ## Tools 
-## For tools that are not explicitly defined, the pipeline will automatically check if they are installed and include them in the system path for use. 
-## This allows the pipeline to utilize these tools without needing manual configuration for each one.
+For tools that are not explicitly defined, the pipeline will automatically check if they are installed and include them in the system path for use. This allows the pipeline to utilize these tools without needing manual configuration for each one.
+```
 tools:
   spatula: <path_to_the_spatula_bin_file> 		## Default: "spatula"
   samtools: <path_to_the_samtools_bin_file>		## Default: "samtools"
-  star: <path_to_the_starsolo_bin_file> 		## Default: "STAR"
+  star: <path_to_the_starsolo_bin_file> 		  ## Default: "STAR"
+```
 
 ## HPC-specific configuration:
-## Use this section exclusively for HPC execution mode to load the required software tools as modules.
-## This setup is not necessary for local executions; you may skip this section if running the pipeline on your local machine.
-envmodules:
-  python: "python/3.9.12"
-  gcc: "gcc/10.3.0"
-  gdal: "gdal/3.5.1"
-  imagemagick: "imagemagick/7.1.0-25.lua"
 
-## Reference database for the alignment
-## List all reference files you need here:
+For HPC users, use the `envmodules` section to load the required software tools as modules. If a tool is not listed in the envmodules section, the pipeline will assume it's installed system-wide. For local executions, you may remove this section if running the pipeline on your local machine.
+
+Please specify the **version** information. 
+
+If your python environment was set up using a Python version accessed through a module, your environment depends on certain shared files from that module. Therefore, you must add the `python: "python/<version_information>"`  in the `envmodules` section to load the same module you initially used to establish your environment. But if you set up with a locally installed Python (not using module load), comment out or remove the module line `python: "python/<version_information>"`.
+
+```
+envmodules:
+  python: "python/<version_information>"
+  gcc: "gcc/<version_information>"
+  gdal: "gdal/<version_information>"
+  imagemagick: "imagemagick/<version_information>"
+```
+
+## Reference database
+
+Please list every reference database used for alignment here. Ensure the reference database corresponds to the species of your input data.
+
+```
 ref:
   align:
     <specie1>: <path_to_the_reference_genome_index_for_specie1>
-	<specie2>: <path_to_the_reference_genome_index_for_specie2>
+    <specie2>: <path_to_the_reference_genome_index_for_specie2>
    #...
+```
 
 ## Python environment
+
+```
 pyenv:
   <python_env1>: <path_to_the_python_environment1>
 ```
+
