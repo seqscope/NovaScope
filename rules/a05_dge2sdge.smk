@@ -24,7 +24,7 @@ rule a05_dge2sdge:
         visual_max_scale = config.get("preprocess", {}).get("visualization", {}).get("rgb",{}).get("max_scale", 50),
         visual_res       = config.get("preprocess", {}).get("visualization", {}).get("rgb",{}).get("resolution", 1000),
         # module
-        module_cmd        = get_envmodules_for_rule(["python", "imagemagick"], module_config, exe_mode)
+        module_cmd        = get_envmodules_for_rule(["python", "imagemagick"], module_config)
     resources: 
         mem           = "24000MB", 
         time          = "3:00:00"  

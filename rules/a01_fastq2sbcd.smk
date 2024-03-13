@@ -6,7 +6,7 @@ rule a01_fastq2sbcd:
     params:
         sbcd_format = config.get("preprocess", {}).get("fastq2sbcd", {}).get('format', "DraI32"),  
         # module
-        module_cmd        = get_envmodules_for_rule(["python"], module_config, exe_mode)
+        module_cmd        = get_envmodules_for_rule(["python"], module_config)
     resources:
         time = "50:00:00",
         mem  = "70g",

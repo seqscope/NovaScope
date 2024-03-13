@@ -36,10 +36,7 @@ logging.info(f" - Current job path: {job_dir}")
 
 # Config
 logging.info(f" - Loading config file:")
-config_files = [
-    ("config_job.yaml", True),              # True indicates this file is required
-]
-config = load_configs(job_dir, config_files)
+config = load_configs(job_dir, [("config_job.yaml", True)])
 
 # Env
 #env_dir = config.get("env", os.path.join(smk_dir, "env"))
@@ -51,6 +48,10 @@ config = load_configs(job_dir, config_files)
 env_configfile = check_path(config.get("env_yml", os.path.join(smk_dir, "config_env.yaml")),job_dir, strict_mode=True, flag="The environment config file")
 env_config = load_configs(None, [(env_configfile, True)])
 
+module_config = env_config.get("envmodules", None)
+logging.info(f" - envmodules: ")
+logging.info(f"     {module_config}")
+
 # - ref  
 sp2alignref=env_config.get("ref", None).get("align", None)
 
@@ -59,22 +60,9 @@ py39_env  = env_config.get("pyenv", {}).get("py39", None)
 py39      = os.path.join(py39_env, "bin", "python")
 
 # - tools
-# 
 spatula   = env_config.get("tools", {}).get("spatula", "spatula")
 samtools  = env_config.get("tools", {}).get("samtools", "samtools")
 star      = env_config.get("tools", {}).get("star", "STAR")
-
-# - exe mode and modules
-exe_mode = check_input(config.get("execution", "HPC"), {"HPC", "local"}, "execuation mode", lower=False)
-logging.info(f" - Execution mode: {exe_mode}")
-
-# if exe_mode is "HPC":
-if exe_mode == "HPC":
-    logging.info(f" - Reading envmodules.")
-    module_config = env_config.get("envmodules", None)
-else:
-    module_config = None
-    logging.info(f" - Skipping envmodules for local mode.")
 
 #==============================================
 #

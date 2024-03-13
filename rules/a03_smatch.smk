@@ -19,7 +19,7 @@ rule a03_smatch:
         visual_icol_x             = config.get("preprocess", {}).get("visualization", {}).get("drawxy",{}).get("icol_x", 3),
         visual_icol_y             = config.get("preprocess", {}).get("visualization", {}).get("drawxy",{}).get("col_y", 4),
         # module
-        module_cmd        = get_envmodules_for_rule(["python", "imagemagick"], module_config, exe_mode)
+        module_cmd        = get_envmodules_for_rule(["python", "imagemagick"], module_config)
     resources:
         time = "50:00:00",
         mem  = "13000m"

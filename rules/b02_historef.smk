@@ -13,7 +13,7 @@ rule b02_historef:
         hist_fit       = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "histology", "{specie_with_seq2v}", hist_fit_fn),
     params:
         hist_std_tif   = hist_std_tif,
-        module_cmd     = get_envmodules_for_rule(["python", "gcc", "gdal"], module_config, exe_mode)
+        module_cmd     = get_envmodules_for_rule(["python", "gcc", "gdal"], module_config)
     run:
         shell(
         r"""

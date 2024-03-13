@@ -12,7 +12,7 @@ rule b01_gene_visual:
         visual_res        = config.get("preprocess", {}).get("visualization", {}).get("rgb",{}).get("resolution", 1000),
         visual_gene_scale = config.get("preprocess", {}).get("visualization", {}).get("rgb",{}).get("gene_scale", 20),
         # module
-        module_cmd        = get_envmodules_for_rule(["python", "imagemagick"], module_config, exe_mode)
+        module_cmd        = get_envmodules_for_rule(["python", "imagemagick"], module_config)
     resources: 
         mem           = "13000MB", 
         time          = "5:00:00"  
