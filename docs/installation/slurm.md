@@ -4,7 +4,7 @@ Snakemake can automate the process of submitting your jobs to the SLURM schedule
 
 In NovaScope, we used a configuration profile to specify the sbatch information. For more details, please refers the official Snakemake documentation for the [Executor Plugin for HPC Clusters using the SLURM Batch System](https://github.com/snakemake/snakemake-executor-plugin-slurm/blob/main/docs/further.md)
 
-## Integrating a configuration profile with snakemake
+## Integrating a Configuration Profile with Snakemake
 
 Using a configuration profile is recommended for its consistency and time-saving benefits. 
 
@@ -41,7 +41,7 @@ default-resources:
   - account=<default_account_information> # Replace <default_account_information> with your account info
 
 
-## General Snakemake settings
+## General Snakemake Settings
 
 jobs: <max_number_of_jobs>               # Replace <max_number_of_jobs> with your desired maximum number of concurrent jobs, e.g., 10
 latency-wait: <latency_seconds>          # Replace <latency_seconds> with the number of seconds to wait if job output is not present, e.g., 120
@@ -53,12 +53,12 @@ rerun-incomplete: <rerun_incomplete_jobs> # Replace <rerun_incomplete_jobs> with
 printshellcmds: <print_commands>         # Replace <print_commands> with True or False to specify if shell commands should be printed before execution
 
 
-## Scheduler settings
+## Scheduler Settings
 
 #scheduler: greedy      
 
 
-## Conda environment settings
+## Conda Environment Settings
 
 use-conda: <True_or_False>               # Enable use of Conda environments
 conda-frontend: conda                    # Specify Conda as the package manager frontend

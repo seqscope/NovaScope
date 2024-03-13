@@ -15,6 +15,8 @@ The current documentation include the following:
     * Execute NovaScope: Three options to execute the pipeline.
     * Output: Details on the structure of the output directory and the usage of the produced data.
 
-## An overview of the workflow structure
+## An Overview of the Workflow Structure
+
 ![rulegraph](rulegraph.png)
+
 *Figure 1: The overall flow and dependencies between rules.*

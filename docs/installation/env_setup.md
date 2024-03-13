@@ -1,4 +1,4 @@
-# Setup Environment YAML file
+# Setup A Environment YAML File
 
 Create a `config_env.yaml` file for the environment setup, see our example [here](https://github.com/seqscope/NovaScope/blob/main/config_env.yaml).
 
@@ -13,7 +13,7 @@ tools:
   star: <path_to_the_starsolo_bin_file> 		  ## Default: "STAR"
 ```
 
-## HPC-specific configuration:
+## HPC-specific Configuration:
 
 For HPC users, use the `envmodules` section to load the required software tools as modules. If a tool is not listed in the envmodules section, the pipeline will assume it's installed system-wide. For local executions, you may remove this section if running the pipeline on your local machine.
 
@@ -29,7 +29,7 @@ envmodules:
   imagemagick: "imagemagick/<version_information>"
 ```
 
-## Reference database
+## Reference Database
 
 Please list every reference database used for alignment here. Ensure the reference database corresponds to the species of your input data.
 
@@ -41,7 +41,7 @@ ref:
    #...
 ```
 
-## Python environment
+## Python Environment
 
 ```
 pyenv:
