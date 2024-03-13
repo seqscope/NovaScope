@@ -1,6 +1,7 @@
 # Output
 
 ## 1. Output
+
 The output, of which the path was provided via the `config_job.yaml`, will be organized as follows, 
 
 ```
@@ -49,7 +50,6 @@ align
         ├── match
         └── sge
 ```
-
 
 ## 2. Usage
 

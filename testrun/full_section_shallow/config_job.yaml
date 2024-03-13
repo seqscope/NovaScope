@@ -21,9 +21,7 @@ request:
   - nge-per-section
   - hist-per-section
 
-env: /nfs/turbo/sph-hmkang/index/data/weiqiuc/NovaScope_local/env
-
-execution: "HPC"
+env_yml: /nfs/turbo/sph-hmkang/index/data/weiqiuc/NovaScope/config_env.yaml
 
 preprocess:
   fastq2sbcd:

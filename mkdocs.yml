@@ -8,9 +8,12 @@ repo_url: https://github.com/seqscope/NovaScope
 # Theme configuration
 theme:
   name: 'mkdocs'
+#  palette:
+#    primary: 'deep purple'
+#    accent: 'lime'
   palette:
-    primary: 'deep purple'
-    accent: 'lime'
+    primary: indigo
+    accent: grey
   font:
     text: 'Roboto'
     code: 'Roboto Mono'

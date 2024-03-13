@@ -10,9 +10,10 @@ The current documentation include the following:
     * Requirements: Instructions on how to install necessary software tools and obtain reference datasets.
     * Environment Setup: A quick guide to configure your environment.
     * Slurm: (Optional) Instructions for creating a configuration file for the SLURM scheduler.
-* Preparing Input: How to ready your input data and configuration file.
-* Execute NovaScope: Three options to execute the pipeline.
-* Output: Details on the structure of the output directory and the usage of the produced data.
+* Getting Started:
+    * Preparing Input: How to ready your input data and configuration file.
+    * Execute NovaScope: Three options to execute the pipeline.
+    * Output: Details on the structure of the output directory and the usage of the produced data.
 
 ## An overview of the workflow structure
 ![rulegraph](rulegraph.png)
