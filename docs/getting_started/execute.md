@@ -1,11 +1,12 @@
 
-# Execute NovaScope Pipeline
+# Executing NovaScope Pipeline
 
 ## 1 Preliminary Steps 
 
 Executing a dry run is a critical initial step. It verifies that your `config_job.yaml` is properly configured and outlines the necessary jobs to be executed. 
 
-Additionally, you can use dot -Tpdf to create a rule graph that visually represents the structure of the workflow or a DAG (Directed Acyclic Graph) to view all jobs and their actual dependency structure. 
+Additionally, you can create a rule graph that visually represents the structure of the workflow or a DAG (Directed Acyclic Graph) to view all jobs and their actual dependency structure.
+
 ```
 # Paths
 smk_dir="<path_to_NovaScope_repo>"    # Replace <path_to_NovaScope_repo> with the path to the NovaScope repository
@@ -19,8 +20,6 @@ snakemake -s $smk_dir/NovaScope.smk --rerun-incomplete -d $job_dir --dry-run -p
 snakemake -s $smk_dir/NovaScope.smk --rerun-incomplete -d $job_dir --dry-run --quiet
 
 ## (Optional) Visualization.
-## Snakemake can generate two types of graphs to help visualize the dependencies and execution flow within a workflow: DAG and Rulegraph. Overall, Rulegraph is typically much simpler and less dense than the DAG, making it easier to grasp the overall design and logic of the workflow, especially for workflows with many files and rules.
-
 ## - (1) Rulegraph
 snakemake --rulegraph  -s $smk_dir/NovaScope.smk --rerun-incomplete -d $job_dir | dot -Tpdf > rulegraph.pdf
 
@@ -31,8 +30,11 @@ snakemake --dag  -s $smk_dir/NovaScope.smk --rerun-incomplete -d $job_dir | dot 
 ## 2 Execution Options
 
 ### Option A: SLURM using a Master Job
-This approach involves utilizing a master SLURM job to oversee and manage the status of all other jobs. First, you need to establish the master job. Typically, this job requires minimal memory because its primary role is to monitor the progress of all tasks, handle job submissions based on dependencies and available resources. However, it's crucial for the master job to have an extended time limit, ensuring it remains active longer than the total time required to complete all associated jobs.
+This approach involves utilizing a master SLURM job to oversee and manage the status of all other jobs. 
 
+First, you need to establish the master job. The primary role of this job is to monitor the progress of all tasks, handle job submissions based on dependencies and available resources. Thus, it requires minimal memory but an extended time limit. Its time limit should be longer than the total time required to complete all associated jobs.
+
+Below is an example:
 ```
 #!/bin/bash
 ####  Job configuration
@@ -49,9 +51,9 @@ This approach involves utilizing a master SLURM job to oversee and manage the st
 #SBATCH --output=./logs/<log_filename>         # Replace <log_filename> with the log file name pattern
 
 # Paths
-smk_dir="<path_to_NovaScope_repo>"             # Replace <path_to_NovaScope_repo> with the path to the NovaScope repository
-job_dir="<job_directory>"                      # Replace <job_directory> with your specific job directory path
-slurm_params="--profile $smk_dir/slurm"        # Directory of the SLURM configuration file, adjust if your config.yaml is located elsewhere
+smk_dir="<path_to_NovaScope_repo>"                  # Replace <path_to_NovaScope_repo> with the path to the NovaScope repository
+job_dir="<path_to_the_job_directory>"               # Replace <path_to_the_job_directory> with your specific job directory path
+slurm_params="--profile <path_to_slurm_directory>"  # Replace <path_to_slurm_directory> with your directory of the SLURM configuration file
 
 # Execute the NovaScope pipeline
 snakemake $slurm_params --latency-wait 120 -s $smk_dir/NovaScope.smk --rerun-triggers
@@ -66,12 +68,14 @@ sbatch submit_Novascope_example.job
 ### Option B: SLURM via Command Line
 
 
-For a small number of quick tasks, you can submit them with a single command line. However, it's important to remember that if you log out before all jobs have been submitted to SLURM, any remaining jobs, i.e., those haven't been submitted, will not be submitted.
+For a small number of quick tasks, you can submit them with a single command line. 
+
+However, it's important to remember that if you log out before all jobs have been submitted to SLURM, any remaining jobs, i.e., those haven't been submitted, will not be submitted.
 
 ```
-smk_dir="<path_to_NovaScope_repo>"             # Replace <path_to_NovaScope_repo> with the path to the NovaScope repository
-job_dir="$smk_dir/<job_directory>"             # Replace <job_directory> with your specific job directory path
-slurm_params="--profile $smk_dir/slurm"        # Directory of the SLURM configuration file, adjust if your config.yaml is located elsewhere
+smk_dir="<path_to_NovaScope_repo>"                  # Replace <path_to_NovaScope_repo> with the path to the NovaScope repository
+job_dir="<path_to_the_job_directory>"               # Replace <path_to_the_job_directory> with your specific job directory path
+slurm_params="--profile <path_to_slurm_directory>"  # Replace <path_to_slurm_directory> with your directory of the SLURM configuration file
 
 snakemake $slurm_params --latency-wait 120 -s ${smk_dir}/NovaScope.smk --rerun-incomplete -d $job_dir
 ```
@@ -81,8 +85,7 @@ Run the pipeline locally, specifying the number of cores.
 
 ```
 smk_dir="<path_to_NovaScope_repo>"             # Replace <path_to_NovaScope_repo> with the path to the NovaScope repository
-job_dir="$smk_dir/<job_directory>"             # Replace <job_directory> with your specific job directory path
-slurm_params="--profile $smk_dir/slurm"        # Directory of the SLURM configuration file, adjust if your config.yaml is located elsewhere
+job_dir="<path_to_the_job_directory>"          # Replace <job_directory> with your specific job directory path
 
 Ncores=1 # Number of CPU cores
 

@@ -12,9 +12,11 @@ Snakemake orchestrates the workflow of this pipeline. We recommend installing Sn
 
 The NovaScope is created and tested using Snakemake v7.29.0.
 
-## 1.3 Other required Software 
+## 1.3 Other Dependent Software 
 
-The required software tools are listed below. The versions specified for each software tool have been verified for compatibility with our pipeline, though other versions may also be compatible.
+The dependent software tools are listed below. The versions specified for each software tool have been verified for compatibility with our pipeline, though other versions may also be compatible.
+
+As an HPC user, you have the option to load a tool rather than installing it. To check if the following software is available, use the `module avail` or `module spider` commands.
 
 	* STAR (v2.7.11)
 	* Samtools (v1.14)
@@ -39,7 +41,7 @@ Please download the necessary reference datasets for STARsolo alignment. The ver
 If you already have an existing python environment with all required packages (see `./installation/py39_req.txt`), skip 3.1.
 
 ## 3.1 Create a New Environment
-		
+
 ```
 pyenv=<path_to_python_environment>
 smk_dir=<path_to_NovaScope_repository>

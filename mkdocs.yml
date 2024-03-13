@@ -7,7 +7,7 @@ repo_url: https://github.com/seqscope/NovaScope
 
 # Theme configuration
 theme:
-  name: 'mkdocs'
+  name: material
 #  palette:
 #    primary: 'deep purple'
 #    accent: 'lime'
@@ -25,9 +25,10 @@ nav:
       - Requirements: installation/requirement.md
       - Environment Setup: installation/env_setup.md
       - Slurm: installation/slurm.md
-  - Preparing Input: prep_input.md
-  - Execute NovaScope Pipeline: execute.md
-  - Output: output.md
+  - Getting Started:
+      - Preparing Input: getting_started/prep_input.md
+      - Executing NovaScope Pipeline: getting_started/execute.md
+      - Output: getting_started/output.md
 
 # Markdown Extensions
 markdown_extensions:

@@ -3,14 +3,18 @@
 
 ## 1. Input Data
 
+The input data include 1st-seq and 2nd-seq FASTQ files and a histology file (optional).
+
+Begin by creating a dedicated directory for your job. This directory will serve to identify the input configuration file (refer to *2. Prepare Input Config Files*) and to store log files.
+
+
 ### Example 1 - Regional Section Test Run
 
-The input data originates from a specific, limited region of a section. No histology files is provided for this dataset.
+The input data originates from a specific, limited region of a section. No histology files is provided.
 
-Download the first and second sequencing data sets from [here](https://www.dropbox.com/scl/fi/3egsr9nqc559e9hb45vik/B08Csub_20240301_raw.tar.gz?rlkey=z06xwb3v6ku19dp6br6mlsgkm&dl=0).
+Now Download the first and second sequencing data sets from [here](https://www.dropbox.com/scl/fi/3egsr9nqc559e9hb45vik/B08Csub_20240301_raw.tar.gz?rlkey=z06xwb3v6ku19dp6br6mlsgkm&dl=0).
 
 ```
-# Define the $job_dir, with config_job.yaml and the downloaded input data.
 job_dir="$smk_dir/testrun/regional_section"  
 
 mkdir -p  $job_dir && cd $job_dir
@@ -23,7 +27,7 @@ The input data is from a full section with an available histology file.
 Download the first and second sequencing data sets from here. *TBC: Add the download link*
 
 ```
-# Define the $job_dir, with config_job.yaml and the downloaded input data.
+# Define the $job_dir
 job_dir="$smk_dir/testrun/full_section_shallow"  
 
 mkdir -p  $job_dir && cd $job_dir
@@ -34,9 +38,11 @@ wget https://historef-sample-data.s3.amazonaws.com/sample/b08c/histology.tif
 
 ## 2. Prepare Input Config Files
 
-The pipeline necessitates a `config_job.yaml` file to define all inputs, outputs, and parameters. Separate example `config_job.yaml` files for the [regionsal](https://github.com/seqscope/NovaScope/blob/main/testrun/regional_section/config_job.yaml) and [full](https://github.com/seqscope/NovaScope/blob/main/testrun/full_section_shallow/config_job.yaml) section test runs are provided.  
+The pipeline necessitates a `config_job.yaml` file to define all inputs, outputs, and parameters. This `config_job.yaml` file should be provided in the `$job_dir`.
 
-Below, you'll find explanations for each item specified in the config_job.yaml.
+Separate example `config_job.yaml` files for the [regional](https://github.com/seqscope/NovaScope/blob/main/testrun/regional_section/config_job.yaml) and [full](https://github.com/seqscope/NovaScope/blob/main/testrun/full_section_shallow/config_job.yaml) section test runs are provided.  
+
+Below, you'll find explanations for each item specified in the `config_job.yaml`.
 
 ```
 ## ================================================
@@ -74,15 +80,14 @@ request:                      ## Required output files. Options: "nbcd-per-secti
   # ...
 
 ## Environment Section
-env: /nfs/turbo/sph-hmkang/index/data/weiqiuc/NovaScope_local/env ## If absent, the pipeline will check if a "env" directory exists in the Novascope directory.
+env_yml: <path_to_config_env.yaml_file>## If absent, the pipeline will check if a "config_env.yaml" file exists in the Novascope directory.
 
-execution: "HPC"              ## Execution mode. Options: "HPC" and "Local". When HPC, the envmodules will be loaded.
 
 ## ================================================
 ##
 ##  Optional Fields:
 ## 
-##    "preprocess" and "histology" are included below, along side the default value for each parameter.
+##    The "preprocess" and "histology" parameters are included below, along side the default value for each parameter.
 ##    Revise and enable the following parameters only if you wish to utilize values different than the default.
 ##
 ## ================================================
