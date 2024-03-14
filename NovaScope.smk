@@ -93,7 +93,7 @@ specie = check_input(config["input"]["specie"], {"human","human_mouse","mouse","
 logging.info(f" - Specie: {specie}")
 
 # Request
-request=check_input(config.get("request",["nge-per-section"]),{"sbcd-per-section", "smatch-per-section", "align-per-section", "nge-per-section","hist-per-section"}, "request", lower=False)
+request=check_input(config.get("request",["sge-per-section"]),{"sbcd-per-section", "smatch-per-section", "align-per-section", "sge-per-section","hist-per-section"}, "request", lower=False)
 logging.info(f" - Request: {request}")
 
 # Label: if not provided, use specie as label, else use {specie}_{label}
@@ -139,7 +139,7 @@ sc2seq2 = create_dict(df_seq2, key_col="section", val_cols="seq2_prefix",  dict_
 logging.info("     Seq2 input summary table:\n%s", df_seq2)
 
 # STD fq files  (TO-DO: do this only when the std file is needed)
-if any(task in request for task in ["sbcd-per-section", "smatch-per-section", "align-per-section", "nge-per-section"]):
+if any(task in request for task in ["sbcd-per-section", "smatch-per-section", "align-per-section", "sge-per-section"]):
     logging.info(f" - Standardzing fastq file names.")
 
     logging.info("     Creating symlinks to standardize the file names for seq1.")
@@ -248,9 +248,9 @@ output_filename_conditions = [
             'specie_with_seq2v': df_seq2["specie_with_seq2v"].values,  
         },
     },
-    # nge-per-section
+    # sge-per-section
     {
-        'flag': 'nge-per-section',
+        'flag': 'sge-per-section',
         'root': main_dirs["align"],
         'subfolders_patterns': [
                                 (["{flowcell}", "{section}", "sge",   "{specie_with_seq2v}", "barcodes.tsv.gz"], None),

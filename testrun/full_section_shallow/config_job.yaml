@@ -18,7 +18,7 @@ input:
 output: "/nfs/turbo/umms-leeju/v5"
 
 request:
-  - nge-per-section
+  - sge-per-section
   - hist-per-section
 
 env_yml: /nfs/turbo/sph-hmkang/index/data/weiqiuc/NovaScope/config_env.yaml

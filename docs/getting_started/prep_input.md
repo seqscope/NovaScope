@@ -60,35 +60,36 @@ input:
   seq1st:
     prefix: <seq1st_id>       ## Optional. Defaults to "L{lane}" if absent.
     fastq: <path_to_seq1st_fastq_file>
-    sbcd_layout_summary: <path_to_sbcd_layout_summary> ## Provide sbcd_layout_summary or sbcd_layout.
+    sbcd_layout_summary: <path_to_sbcd_layout_summary> ## Provide either sbcd_layout_summary or sbcd_layout.
+    #sbcd_layout: <path_to_sbcd_layout>
   seq2nd:                     ## List all input 2nd sequencing data here.
     - prefix: <seq2st_pair1_id>
-      fastq_R1: <path_to_seq2nd_pair1_fastq_R1_file>
-      fastq_R2: <path_to_seq2nd_pair1_fastq_R2_file>
+      fastq_R1: <path_to_seq2nd_pair1_fastq_Read1_file>
+      fastq_R2: <path_to_seq2nd_pair1_fastq_Read2_file>
     - prefix: <seq2st_pair2_id>
-      fastq_R1: <path_to_seq2nd_pair2_fastq_R1_file>
-      fastq_R2: <path_to_seq2nd_pair2_fastq_R2_file>
+      fastq_R1: <path_to_seq2nd_pair2_fastq_Read1_file>
+      fastq_R2: <path_to_seq2nd_pair2_fastq_Read2_file>
     # ...
   label: <seq2nd_version>     ## Optional. A version label for the input seq2 data, if applicable.
 
 ## Output Section
 output: <output_directory>
 
-request:                      ## Required output files. Options: "nbcd-per-section", "nmatch-per-section", "align-per-section", "nge-per-section", "hist-per-section"
+request:                      ## Required output files. Options: "sbcd-per-section", "smatch-per-section", "align-per-section", "sge-per-section", "hist-per-section"
   - <required_output1>
   - <required_output2>
   # ...
 
 ## Environment Section
-env_yml: <path_to_config_env.yaml_file>## If absent, the pipeline will check if a "config_env.yaml" file exists in the Novascope directory.
+env_yml: <path_to_config_env.yaml_file> ## If absent, the pipeline will check if a "config_env.yaml" file exists in the Novascope directory.
 
 
 ## ================================================
 ##
 ##  Optional Fields:
 ## 
-##    The "preprocess" and "histology" parameters are included below, along side the default value for each parameter.
-##    Revise and enable the following parameters only if you wish to utilize values different than the default.
+##    The "preprocess" and "histology" parameters are included below, along side the default values.
+##    You only need to revise and enable the following parameters if you wish to utilize values different than the default.
 ##
 ## ================================================
 
@@ -124,3 +125,47 @@ env_yml: <path_to_config_env.yaml_file>## If absent, the pipeline will check if 
 #    resolution: 10
 #    figtype: "hne"          ## Options: "hne","dapi","fl"
 ```
+
+### Mandatory Fields
+Most of parameters in these field are mandatory. 
+
+#### Input
+* **seq1st**
+  * `prefix`: The `prefix` will be used to organize the 1st-seq FASTQ files. Make sure the `prefix` parameter in the corresponding flowcell is unique.  
+  * `sbcd_layout_summary`: A file summarizs the tile information for section chips with the following format. You only need to supply either `sbcd_layout_summary` or `sbcd_layout`, not both. 
+    ```
+    section_id  lane  topbot  start  end
+    B02A        1     2       01     10
+    B03A        1     2       09     18
+    ```
+    * section_id: Section chip IDs
+    * lane: Lane IDs
+    * topbot: The positions of each section chip where 1 represents top and 2 indicates bottom.
+    * start: The start tile.
+    * end: The end tile.
+  * `sbcd_layout`: The sbcd layout file for the input section chip. The format should be:
+    ```
+    lane  tile  row  col  rowshift  colshift
+    3     2556  1    1    0         0
+    3     2456  2    1    0         0.1715
+    ```
+    * lane: Lane IDs
+    * tile: Tile IDs
+    * row & col: The layout position
+    * rowshift & colshift: The gap information
+
+* **seq2nd**
+  Every FASTQ pair associated with the chip section in the input should be supplied in seq2nd as pairs.  The `prefix` should unique among all 2nd-seq data, not just within this flowcell.
+
+#### output
+The output directory will be used to organize the input files and store output files. Please see the structure directory [here](output.md)
+
+#### request:
+The pipeline interprets the requested output file via this paramter and determines which jobs need to be executed.
+
+The options and corresponding output files are listed below:
+* `"sbcd-per-section"`: A spatial barcode map for a section chip, including a compressed tab-delimited file for barcodes and corresponding global coordinates, and an image displaying the spatial distribution of the barcodes' coordinates.
+* `"smatch-per-section"`: A compressed tab-delimited file with spatial barcodes corresponding to the 2nd-seq reads, a "smatch" image depicting the distribution of spatial coordinates for the matching barcodes, and a summary file of the matching results.
+* `"align-per-section"`: A BAM file accompanied by alignment summary metrics, along with spatial digital gene expression (sDGE) matrices for Gene, GeneFull, splice junctions (SJ), and Velocyto.
+* `"sge-per-section"`: An sDGE matrix, an "sge" image depicting the spatial alignment of transcripts, and an RGB image representing the sDGE matrix and selected genes. In the absence of specified genes of interest, the RGB image will display the top 5 genes with the highest expression levels.
+* `"hist-per-section"`: Two aligned histology files, one of which is a referenced geotiff file facilitating the coordinate transformation between the SGE matrix and the histology image. The other is a tiff file matching the dimensions of both the "smatch" and "sge" images.

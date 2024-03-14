@@ -21,7 +21,7 @@ request:
   - sbcd-per-section
   - smatch-per-section
   - align-per-section
-  - nge-per-section
+  - sge-per-section
 
 env_yml: /nfs/turbo/sph-hmkang/index/data/weiqiuc/NovaScope/config_env.yaml
 
