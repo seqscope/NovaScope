@@ -617,22 +617,23 @@
 </code></pre></div>
 
 <h1 id="3-configure-python-environment">3. Configure Python Environment<a class="headerlink" href="#3-configure-python-environment" title="Permanent link">&para;</a></h1>
-<p>If you already have an existing Python environment with all required packages (see <code>./installation/py39_req.txt</code>), skip 3.1.</p>
+<p>If you already have an existing Python environment with all required packages (see <code>./installation/pyenv_req.txt</code>), skip 3.1.</p>
 <h2 id="31-create-a-new-python-environment">3.1 Create a New Python Environment<a class="headerlink" href="#31-create-a-new-python-environment" title="Permanent link">&para;</a></h2>
-<div class="codehilite"><pre><span></span><code>pyenv=&lt;path_to_python_environment&gt;
+<div class="codehilite"><pre><span></span><code>pyenv_dir=&lt;directory_of_python_environment&gt;
+pyenv_name=&lt;name_of_python_environment&gt;
 smk_dir=&lt;path_to_NovaScope_repository&gt;
 
-mkdir -p $pyenv
-cd $pyenv
+mkdir -p $pyenv_dir
+cd $pyenv_dir
 
-python -m venv py39
-source py39/bin/activate
-pip install -r $smk_dir/installation/py39_req.txt
+python -m venv $pyenv_name
+source $pyenv_name/bin/activate
+pip install -r $smk_dir/installation/pyenv_req.txt
 </code></pre></div>
 
 <h2 id="32-install-the-historef-package-using-the-whl-file">3.2 Install the historef Package Using the whl File<a class="headerlink" href="#32-install-the-historef-package-using-the-whl-file" title="Permanent link">&para;</a></h2>
 <p>Below are codes to download historef's latest version at document creation. To access the most recent version, please see <a href="https://github.com/seqscope/historef?tab=readme-ov-file">its GitHub repository</a>.</p>
-<div class="codehilite"><pre><span></span><code>source $pyenv/py39/bin/activate
+<div class="codehilite"><pre><span></span><code>source $pyenv_dir/$pyenv_name/bin/activate
 wget -P $smk_dir/installation https://github.com/seqscope/historef/releases/download/v0.1.1/historef-0.1.1-py3-none-any.whl
 pip install $smk_dir/installation/historef-0.1.1-py3-none-any.whl
 </code></pre></div>
