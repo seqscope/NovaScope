@@ -7,13 +7,12 @@ input:
   seq1st:
     prefix: null
     fastq: "/nfs/turbo/umms-leeju/NGST/1stSeq/AGC-NOVASEQ.fastqs/9203-AP/230914_A00437_0746_AHG5MCDSX7/Undetermined_S0_L003_R1_001.fastq.gz"
-    sbcd_layout_summary: nova6000.section.info.v2.tsv
   seq2nd:
     - prefix: N3_B08C_v1
       fastq_R1: "/nfs/turbo/umms-leeju/NGST/1stSeq/AGC-NOVASEQ/9748-YK/fastqs_9748-YK/9748-YK-3_CGAGGCTG_S3_R1_001.fastq.gz"
       fastq_R2: "/nfs/turbo/umms-leeju/NGST/1stSeq/AGC-NOVASEQ/9748-YK/fastqs_9748-YK/9748-YK-3_CGAGGCTG_S3_R2_001.fastq.gz"
   label: v1
-  #histology: histology.tif
+  histology: histology.tif
 
 output: "/nfs/turbo/umms-leeju/v5"
 

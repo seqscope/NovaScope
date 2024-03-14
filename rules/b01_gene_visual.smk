@@ -25,8 +25,15 @@ rule b01_gene_visual:
         visual_dirprefix = os.path.basename(visual_dir)
 
         # Check the layout for rgb-gene-image.
-        rgb_layout = setup_rgb_layout(params.rgb_layout, sdge_dir)
-
+        if params.rgb_layout is not None:
+            rgb_layout = params.rgb_layout
+            assert os.path.exists(rgb_layout), f"The provided RGB layout file does not exist: {rgb_layout}"
+            print(f"Using the provided RGB layout file: {rgb_layout}.")
+        else: 
+            rgb_layout = os.path.join(smk_dir, "info", "assets", "layout_per_section_basis", "layout.1x1.tsv")
+            assert os.path.exists(rgb_layout), f"The default RGB layout file does not exist: {rgb_layout}."
+            print(f"Using the default RGB layout file: {rgb_layout}.")
+        
         # Obtain genes of interest.
         if params.visual_gof is None:
             visual_gof = subprocess.check_output(f"zcat {input.sdge_ftr} | sort -k4,4nr | head -n 5 | cut -f 2", shell=True).decode().strip().split("\n")

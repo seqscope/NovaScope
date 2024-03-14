@@ -36,11 +36,28 @@ mkdir -p  $job_dir && cd $job_dir
 wget https://historef-sample-data.s3.amazonaws.com/sample/b08c/histology.tif
 ```
 
+
+### Example 3 - Full Section Deep Sequencing Test Run 
+
+The input data is from a full section with an available histology file.
+
+Download the first and second sequencing data sets from here. *TBC: Add the download link*
+
+```
+# Define the $job_dir
+job_dir="$smk_dir/testrun/full_section_deep"  
+
+mkdir -p  $job_dir && cd $job_dir
+
+# Download the histology file
+wget https://historef-sample-data.s3.amazonaws.com/sample/b08c/histology.tif
+```
+
 ## 2. Prepare Input Config Files
 
 The pipeline necessitates a `config_job.yaml` file to define all inputs, outputs, and parameters. This `config_job.yaml` file should be provided in the `$job_dir`.
 
-Separate example `config_job.yaml` files for the [regional](https://github.com/seqscope/NovaScope/blob/main/testrun/regional_section/config_job.yaml) and [full](https://github.com/seqscope/NovaScope/blob/main/testrun/full_section_shallow/config_job.yaml) section test runs are provided.  
+Separate example `config_job.yaml` files for the [regional section](https://github.com/seqscope/NovaScope/blob/main/testrun/regional_section/config_job.yaml), [full section shallow](https://github.com/seqscope/NovaScope/blob/main/testrun/full_section_shallow/config_job.yaml), and [full section deep]() test runs are provided.  
 
 Below, you'll find explanations for each item specified in the `config_job.yaml`.
 
@@ -60,8 +77,7 @@ input:
   seq1st:
     prefix: <seq1st_id>       ## Optional. Defaults to "L{lane}" if absent.
     fastq: <path_to_seq1st_fastq_file>
-    sbcd_layout_summary: <path_to_sbcd_layout_summary> ## Provide either sbcd_layout_summary or sbcd_layout.
-    #sbcd_layout: <path_to_sbcd_layout>
+    layout: <path_to_sbcd_layout>
   seq2nd:                     ## List all input 2nd sequencing data here.
     - prefix: <seq2st_pair1_id>
       fastq_R1: <path_to_seq2nd_pair1_fastq_Read1_file>
@@ -113,7 +129,9 @@ env_yml: <path_to_config_env.yaml_file> ## If absent, the pipeline will check if
 #      partition: standard
 #      threads: 10
 #      memory: 70000m
-#  gene_visual: None         ## If you have a specific set of genes to visualize, specify the path to a file containing a list of gene names (one per line) here. By default, the top five genes with the highest expression are visualized.
+#  dge2sdge:
+#      layout: null          ## If absent, the layout file in the info/assets/layout_per_section_basis/layout.1x1.tsv will be used for RGB plots.
+#  gene_visual: null         ## If you have a specific set of genes to visualize, specify the path to a file containing a list of gene names (one per line) here. By default, the top five genes with the highest expression are visualized.
 #  visualization:
 #    drawxy:
 #      coord_per_pixel: 1000

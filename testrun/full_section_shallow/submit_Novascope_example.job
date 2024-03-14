@@ -20,4 +20,4 @@ job_dir="$smk_dir/testrun/full_section_shallow"  # Path to your Job directory, w
 slurm_params="--profile $smk_dir/slurm" # Path to the SLURM parameter directory, which should include a config.yaml file.
 
 # Execute the NovaScope pipeline
-snakemake $slurm_params --latency-wait 120 -s $smk_dir/NovaScope.smk --rerun-triggers mtime --rerun-incomplete -d $job_dir
+snakemake $slurm_params --latency-wait 120 -s $smk_dir/NovaScope.smk -d $job_dir

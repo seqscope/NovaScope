@@ -24,7 +24,7 @@ sys.path.append(local_scripts)
 from bricks import setup_logging, end_logging, configure_pandas_display, load_configs
 from bricks import check_input, check_path, create_dict, create_symlink, create_dirs_and_get_paths
 from bricks import list_outputfn_by_request
-from rule_general import setup_rgb_layout, get_skip_sbcd, assign_resource_for_align, get_envmodules_for_rule
+from rule_general import get_skip_sbcd, assign_resource_for_align, get_envmodules_for_rule #setup_rgb_layout
 
 # Set up display and log
 configure_pandas_display()
@@ -38,13 +38,7 @@ logging.info(f" - Current job path: {job_dir}")
 logging.info(f" - Loading config file:")
 config = load_configs(job_dir, [("config_job.yaml", True)])
 
-# Env
-#env_dir = config.get("env", os.path.join(smk_dir, "env"))
-#if not os.path.exists(env_dir):
-#    raise ValueError(f"The environment path ({env_dir}) does not exist. Please provide a valid environment path in the config file or create a environment directory within the pipeline directory.")
-#logging.info(f" - Environment path: {env_dir}")
-
-# Env config
+# Env config 
 env_configfile = check_path(config.get("env_yml", os.path.join(smk_dir, "config_env.yaml")),job_dir, strict_mode=True, flag="The environment config file")
 env_config = load_configs(None, [(env_configfile, True)])
 
@@ -93,7 +87,7 @@ specie = check_input(config["input"]["specie"], {"human","human_mouse","mouse","
 logging.info(f" - Specie: {specie}")
 
 # Request
-request=check_input(config.get("request",["sge-per-section"]),{"sbcd-per-section", "smatch-per-section", "align-per-section", "sge-per-section","hist-per-section"}, "request", lower=False)
+request=check_input(config.get("request",["sge-per-section"]),{"sbcd-per-flowcell", "sbcd-per-section", "smatch-per-section", "align-per-section", "sge-per-section","hist-per-section"}, "request", lower=False)
 logging.info(f" - Request: {request}")
 
 # Label: if not provided, use specie as label, else use {specie}_{label}
@@ -119,7 +113,7 @@ if pd.isna(df_seq1["seq1_prefix"]).any():
 
 df_seq1['seq1_fq_raw'] = df_seq1['seq1_fq_raw'].apply(lambda x: check_path(x, job_dir)) # Check path for each fastq file and update the path when it is a relative path. 
 
-sc2seq1     = create_dict(df_seq1, key_col="section", val_cols="seq1_prefix", dict_type="val", val_type="str")
+sc2seq1 = create_dict(df_seq1, key_col="section", val_cols="seq1_prefix", dict_type="val", val_type="str")
 
 logging.info("     Seq1 input summary table:\n%s", df_seq1)
 
@@ -182,12 +176,10 @@ if "hist-per-section" in request:
         logging.info(f"     Histology file: {os.path.realpath(hist_std_tif)}")
     else:
         raise ValueError(f"Please provide a valid histology file.")
-
 else:
     hist_std_tif=None
     logging.info(f" - Histology file: Skipping.")
 
-#hist_request = lambda: "hist-per-section" in request
 #==============================================
 #
 # 3. A dummy rule to collect results
@@ -199,6 +191,18 @@ logging.info(f"\n")
 logging.info(f"3. Required output filenames.")
 
 output_filename_conditions = [
+    # sbcd-per-flowcell
+    {
+        'flag': 'sbcd-per-flowcell',
+        'root': main_dirs["seq1st"],
+        'subfolders_patterns': [
+                                (["{flowcell}", "sbcds", "{seq1_prefix}", "manifest.tsv"], None),
+        ],
+        'zip_args': {
+            'flowcell':         df_seq1["flowcell"].values,
+            'seq1_prefix':      df_seq1["seq1_prefix"].values,
+        },
+    },
     # sbcd-per-section
     {
         'flag': 'sbcd-per-section',

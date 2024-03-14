@@ -6,13 +6,9 @@ rule a02_sbcd2chip:
         nbcd_mnfst       = os.path.join(main_dirs["seq1st"], "{flowcell}", "nbcds", "{section}", "manifest.tsv"),
         nbcd_png         = os.path.join(main_dirs["seq1st"], "{flowcell}", "nbcds", "{section}", "1_1.sbcds.sorted.png"),
     params:
-        # general params
-        section          = lambda wildcards: wildcards.section,
-        # sbcd.part
-        input_sbcd_part_layout    = check_path(config.get('input', {}).get('seq1st', {}).get('sbcd_layout', None), job_dir, strict_mode=False),
-        input_sbcd_layout_summary = check_path(config.get("input", {}).get("seq1st", {}).get('sbcd_layout_summary',None),job_dir, strict_mode=False),
-        sbcd_part_layout          = lambda wildcards: os.path.join(main_dirs["seq1st"], wildcards.flowcell, "sbcds.part", sc2seq1[wildcards.section], wildcards.section, wildcards.section+".layout.tsv"),
-        sbcd_part_mnfst           = lambda wildcards: os.path.join(main_dirs["seq1st"], wildcards.flowcell, "sbcds.part", sc2seq1[wildcards.section], wildcards.section, "manifest.tsv"),
+        # sbcd layout: tile2section
+        sbcd_layout      = check_path(config.get('input', {}).get('seq1st', {}).get('layout', None), job_dir, strict_mode=False),
+        sbcd_layout_def  = lambda wildcards: os.path.join(smk_dir, "info", "assets", "layout_per_tile_basis", wildcards.section+".layout.tsv"),
         # combine 
         gap_row             = config.get("preprocess", {}).get("sbcd2chip", {}).get('gap_row', 0.0517),
         gap_col             = config.get("preprocess", {}).get("sbcd2chip", {}).get('gap_col', 0.0048),
@@ -35,41 +31,27 @@ rule a02_sbcd2chip:
 
         os.makedirs(sbcd_part_dir, exist_ok=True)
 
-        # s1a
-        if params.input_sbcd_part_layout is not None:
-            assert os.path.exists(params.input_sbcd_part_layout), f"Provided sbcd layout file does not exist: {params.input_sbcd_part_layout}."
-            print(f"Using the provided sbcd lay out file: {params.input_sbcd_part_layout}.")
-            print(f"Linking {params.sbcd_part_layout} to {params.sbcd_part_layout}.")
-            create_symlink( input_path=params.input_sbcd_part_layout, 
-                            output_path=params.sbcd_part_layout,  
-                            handle_missing_input="warn",  
-                            handle_existing_output="replace",  
-                            silent=True)
-            args_layout_input = f"--input {params.input_sbcd_part_layout} --input_type layout "
-        elif params.input_sbcd_layout_summary is not None:
-            assert os.path.exists(params.input_sbcd_layout_summary), f"Provided sbcd layout summary file does not exist: {params.input_sbcd_layout_summary}."
-            print(f"Using the provided sbcd lay out summary file: {params.input_sbcd_layout_summary}")
-            args_layout_input = f"--input {params.input_sbcd_layout_summary} --input_type summary "
+        # Identify the sbcd layout file to use.
+        if params.sbcd_layout is not None:
+            assert os.path.exists(params.sbcd_layout), f"The provided sbcd layout file does not exist: {params.sbcd_layout}."
+            print(f"Using the provided sbcd lay out file: {params.sbcd_layout}.")
+            sbcd_layout = params.sbcd_layout
         else:
-            raise ValueError("No sbcd layout file or layout summary is provided.")
-        
+            assert os.path.exists(params.sbcd_layout_def), f"The default sbcd layout file does not exist: {params.sbcd_layout_def}. Check your section chip ID."
+            print(f"Using the default sbcd lay out file: {params.sbcd_layout_def}.")
+            sbcd_layout = params.sbcd_layout_def    
+            
         shell(
         r"""
         set -euo pipefail
         {params.module_cmd}
         source {py39_env}/bin/activate
-    
-        # s1b
-        command time -v {py39} {local_scripts}/rule_a2.sbcd_section_from_lane.py \
-            --sbcd_dir {sbcd_dir} \
-            --sbcd_part_dir {sbcd_part_dir} \
-            --section {params.section} {args_layout_input}
 
-        # s2
+        # s1
         echo -e "Combinding sbcds.part to ncbds.\\n"
         command time -v  {spatula} combine-sbcds \
-            --layout {params.sbcd_part_layout} \
-            --manifest {params.sbcd_part_mnfst} \
+            --layout {sbcd_layout} \
+            --manifest {input.sbcd_mnfst} \
             --sbcd {sbcd_part_dir} \
             --out {nbcd_dir} \
             --rowgap {params.gap_row} \
@@ -77,7 +59,7 @@ rule a02_sbcd2chip:
             --max-dup {params.dup_maxnum} \
             --max-dup-dist-nm {params.dup_maxdist}
 
-        # s3
+        # s2
         echo -e "Runing draw-xy...\\n"
         command time -v  {spatula} draw-xy \
             --tsv {output.nbcd_tsv} \

@@ -36,8 +36,15 @@ rule a05_dge2sdge:
         smatch_tsv_warg_smatch = " --smatch ".join(expand(input.smatch_tsv))
 
         # Check the layout for rgb-gene-image.
-        rgb_layout = setup_rgb_layout(params.rgb_layout, sdge_dir)
-       
+        if params.rgb_layout is not None:
+            rgb_layout = params.rgb_layout
+            assert os.path.exists(params.rgb_layout), f"The provided RGB layout file does not exist: {params.rgb_layout}"
+            print(f"Using the provided RGB layout file: {params.rgb_layout}.")
+        else: 
+            rgb_layout = os.path.join(smk_dir, "info", "assets", "layout_per_section_basis", "layout.1x1.tsv")
+            assert os.path.exists(rgb_layout), f"The default RGB layout file does not exist: {rgb_layout}."
+            print(f"Using the default RGB layout file: {rgb_layout}.")
+
         shell(
         r"""
         set -euo pipefail
