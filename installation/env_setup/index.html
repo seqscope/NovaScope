@@ -620,16 +620,22 @@
 <h2 id="hpc-specific-configuration">HPC-specific Configuration:<a class="headerlink" href="#hpc-specific-configuration" title="Permanent link">&para;</a></h2>
 <p>For HPC users, use the <code>envmodules</code> section to load the required software tools as modules. If a tool is not listed in the envmodules section, the pipeline will assume it's installed system-wide. For local executions, you may remove this section if running the pipeline on your local machine.</p>
 <p>Please specify the <strong>version</strong> information. </p>
-<p>If your python environment was set up using a Python version accessed through a module, your environment depends on certain shared files from that module. Therefore, you must add the <code>python: "python/&lt;version_information&gt;"</code>  in the <code>envmodules</code> section to load the same module you initially used to establish your environment. But if you set up with a locally installed Python (not using module load), comment out or remove the module line <code>python: "python/&lt;version_information&gt;"</code>.</p>
 <div class="codehilite"><pre><span></span><code>envmodules:
   python: &quot;python/&lt;version_information&gt;&quot;
   gcc: &quot;gcc/&lt;version_information&gt;&quot;
   gdal: &quot;gdal/&lt;version_information&gt;&quot;
   imagemagick: &quot;imagemagick/&lt;version_information&gt;&quot;
+  #Bioinformatics: &quot;Bioinformatics&quot;
+  #samtools: &quot;samtools/1.13-fwwss5n&quot;
 </code></pre></div>
 
+<ul>
+<li><code>python</code>: If your python environment was set up using a Python version accessed through a module, your environment depends on certain shared files from that module. Therefore, you must add the <code>python: "python/&lt;version_information&gt;"</code>  in the <code>envmodules</code> section to load the same module you initially used to establish your environment. But if you set up with a locally installed Python (not using <code>module load</code>), comment out or remove the module line <code>python: "python/&lt;version_information&gt;"</code>.</li>
+<li><code>Bioinformatics</code> and <code>samtools</code>: It is also feasible to use <code>envmodules</code> to load samtools instead of defining its path in <code>tools</code>.</li>
+</ul>
 <h2 id="reference-database">Reference Database<a class="headerlink" href="#reference-database" title="Permanent link">&para;</a></h2>
-<p>Please list every reference database used for alignment here. Ensure the reference database corresponds to the species of your input data.</p>
+<p>Please list every reference database used for alignment here. The reference data are provided via . <em>TODO: add the download link</em></p>
+<p>Please Ensure the reference database corresponds to the species of your input data. </p>
 <div class="codehilite"><pre><span></span><code>ref:
   align:
     &lt;specie1&gt;: &lt;path_to_the_reference_genome_index_for_specie1&gt;
@@ -638,8 +644,7 @@
 </code></pre></div>
 
 <h2 id="python-environment">Python Environment<a class="headerlink" href="#python-environment" title="Permanent link">&para;</a></h2>
-<div class="codehilite"><pre><span></span><code>pyenv:
-  &lt;python_env1&gt;: &lt;path_to_the_python_environment1&gt;
+<div class="codehilite"><pre><span></span><code>pyenv: &lt;path_to_the_python_environment1&gt;
 </code></pre></div>
 
 

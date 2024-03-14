@@ -679,7 +679,7 @@ snakemake --dag  -s $smk_dir/NovaScope.smk --rerun-incomplete -d $job_dir | dot 
 #SBATCH --output=./logs/&lt;log_filename&gt;         # Replace &lt;log_filename&gt; with the log file name pattern
 
 # Paths
-smk_dir=&quot;&lt;path_to_NovaScope_repository&gt;&quot;                  # Replace &lt;path_to_NovaScope_repository&gt; with the path to the NovaScope repository
+smk_dir=&quot;&lt;path_to_NovaScope_repository&gt;&quot;            # Replace &lt;path_to_NovaScope_repository&gt; with the path to the NovaScope repository
 job_dir=&quot;&lt;path_to_the_job_directory&gt;&quot;               # Replace &lt;path_to_the_job_directory&gt; with your specific job directory path
 slurm_params=&quot;--profile &lt;path_to_slurm_directory&gt;&quot;  # Replace &lt;path_to_slurm_directory&gt; with your directory of the SLURM configuration file
 
@@ -694,7 +694,7 @@ snakemake $slurm_params  --latency-wait 120  -s ${smk_dir}/NovaScope.smk  -d $jo
 <h3 id="option-b-slurm-via-command-line">Option B: SLURM via Command Line<a class="headerlink" href="#option-b-slurm-via-command-line" title="Permanent link">&para;</a></h3>
 <p>For a small number of quick jobs, you can submit them with a single command line. </p>
 <p>However, it's important to remember that if you log out before all jobs have been submitted to SLURM, any remaining jobs, i.e., those haven't been submitted, will not be submitted.</p>
-<div class="codehilite"><pre><span></span><code>smk_dir=&quot;&lt;path_to_NovaScope_repository&gt;&quot;                  # Replace &lt;path_to_NovaScope_repository&gt; with the path to the NovaScope repository
+<div class="codehilite"><pre><span></span><code>smk_dir=&quot;&lt;path_to_NovaScope_repository&gt;&quot;            # Replace &lt;path_to_NovaScope_repository&gt; with the path to the NovaScope repository
 job_dir=&quot;&lt;path_to_the_job_directory&gt;&quot;               # Replace &lt;path_to_the_job_directory&gt; with your specific job directory path
 slurm_params=&quot;--profile &lt;path_to_slurm_directory&gt;&quot;  # Replace &lt;path_to_slurm_directory&gt; with your directory of the SLURM configuration file
 
@@ -703,7 +703,7 @@ snakemake $slurm_params --latency-wait 120 -s ${smk_dir}/NovaScope.smk -d $job_d
 
 <h3 id="option-c-local-execution">Option C: Local Execution<a class="headerlink" href="#option-c-local-execution" title="Permanent link">&para;</a></h3>
 <p>Run the pipeline locally, with specifying the number of cores. See examples in the <a href="https://github.com/seqscope/NovaScope/blob/main/testrun/regional_section/submit_local.sh">regional section</a>, <a href="https://github.com/seqscope/NovaScope/blob/main/testrun/full_section_shallow/submit_local.sh">full section shallow</a>, and <a href="https://github.com/seqscope/NovaScope/blob/main/testrun/full_section_deep/submit_local.sh">full section deep</a> test runs.</p>
-<div class="codehilite"><pre><span></span><code>smk_dir=&quot;&lt;path_to_NovaScope_repository&gt;&quot;             # Replace &lt;path_to_NovaScope_repository&gt; with the path to the NovaScope repository
+<div class="codehilite"><pre><span></span><code>smk_dir=&quot;&lt;path_to_NovaScope_repository&gt;&quot;       # Replace &lt;path_to_NovaScope_repository&gt; with the path to the NovaScope repository
 job_dir=&quot;&lt;path_to_the_job_directory&gt;&quot;          # Replace &lt;job_directory&gt; with your specific job directory path
 
 Ncores=1 # Number of CPU cores

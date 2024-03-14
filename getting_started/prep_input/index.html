@@ -809,6 +809,8 @@
 job_dir=&quot;$smk_dir/testrun/regional_section&quot;  
 
 mkdir -p  $job_dir &amp;&amp; cd $job_dir
+
+mkdir -p input_data 
 </code></pre></div>
 
 <h3 id="example-2-full-section-shallow-sequencing-test-run">Example 2 - Full Section Shallow Sequencing Test Run<a class="headerlink" href="#example-2-full-section-shallow-sequencing-test-run" title="Permanent link">&para;</a></h3>
@@ -876,8 +878,7 @@ request:                                        ## See 2.2.
   # ...
 
 ## Environment
-env_yml: &lt;path_to_config_env.yaml_file&gt;         ## If absent, the pipeline will check if a &quot;config_env.yaml&quot; file exists in the `info` subdirectory in the Novascope.
-
+env_yml: &lt;path_to_config_env.yaml_file&gt;         ## If absent, the pipeline will check if a &quot;config_env.yaml&quot; file exists in the `info` subdirectory in the Novascope repository.
 
 ## ================================================
 ##
