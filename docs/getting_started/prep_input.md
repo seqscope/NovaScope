@@ -15,6 +15,7 @@ The input data originates from a specific, limited region of a section. No histo
 Now Download the first and second sequencing data sets from [here](https://www.dropbox.com/scl/fi/3egsr9nqc559e9hb45vik/B08Csub_20240301_raw.tar.gz?rlkey=z06xwb3v6ku19dp6br6mlsgkm&dl=0).
 
 ```
+smk_dir="<path_to_NovaScope_repository>"    # Replace <path_to_NovaScope_repository> with the path to the NovaScope repository
 job_dir="$smk_dir/testrun/regional_section"  
 
 mkdir -p  $job_dir && cd $job_dir
@@ -27,7 +28,7 @@ The input data is from a full section with an available histology file.
 Download the first and second sequencing data sets from here. *TBC: Add the download link*
 
 ```
-# Define the $job_dir
+smk_dir="<path_to_NovaScope_repository>"    # Replace <path_to_NovaScope_repository> with the path to the NovaScope repository
 job_dir="$smk_dir/testrun/full_section_shallow"  
 
 mkdir -p  $job_dir && cd $job_dir
@@ -44,7 +45,7 @@ The input data is from a full section with an available histology file.
 Download the first and second sequencing data sets from here. *TBC: Add the download link*
 
 ```
-# Define the $job_dir
+smk_dir="<path_to_NovaScope_repository>"    # Replace <path_to_NovaScope_repository> with the path to the NovaScope repository
 job_dir="$smk_dir/testrun/full_section_deep"  
 
 mkdir -p  $job_dir && cd $job_dir
@@ -57,7 +58,7 @@ wget https://historef-sample-data.s3.amazonaws.com/sample/b08c/histology.tif
 
 The pipeline necessitates a `config_job.yaml` file to define all inputs, outputs, and parameters. This `config_job.yaml` file should be provided in the `$job_dir`.
 
-Separate example `config_job.yaml` files for the [regional section](https://github.com/seqscope/NovaScope/blob/main/testrun/regional_section/config_job.yaml), [full section shallow](https://github.com/seqscope/NovaScope/blob/main/testrun/full_section_shallow/config_job.yaml), and [full section deep]() test runs are provided.  
+Separate example `config_job.yaml` files for the [regional section](../../testrun/regional_section/config_job.yaml), [full section shallow](../../testrun/full_section_shallow/config_job.yaml), and [full section deep](../../testrun/full_section_deep/config_job.yaml) test runs are provided.  
 
 Below, you'll find explanations for each item specified in the `config_job.yaml`.
 
@@ -77,7 +78,7 @@ input:
   seq1st:
     prefix: <seq1st_id>       ## Optional. Defaults to "L{lane}" if absent.
     fastq: <path_to_seq1st_fastq_file>
-    layout: <path_to_sbcd_layout>
+    layout: <path_to_sbcd_layout>   ## Optional. By default, NovaScope will search the sbcd layout at the info/assets/layout_per_tile_basis in the NovaScope repository.
   seq2nd:                     ## List all input 2nd sequencing data here.
     - prefix: <seq2st_pair1_id>
       fastq_R1: <path_to_seq2nd_pair1_fastq_Read1_file>
@@ -97,7 +98,7 @@ request:                      ## Required output files. Options: "sbcd-per-secti
   # ...
 
 ## Environment Section
-env_yml: <path_to_config_env.yaml_file> ## If absent, the pipeline will check if a "config_env.yaml" file exists in the Novascope directory.
+env_yml: <path_to_config_env.yaml_file> ## If absent, the pipeline will check if a "config_env.yaml" file exists in the `info` subdirectory in the Novascope.
 
 
 ## ================================================
@@ -116,7 +117,7 @@ env_yml: <path_to_config_env.yaml_file> ## If absent, the pipeline will check if
 #    gap_row: 0.0517
 #    gap_col: 0.0048
 #    dup_maxnum: 1
-#    dup_maxdist: 0.1
+#    dup_maxdist: 1
 #  smatch:
 #    skip_sbcd: 1            ## If absent, skip_sbcd can be calculated follows the fastq2sbcd format: 1 for DraI31 and 0 for DraI32.
 #    match_len: 27

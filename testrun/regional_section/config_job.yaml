@@ -8,7 +8,7 @@ input:
   seq1st:
     prefix: L3_filt
     fastq: "input_data/seq1st/fastqs/9203-AP.L3.2456_2556.R1_001.fastq.gz"
-    sbcd_layout: "input_data/seq1st/layout/B08Csub.layout.tsv"
+    layout: "input_data/seq1st/layout/B08Csub.layout.tsv"
   seq2nd:
     - prefix: B08Cv1.filt
       fastq_R1: "input_data/seq2nd/fastqs/B08Cv1.filt/B08Cv1.filt.R1.fastq.gz"
@@ -18,12 +18,13 @@ input:
 output: "/nfs/turbo/umms-leeju/v5"
 
 request:
+  - sbcd-per-flowcell
   - sbcd-per-section
   - smatch-per-section
   - align-per-section
   - sge-per-section
 
-env_yml: /nfs/turbo/sph-hmkang/index/data/weiqiuc/NovaScope/config_env.yaml
+env_yml: /nfs/turbo/sph-hmkang/index/data/weiqiuc/NovaScope/info/config_env.yaml
 
 preprocess:
   fastq2sbcd:

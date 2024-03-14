@@ -9,8 +9,8 @@ Additionally, you can create a rule graph that visually represents the structure
 
 ```
 # Paths
-smk_dir="<path_to_NovaScope_repo>"    # Replace <path_to_NovaScope_repo> with the path to the NovaScope repository
-job_dir="<job_directory>"             # Replace <job_directory> with your specific job directory path, which has the `config_job.yaml` file.
+smk_dir="<path_to_NovaScope_repository>"    # Replace <path_to_NovaScope_repository> with the path to the NovaScope repository
+job_dir="<job_directory>"                   # Replace <job_directory> with your specific job directory path, which has the `config_job.yaml` file.
 
 ## (Recommended) Start with a dry run
 ## - View all information:
@@ -34,7 +34,8 @@ This approach involves utilizing a master SLURM job to oversee and manage the st
 
 First, you need to establish the master job. The primary role of this job is to monitor the progress of all tasks, handle job submissions based on dependencies and available resources. Thus, it requires minimal memory but an extended time limit. Its time limit should be longer than the total time required to complete all associated jobs.
 
-Below is an example:
+Create a file with the information below, e.g. submit_HPC.job. See examples in the [regional section](../../testrun/regional_section/submit_HPC.job), [full section shallow](../../testrun/full_section_shallow/submit_HPC.job), and [full section deep](../../testrun/full_section_deep/submit_HPC.job) test runs.
+
 ```
 #!/bin/bash
 ####  Job configuration
@@ -51,15 +52,15 @@ Below is an example:
 #SBATCH --output=./logs/<log_filename>         # Replace <log_filename> with the log file name pattern
 
 # Paths
-smk_dir="<path_to_NovaScope_repo>"                  # Replace <path_to_NovaScope_repo> with the path to the NovaScope repository
+smk_dir="<path_to_NovaScope_repository>"                  # Replace <path_to_NovaScope_repository> with the path to the NovaScope repository
 job_dir="<path_to_the_job_directory>"               # Replace <path_to_the_job_directory> with your specific job directory path
 slurm_params="--profile <path_to_slurm_directory>"  # Replace <path_to_slurm_directory> with your directory of the SLURM configuration file
 
 # Execute the NovaScope pipeline
-snakemake $slurm_params --latency-wait 120 -s $smk_dir/NovaScope.smk --rerun-triggers
+snakemake $slurm_params  --latency-wait 120  -s ${smk_dir}/NovaScope.smk  -d $job_dir 
 ```
 
-Create a file with the above information, e.g. submit_Novascope_example.job, and then submit this file:
+then submit this file:
 
 ```
 sbatch submit_Novascope_example.job
@@ -73,21 +74,21 @@ For a small number of quick jobs, you can submit them with a single command line
 However, it's important to remember that if you log out before all jobs have been submitted to SLURM, any remaining jobs, i.e., those haven't been submitted, will not be submitted.
 
 ```
-smk_dir="<path_to_NovaScope_repo>"                  # Replace <path_to_NovaScope_repo> with the path to the NovaScope repository
+smk_dir="<path_to_NovaScope_repository>"                  # Replace <path_to_NovaScope_repository> with the path to the NovaScope repository
 job_dir="<path_to_the_job_directory>"               # Replace <path_to_the_job_directory> with your specific job directory path
 slurm_params="--profile <path_to_slurm_directory>"  # Replace <path_to_slurm_directory> with your directory of the SLURM configuration file
 
-snakemake $slurm_params --latency-wait 120 -s ${smk_dir}/NovaScope.smk --rerun-incomplete -d $job_dir
+snakemake $slurm_params --latency-wait 120 -s ${smk_dir}/NovaScope.smk -d $job_dir 
 ```
 
 ### Option C: Local Execution
-Run the pipeline locally, with specifying the number of cores.
+Run the pipeline locally, with specifying the number of cores. See examples in the [regional section](../../testrun/regional_section/submit_local.sh), [full section shallow](../../testrun/full_section_shallow/submit_local.sh), and [full section deep](../../testrun/full_section_deep/submit_local.sh) test runs.
 
 ```
-smk_dir="<path_to_NovaScope_repo>"             # Replace <path_to_NovaScope_repo> with the path to the NovaScope repository
+smk_dir="<path_to_NovaScope_repository>"             # Replace <path_to_NovaScope_repository> with the path to the NovaScope repository
 job_dir="<path_to_the_job_directory>"          # Replace <job_directory> with your specific job directory path
 
 Ncores=1 # Number of CPU cores
 
-snakemake --latency-wait 120 -s ${smk_dir}/NovaScope.smk --rerun-incomplete -d $job_dir --cores $Ncores
+snakemake --latency-wait 120 -s ${smk_dir}/NovaScope.smk -d $job_dir --cores $Ncores --rerun-incomplete 
 ```

@@ -55,6 +55,7 @@ rule a04_align:
             --threads {threads}  \
             --match-len {params.match_len} \
             --len-sbcd {params.len_sbcd} \
+            --overwrite-existing \
             --star-add-options "--limitBAMsortRAM {params.ram}"
 
         """)

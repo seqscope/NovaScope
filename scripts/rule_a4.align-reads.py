@@ -1,4 +1,4 @@
-import os, sys, gzip, argparse, subprocess, random
+import os, sys, gzip, argparse, subprocess, random, glob
 from utils import read_maybe_gzip, check_iupac, revcomp
 
 star_default_options= "--limitOutSJcollapsed 5000000 --soloCellFilter None --soloBarcodeReadLength 0 --outFilterScoreMinOverLread 0 --outSAMtype BAM SortedByCoordinate --soloType CB_UMI_Simple --soloCBstart 1"
@@ -34,7 +34,7 @@ aln_params.add_argument("--min-match-frac", type=float, default=0, help="--outFi
 aln_params.add_argument("--star-add-options", type=str, help="Additional options to add to STARsolo alignment")
 aln_params.add_argument("--star-bin", type=str, default="/nfs/turbo/sph-hmkang/bin/STAR_2_7_10a_v3", help="STAR binary path")
 
-aux_params = parser.add_argument_group("Auxilary Parameters", "Auxilary Parameters (default recommended, modify at yown risk)")
+aux_params = parser.add_argument_group("Auxilary Parameters", "Auxilary Parameters (default recommended, modify at your own risk)")
 aux_params.add_argument("--spatula", type=str, default="spatula", help="Path to spatula binary")
 aux_params.add_argument("--samtools", type=str, default="samtools", help="Path to samtools binary")
 aux_params.add_argument("--gzip", type=str, default="gzip", help="Binary of gzip (e.g. you can replace it with pigz -p 10)")
@@ -47,35 +47,37 @@ aux_params.add_argument("--tmpdir", type=str, default="/tmp", help="Temporary di
 aux_params.add_argument("--sortmem", type=str, default="5G", help="Max memory to use for sorting")
 aux_params.add_argument("--batch-size", type=int, default=300000000, help="Batch size in --write-match")
 aux_params.add_argument("--skip-existing", action='store_true', default=False, help="Skip rerunning command if the output file already exists")
+aux_params.add_argument("--overwrite-existing", action='store_true', default=False, help="Overwrite the output file if it already exists")
 aux_params.add_argument("--keep-temp-files", action='store_true', default=False, help="Keep intermediate files for debugging purpose")
 
 args = parser.parse_args()
 
-def run_or_skip(cmd, outfile, skipFlag):
-    if skipFlag and os.path.exists(outfile):
-        print(f"Skipping the following command because output file {outfile} exitsts:\n{cmd}", file=sys.stderr)
+## function definitons
+## Update: added a overwriteFlag
+def execute_with_flag(cmd, outfile, skipFlag=False, overwriteFlag=False):
+    file_exists = os.path.exists(outfile)
+    if skipFlag and file_exists:
+        action = "Skipping"
+    elif overwriteFlag and file_exists:
+        action = "Overwriting"
+        os.remove(outfile)
     else:
-        res = subprocess.run(cmd, shell=True)
-        if res.returncode != 0:
+        action = "Executing" 
+    print(f"{action} command: {cmd}\nOutput file: {outfile}", file=sys.stderr)
+    if action != "Skipping":
+        res = subprocess.run(cmd, shell=True)  
+        if res.returncode != 0: # Or use `check=True` in subprocess.run to automatically raise an exception on non-zero returncode.
             raise OSError(f"Error in running command {cmd}")
-        
+
 ## function definitons
 def make_whitelist_from_match(matchf, outf):
     if len(matchf) == 1:
         cmd = f"/bin/bash -c 'set -o pipefail; {args.gzip} -cd {matchf[0]} | cut -c 1-{args.len_sbcd} | uniq > {outf}'"
-        run_or_skip(cmd, outf, args.skip_existing)    
-        # if args.skip_existing and os.path.exits(outf):
-        #     print("Skipping the following command because ")
-        # res = subprocess.run(cmd, shell=True)
-        # if res.returncode != 0:
-        #     raise OSError(f"Error in running command {cmd}")
+        execute_with_flag(cmd, outf, args.skip_existing, args.overwrite_existing)    
     elif len(matchf) > 0:
         matchfs = " ".join(matchf)
         cmd = f"/bin/bash -c 'set -o pipefail; {args.gzip} -cd {matchfs} | cut -c 1-{args.len_sbcd} | sort -T {args.tmpdir} -S {args.sortmem} | uniq > {outf}'"
-        run_or_skip(cmd, outf, args.skip_existing)    
-        # res = subprocess.run(cmd, shell=True)
-        # if res.returncode != 0:
-        #     raise OSError(f"Error in running command {cmd}")
+        execute_with_flag(cmd, outf, args.skip_existing, args.overwrite_existing)    
     else:
         raise ValueError(f"Cannot process {matchf}")
 
@@ -103,16 +105,15 @@ def make_whitelist_from_sbcd(sbcdf, outf):
                 filepath = toks[icol]
                 print(f"Processing {sbcdf}/{filepath}...", file=sys.stderr)
                 cmd = f"/bin/bash -c 'set -o pipefail; {args.gzip} -cd {sbcdf}/{filepath} | cut -c 1-{args.len_sbcd} >> {outf}'"
-                run_or_skip(cmd, outf, False)
-                # res = subprocess.run(cmd, shell=True)
-                # if res.returncode != 0:
-                #     raise OSError(f"Error in running command {cmd}")    
+                execute_with_flag(cmd, outf, False, False)
 
 ## sanity checking on the input files
 if len(args.fq1) != len(args.fq2):
     raise ValueError("The number of --fq1 and --fq2 inputs do not match")
+
 if args.whitelist_match is not None and len(args.whitelist_match) > 0 and len(args.whitelist_match) != len(args.fq1):
     raise ValueError("--whitelist-match is expected for each FASTQ file")
+
 if args.filter_match is not None and len(args.filter_match) > 0 and len(args.filter_match) != len(args.fq1):
     raise ValueError("--filter-match is expected for each FASTQ file")
 
@@ -148,49 +149,33 @@ else:
 ## perform STARsolo alignment with pipe
 fq1s = " ".join(args.fq1)
 fq2s = " ".join(args.fq2)
+
 ## command to write FASTQ files
 cmd_writefq = f"{args.spatula} reformat-fastqs --fq1 <({args.gzip} -cd {fq1s}) --fq2 <({args.gzip} -cd {fq2s}) --skip-sbcd {args.skip_sbcd} --len-match {args.match_len} --len-sbcd {args.len_sbcd} --len-umi {args.len_umi} --len-r2 {args.len_r2} --out1 {outprefix}{fifo_R1_suffix} --out2 {outprefix}{fifo_R2_suffix}"
 if args.filter_match is not None and len(args.filter_match) > 0:
     for matchf in args.filter_match:
         cmd_writefq += f" --match-tsv {matchf}"
+
+execute_with_flag(f"/bin/bash -c '{cmd_writefq}'", f"{outprefix}{fifo_R1_suffix}", args.skip_existing, args.overwrite_existing)
+
+## command to align with STARsolo
 cmd_star = f"{args.star_bin} --genomeDir {args.star_index} --readFilesIn {outprefix}{fifo_R2_suffix} {outprefix}{fifo_R1_suffix} --runDirPerm {args.run_dir_perm} --outFileNamePrefix {outprefix} --soloCBlen {args.len_sbcd} --soloUMIstart {args.len_sbcd+1} --soloUMIlen {args.len_umi} --soloCBwhitelist {outprefix}{whitelist_suffix} --runThreadN {args.threads} --outSAMattributes {args.sam_attr} --clip3pAdapterSeq {args.clip3p_seq} --clip3pAdapterMMp {args.clip3p_mmp} --soloFeatures {args.solo_features} --outFilterMatchNmin {args.min_match_len} --outFilterMatchNminOverLread {args.min_match_frac} {star_default_options}"
 if args.star_add_options is not None:
     cmd_star += f" {args.star_add_options}"
 
-run_or_skip(f"/bin/bash -c '{cmd_writefq}'", f"{outprefix}{fifo_R1_suffix}", args.skip_existing)
-# res = subprocess.run(f"/bin/bash -c '{cmd_writefq}'", shell=True)
-# if res.returncode != 0:
-#     raise OSError(f"Error in running command {cmd_writefq}")
+execute_with_flag(cmd_star, f"{outprefix}Aligned.sortedByCoord.out.bam", args.skip_existing, args.overwrite_existing)
 
-run_or_skip(cmd_star, f"{outprefix}Aligned.sortedByCoord.out.bam", args.skip_existing)
-#res = subprocess.run(cmd_star, shell=True)
-#if res.returncode != 0:
-#    raise OSError(f"Error in running command {cmd_star}")
-
+## command to index the BAM file
 cmd_bai = f"{args.samtools} index -@ {args.threads} {outprefix}Aligned.sortedByCoord.out.bam"
-run_or_skip(cmd_bai, f"{outprefix}Aligned.sortedByCoord.out.bam.bai", args.skip_existing)
-# res = subprocess.run(cmd_bai, shell=True)
-# if res.returncode != 0:
-#     raise OSError(f"Error in running command {cmd_bai}")
+execute_with_flag(cmd_bai, f"{outprefix}Aligned.sortedByCoord.out.bam.bai", args.skip_existing, args.overwrite_existing)
 
-cmd_gzip = "ls %sSolo.out/*/raw/*.{mtx,tsv} | grep -v SJ/raw/feature | xargs -I {} -P %d gzip {}" % (outprefix, args.threads)
-run_or_skip(cmd_gzip, f"{outprefix}Solo.out/Gene/raw/matrix.mtx.gz", args.skip_existing)
-# res = subprocess.run(f"/bin/bash -c 'set -o pipefail; {cmd_gzip}'", shell=True)
-# if res.returncode != 0:
-#     raise OSError(f"Error in running command {cmd_gzip}")
-
-#cmd_mkfifo = f"mkfifo {outprefix}{fifo_R1_suffix} {outprefix}{fifo_R2_suffix}"
-#res = subprocess.run(cmd_mkfifo, shell=True)
-#if res.returncode != 0:
-#    raise OSError(f"Error in running command {cmd_mkfifo}")
-#commands = [f"/bin/bash -c '{cmd_writefq}'", cmd_star]
-#procs = [ subprocess.Popen(i, shell=True) for i in commands ]
-#for p in procs:
-#   p.wait()
+## command to gzip the output files
+cmd_gzip = "ls %sSolo.out/*/raw/*.{mtx,tsv} | grep -v SJ/raw/feature | xargs -I {} -P %d gzip -f {}" % (outprefix, args.threads)
+execute_with_flag(cmd_gzip, f"{outprefix}Solo.out/Gene/raw/matrix.mtx.gz", args.skip_existing, args.overwrite_existing)
 
 if not args.keep_temp_files:
     os.remove(f"{outprefix}{fifo_R1_suffix}")
     os.remove(f"{outprefix}{fifo_R2_suffix}")
     os.remove(f"{outprefix}{whitelist_suffix}")
 
-print("Analysis Finished", file=sys.stderr);
+print("Analysis Finished", file=sys.stderr)

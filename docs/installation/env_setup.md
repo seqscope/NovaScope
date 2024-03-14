@@ -1,8 +1,8 @@
 # Setup A Environment YAML File
 
-Create a `config_env.yaml` file for the environment setup, see our example [here](https://github.com/seqscope/NovaScope/blob/main/config_env.yaml).
+Create a `config_env.yaml` file for the environment setup, see our example [here](https://github.com/seqscope/NovaScope/blob/main/info/config_env.yaml).
 
-Below is a brief description of all the items in the YAML file. Replace the placeholders with your specific input variables to customize it according to your needs.
+Below is a brief description of all the items in the YAML file. Replace the placeholders with your specific input variables to customize it according to your needs, and provide it via your `config_job.yaml`.
 
 ## Tools 
 For tools that are not explicitly defined, the pipeline will automatically check if they are installed and include them in the system path for use. This allows the pipeline to utilize these tools without needing manual configuration for each one.

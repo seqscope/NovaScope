@@ -39,7 +39,7 @@ logging.info(f" - Loading config file:")
 config = load_configs(job_dir, [("config_job.yaml", True)])
 
 # Env config 
-env_configfile = check_path(config.get("env_yml", os.path.join(smk_dir, "config_env.yaml")),job_dir, strict_mode=True, flag="The environment config file")
+env_configfile = check_path(config.get("env_yml", os.path.join(smk_dir, "info", "config_env.yaml")),job_dir, strict_mode=True, flag="The environment config file")
 env_config = load_configs(None, [(env_configfile, True)])
 
 module_config = env_config.get("envmodules", None)

@@ -38,20 +38,21 @@ Please download the necessary reference datasets for STARsolo alignment. The ver
 
 # 3. Configure Python Environment
 
-If you already have an existing Python environment with all required packages (see `./installation/py39_req.txt`), skip 3.1.
+If you already have an existing Python environment with all required packages (see `./installation/pyenv_req.txt`), skip 3.1.
 
 ## 3.1 Create a New Python Environment
 
 ```
-pyenv=<path_to_python_environment>
+pyenv_dir=<directory_of_python_environment>
+pyenv_name=<name_of_python_environment>
 smk_dir=<path_to_NovaScope_repository>
 
-mkdir -p $pyenv
-cd $pyenv
+mkdir -p $pyenv_dir
+cd $pyenv_dir
 
-python -m venv py39
-source py39/bin/activate
-pip install -r $smk_dir/installation/py39_req.txt
+python -m venv $pyenv_name
+source $pyenv_name/bin/activate
+pip install -r $smk_dir/installation/pyenv_req.txt
 ```
 
 ## 3.2 Install the historef Package Using the whl File
@@ -59,7 +60,7 @@ pip install -r $smk_dir/installation/py39_req.txt
 Below are codes to download historef's latest version at document creation. To access the most recent version, please see [its GitHub repository](https://github.com/seqscope/historef?tab=readme-ov-file).
 
 ```
-source $pyenv/py39/bin/activate
+source $pyenv_dir/$pyenv_name/bin/activate
 wget -P $smk_dir/installation https://github.com/seqscope/historef/releases/download/v0.1.1/historef-0.1.1-py3-none-any.whl
 pip install $smk_dir/installation/historef-0.1.1-py3-none-any.whl
 ```

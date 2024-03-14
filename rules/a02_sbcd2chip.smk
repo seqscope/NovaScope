@@ -27,9 +27,6 @@ rule a02_sbcd2chip:
     run:
         sbcd_dir         = os.path.dirname(input.sbcd_mnfst)
         nbcd_dir         = os.path.dirname(output.nbcd_tsv)
-        sbcd_part_dir    = os.path.dirname(params.sbcd_part_layout)
-
-        os.makedirs(sbcd_part_dir, exist_ok=True)
 
         # Identify the sbcd layout file to use.
         if params.sbcd_layout is not None:
@@ -48,11 +45,11 @@ rule a02_sbcd2chip:
         source {py39_env}/bin/activate
 
         # s1
-        echo -e "Combinding sbcds.part to ncbds.\\n"
+        echo -e "Combinding sbcds from tile to section.\\n"
         command time -v  {spatula} combine-sbcds \
             --layout {sbcd_layout} \
             --manifest {input.sbcd_mnfst} \
-            --sbcd {sbcd_part_dir} \
+            --sbcd {sbcd_dir} \
             --out {nbcd_dir} \
             --rowgap {params.gap_row} \
             --colgap {params.gap_col}  \
