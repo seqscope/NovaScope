@@ -126,46 +126,60 @@ env_yml: <path_to_config_env.yaml_file> ## If absent, the pipeline will check if
 #    figtype: "hne"          ## Options: "hne","dapi","fl"
 ```
 
-### Mandatory Fields
-Most of parameters in these field are mandatory. 
 
-#### Input
-* **seq1st**
-  * `prefix`: The `prefix` will be used to organize the 1st-seq FASTQ files. Make sure the `prefix` parameter in the corresponding flowcell is unique.  
-  * `sbcd_layout_summary`: A file summarizs the tile information for section chips with the following format. You only need to supply either `sbcd_layout_summary` or `sbcd_layout`, not both. 
-    ```
-    section_id  lane  topbot  start  end
-    B02A        1     2       01     10
-    B03A        1     2       09     18
-    ```
-    * section_id: Section chip IDs
-    * lane: Lane IDs
-    * topbot: The positions of each section chip where 1 represents top and 2 indicates bottom.
-    * start: The start tile.
-    * end: The end tile.
-  * `sbcd_layout`: The sbcd layout file for the input section chip. The format should be:
-    ```
-    lane  tile  row  col  rowshift  colshift
-    3     2556  1    1    0         0
-    3     2456  2    1    0         0.1715
-    ```
-    * lane: Lane IDs
-    * tile: Tile IDs
-    * row & col: The layout position
-    * rowshift & colshift: The gap information
 
-* **seq2nd**
-  Every FASTQ pair associated with the chip section in the input should be supplied in seq2nd as pairs.  The `prefix` should unique among all 2nd-seq data, not just within this flowcell.
+### Input
 
-#### output
+#### seq1st
+
+**`prefix`**
+
+The `prefix` will be used to organize the 1st-seq FASTQ files. Make sure the `prefix` parameter in the corresponding flowcell is unique.  
+
+**`sbcd_layout_summary`**
+
+A file summarizes the tile information for section chips with the following format. You only need to supply either `sbcd_layout_summary` or `sbcd_layout`, not both. 
+
+```
+section_id  lane  topbot  start  end
+B02A        1     2       01     10
+B03A        1     2       09     18
+```
+
+  * section_id: Section chip IDs
+  * lane: Lane IDs
+  * topbot: The positions of each section chip where 1 represents top and 2 indicates bottom.
+  * start: The start tile.
+  * end: The end tile.
+
+**`sbcd_layout`**
+
+The sbcd layout file for the input section chip. The format should be:
+
+```
+lane  tile  row  col  rowshift  colshift
+3     2556  1    1    0         0
+3     2456  2    1    0         0.1715
+```
+
+  * lane: Lane IDs
+  * tile: Tile IDs 
+  * row & col: The layout position
+  * rowshift & colshift: The gap information
+
+#### seq2nd
+Every FASTQ pair associated with the input section chip should be supplied in `seq2nd`.  The `prefix` should be unique among all 2nd-seq FASTQ pairs, not just within this flowcell.
+
+### output
 The output directory will be used to organize the input files and store output files. Please see the structure directory [here](output.md)
 
-#### request:
-The pipeline interprets the requested output file via this paramter and determines which jobs need to be executed.
+### request:
+The pipeline interprets the requested output file via this parameter and determines which jobs need to be executed.
 
 The options and corresponding output files are listed below:
-* `"sbcd-per-section"`: A spatial barcode map for a section chip, including a compressed tab-delimited file for barcodes and corresponding global coordinates, and an image displaying the spatial distribution of the barcodes' coordinates.
-* `"smatch-per-section"`: A compressed tab-delimited file with spatial barcodes corresponding to the 2nd-seq reads, a "smatch" image depicting the distribution of spatial coordinates for the matching barcodes, and a summary file of the matching results.
-* `"align-per-section"`: A BAM file accompanied by alignment summary metrics, along with spatial digital gene expression (sDGE) matrices for Gene, GeneFull, splice junctions (SJ), and Velocyto.
-* `"sge-per-section"`: An sDGE matrix, an "sge" image depicting the spatial alignment of transcripts, and an RGB image representing the sDGE matrix and selected genes. In the absence of specified genes of interest, the RGB image will display the top 5 genes with the highest expression levels.
-* `"hist-per-section"`: Two aligned histology files, one of which is a referenced geotiff file facilitating the coordinate transformation between the SGE matrix and the histology image. The other is a tiff file matching the dimensions of both the "smatch" and "sge" images.
+
+  * `"sbcd-per-section"`: A spatial barcode map for a section chip, including a compressed tab-delimited file for barcodes and corresponding global coordinates, and an image displaying the spatial distribution of the barcodes' coordinates.
+  * `"smatch-per-section"`: A compressed tab-delimited file with spatial barcodes corresponding to the 2nd-seq reads, a "smatch" image depicting the distribution of spatial coordinates for the matching barcodes, and a summary file of the matching results.
+  * `"align-per-section"`: A BAM file accompanied by alignment summary metrics, along with spatial digital gene expression (sDGE) matrices for Gene, GeneFull, splice junctions (SJ), and Velocyto.
+  * `"sge-per-section"`: An sDGE matrix, an "sge" image depicting the spatial alignment of transcripts, and an RGB image representing the sDGE matrix and selected genes. In the absence of specified genes of interest, the RGB image will display the top 5 genes with the highest expression levels.
+  * `"hist-per-section"`: Two aligned histology files, one of which is a referenced geotiff file facilitating the coordinate transformation between the SGE matrix and the histology image. The other is a tiff file matching the dimensions of both the "smatch" and "sge" images.

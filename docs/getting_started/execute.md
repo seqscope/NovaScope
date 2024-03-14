@@ -68,7 +68,7 @@ sbatch submit_Novascope_example.job
 ### Option B: SLURM via Command Line
 
 
-For a small number of quick tasks, you can submit them with a single command line. 
+For a small number of quick jobs, you can submit them with a single command line. 
 
 However, it's important to remember that if you log out before all jobs have been submitted to SLURM, any remaining jobs, i.e., those haven't been submitted, will not be submitted.
 
@@ -81,7 +81,7 @@ snakemake $slurm_params --latency-wait 120 -s ${smk_dir}/NovaScope.smk --rerun-i
 ```
 
 ### Option C: Local Execution
-Run the pipeline locally, specifying the number of cores.
+Run the pipeline locally, with specifying the number of cores.
 
 ```
 smk_dir="<path_to_NovaScope_repo>"             # Replace <path_to_NovaScope_repo> with the path to the NovaScope repository

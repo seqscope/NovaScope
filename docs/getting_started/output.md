@@ -1,8 +1,8 @@
 # Output
 
-## 1. Output 
+## 1. Output Directory Structure
 
-The output, of which the path was provided via the `config_job.yaml`, will be organized as follows, 
+The directory passed through `output` paramter in the `config_job.yaml` will be organized as follows, 
 
 ```
 ├── align
@@ -13,8 +13,13 @@ The output, of which the path was provided via the `config_job.yaml`, will be or
 
 ### 1.1 seq1st
 
-The `seq1st` directory contains a subdirectory (`fastqs`) for organizing the 1st sequencing FASTQ files, along with three others for managing the spatial barcode maps: one for individual tiles (`sbcds`), and two related to chip sections (`sbcds.part` and `nbcds`). 
-For a chip section, the `sbcds.part` hosts the spatial barcode maps organized on a per-tile basis, while the `nbcds` contains a spatial barcode map organzied on a per-chip basis, which is applied in subsequent processing phases. 
+The seq1st directory is structured for organizing 1st sequencing FASTQ files and spatial barcode maps. It includes:
+
+* `fastq`: A fastqs subdirectory for the 1st sequencing FASTQ files (`fastq`).
+* Three subdirectories for spatial barcode maps:
+    * sbcds for maps of individual tiles from the 1st sequencing,
+    * sbcds.part for maps related to section chips, organized per tile,
+    * nbcds for a map organized on a per-chip basis, used in later processing.
 
 ```
 └── seq1st
@@ -27,11 +32,11 @@ For a chip section, the `sbcds.part` hosts the spatial barcode maps organized on
 
 ### 1.2 seq2nd
 
-The seq2nd directory is dedicated to managing the second set of sequencing FASTQ files.
+The seq2nd directory is dedicated to managing the 2nd sequencing FASTQ files.
 
 ### 1.3 histology
 
-The `histology` directory is designated for holding all histology input files.
+The `histology` directory is designated for holding all input histology files.
 
 ### 1.4 align
 
