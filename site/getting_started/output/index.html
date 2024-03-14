@@ -664,24 +664,22 @@
 <h3 id="11-seq1st">1.1 seq1st<a class="headerlink" href="#11-seq1st" title="Permanent link">&para;</a></h3>
 <p>The seq1st directory is structured for organizing 1st sequencing FASTQ files and spatial barcode maps. It includes:</p>
 <ul>
-<li><code>fastq</code>: A fastqs subdirectory for the 1st sequencing FASTQ files (<code>fastq</code>).</li>
-<li>Three subdirectories for spatial barcode maps:<ul>
-<li>sbcds for maps of individual tiles from the 1st sequencing,</li>
-<li>sbcds.part for maps related to section chips, organized per tile,</li>
-<li>nbcds for a map organized on a per-chip basis, used in later processing.</li>
+<li>A fastqs subdirectory for all input 1st sequencing FASTQ files (<code>fastq</code>).</li>
+<li>Two subdirectories for spatial barcode maps:<ul>
+<li><code>sbcds</code> for maps of individual tiles from the 1st sequencing,</li>
+<li><code>nbcds</code> for a map organized on a per-chip basis, used in later processing.</li>
 </ul>
 </li>
 </ul>
 <div class="codehilite"><pre><span></span><code>└── seq1st
-    └── &lt;flowcell_id&gt;
+    └── &lt;flowcell_ID&gt;
         ├── fastqs
         ├── nbcds
-        ├── sbcds
-        └── sbcds.part
+        └── sbcds
 </code></pre></div>
 
 <h3 id="12-seq2nd">1.2 seq2nd<a class="headerlink" href="#12-seq2nd" title="Permanent link">&para;</a></h3>
-<p>The seq2nd directory is dedicated to managing the 2nd sequencing FASTQ files.</p>
+<p>The seq2nd directory is dedicated to managing all input 2nd sequencing FASTQ files.</p>
 <h3 id="13-histology">1.3 histology<a class="headerlink" href="#13-histology" title="Permanent link">&para;</a></h3>
 <p>The <code>histology</code> directory is designated for holding all input histology files.</p>
 <h3 id="14-align">1.4 align<a class="headerlink" href="#14-align" title="Permanent link">&para;</a></h3>
@@ -691,8 +689,8 @@
 (3) <code>sge</code>, containing a spatial gene expression (SGE) matrix and its associated visualizations; 
 (4) <code>histology</code>, which stores histology images aligned with the spatial coordinates of the SGE matrix.</p>
 <div class="codehilite"><pre><span></span><code>align
-└── &lt;flowcell_id&gt;
-    └── &lt;section_chip_id&gt;
+└── &lt;flowcell_ID&gt;
+    └── &lt;section_chip_ID&gt;
         ├── bam
         ├── histology
         ├── match

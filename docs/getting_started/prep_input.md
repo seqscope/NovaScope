@@ -58,9 +58,11 @@ wget https://historef-sample-data.s3.amazonaws.com/sample/b08c/histology.tif
 
 The pipeline necessitates a `config_job.yaml` file to define all inputs, outputs, and parameters. This `config_job.yaml` file should be provided in the `$job_dir`.
 
-Separate example `config_job.yaml` files for the [regional section](../../testrun/regional_section/config_job.yaml), [full section shallow](../../testrun/full_section_shallow/config_job.yaml), and [full section deep](../../testrun/full_section_deep/config_job.yaml) test runs are provided.  
+Separate example `config_job.yaml` files for the [regional section](https://github.com/seqscope/NovaScope/blob/main/testrun/regional_section/config_job.yaml), [full section shallow](https://github.com/seqscope/NovaScope/blob/main/testrun/full_section_shallow/config_job.yaml), and [full section deep](https://github.com/seqscope/NovaScope/blob/main/testrun/full_section_deep/config_job.yaml) test runs are provided.  
 
 Below, you'll find explanations for each item specified in the `config_job.yaml`.
+
+### 2.1 A Config Template 
 
 ```
 ## ================================================
@@ -69,17 +71,17 @@ Below, you'll find explanations for each item specified in the `config_job.yaml`
 ##
 ## ================================================
 
-## Input Section
+## Input
 input:
   flowcell: <flowcell_id>
   section: <section_chip_id>
   specie: <specie_info>
-  lane: <lane_id>             ## Optional. Auto-assigned based on section's last letter if absent (A->1, B->2, C->3, D->4).
+  lane: <lane_id>                               ## Optional. Auto-assigned based on section's last letter if absent (A->1, B->2, C->3, D->4).
   seq1st:
-    prefix: <seq1st_id>       ## Optional. Defaults to "L{lane}" if absent.
+    prefix: <seq1st_id>                         ## Optional. Defaults to "L{lane}" if absent.
     fastq: <path_to_seq1st_fastq_file>
-    layout: <path_to_sbcd_layout>   ## Optional. By default, NovaScope will search the sbcd layout at the info/assets/layout_per_tile_basis in the NovaScope repository.
-  seq2nd:                     ## List all input 2nd sequencing data here.
+    layout: <path_to_sbcd_layout>               ## Optional. See 2.2.
+  seq2nd:                                       ## See 2.2.
     - prefix: <seq2st_pair1_id>
       fastq_R1: <path_to_seq2nd_pair1_fastq_Read1_file>
       fastq_R2: <path_to_seq2nd_pair1_fastq_Read2_file>
@@ -87,18 +89,19 @@ input:
       fastq_R1: <path_to_seq2nd_pair2_fastq_Read1_file>
       fastq_R2: <path_to_seq2nd_pair2_fastq_Read2_file>
     # ...
-  label: <seq2nd_version>     ## Optional. A version label for the input seq2 data, if applicable.
+  label: <seq2nd_version>                       ## Optional. A version label for the input seq2 data, if applicable.
+  histology: <path_to_the_input_histology_file> ## Optional.
 
-## Output Section
-output: <output_directory>
+## Output
+output: <output_directory>                      ## See 2.2.
 
-request:                      ## Required output files. Options: "sbcd-per-section", "smatch-per-section", "align-per-section", "sge-per-section", "hist-per-section"
+request:                                        ## See 2.2.
   - <required_output1>
   - <required_output2>
   # ...
 
-## Environment Section
-env_yml: <path_to_config_env.yaml_file> ## If absent, the pipeline will check if a "config_env.yaml" file exists in the `info` subdirectory in the Novascope.
+## Environment
+env_yml: <path_to_config_env.yaml_file>         ## If absent, the pipeline will check if a "config_env.yaml" file exists in the `info` subdirectory in the Novascope.
 
 
 ## ================================================
@@ -145,35 +148,19 @@ env_yml: <path_to_config_env.yaml_file> ## If absent, the pipeline will check if
 #    figtype: "hne"          ## Options: "hne","dapi","fl"
 ```
 
+### 2.2 Additional Information
 
+#### Input
 
-### Input
-
-#### seq1st
+##### seq1st
 
 **`prefix`**
 
 The `prefix` will be used to organize the 1st-seq FASTQ files. Make sure the `prefix` parameter in the corresponding flowcell is unique.  
 
-**`sbcd_layout_summary`**
+**`layout`**
 
-A file summarizes the tile information for section chips with the following format. You only need to supply either `sbcd_layout_summary` or `sbcd_layout`, not both. 
-
-```
-section_id  lane  topbot  start  end
-B02A        1     2       01     10
-B03A        1     2       09     18
-```
-
-  * section_id: Section chip IDs
-  * lane: Lane IDs
-  * topbot: The positions of each section chip where 1 represents top and 2 indicates bottom.
-  * start: The start tile.
-  * end: The end tile.
-
-**`sbcd_layout`**
-
-The sbcd layout file for the input section chip. The format should be:
+A file to provide the layout of tiles in a section chip with the following format. If absent, NovaScope will automatically look for the sbcd layout within the NovaScope repository at [info/assets/layout_per_tile_basis](https://github.com/seqscope/NovaScope/tree/main/info/assets/layout_per_tile_basis), using the section chip ID for reference.
 
 ```
 lane  tile  row  col  rowshift  colshift
@@ -186,19 +173,23 @@ lane  tile  row  col  rowshift  colshift
   * row & col: The layout position
   * rowshift & colshift: The gap information
 
-#### seq2nd
+##### seq2nd
 Every FASTQ pair associated with the input section chip should be supplied in `seq2nd`.  The `prefix` should be unique among all 2nd-seq FASTQ pairs, not just within this flowcell.
 
-### output
+#### output
 The output directory will be used to organize the input files and store output files. Please see the structure directory [here](output.md)
 
-### request:
-The pipeline interprets the requested output file via this parameter and determines which jobs need to be executed.
+#### request:
+
+The pipeline interprets the requested output files via this parameter and determines which jobs need to be executed. 
+
+Simply define the **final output** required, and all intermediary files contributing to this output will be automatically generated (i.e.,  the dependencies between rules). For instance, outputs from `"sbcd-per-flowcell"` serve as inputs for `"sbcd-per-section"`. Thus, by requesting `"sbcd-per-section"`, the pipeline will generate not only the files for `"sbcd-per-section"` but also those for `"sbcd-per-flowcell"`. For detailed insights into these dependencies, please consult the [rulegraph](https://seqscope.github.io/NovaScope/#an-overview-of-the-workflow-structure).
 
 The options and corresponding output files are listed below:
 
-  * `"sbcd-per-section"`: A spatial barcode map for a section chip, including a compressed tab-delimited file for barcodes and corresponding global coordinates, and an image displaying the spatial distribution of the barcodes' coordinates.
-  * `"smatch-per-section"`: A compressed tab-delimited file with spatial barcodes corresponding to the 2nd-seq reads, a "smatch" image depicting the distribution of spatial coordinates for the matching barcodes, and a summary file of the matching results.
+  * `"sbcd-per-flowcell"`: A spatial barcode map for a flowcell organzied on a per-tile basis. Each tile has a compressed tab-delimited file for barcodes and corresponding local coordinates in the tile.
+  * `"sbcd-per-section"`: A spatial barcode map for a section chip, including a compressed tab-delimited file for barcodes and corresponding global coordinates in the section chip, and an image displaying the spatial distribution of the barcodes' coordinates.
+  * `"smatch-per-section"`: A compressed tab-delimited file with spatial barcodes corresponding to the 2nd-seq reads, a "smatch" image depicting the distribution of spatial coordinates for the matching barcodes, and a summary file of the matching results. 
   * `"align-per-section"`: A BAM file accompanied by alignment summary metrics, along with spatial digital gene expression (sDGE) matrices for Gene, GeneFull, splice junctions (SJ), and Velocyto.
   * `"sge-per-section"`: An sDGE matrix, an "sge" image depicting the spatial alignment of transcripts, and an RGB image representing the sDGE matrix and selected genes. In the absence of specified genes of interest, the RGB image will display the top 5 genes with the highest expression levels.
   * `"hist-per-section"`: Two aligned histology files, one of which is a referenced geotiff file facilitating the coordinate transformation between the SGE matrix and the histology image. The other is a tiff file matching the dimensions of both the "smatch" and "sge" images.

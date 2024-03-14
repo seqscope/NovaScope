@@ -485,6 +485,25 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#21-a-config-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.1 A Config Template
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-additional-information" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.2 Additional Information
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.2 Additional Information">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#input" class="md-nav__link">
     <span class="md-ellipsis">
       Input
@@ -532,6 +551,11 @@
       request:
     </span>
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -677,6 +701,25 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#21-a-config-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.1 A Config Template
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-additional-information" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.2 Additional Information
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.2 Additional Information">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#input" class="md-nav__link">
     <span class="md-ellipsis">
       Input
@@ -731,6 +774,11 @@
     </nav>
   
 </li>
+        
+      </ul>
+    </nav>
+  
+</li>
       
     </ul>
   
@@ -757,7 +805,8 @@
 <h3 id="example-1-regional-section-test-run">Example 1 - Regional Section Test Run<a class="headerlink" href="#example-1-regional-section-test-run" title="Permanent link">&para;</a></h3>
 <p>The input data originates from a specific, limited region of a section. No histology files is provided.</p>
 <p>Now Download the first and second sequencing data sets from <a href="https://www.dropbox.com/scl/fi/3egsr9nqc559e9hb45vik/B08Csub_20240301_raw.tar.gz?rlkey=z06xwb3v6ku19dp6br6mlsgkm&amp;dl=0">here</a>.</p>
-<div class="codehilite"><pre><span></span><code>job_dir=&quot;$smk_dir/testrun/regional_section&quot;  
+<div class="codehilite"><pre><span></span><code>smk_dir=&quot;&lt;path_to_NovaScope_repository&gt;&quot;    # Replace &lt;path_to_NovaScope_repository&gt; with the path to the NovaScope repository
+job_dir=&quot;$smk_dir/testrun/regional_section&quot;  
 
 mkdir -p  $job_dir &amp;&amp; cd $job_dir
 </code></pre></div>
@@ -765,7 +814,7 @@ mkdir -p  $job_dir &amp;&amp; cd $job_dir
 <h3 id="example-2-full-section-shallow-sequencing-test-run">Example 2 - Full Section Shallow Sequencing Test Run<a class="headerlink" href="#example-2-full-section-shallow-sequencing-test-run" title="Permanent link">&para;</a></h3>
 <p>The input data is from a full section with an available histology file.</p>
 <p>Download the first and second sequencing data sets from here. <em>TBC: Add the download link</em></p>
-<div class="codehilite"><pre><span></span><code># Define the $job_dir
+<div class="codehilite"><pre><span></span><code>smk_dir=&quot;&lt;path_to_NovaScope_repository&gt;&quot;    # Replace &lt;path_to_NovaScope_repository&gt; with the path to the NovaScope repository
 job_dir=&quot;$smk_dir/testrun/full_section_shallow&quot;  
 
 mkdir -p  $job_dir &amp;&amp; cd $job_dir
@@ -777,7 +826,7 @@ wget https://historef-sample-data.s3.amazonaws.com/sample/b08c/histology.tif
 <h3 id="example-3-full-section-deep-sequencing-test-run">Example 3 - Full Section Deep Sequencing Test Run<a class="headerlink" href="#example-3-full-section-deep-sequencing-test-run" title="Permanent link">&para;</a></h3>
 <p>The input data is from a full section with an available histology file.</p>
 <p>Download the first and second sequencing data sets from here. <em>TBC: Add the download link</em></p>
-<div class="codehilite"><pre><span></span><code># Define the $job_dir
+<div class="codehilite"><pre><span></span><code>smk_dir=&quot;&lt;path_to_NovaScope_repository&gt;&quot;    # Replace &lt;path_to_NovaScope_repository&gt; with the path to the NovaScope repository
 job_dir=&quot;$smk_dir/testrun/full_section_deep&quot;  
 
 mkdir -p  $job_dir &amp;&amp; cd $job_dir
@@ -788,25 +837,26 @@ wget https://historef-sample-data.s3.amazonaws.com/sample/b08c/histology.tif
 
 <h2 id="2-prepare-input-config-files">2. Prepare Input Config Files<a class="headerlink" href="#2-prepare-input-config-files" title="Permanent link">&para;</a></h2>
 <p>The pipeline necessitates a <code>config_job.yaml</code> file to define all inputs, outputs, and parameters. This <code>config_job.yaml</code> file should be provided in the <code>$job_dir</code>.</p>
-<p>Separate example <code>config_job.yaml</code> files for the <a href="https://github.com/seqscope/NovaScope/blob/main/testrun/regional_section/config_job.yaml">regional section</a>, <a href="https://github.com/seqscope/NovaScope/blob/main/testrun/full_section_shallow/config_job.yaml">full section shallow</a>, and <a href="">full section deep</a> test runs are provided.  </p>
+<p>Separate example <code>config_job.yaml</code> files for the <a href="https://github.com/seqscope/NovaScope/blob/main/testrun/regional_section/config_job.yaml">regional section</a>, <a href="https://github.com/seqscope/NovaScope/blob/main/testrun/full_section_shallow/config_job.yaml">full section shallow</a>, and <a href="https://github.com/seqscope/NovaScope/blob/main/testrun/full_section_deep/config_job.yaml">full section deep</a> test runs are provided.  </p>
 <p>Below, you'll find explanations for each item specified in the <code>config_job.yaml</code>.</p>
+<h3 id="21-a-config-template">2.1 A Config Template<a class="headerlink" href="#21-a-config-template" title="Permanent link">&para;</a></h3>
 <div class="codehilite"><pre><span></span><code>## ================================================
 ##
 ## Mandatory Fields:
 ##
 ## ================================================
 
-## Input Section
+## Input
 input:
   flowcell: &lt;flowcell_id&gt;
   section: &lt;section_chip_id&gt;
   specie: &lt;specie_info&gt;
-  lane: &lt;lane_id&gt;             ## Optional. Auto-assigned based on section&#39;s last letter if absent (A-&gt;1, B-&gt;2, C-&gt;3, D-&gt;4).
+  lane: &lt;lane_id&gt;                               ## Optional. Auto-assigned based on section&#39;s last letter if absent (A-&gt;1, B-&gt;2, C-&gt;3, D-&gt;4).
   seq1st:
-    prefix: &lt;seq1st_id&gt;       ## Optional. Defaults to &quot;L{lane}&quot; if absent.
+    prefix: &lt;seq1st_id&gt;                         ## Optional. Defaults to &quot;L{lane}&quot; if absent.
     fastq: &lt;path_to_seq1st_fastq_file&gt;
-    layout: &lt;path_to_sbcd_layout&gt;
-  seq2nd:                     ## List all input 2nd sequencing data here.
+    layout: &lt;path_to_sbcd_layout&gt;               ## Optional. See 2.2.
+  seq2nd:                                       ## See 2.2.
     - prefix: &lt;seq2st_pair1_id&gt;
       fastq_R1: &lt;path_to_seq2nd_pair1_fastq_Read1_file&gt;
       fastq_R2: &lt;path_to_seq2nd_pair1_fastq_Read2_file&gt;
@@ -814,18 +864,19 @@ input:
       fastq_R1: &lt;path_to_seq2nd_pair2_fastq_Read1_file&gt;
       fastq_R2: &lt;path_to_seq2nd_pair2_fastq_Read2_file&gt;
     # ...
-  label: &lt;seq2nd_version&gt;     ## Optional. A version label for the input seq2 data, if applicable.
+  label: &lt;seq2nd_version&gt;                       ## Optional. A version label for the input seq2 data, if applicable.
+  histology: &lt;path_to_the_input_histology_file&gt; ## Optional.
 
-## Output Section
-output: &lt;output_directory&gt;
+## Output
+output: &lt;output_directory&gt;                      ## See 2.2.
 
-request:                      ## Required output files. Options: &quot;sbcd-per-section&quot;, &quot;smatch-per-section&quot;, &quot;align-per-section&quot;, &quot;sge-per-section&quot;, &quot;hist-per-section&quot;
+request:                                        ## See 2.2.
   - &lt;required_output1&gt;
   - &lt;required_output2&gt;
   # ...
 
-## Environment Section
-env_yml: &lt;path_to_config_env.yaml_file&gt; ## If absent, the pipeline will check if a &quot;config_env.yaml&quot; file exists in the `info` subdirectory in the Novascope.
+## Environment
+env_yml: &lt;path_to_config_env.yaml_file&gt;         ## If absent, the pipeline will check if a &quot;config_env.yaml&quot; file exists in the `info` subdirectory in the Novascope.
 
 
 ## ================================================
@@ -844,7 +895,7 @@ env_yml: &lt;path_to_config_env.yaml_file&gt; ## If absent, the pipeline will ch
 #    gap_row: 0.0517
 #    gap_col: 0.0048
 #    dup_maxnum: 1
-#    dup_maxdist: 0.1
+#    dup_maxdist: 1
 #  smatch:
 #    skip_sbcd: 1            ## If absent, skip_sbcd can be calculated follows the fastq2sbcd format: 1 for DraI31 and 0 for DraI32.
 #    match_len: 27
@@ -872,26 +923,13 @@ env_yml: &lt;path_to_config_env.yaml_file&gt; ## If absent, the pipeline will ch
 #    figtype: &quot;hne&quot;          ## Options: &quot;hne&quot;,&quot;dapi&quot;,&quot;fl&quot;
 </code></pre></div>
 
-<h3 id="input">Input<a class="headerlink" href="#input" title="Permanent link">&para;</a></h3>
-<h4 id="seq1st">seq1st<a class="headerlink" href="#seq1st" title="Permanent link">&para;</a></h4>
+<h3 id="22-additional-information">2.2 Additional Information<a class="headerlink" href="#22-additional-information" title="Permanent link">&para;</a></h3>
+<h4 id="input">Input<a class="headerlink" href="#input" title="Permanent link">&para;</a></h4>
+<h5 id="seq1st">seq1st<a class="headerlink" href="#seq1st" title="Permanent link">&para;</a></h5>
 <p><strong><code>prefix</code></strong></p>
 <p>The <code>prefix</code> will be used to organize the 1st-seq FASTQ files. Make sure the <code>prefix</code> parameter in the corresponding flowcell is unique.  </p>
-<p><strong><code>sbcd_layout_summary</code></strong></p>
-<p>A file summarizes the tile information for section chips with the following format. You only need to supply either <code>sbcd_layout_summary</code> or <code>sbcd_layout</code>, not both. </p>
-<div class="codehilite"><pre><span></span><code>section_id  lane  topbot  start  end
-B02A        1     2       01     10
-B03A        1     2       09     18
-</code></pre></div>
-
-<ul>
-<li>section_id: Section chip IDs</li>
-<li>lane: Lane IDs</li>
-<li>topbot: The positions of each section chip where 1 represents top and 2 indicates bottom.</li>
-<li>start: The start tile.</li>
-<li>end: The end tile.</li>
-</ul>
-<p><strong><code>sbcd_layout</code></strong></p>
-<p>The sbcd layout file for the input section chip. The format should be:</p>
+<p><strong><code>layout</code></strong></p>
+<p>A file to provide the layout of tiles in a section chip with the following format. If absent, NovaScope will automatically look for the sbcd layout within the NovaScope repository at <a href="https://github.com/seqscope/NovaScope/tree/main/info/assets/layout_per_tile_basis">info/assets/layout_per_tile_basis</a>, using the section chip ID for reference.</p>
 <div class="codehilite"><pre><span></span><code>lane  tile  row  col  rowshift  colshift
 3     2556  1    1    0         0
 3     2456  2    1    0         0.1715
@@ -903,16 +941,18 @@ B03A        1     2       09     18
 <li>row &amp; col: The layout position</li>
 <li>rowshift &amp; colshift: The gap information</li>
 </ul>
-<h4 id="seq2nd">seq2nd<a class="headerlink" href="#seq2nd" title="Permanent link">&para;</a></h4>
+<h5 id="seq2nd">seq2nd<a class="headerlink" href="#seq2nd" title="Permanent link">&para;</a></h5>
 <p>Every FASTQ pair associated with the input section chip should be supplied in <code>seq2nd</code>.  The <code>prefix</code> should be unique among all 2nd-seq FASTQ pairs, not just within this flowcell.</p>
-<h3 id="output">output<a class="headerlink" href="#output" title="Permanent link">&para;</a></h3>
+<h4 id="output">output<a class="headerlink" href="#output" title="Permanent link">&para;</a></h4>
 <p>The output directory will be used to organize the input files and store output files. Please see the structure directory <a href="../output/">here</a></p>
-<h3 id="request">request:<a class="headerlink" href="#request" title="Permanent link">&para;</a></h3>
-<p>The pipeline interprets the requested output file via this parameter and determines which jobs need to be executed.</p>
+<h4 id="request">request:<a class="headerlink" href="#request" title="Permanent link">&para;</a></h4>
+<p>The pipeline interprets the requested output files via this parameter and determines which jobs need to be executed. </p>
+<p>Simply define the <strong>final output</strong> required, and all intermediary files contributing to this output will be automatically generated (i.e.,  the dependencies between rules). For instance, outputs from <code>"sbcd-per-flowcell"</code> serve as inputs for <code>"sbcd-per-section"</code>. Thus, by requesting <code>"sbcd-per-section"</code>, the pipeline will generate not only the files for <code>"sbcd-per-section"</code> but also those for <code>"sbcd-per-flowcell"</code>. For detailed insights into these dependencies, please consult the <a href="https://seqscope.github.io/NovaScope/#an-overview-of-the-workflow-structure">rulegraph</a>.</p>
 <p>The options and corresponding output files are listed below:</p>
 <ul>
-<li><code>"sbcd-per-section"</code>: A spatial barcode map for a section chip, including a compressed tab-delimited file for barcodes and corresponding global coordinates, and an image displaying the spatial distribution of the barcodes' coordinates.</li>
-<li><code>"smatch-per-section"</code>: A compressed tab-delimited file with spatial barcodes corresponding to the 2nd-seq reads, a "smatch" image depicting the distribution of spatial coordinates for the matching barcodes, and a summary file of the matching results.</li>
+<li><code>"sbcd-per-flowcell"</code>: A spatial barcode map for a flowcell organzied on a per-tile basis. Each tile has a compressed tab-delimited file for barcodes and corresponding local coordinates in the tile.</li>
+<li><code>"sbcd-per-section"</code>: A spatial barcode map for a section chip, including a compressed tab-delimited file for barcodes and corresponding global coordinates in the section chip, and an image displaying the spatial distribution of the barcodes' coordinates.</li>
+<li><code>"smatch-per-section"</code>: A compressed tab-delimited file with spatial barcodes corresponding to the 2nd-seq reads, a "smatch" image depicting the distribution of spatial coordinates for the matching barcodes, and a summary file of the matching results. </li>
 <li><code>"align-per-section"</code>: A BAM file accompanied by alignment summary metrics, along with spatial digital gene expression (sDGE) matrices for Gene, GeneFull, splice junctions (SJ), and Velocyto.</li>
 <li><code>"sge-per-section"</code>: An sDGE matrix, an "sge" image depicting the spatial alignment of transcripts, and an RGB image representing the sDGE matrix and selected genes. In the absence of specified genes of interest, the RGB image will display the top 5 genes with the highest expression levels.</li>
 <li><code>"hist-per-section"</code>: Two aligned histology files, one of which is a referenced geotiff file facilitating the coordinate transformation between the SGE matrix and the histology image. The other is a tiff file matching the dimensions of both the "smatch" and "sge" images.</li>

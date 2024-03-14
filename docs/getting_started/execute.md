@@ -34,7 +34,7 @@ This approach involves utilizing a master SLURM job to oversee and manage the st
 
 First, you need to establish the master job. The primary role of this job is to monitor the progress of all tasks, handle job submissions based on dependencies and available resources. Thus, it requires minimal memory but an extended time limit. Its time limit should be longer than the total time required to complete all associated jobs.
 
-Create a file with the information below, e.g. submit_HPC.job. See examples in the [regional section](../../testrun/regional_section/submit_HPC.job), [full section shallow](../../testrun/full_section_shallow/submit_HPC.job), and [full section deep](../../testrun/full_section_deep/submit_HPC.job) test runs.
+Create a file with the information below, e.g. submit_HPC.job. See examples in the [regional section](https://github.com/seqscope/NovaScope/blob/main/testrun/regional_section/submit_HPC.job), [full section shallow](https://github.com/seqscope/NovaScope/blob/main/testrun/full_section_shallow/submit_HPC.job), and [full section deep](https://github.com/seqscope/NovaScope/blob/main/testrun/full_section_deep/submit_HPC.job) test runs.
 
 ```
 #!/bin/bash
@@ -60,10 +60,10 @@ slurm_params="--profile <path_to_slurm_directory>"  # Replace <path_to_slurm_dir
 snakemake $slurm_params  --latency-wait 120  -s ${smk_dir}/NovaScope.smk  -d $job_dir 
 ```
 
-then submit this file:
+Then submit the master job:
 
 ```
-sbatch submit_Novascope_example.job
+sbatch submit_HPC.job
 ```
 
 ### Option B: SLURM via Command Line
@@ -82,7 +82,7 @@ snakemake $slurm_params --latency-wait 120 -s ${smk_dir}/NovaScope.smk -d $job_d
 ```
 
 ### Option C: Local Execution
-Run the pipeline locally, with specifying the number of cores. See examples in the [regional section](../../testrun/regional_section/submit_local.sh), [full section shallow](../../testrun/full_section_shallow/submit_local.sh), and [full section deep](../../testrun/full_section_deep/submit_local.sh) test runs.
+Run the pipeline locally, with specifying the number of cores. See examples in the [regional section](https://github.com/seqscope/NovaScope/blob/main/testrun/regional_section/submit_local.sh), [full section shallow](https://github.com/seqscope/NovaScope/blob/main/testrun/full_section_shallow/submit_local.sh), and [full section deep](https://github.com/seqscope/NovaScope/blob/main/testrun/full_section_deep/submit_local.sh) test runs.
 
 ```
 smk_dir="<path_to_NovaScope_repository>"             # Replace <path_to_NovaScope_repository> with the path to the NovaScope repository

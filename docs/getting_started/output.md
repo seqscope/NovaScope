@@ -15,24 +15,22 @@ The directory passed through `output` paramter in the `config_job.yaml` will be 
 
 The seq1st directory is structured for organizing 1st sequencing FASTQ files and spatial barcode maps. It includes:
 
-* `fastq`: A fastqs subdirectory for the 1st sequencing FASTQ files (`fastq`).
-* Three subdirectories for spatial barcode maps:
-    * sbcds for maps of individual tiles from the 1st sequencing,
-    * sbcds.part for maps related to section chips, organized per tile,
-    * nbcds for a map organized on a per-chip basis, used in later processing.
+* A fastqs subdirectory for all input 1st sequencing FASTQ files (`fastq`).
+* Two subdirectories for spatial barcode maps:
+    * `sbcds` for maps of individual tiles from the 1st sequencing,
+    * `nbcds` for a map organized on a per-chip basis, used in later processing.
 
 ```
 └── seq1st
-    └── <flowcell_id>
+    └── <flowcell_ID>
         ├── fastqs
         ├── nbcds
-        ├── sbcds
-        └── sbcds.part
+        └── sbcds
 ```
 
 ### 1.2 seq2nd
 
-The seq2nd directory is dedicated to managing the 2nd sequencing FASTQ files.
+The seq2nd directory is dedicated to managing all input 2nd sequencing FASTQ files.
 
 ### 1.3 histology
 
@@ -48,8 +46,8 @@ The `align` directory encompasses several subdirectories, including:
 
 ```
 align
-└── <flowcell_id>
-    └── <section_chip_id>
+└── <flowcell_ID>
+    └── <section_chip_ID>
         ├── bam
         ├── histology
         ├── match
