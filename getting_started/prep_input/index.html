@@ -878,12 +878,14 @@ B03A        1     2       09     18
 <p>The output directory will be used to organize the input files and store output files. Please see the structure directory <a href="../output/">here</a></p>
 <h3 id="request">request:<a class="headerlink" href="#request" title="Permanent link">&para;</a></h3>
 <p>The pipeline interprets the requested output file via this paramter and determines which jobs need to be executed.</p>
-<p>The options and corresponding output files are listed below:
-* <code>"sbcd-per-section"</code>: A spatial barcode map for a section chip, including a compressed tab-delimited file for barcodes and corresponding global coordinates, and an image displaying the spatial distribution of the barcodes' coordinates.
-* <code>"smatch-per-section"</code>: A compressed tab-delimited file with spatial barcodes corresponding to the 2nd-seq reads, a "smatch" image depicting the distribution of spatial coordinates for the matching barcodes, and a summary file of the matching results.
-* <code>"align-per-section"</code>: A BAM file accompanied by alignment summary metrics, along with spatial digital gene expression (sDGE) matrices for Gene, GeneFull, splice junctions (SJ), and Velocyto.
-* <code>"sge-per-section"</code>: An sDGE matrix, an "sge" image depicting the spatial alignment of transcripts, and an RGB image representing the sDGE matrix and selected genes. In the absence of specified genes of interest, the RGB image will display the top 5 genes with the highest expression levels.
-* <code>"hist-per-section"</code>: Two aligned histology files, one of which is a referenced geotiff file facilitating the coordinate transformation between the SGE matrix and the histology image. The other is a tiff file matching the dimensions of both the "smatch" and "sge" images.</p>
+<p>The options and corresponding output files are listed below:</p>
+<ul>
+<li><code>"sbcd-per-section"</code>: A spatial barcode map for a section chip, including a compressed tab-delimited file for barcodes and corresponding global coordinates, and an image displaying the spatial distribution of the barcodes' coordinates.</li>
+<li><code>"smatch-per-section"</code>: A compressed tab-delimited file with spatial barcodes corresponding to the 2nd-seq reads, a "smatch" image depicting the distribution of spatial coordinates for the matching barcodes, and a summary file of the matching results.</li>
+<li><code>"align-per-section"</code>: A BAM file accompanied by alignment summary metrics, along with spatial digital gene expression (sDGE) matrices for Gene, GeneFull, splice junctions (SJ), and Velocyto.</li>
+<li><code>"sge-per-section"</code>: An sDGE matrix, an "sge" image depicting the spatial alignment of transcripts, and an RGB image representing the sDGE matrix and selected genes. In the absence of specified genes of interest, the RGB image will display the top 5 genes with the highest expression levels.</li>
+<li><code>"hist-per-section"</code>: Two aligned histology files, one of which is a referenced geotiff file facilitating the coordinate transformation between the SGE matrix and the histology image. The other is a tiff file matching the dimensions of both the "smatch" and "sge" images.</li>
+</ul>
 
 
 
