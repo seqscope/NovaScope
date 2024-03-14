@@ -19,6 +19,10 @@ smk_dir="<path_to_NovaScope_repository>"    # Replace <path_to_NovaScope_reposit
 job_dir="$smk_dir/testrun/regional_section"  
 
 mkdir -p  $job_dir && cd $job_dir
+
+mkdir -p input_data 
+
+
 ```
 
 ### Example 2 - Full Section Shallow Sequencing Test Run 
@@ -101,8 +105,7 @@ request:                                        ## See 2.2.
   # ...
 
 ## Environment
-env_yml: <path_to_config_env.yaml_file>         ## If absent, the pipeline will check if a "config_env.yaml" file exists in the `info` subdirectory in the Novascope.
-
+env_yml: <path_to_config_env.yaml_file>         ## If absent, the pipeline will check if a "config_env.yaml" file exists in the `info` subdirectory in the Novascope repository.
 
 ## ================================================
 ##

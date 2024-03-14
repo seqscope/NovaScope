@@ -20,5 +20,4 @@ ref:
     rat: "/nfs/turbo/sph-hmkang/ref/cellranger/refdata-gex-mRatBN7-custom/star_2_7_10a"
     worm: "/nfs/turbo/sph-hmkang/ref/cellranger/refdata-gex-WBcel235-custom/star_2_7_10a"
 
-pyenv:
-  py39: /nfs/turbo/sph-hmkang/index/data/weiqiuc/NovaScope_local/env/pyenv/py39
+pyenv: /nfs/turbo/sph-hmkang/index/data/weiqiuc/NovaScope_local/env/pyenv/py39

@@ -42,7 +42,7 @@ rule a02_sbcd2chip:
         r"""
         set -euo pipefail
         {params.module_cmd}
-        source {py39_env}/bin/activate
+        source {pyenv}/bin/activate
 
         # s1
         echo -e "Combinding sbcds from tile to section.\\n"

@@ -50,8 +50,12 @@ logging.info(f"     {module_config}")
 sp2alignref=env_config.get("ref", None).get("align", None)
 
 # - python env (py3.10 and py3.9)
-py39_env  = env_config.get("pyenv", {}).get("py39", None)
-py39      = os.path.join(py39_env, "bin", "python")
+pyenv  = env_config.get("pyenv", None)
+assert pyenv is not None, "Please provide a valid python environment."
+assert os.path.exists(pyenv), f"Python environment does not exist: {pyenv}"
+
+python = os.path.join(pyenv, "bin", "python")
+assert os.path.exists(python), f"Python does not exist in your python environment: {python}"
 
 # - tools
 spatula   = env_config.get("tools", {}).get("spatula", "spatula")

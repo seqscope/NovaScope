@@ -47,13 +47,13 @@ rule b01_gene_visual:
         r"""
         set -euo pipefail
         {params.module_cmd}
-        source {py39_env}/bin/activate
+        source {pyenv}/bin/activate
 
         #  ## 1:gene 2:genefull 3:spliced 4:unspliced 5:ambiguous
         echo -e "Creating RGB images for each gene of interest...\\n"
         for gene in {visual_gof}; do 
             echo -e " - $gene \\n"
-            command time -v {py39} {local_scripts}/rgb-gene-image.py \
+            command time -v {python} {local_scripts}/rgb-gene-image.py \
                 --layout {rgb_layout} \
                 --sdge {sdge_dir} \
                 --out {visual_dir}/rgb.${{gene}}.png \

@@ -19,19 +19,23 @@ For HPC users, use the `envmodules` section to load the required software tools 
 
 Please specify the **version** information. 
 
-If your python environment was set up using a Python version accessed through a module, your environment depends on certain shared files from that module. Therefore, you must add the `python: "python/<version_information>"`  in the `envmodules` section to load the same module you initially used to establish your environment. But if you set up with a locally installed Python (not using module load), comment out or remove the module line `python: "python/<version_information>"`.
-
 ```
 envmodules:
   python: "python/<version_information>"
   gcc: "gcc/<version_information>"
   gdal: "gdal/<version_information>"
   imagemagick: "imagemagick/<version_information>"
+  #Bioinformatics: "Bioinformatics"
+  #samtools: "samtools/1.13-fwwss5n"
 ```
+* `python`: If your python environment was set up using a Python version accessed through a module, your environment depends on certain shared files from that module. Therefore, you must add the `python: "python/<version_information>"`  in the `envmodules` section to load the same module you initially used to establish your environment. But if you set up with a locally installed Python (not using `module load`), comment out or remove the module line `python: "python/<version_information>"`.
+* `Bioinformatics` and `samtools`: It is also feasible to use `envmodules` to load samtools instead of defining its path in `tools`.
 
 ## Reference Database
 
-Please list every reference database used for alignment here. Ensure the reference database corresponds to the species of your input data.
+Please list every reference database used for alignment here. The reference data are provided via . *TODO: add the download link*
+
+Please Ensure the reference database corresponds to the species of your input data. 
 
 ```
 ref:
@@ -44,7 +48,6 @@ ref:
 ## Python Environment
 
 ```
-pyenv:
-  <python_env1>: <path_to_the_python_environment1>
+pyenv: <path_to_the_python_environment1>
 ```
 

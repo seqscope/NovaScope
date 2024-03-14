@@ -30,7 +30,7 @@ rule a03_smatch:
         r"""
         set -euo pipefail
         {params.module_cmd}
-        source {py39_env}/bin/activate
+        source {pyenv}/bin/activate
 
         echo "Runing step1 match-sbcds.\\n"
         command time -v {spatula} match-sbcds \

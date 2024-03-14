@@ -20,10 +20,10 @@ rule b02_historef:
         set -euo pipefail
         {params.module_cmd}
 
-        source {py39_env}/bin/activate
+        source {pyenv}/bin/activate
 
         # aligned histology
-        {py39} -m historef.referencer \
+        {python} -m historef.referencer \
             --nge  {input.sdge_3in1_png}\
             --hne {params.hist_std_tif} \
             --aligned {output.hist_aligned}

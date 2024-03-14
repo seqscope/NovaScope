@@ -58,4 +58,4 @@ align
 
 The aligned sequenced reads can be directly used for tasks that require read-level information, such as allele-specific expression or somatic variant analysis. The SGE matrix can also be analyzed with many software tools, such as Latent Dirichlet Allocation (LDA) and Seurat. 
 
-An exemplary downstream analysis is provided at: https://github.com/seqscope/NovaScope-exemplary-downstream-analysis.
+An exemplary downstream analysis is provided at [NovaScope-exemplary-downstream-analysis](https://github.com/seqscope/NovaScope-exemplary-downstream-analysis).

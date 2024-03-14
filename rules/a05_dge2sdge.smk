@@ -50,7 +50,7 @@ rule a05_dge2sdge:
         set -euo pipefail
         {params.module_cmd}
 
-        source {py39_env}/bin/activate
+        source {pyenv}/bin/activate
         
         echo -e "Creating sdge files...\\n"
         command time -v {spatula} dge2sdge \
@@ -73,7 +73,7 @@ rule a05_dge2sdge:
             --out {output.sdge_3in1_png} 
 
         echo -e "Creating rgb image...\\n"
-        command time -v {py39} {local_scripts}/rgb-gene-image.py \
+        command time -v {python} {local_scripts}/rgb-gene-image.py \
             --layout {rgb_layout} \
             --sdge {sdge_dir} \
             --out {output.sdge_rgb_png} \

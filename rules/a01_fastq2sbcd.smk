@@ -16,9 +16,9 @@ rule a01_fastq2sbcd:
         r"""
         set -euo pipefail
         {params.module_cmd}
-        source {py39_env}/bin/activate
+        source {pyenv}/bin/activate
                 
-        command time -v {py39} {local_scripts}/rule_a1.build-spatial-barcode-dict.py \
+        command time -v {python} {local_scripts}/rule_a1.build-spatial-barcode-dict.py \
             --spatula {spatula} \
             --fq {input.seq1_fq} \
             --format {params.sbcd_format} \

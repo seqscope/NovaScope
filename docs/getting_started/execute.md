@@ -52,7 +52,7 @@ Create a file with the information below, e.g. submit_HPC.job. See examples in t
 #SBATCH --output=./logs/<log_filename>         # Replace <log_filename> with the log file name pattern
 
 # Paths
-smk_dir="<path_to_NovaScope_repository>"                  # Replace <path_to_NovaScope_repository> with the path to the NovaScope repository
+smk_dir="<path_to_NovaScope_repository>"            # Replace <path_to_NovaScope_repository> with the path to the NovaScope repository
 job_dir="<path_to_the_job_directory>"               # Replace <path_to_the_job_directory> with your specific job directory path
 slurm_params="--profile <path_to_slurm_directory>"  # Replace <path_to_slurm_directory> with your directory of the SLURM configuration file
 
@@ -74,7 +74,7 @@ For a small number of quick jobs, you can submit them with a single command line
 However, it's important to remember that if you log out before all jobs have been submitted to SLURM, any remaining jobs, i.e., those haven't been submitted, will not be submitted.
 
 ```
-smk_dir="<path_to_NovaScope_repository>"                  # Replace <path_to_NovaScope_repository> with the path to the NovaScope repository
+smk_dir="<path_to_NovaScope_repository>"            # Replace <path_to_NovaScope_repository> with the path to the NovaScope repository
 job_dir="<path_to_the_job_directory>"               # Replace <path_to_the_job_directory> with your specific job directory path
 slurm_params="--profile <path_to_slurm_directory>"  # Replace <path_to_slurm_directory> with your directory of the SLURM configuration file
 
@@ -85,7 +85,7 @@ snakemake $slurm_params --latency-wait 120 -s ${smk_dir}/NovaScope.smk -d $job_d
 Run the pipeline locally, with specifying the number of cores. See examples in the [regional section](https://github.com/seqscope/NovaScope/blob/main/testrun/regional_section/submit_local.sh), [full section shallow](https://github.com/seqscope/NovaScope/blob/main/testrun/full_section_shallow/submit_local.sh), and [full section deep](https://github.com/seqscope/NovaScope/blob/main/testrun/full_section_deep/submit_local.sh) test runs.
 
 ```
-smk_dir="<path_to_NovaScope_repository>"             # Replace <path_to_NovaScope_repository> with the path to the NovaScope repository
+smk_dir="<path_to_NovaScope_repository>"       # Replace <path_to_NovaScope_repository> with the path to the NovaScope repository
 job_dir="<path_to_the_job_directory>"          # Replace <job_directory> with your specific job directory path
 
 Ncores=1 # Number of CPU cores
