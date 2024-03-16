@@ -1,0 +1,49 @@
+## The --cluster option is deprecated since Snakemake v8, so replace it with the following configuration file.
+#cluster:
+#  mkdir -p logs/{rule}/ &&
+#  sbatch
+#    --job-name={rule}_{wildcards}
+#    --output=logs/{rule}/{rule}___{wildcards}___%j.out
+#    --error=logs/{rule}/{rule}___{wildcards}___%j.err
+#    --partition={resources.partition}
+#    --mem={resources.mem}
+#    --time={resources.time}
+#    --cpus-per-task={threads}
+#    --parsable
+#    --nodes={resources.nodes}
+
+executor: "cluster-generic"
+cluster-generic-submit-cmd: "mkdir -p logs/{rule}/ &&
+  sbatch
+    --job-name={rule}_{wildcards} \
+    --output=logs/{rule}/{rule}___{wildcards}___%j.out \
+    --error=logs/{rule}/{rule}___{wildcards}___%j.err \
+    --partition={resources.partition} \
+    --mem={resources.mem} \
+    --time={resources.time} \
+    --cpus-per-task={threads} \
+    --parsable \
+    --nodes={resources.nodes} "
+
+default-resources:
+  - partition="main"
+  - mem="6500MB"
+  - time="05:00:00"
+  - nodes=1
+
+
+jobs: 10                       
+latency-wait: 120              
+local-cores: 20                
+restart-times: 0               
+max-jobs-per-second: 20
+keep-going: True
+rerun-incomplete: True
+printshellcmds: True
+
+## Those does not work since Snakemake 8
+#use-conda: True 
+#conda-frontend: conda
+software-deployment-method: conda
+
+

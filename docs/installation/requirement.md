@@ -10,21 +10,21 @@ git clone git@github.com:seqscope/NovaScope.git
 
 Snakemake orchestrates the workflow of this pipeline. We recommend installing Snakemake using Conda or Mamba. For detailed installation instructions, please refer to the [official Snakemake documentation](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html).
 
-The NovaScope is created and tested using Snakemake v7.29.0.
+The NovaScope is created and tested using Snakemake v7.29.0 and v8.6.0.
 
 ## 1.3 Other Dependent Software Tools
 
 The dependent software tools are listed below. The versions specified for each software tool have been verified for compatibility with our pipeline, though other versions may also be compatible.
 
-As an HPC user, you have the option to load a tool rather than installing it. To check if the following software is available, use the `module avail` or `module spider` commands.
-
-	* STAR (v2.7.11)
-	* Samtools (v1.14)
+	* STAR (v2.7.11a)
+	* Samtools (v1.14 and v1.19)
 	* spatula 
-	* Python (v3.9.12)
-	* imagemagick (7.1.0-25.lua)
+	* Python (v3.9.12, v3.10, and v3.12.2)
+	* imagemagick (7.1.0-25.lua and 7.1.1-30)
 	* gcc (v10.3.0) 
 	* gdal (v3.5.1)
+
+We provide an [example work log](https://github.com/seqscope/NovaScope/blob/main/installation/requirement_install_log.md) documenting the installation of the aforementioned software tools.
 
 # 2. Reference Datasets
 	
@@ -35,10 +35,9 @@ Please download the necessary reference datasets for STARsolo alignment. The ver
 	* rat: mRatBN7
 	* worm: WBcel235
 
-
 # 3. Configure Python Environment
 
-If you already have an existing Python environment with all required packages (see `./installation/pyenv_req.txt`), skip 3.1.
+If you already have an existing Python environment with all required packages (see [pyenv_req.txt](https://github.com/seqscope/NovaScope/blob/main/installation/pyenv_req.txt)), skip 3.1.
 
 ## 3.1 Create a New Python Environment
 

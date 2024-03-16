@@ -1,21 +1,18 @@
 # Snakemake with SLURM
 
-Snakemake can automate the process of submitting your jobs to the SLURM scheduler. Utilizing SLURM for job management is recommended due to the extended duration of steps. 
+It is recommended to integrate SLURM scheduler with Snakemake, which can automate the process of submitting your jobs.
 
-In NovaScope, we used a configuration profile to specify the sbatch information. For more details, please refers the official Snakemake documentation for the [Executor Plugin for HPC Clusters using the SLURM Batch System](https://github.com/snakemake/snakemake-executor-plugin-slurm/blob/main/docs/further.md)
+Please be aware that Snakemake introduced significant updates for cluster Configuration starting from **version 8**. Thus, we advise checking to verify your Snakemake version using `snakemake --version`. 
 
-## Integrating a Configuration Profile with Snakemake
+In NovaScope, we utilized a cluster configuration profile to define the details of the cluster and resources given its consistency and time-saving benefits. More details are provided below. Those files were crafted with inspiration from the [smk-simple-slurm](https://github.com/jdblischak/smk-simple-slurm) repository.
 
-Using a configuration profile is recommended for its consistency and time-saving benefits. 
+## A Cluster Configuration file for Snakemake v7.29.0
 
-To implement this, start by creating a configuration profile with all settings, for example, `<path_to_NovaScope_repository>/slurm/config.yaml`. Then, apply this configuration by referencing its parent directory in your Snakemake command like so: `snakemake --profile <path_to_NovaScope_repository>/slurm`. The configuration profile utilized in NovaScope is provide [here](https://github.com/seqscope/NovaScope/blob/main/slurm/config.yaml) as an example. This file was crafted with inspiration from the [smk-simple-slurm](https://github.com/jdblischak/smk-simple-slurm) repository. 
-
-Below are the specifics of our settings. Please substitute the placeholders below, marked with <>, to suit your specific case.
+Create a `config.yaml` with the following settings. Please substitute the placeholders below, marked with <>, to suit your specific case. Please see our example file at [slurm/v7.29.0/config.yaml](https://github.com/seqscope/NovaScope/blob/main/slurm/v7.29.0/config.yaml). 
 
 ```
 ## Cluster Configuration
 ## The following setting also aids in organizing log files by creating rule-specific subdirectories within the job's log directory, each holding its own output and error files.
-
 cluster:
   mkdir -p logs/{rule}/ &&
   sbatch
@@ -30,9 +27,7 @@ cluster:
     --parsable
     --nodes={resources.nodes}
 
-
 ## Default Resources for Jobs
-
 default-resources:
   - partition=<your_default_partition>    # Replace <your_default_partition> with your actual partition name
   - mem=<default_memory_allocation>       # Replace <default_memory_allocation> with memory, e.g., "4G"
@@ -40,9 +35,7 @@ default-resources:
   - nodes=<default_number_of_nodes>       # Replace <default_number_of_nodes> with nodes, e.g., "1"
   - account=<default_account_information> # Replace <default_account_information> with your account info
 
-
 ## General Snakemake Settings
-
 jobs: <max_number_of_jobs>               # Replace <max_number_of_jobs> with your desired maximum number of concurrent jobs, e.g., 10
 latency-wait: <latency_seconds>          # Replace <latency_seconds> with the number of seconds to wait if job output is not present, e.g., 120
 local-cores: <local_core_count>          # Replace <local_core_count> with the max number of cores to use locally, e.g., "20"
@@ -52,14 +45,53 @@ keep-going: <continue_after_failure>     # Replace <continue_after_failure> with
 rerun-incomplete: <rerun_incomplete_jobs> # Replace <rerun_incomplete_jobs> with True or False to decide if incomplete jobs should be rerun
 printshellcmds: <print_commands>         # Replace <print_commands> with True or False to specify if shell commands should be printed before execution
 
-
 ## Scheduler Settings
-
 #scheduler: greedy      
 
-
 ## Conda Environment Settings
-
 use-conda: <True_or_False>               # Enable use of Conda environments
 conda-frontend: conda                    # Specify Conda as the package manager frontend
+```
+
+## A Cluster Configuration file for Snakemake v8.6.0
+
+Please first install the Snakemake executor plugin "cluster-generic":
+
+```
+pip install snakemake-executor-plugin-cluster-generic
+```
+
+Then, create the cluster configuration file with below. Please substitute the placeholders below, marked with <>, to suit your specific case. Please see our example file at [slurm/v8.6.0/config.yaml](https://github.com/seqscope/NovaScope/blob/main/slurm/v8.6.0/config.yaml). 
+
+```
+executor: "cluster-generic"
+cluster-generic-submit-cmd: "mkdir -p logs/{rule}/ &&
+  sbatch
+    --job-name={rule}_{wildcards} \
+    --output=logs/{rule}/{rule}___{wildcards}___%j.out \
+    --error=logs/{rule}/{rule}___{wildcards}___%j.err \
+    --partition={resources.partition} \
+    --mem={resources.mem} \
+    --time={resources.time} \
+    --cpus-per-task={threads} \
+    --parsable \
+    --nodes={resources.nodes} "
+
+default-resources:
+  - partition="main"
+  - mem="6500MB"
+  - time="05:00:00"
+  - nodes=1
+
+
+jobs: 10                       
+latency-wait: 120              
+local-cores: 20                
+restart-times: 0               
+max-jobs-per-second: 20
+keep-going: True
+rerun-incomplete: True
+printshellcmds: True
+
+software-deployment-method: conda
 ```
