@@ -595,19 +595,19 @@
 
 <h2 id="12-snakemake">1.2 Snakemake<a class="headerlink" href="#12-snakemake" title="Permanent link">&para;</a></h2>
 <p>Snakemake orchestrates the workflow of this pipeline. We recommend installing Snakemake using Conda or Mamba. For detailed installation instructions, please refer to the <a href="https://snakemake.readthedocs.io/en/stable/getting_started/installation.html">official Snakemake documentation</a>.</p>
-<p>The NovaScope is created and tested using Snakemake v7.29.0.</p>
+<p>The NovaScope is created and tested using Snakemake v7.29.0 and v8.6.0.</p>
 <h2 id="13-other-dependent-software-tools">1.3 Other Dependent Software Tools<a class="headerlink" href="#13-other-dependent-software-tools" title="Permanent link">&para;</a></h2>
 <p>The dependent software tools are listed below. The versions specified for each software tool have been verified for compatibility with our pipeline, though other versions may also be compatible.</p>
-<p>As an HPC user, you have the option to load a tool rather than installing it. To check if the following software is available, use the <code>module avail</code> or <code>module spider</code> commands.</p>
-<div class="codehilite"><pre><span></span><code>* STAR (v2.7.11)
-* Samtools (v1.14)
+<div class="codehilite"><pre><span></span><code>* STAR (v2.7.11a)
+* Samtools (v1.14 and v1.19)
 * spatula 
-* Python (v3.9.12)
-* imagemagick (7.1.0-25.lua)
+* Python (v3.9.12, v3.10, and v3.12.2)
+* imagemagick (7.1.0-25.lua and 7.1.1-30)
 * gcc (v10.3.0) 
 * gdal (v3.5.1)
 </code></pre></div>
 
+<p>We provide an <a href="https://github.com/seqscope/NovaScope/blob/main/installation/requirement_install_log.md">example work log</a> documenting the installation of the aforementioned software tools.</p>
 <h1 id="2-reference-datasets">2. Reference Datasets<a class="headerlink" href="#2-reference-datasets" title="Permanent link">&para;</a></h1>
 <p>Please download the necessary reference datasets for STARsolo alignment. The versions listed below are those we utilized in our setup.</p>
 <div class="codehilite"><pre><span></span><code>* mouse: mm39
@@ -617,7 +617,7 @@
 </code></pre></div>
 
 <h1 id="3-configure-python-environment">3. Configure Python Environment<a class="headerlink" href="#3-configure-python-environment" title="Permanent link">&para;</a></h1>
-<p>If you already have an existing Python environment with all required packages (see <code>./installation/pyenv_req.txt</code>), skip 3.1.</p>
+<p>If you already have an existing Python environment with all required packages (see <a href="https://github.com/seqscope/NovaScope/blob/main/installation/pyenv_req.txt">pyenv_req.txt</a>), skip 3.1.</p>
 <h2 id="31-create-a-new-python-environment">3.1 Create a New Python Environment<a class="headerlink" href="#31-create-a-new-python-environment" title="Permanent link">&para;</a></h2>
 <div class="codehilite"><pre><span></span><code>pyenv_dir=&lt;directory_of_python_environment&gt;
 pyenv_name=&lt;name_of_python_environment&gt;
