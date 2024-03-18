@@ -15,11 +15,14 @@ rule a04_align:
         # dir 
         bam_dir        = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{specie_with_seq2v}"),
         # params
-        skip_sbcd      = get_skip_sbcd(config), 
-        match_len      = config.get("preprocess", {}).get("smatch", {}).get('match_len', 27), 
-        len_sbcd       = config.get("preprocess", {}).get("align", {}).get('len_sbcd', 30),
         min_match_len  = config.get("preprocess", {}).get("align", {}).get('min_match_len', 30),
         min_match_frac = config.get("preprocess", {}).get("align", {}).get('min_match_frac', 0.66),
+        match_len      = config.get("preprocess", {}).get("smatch", {}).get('match_len', 27), 
+        skip_sbcd      = get_skip_sbcd(config), 
+        len_sbcd       = config.get("preprocess", {}).get("align", {}).get('len_sbcd', 30),
+        len_umi        = config.get("preprocess", {}).get("align", {}).get('len_umi', 9),
+        len_r2         = config.get("preprocess", {}).get("align", {}).get('len_r2', 101),
+        exist_action   = config.get("preprocess", {}).get("align", {}).get('exist_action', "overwrite"),
         # ref
         refidx         = sp2alignref[specie],
         # resource
@@ -33,6 +36,13 @@ rule a04_align:
         mem       = lambda wildcards: assign_resource_for_align(wildcards.section, config, sc2seq2, main_dirs)["mem"],
         partition = lambda wildcards: assign_resource_for_align(wildcards.section, config, sc2seq2, main_dirs)["partition"],
     run:
+        exist_action = ""
+        assert params.exist_action in ["skip", "overwrite"], "exist_action should be skip or overwrite"
+        if params.exist_action == "skip":
+            exist_action = " --skip-existing "
+        elif params.exist_action == "overwrite":
+            exist_action =" --overwrite-existing "
+        
         shell(
         r"""
         set -euo pipefail
@@ -40,23 +50,25 @@ rule a04_align:
         source {pyenv}/bin/activate
 
         command time -v {python} {local_scripts}/rule_a4.align-reads.py \
-            --skip-sbcd {params.skip_sbcd} \
-            --spatula {spatula} \
             --fq1 {input.seq2_fqr1} \
             --fq2 {input.seq2_fqr2} \
             --whitelist-match {input.smatch_tsv} \
             --filter-match {input.smatch_tsv} \
             --star-index {params.refidx} \
             --star-bin {star} \
+            --min-match-len  {params.min_match_len} \
+            --min-match-frac {params.min_match_frac} \
             --samtools {samtools} \
-            --min-match-len  {params.min_match_len}\
-            --min-match-frac {params.min_match_frac}\
+            --spatula {spatula} \
+            --match-len {params.match_len} \
+            --skip-sbcd {params.skip_sbcd} \
+            --len-sbcd {params.len_sbcd} \
+            --len-umi {params.len_umi} \
+            --len-r2 {params.len_r2} \
             --out {params.bam_dir} \
             --threads {threads}  \
-            --match-len {params.match_len} \
-            --len-sbcd {params.len_sbcd} \
-            --overwrite-existing \
-            --star-add-options "--limitBAMsortRAM {params.ram}"
+            --star-add-options "--limitBAMsortRAM {params.ram}" \
+            {exist_action} 
 
         """)
 

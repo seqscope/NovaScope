@@ -95,3 +95,6 @@ printshellcmds: True
 
 software-deployment-method: conda
 ```
+
+## Additional functions
+If you encounter situations where your jobs fail without any warnings, it is feasible to using a cluster status script to keep track of your jobs. See details [here](https://github.com/jdblischak/smk-simple-slurm/tree/main/extras).

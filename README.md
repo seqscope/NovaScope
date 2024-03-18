@@ -2,11 +2,13 @@
 
 A pipeline to preprocess the spatial transcriptomics data from Novaseq.
 
+Please find a detailed tutorial at: https://seqscope.github.io/NovaScope.
+
 ## Installation
 
 To run NovaScope, please 
 * follow [docs/installation/requirement.md](docs/installation/requirement.md) to install Novascope, snakemake and other dependent softwares, and download reference datasets;
-* follow [docs/installation/env_setup.md](docs/installation/env_setup.md) to set up a environment configuration file;
+* follow [docs/installation/env_setup.md](docs/installation/env_setup.md) to set up an environment configuration file;
 * if you're an HPC user who prefers using SLURM for job management, consider checking out [docs/installation/slurm.md](docs/installation/slurm.md) to configure a job management profile.
 
 ## Examples
