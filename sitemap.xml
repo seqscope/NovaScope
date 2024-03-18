@@ -2,37 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://seqscope.github.io/NovaScope/</loc>
-         <lastmod>2024-03-16</lastmod>
+         <lastmod>2024-03-18</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://seqscope.github.io/NovaScope/getting_started/execute/</loc>
-         <lastmod>2024-03-16</lastmod>
+         <lastmod>2024-03-18</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://seqscope.github.io/NovaScope/getting_started/output/</loc>
-         <lastmod>2024-03-16</lastmod>
+         <lastmod>2024-03-18</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://seqscope.github.io/NovaScope/getting_started/prep_input/</loc>
-         <lastmod>2024-03-16</lastmod>
+         <lastmod>2024-03-18</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://seqscope.github.io/NovaScope/installation/env_setup/</loc>
-         <lastmod>2024-03-16</lastmod>
+         <lastmod>2024-03-18</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://seqscope.github.io/NovaScope/installation/requirement/</loc>
-         <lastmod>2024-03-16</lastmod>
+         <lastmod>2024-03-18</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://seqscope.github.io/NovaScope/installation/slurm/</loc>
-         <lastmod>2024-03-16</lastmod>
+         <lastmod>2024-03-18</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
