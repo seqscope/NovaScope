@@ -370,9 +370,27 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#integrating-a-configuration-profile-with-snakemake" class="md-nav__link">
+  <a href="#a-cluster-configuration-file-for-snakemake-v7290" class="md-nav__link">
     <span class="md-ellipsis">
-      Integrating a Configuration Profile with Snakemake
+      A Cluster Configuration file for Snakemake v7.29.0
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a-cluster-configuration-file-for-snakemake-v860" class="md-nav__link">
+    <span class="md-ellipsis">
+      A Cluster Configuration file for Snakemake v8.6.0
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#additional-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Additional functions
     </span>
   </a>
   
@@ -526,9 +544,27 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#integrating-a-configuration-profile-with-snakemake" class="md-nav__link">
+  <a href="#a-cluster-configuration-file-for-snakemake-v7290" class="md-nav__link">
     <span class="md-ellipsis">
-      Integrating a Configuration Profile with Snakemake
+      A Cluster Configuration file for Snakemake v7.29.0
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a-cluster-configuration-file-for-snakemake-v860" class="md-nav__link">
+    <span class="md-ellipsis">
+      A Cluster Configuration file for Snakemake v8.6.0
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#additional-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Additional functions
     </span>
   </a>
   
@@ -553,15 +589,13 @@
 
 
 <h1 id="snakemake-with-slurm">Snakemake with SLURM<a class="headerlink" href="#snakemake-with-slurm" title="Permanent link">&para;</a></h1>
-<p>Snakemake can automate the process of submitting your jobs to the SLURM scheduler. Utilizing SLURM for job management is recommended due to the extended duration of steps. </p>
-<p>In NovaScope, we used a configuration profile to specify the sbatch information. For more details, please refers the official Snakemake documentation for the <a href="https://github.com/snakemake/snakemake-executor-plugin-slurm/blob/main/docs/further.md">Executor Plugin for HPC Clusters using the SLURM Batch System</a></p>
-<h2 id="integrating-a-configuration-profile-with-snakemake">Integrating a Configuration Profile with Snakemake<a class="headerlink" href="#integrating-a-configuration-profile-with-snakemake" title="Permanent link">&para;</a></h2>
-<p>Using a configuration profile is recommended for its consistency and time-saving benefits. </p>
-<p>To implement this, start by creating a configuration profile with all settings, for example, <code>&lt;path_to_NovaScope_repository&gt;/slurm/config.yaml</code>. Then, apply this configuration by referencing its parent directory in your Snakemake command like so: <code>snakemake --profile &lt;path_to_NovaScope_repository&gt;/slurm</code>. The configuration profile utilized in NovaScope is provide <a href="https://github.com/seqscope/NovaScope/blob/main/slurm/config.yaml">here</a> as an example. This file was crafted with inspiration from the <a href="https://github.com/jdblischak/smk-simple-slurm">smk-simple-slurm</a> repository. </p>
-<p>Below are the specifics of our settings. Please substitute the placeholders below, marked with &lt;&gt;, to suit your specific case.</p>
+<p>It is recommended to integrate SLURM scheduler with Snakemake, which can automate the process of submitting your jobs.</p>
+<p>Please be aware that Snakemake introduced significant updates for cluster Configuration starting from <strong>version 8</strong>. Thus, we advise checking to verify your Snakemake version using <code>snakemake --version</code>. </p>
+<p>In NovaScope, we utilized a cluster configuration profile to define the details of the cluster and resources given its consistency and time-saving benefits. More details are provided below. Those files were crafted with inspiration from the <a href="https://github.com/jdblischak/smk-simple-slurm">smk-simple-slurm</a> repository.</p>
+<h2 id="a-cluster-configuration-file-for-snakemake-v7290">A Cluster Configuration file for Snakemake v7.29.0<a class="headerlink" href="#a-cluster-configuration-file-for-snakemake-v7290" title="Permanent link">&para;</a></h2>
+<p>Create a <code>config.yaml</code> with the following settings. Please substitute the placeholders below, marked with &lt;&gt;, to suit your specific case. Please see our example file at <a href="https://github.com/seqscope/NovaScope/blob/main/slurm/v7.29.0/config.yaml">slurm/v7.29.0/config.yaml</a>. </p>
 <div class="codehilite"><pre><span></span><code>## Cluster Configuration
 ## The following setting also aids in organizing log files by creating rule-specific subdirectories within the job&#39;s log directory, each holding its own output and error files.
-
 cluster:
   mkdir -p logs/{rule}/ &amp;&amp;
   sbatch
@@ -576,9 +610,7 @@ cluster:
     --parsable
     --nodes={resources.nodes}
 
-
 ## Default Resources for Jobs
-
 default-resources:
   - partition=&lt;your_default_partition&gt;    # Replace &lt;your_default_partition&gt; with your actual partition name
   - mem=&lt;default_memory_allocation&gt;       # Replace &lt;default_memory_allocation&gt; with memory, e.g., &quot;4G&quot;
@@ -586,9 +618,7 @@ default-resources:
   - nodes=&lt;default_number_of_nodes&gt;       # Replace &lt;default_number_of_nodes&gt; with nodes, e.g., &quot;1&quot;
   - account=&lt;default_account_information&gt; # Replace &lt;default_account_information&gt; with your account info
 
-
 ## General Snakemake Settings
-
 jobs: &lt;max_number_of_jobs&gt;               # Replace &lt;max_number_of_jobs&gt; with your desired maximum number of concurrent jobs, e.g., 10
 latency-wait: &lt;latency_seconds&gt;          # Replace &lt;latency_seconds&gt; with the number of seconds to wait if job output is not present, e.g., 120
 local-cores: &lt;local_core_count&gt;          # Replace &lt;local_core_count&gt; with the max number of cores to use locally, e.g., &quot;20&quot;
@@ -598,17 +628,54 @@ keep-going: &lt;continue_after_failure&gt;     # Replace &lt;continue_after_fail
 rerun-incomplete: &lt;rerun_incomplete_jobs&gt; # Replace &lt;rerun_incomplete_jobs&gt; with True or False to decide if incomplete jobs should be rerun
 printshellcmds: &lt;print_commands&gt;         # Replace &lt;print_commands&gt; with True or False to specify if shell commands should be printed before execution
 
-
 ## Scheduler Settings
-
 #scheduler: greedy      
 
-
 ## Conda Environment Settings
-
 use-conda: &lt;True_or_False&gt;               # Enable use of Conda environments
 conda-frontend: conda                    # Specify Conda as the package manager frontend
 </code></pre></div>
+
+<h2 id="a-cluster-configuration-file-for-snakemake-v860">A Cluster Configuration file for Snakemake v8.6.0<a class="headerlink" href="#a-cluster-configuration-file-for-snakemake-v860" title="Permanent link">&para;</a></h2>
+<p>Please first install the Snakemake executor plugin "cluster-generic":</p>
+<div class="codehilite"><pre><span></span><code>pip install snakemake-executor-plugin-cluster-generic
+</code></pre></div>
+
+<p>Then, create the cluster configuration file with below. Please substitute the placeholders below, marked with &lt;&gt;, to suit your specific case. Please see our example file at <a href="https://github.com/seqscope/NovaScope/blob/main/slurm/v8.6.0/config.yaml">slurm/v8.6.0/config.yaml</a>. </p>
+<div class="codehilite"><pre><span></span><code>executor: &quot;cluster-generic&quot;
+cluster-generic-submit-cmd: &quot;mkdir -p logs/{rule}/ &amp;&amp;
+  sbatch
+    --job-name={rule}_{wildcards} \
+    --output=logs/{rule}/{rule}___{wildcards}___%j.out \
+    --error=logs/{rule}/{rule}___{wildcards}___%j.err \
+    --partition={resources.partition} \
+    --mem={resources.mem} \
+    --time={resources.time} \
+    --cpus-per-task={threads} \
+    --parsable \
+    --nodes={resources.nodes} &quot;
+
+default-resources:
+  - partition=&quot;main&quot;
+  - mem=&quot;6500MB&quot;
+  - time=&quot;05:00:00&quot;
+  - nodes=1
+
+
+jobs: 10                       
+latency-wait: 120              
+local-cores: 20                
+restart-times: 0               
+max-jobs-per-second: 20
+keep-going: True
+rerun-incomplete: True
+printshellcmds: True
+
+software-deployment-method: conda
+</code></pre></div>
+
+<h2 id="additional-functions">Additional functions<a class="headerlink" href="#additional-functions" title="Permanent link">&para;</a></h2>
+<p>If you encounter situations where your jobs fail without any warnings, it is feasible to using a cluster status script to keep track of your jobs. See details <a href="https://github.com/jdblischak/smk-simple-slurm/tree/main/extras">here</a>.</p>
 
 
 

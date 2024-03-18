@@ -510,30 +510,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Input">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#seq1st" class="md-nav__link">
-    <span class="md-ellipsis">
-      seq1st
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#seq2nd" class="md-nav__link">
-    <span class="md-ellipsis">
-      seq2nd
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
         
           <li class="md-nav__item">
@@ -549,6 +525,15 @@
   <a href="#request" class="md-nav__link">
     <span class="md-ellipsis">
       request:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#preprocess" class="md-nav__link">
+    <span class="md-ellipsis">
+      preprocess
     </span>
   </a>
   
@@ -726,30 +711,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Input">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#seq1st" class="md-nav__link">
-    <span class="md-ellipsis">
-      seq1st
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#seq2nd" class="md-nav__link">
-    <span class="md-ellipsis">
-      seq2nd
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
         
           <li class="md-nav__item">
@@ -765,6 +726,15 @@
   <a href="#request" class="md-nav__link">
     <span class="md-ellipsis">
       request:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#preprocess" class="md-nav__link">
+    <span class="md-ellipsis">
+      preprocess
     </span>
   </a>
   
@@ -800,11 +770,10 @@
 
 <h1 id="preparing-input">Preparing Input<a class="headerlink" href="#preparing-input" title="Permanent link">&para;</a></h1>
 <h2 id="1-input-data">1. Input Data<a class="headerlink" href="#1-input-data" title="Permanent link">&para;</a></h2>
-<p>The input data include 1st-seq and 2nd-seq FASTQ files and a histology file (optional).</p>
-<p>Begin by creating a dedicated directory for your job. This directory will serve to identify the input configuration file (refer to <em>2. Prepare Input Config Files</em>) and to store log files.</p>
+<p>Begin by establishing a specific directory for your job. This directory will be used to organize the input configuration file (i.e., <code>config_job.yaml</code>, as outlined in <em>2. Prepare Input Config Files</em>) and to store log files. </p>
+<p>The required input data includes 1st-seq and 2nd-seq FASTQ files, with the option to include an additional histology file and a file listing genes of interest. Below, we provide <a href="https://github.com/seqscope/NovaScope/tree/main/testrun">three examples</a> from the same section chip, highlighting differences in 2nd-Seq library sequencing depth and selected regions.</p>
 <h3 id="example-1-regional-section-test-run">Example 1 - Regional Section Test Run<a class="headerlink" href="#example-1-regional-section-test-run" title="Permanent link">&para;</a></h3>
-<p>The input data originates from a specific, limited region of a section. No histology files is provided.</p>
-<p>Now Download the first and second sequencing data sets from <a href="https://www.dropbox.com/scl/fi/3egsr9nqc559e9hb45vik/B08Csub_20240301_raw.tar.gz?rlkey=z06xwb3v6ku19dp6br6mlsgkm&amp;dl=0">here</a>.</p>
+<p>The input data originates from a specific, limited region of a section chip, which was subjected to a relatively 2nd-Seq library sequencing depth. No histology files is provided.</p>
 <div class="codehilite"><pre><span></span><code>smk_dir=&quot;&lt;path_to_NovaScope_repository&gt;&quot;    # Replace &lt;path_to_NovaScope_repository&gt; with the path to the NovaScope repository
 job_dir=&quot;$smk_dir/testrun/regional_section&quot;  
 
@@ -814,8 +783,7 @@ mkdir -p input_data
 </code></pre></div>
 
 <h3 id="example-2-full-section-shallow-sequencing-test-run">Example 2 - Full Section Shallow Sequencing Test Run<a class="headerlink" href="#example-2-full-section-shallow-sequencing-test-run" title="Permanent link">&para;</a></h3>
-<p>The input data is from a full section with an available histology file.</p>
-<p>Download the first and second sequencing data sets from here. <em>TBC: Add the download link</em></p>
+<p>The input data was derived from one section chip and features a relatively shallow 2nd-Seq library sequencing depth (approximately 163 million reads). A histology file is also accessible. </p>
 <div class="codehilite"><pre><span></span><code>smk_dir=&quot;&lt;path_to_NovaScope_repository&gt;&quot;    # Replace &lt;path_to_NovaScope_repository&gt; with the path to the NovaScope repository
 job_dir=&quot;$smk_dir/testrun/full_section_shallow&quot;  
 
@@ -826,8 +794,7 @@ wget https://historef-sample-data.s3.amazonaws.com/sample/b08c/histology.tif
 </code></pre></div>
 
 <h3 id="example-3-full-section-deep-sequencing-test-run">Example 3 - Full Section Deep Sequencing Test Run<a class="headerlink" href="#example-3-full-section-deep-sequencing-test-run" title="Permanent link">&para;</a></h3>
-<p>The input data is from a full section with an available histology file.</p>
-<p>Download the first and second sequencing data sets from here. <em>TBC: Add the download link</em></p>
+<p>The input data is based on one section chip underwent deep sequencing, resulting in 2.61 billion reads, and this too comes with an available histology file.</p>
 <div class="codehilite"><pre><span></span><code>smk_dir=&quot;&lt;path_to_NovaScope_repository&gt;&quot;    # Replace &lt;path_to_NovaScope_repository&gt; with the path to the NovaScope repository
 job_dir=&quot;$smk_dir/testrun/full_section_deep&quot;  
 
@@ -871,7 +838,6 @@ input:
 
 ## Output
 output: &lt;output_directory&gt;                      ## See 2.2.
-
 request:                                        ## See 2.2.
   - &lt;required_output1&gt;
   - &lt;required_output2&gt;
@@ -899,18 +865,22 @@ env_yml: &lt;path_to_config_env.yaml_file&gt;         ## If absent, the pipeline
 #    dup_maxdist: 1
 #  smatch:
 #    skip_sbcd: 1            ## If absent, skip_sbcd can be calculated follows the fastq2sbcd format: 1 for DraI31 and 0 for DraI32.
-#    match_len: 27
+#    match_len: 27           ## Length of spatial barcode considered to be a perfect match.
 #  align:
-#    len_sbcd: 30
-#    min_match_len: 30
-#    min_match_frac: 0.66
-#    resource:
-#      assign_type: stdin    ## Options: &quot;filesize&quot;, &quot;stdin&quot;. If &quot;filesize&quot;, there&#39;s no need to input the three values below, as the resources will be automatically determined based on the total size of the second set of sequencing FASTQ files. 
-#      partition: standard
-#      threads: 10
-#      memory: 70000m
+#    min_match_len: 30       ## A minimum number of matching bases.
+#    min_match_frac: 0.66    ## A minimum fraction of matching bases.
+#    len_sbcd: 30            ## Length of spatial barcode (in Read 1) to be copied to output FASTQ file (Read 1).
+#    len_umi: 9              ## Length of UMI barcode (in Read 2) to be copied to output FASTQ file (Read 1).
+#    len_r2: 101             ## Length of read 2 after trimming (including randomers).
+#    exist_action: overwrite ## Skip the action or overwrite the file if an intermediate or output file already exists. Options: &quot;skip&quot;, and &quot;overwrite&quot;.
+#    resource:               ## See 2.2.
+#      assign_type: stdin
+#      stdin:
+#        partition: standard
+#        threads: 10
+#        memory: 70000m
 #  dge2sdge:
-#      layout: null          ## If absent, the layout file in the info/assets/layout_per_section_basis/layout.1x1.tsv will be used for RGB plots.
+#    layout: null            ## If absent, the layout file in the info/assets/layout_per_section_basis/layout.1x1.tsv will be used for RGB plots.
 #  gene_visual: null         ## If you have a specific set of genes to visualize, specify the path to a file containing a list of gene names (one per line) here. By default, the top five genes with the highest expression are visualized.
 #  visualization:
 #    drawxy:
@@ -921,15 +891,15 @@ env_yml: &lt;path_to_config_env.yaml_file&gt;         ## If absent, the pipeline
 #
 #histology:
 #    resolution: 10
-#    figtype: &quot;hne&quot;          ## Options: &quot;hne&quot;,&quot;dapi&quot;,&quot;fl&quot;
+#    figtype: &quot;hne&quot;          ## Options: &quot;hne&quot;, &quot;dapi&quot;, and &quot;fl&quot;.
 </code></pre></div>
 
 <h3 id="22-additional-information">2.2 Additional Information<a class="headerlink" href="#22-additional-information" title="Permanent link">&para;</a></h3>
 <h4 id="input">Input<a class="headerlink" href="#input" title="Permanent link">&para;</a></h4>
-<h5 id="seq1st">seq1st<a class="headerlink" href="#seq1st" title="Permanent link">&para;</a></h5>
-<p><strong><code>prefix</code></strong></p>
+<p><strong><code>seq1st</code></strong> </p>
+<p><em><code>prefix</code></em></p>
 <p>The <code>prefix</code> will be used to organize the 1st-seq FASTQ files. Make sure the <code>prefix</code> parameter in the corresponding flowcell is unique.  </p>
-<p><strong><code>layout</code></strong></p>
+<p><em><code>layout</code></em></p>
 <p>A file to provide the layout of tiles in a section chip with the following format. If absent, NovaScope will automatically look for the sbcd layout within the NovaScope repository at <a href="https://github.com/seqscope/NovaScope/tree/main/info/assets/layout_per_tile_basis">info/assets/layout_per_tile_basis</a>, using the section chip ID for reference.</p>
 <div class="codehilite"><pre><span></span><code>lane  tile  row  col  rowshift  colshift
 3     2556  1    1    0         0
@@ -942,7 +912,7 @@ env_yml: &lt;path_to_config_env.yaml_file&gt;         ## If absent, the pipeline
 <li>row &amp; col: The layout position</li>
 <li>rowshift &amp; colshift: The gap information</li>
 </ul>
-<h5 id="seq2nd">seq2nd<a class="headerlink" href="#seq2nd" title="Permanent link">&para;</a></h5>
+<p><strong><code>seq2nd</code></strong></p>
 <p>Every FASTQ pair associated with the input section chip should be supplied in <code>seq2nd</code>.  The <code>prefix</code> should be unique among all 2nd-seq FASTQ pairs, not just within this flowcell.</p>
 <h4 id="output">output<a class="headerlink" href="#output" title="Permanent link">&para;</a></h4>
 <p>The output directory will be used to organize the input files and store output files. Please see the structure directory <a href="../output/">here</a></p>
@@ -958,6 +928,38 @@ env_yml: &lt;path_to_config_env.yaml_file&gt;         ## If absent, the pipeline
 <li><code>"sge-per-section"</code>: An sDGE matrix, an "sge" image depicting the spatial alignment of transcripts, and an RGB image representing the sDGE matrix and selected genes. In the absence of specified genes of interest, the RGB image will display the top 5 genes with the highest expression levels.</li>
 <li><code>"hist-per-section"</code>: Two aligned histology files, one of which is a referenced geotiff file facilitating the coordinate transformation between the SGE matrix and the histology image. The other is a tiff file matching the dimensions of both the "smatch" and "sge" images.</li>
 </ul>
+<h4 id="preprocess">preprocess<a class="headerlink" href="#preprocess" title="Permanent link">&para;</a></h4>
+<p><strong><code>align</code></strong></p>
+<p><em><code>resource</code></em>: </p>
+<p>The <code>resource</code> parameters are only applicable for HPC users. The <code>assign_type</code> include two options: <code>"stdin"</code> (recommended) and <code>"filesize"</code>. </p>
+<p>If using <code>"stdin"</code>, define the resource parameters in the <code>stdin</code>, including <code>partition</code>, <code>threads</code>, and <code>memory</code>, to fit your case. Such resource will be used for the <em>align</em> step. An example is provided below. </p>
+<div class="codehilite"><pre><span></span><code>preprocess:
+#  ...
+  align:
+#    ...
+    resource:
+      assign_type: stdin
+      stdin:
+        partition: standard
+        threads: 10
+        memory: 70000m
+</code></pre></div>
+
+<p>If using <code>"filesize"</code>, ensure to include details about the computing capabilities of all available nodes. This includes the partition name, the available number of CPUs, and the memory allocated per CPU (refer to the example provided). Resource allocation will be automatically adjusted based on the total size of the input 2nd-seq FASTQ files and the available computing resources. The preliminary strategy for resource allocation is as follows: for input 2nd-seq FASTQ files smaller than 200GB, allocate 70GB of memory for alignment processes; for file sizes ranging from 200GB to 400GB, allocate 140GB of memory; for anything larger, 330GB of memory will be designated for alignment step.</p>
+<div class="codehilite"><pre><span></span><code>preprocess:
+#  ...
+  align:
+#    ...
+    resource:
+      assign_type: filesize
+      filesize:
+        - partition: standard
+          max_n_cpus: 20
+          mem_per_cpu: 7g
+        - partition: largemem
+          max_n_cpus: 10
+          mem_per_cpu: 25g
+</code></pre></div>
 
 
 
