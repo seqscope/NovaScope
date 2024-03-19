@@ -91,7 +91,7 @@ def cal_resource_by_filesize(section, sc2seq2, main_dirs, avail_resource_list):
     mem = threads * resource["mem_per_cpu"]
 
     return {
-            "mem": mem,
+            "mem": f"{int(mem)}g",
             "threads": threads,
             "partition": resource["partition"],
         }

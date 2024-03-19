@@ -18,10 +18,6 @@ input:
 output: "/nfs/turbo/umms-leeju/v5"
 
 request:
-  - sbcd-per-flowcell
-  - sbcd-per-section
-  - smatch-per-section
-  - align-per-section
   - sge-per-section
 
 env_yml: /nfs/turbo/sph-hmkang/index/data/weiqiuc/NovaScope/info/config_env.yaml
