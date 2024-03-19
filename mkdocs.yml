@@ -1,4 +1,4 @@
-site_name: Novascope
+site_name: NovaScope
 site_url: https://seqscope.github.io/NovaScope
 
 # Repository
@@ -8,6 +8,10 @@ repo_url: https://github.com/seqscope/NovaScope
 # Theme configuration
 theme:
   name: material
+  features:
+  - navigation.tabs
+  - navigation.indexes
+  - navigation.sections
 #  palette:
 #    primary: 'deep purple'
 #    accent: 'lime'
@@ -20,7 +24,10 @@ theme:
 
 # Navigation structure
 nav:
-  - Home: index.md
+  - Home: 
+      - Introduction: index.md
+      - Documentation Overview: home/documentation_overview.md
+      - Workflow Structure: home/workflow_structure.md
   - Installation:
       - Requirements: installation/requirement.md
       - Environment Setup: installation/env_setup.md
@@ -37,3 +44,9 @@ markdown_extensions:
       guess_lang: false
   - toc:
       permalink: true
+  - attr_list
+  - md_in_html
+
+plugins:
+  - search
+  - open-in-new-tab

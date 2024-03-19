@@ -1,66 +1,143 @@
-# 1. Software Installation
+# Installing NovaScope
 
-## 1.1 NovaScope.
+Installing [NovaScope](../index.md) involves multiple steps. This document provides instructions on how to install the necessary software tools and obtain reference datasets.
 
+## Installing Snakemake 
+
+[Snakemake](https://snakemake.readthedocs.io/en/stable/) orchestrates the workflow of [NovaScope](../index.md) pipeline. We recommend installing [Snakemake](https://snakemake.readthedocs.io/en/stable/) using [conda](https://docs.conda.io/en/latest/) and/or [mamba](https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html). For detailed installation instructions of these tools, please refer to the [official Snakemake documentation](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html). 
+
+
+### Checking Snakemake Installation
+If you are unsure whether [Snakemake](https://snakemake.readthedocs.io/en/stable/) is installed in your system or not, you can check by running the following command:
+
+```bash
+snakemake --version
 ```
-git clone git@github.com:seqscope/NovaScope.git
+
+In some systems that supports `module`, you may be able to load the `snakemake` module using the following command:
+
+```bash
+## check if snakemake is available as a module
+module avail snakemake
+
+## load the available module (specify the version if necessary)
+module load snakemake
+``` 
+
+[NovaScope](../index.md) has been tested for compatibility with [Snakemake](https://snakemake.readthedocs.io/en/stable/) v7.29.0 and v8.6.0.
+
+### Installing Snakemake Using Conda and Mamba
+
+If you need to install [Snakemake](https://snakemake.readthedocs.io/en/stable/), below is a simplified sequence of instruction. Please refer to the official documentation for more detailed instructions.
+
+```bash
+## Download miniconda
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+
+## install miniconda
+bash Miniconda3-latest-Linux-x86_64.sh
+## Follow the on-screen instructions to complete the installation. 
+
+## Activate the Miniconda installation:
+source ~/.bashrc
+
+## create a new conda environment
+conda create -n snakemake-env python=3.9
+
+## activate the new environment
+conda activate snakemake-env
+
+## install mamba in the conda environment
+conda install mamba -n snakemake-env
+
+## activate the environment to ensure mamba is correctly set up
+conda activate snakemake-env
+
+## install snakemake using mamba
+mamba install snakemake
+
+## verify the installation of snakemake
+snakemake --version
 ```
 
-## 1.2 Snakemake 
+## Installing Other Dependent Tools
 
-Snakemake orchestrates the workflow of this pipeline. We recommend installing Snakemake using Conda or Mamba. For detailed installation instructions, please refer to the [official Snakemake documentation](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html).
-
-The NovaScope is created and tested using Snakemake v7.29.0 and v8.6.0.
-
-## 1.3 Other Dependent Software Tools
+[NovaScope](../index.md) depends on a number has been tested for compatibility with [Snakemake](https://snakemake.readthedocs.io/en/stable/) v7.29.0 and v8.6.0.
 
 The dependent software tools are listed below. The versions specified for each software tool have been verified for compatibility with our pipeline, though other versions may also be compatible.
 
-	* STAR (v2.7.11a)
-	* Samtools (v1.14 and v1.19)
-	* spatula 
-	* Python (v3.9.12, v3.10, and v3.12.2)
-	* imagemagick (7.1.0-25.lua and 7.1.1-30)
-	* gcc (v10.3.0) 
-	* gdal (v3.5.1)
+* [STARsolo](https://github.com/alexdobin/STAR) (v2.7.11b)
+* [samtools](https://www.htslib.org/) (v1.14 or v1.19)
+* [spatula](https://seqscope.github.io/spatula/) (v0.1.0)
+* [Python](https://www.python.org/) (v3.9.12, v3.10, or v3.12.2)
+* [ImageMagick](https://imagemagick.org/) (7.1.0-25.lua and 7.1.1-30)
+* [GDAL](https://gdal.org/) (v3.5.1)
 
 We provide an [example work log](https://github.com/seqscope/NovaScope/blob/main/installation/requirement_install_log.md) documenting the installation of the aforementioned software tools.
 
-# 2. Reference Datasets
-	
-Please download the necessary reference datasets for STARsolo alignment. The versions listed below are those we utilized in our setup.
+## Installing NovaScope
 
-	* mouse: mm39
-	* human: GRCh38
-	* rat: mRatBN7
-	* worm: WBcel235
+To install [NovaScope](../index.md), clone the repository from GitHub using the following command:
 
-# 3. Configure Python Environment
-
-If you already have an existing Python environment with all required packages (see [pyenv_req.txt](https://github.com/seqscope/NovaScope/blob/main/installation/pyenv_req.txt)), skip 3.1.
-
-## 3.1 Create a New Python Environment
-
-```
-pyenv_dir=<directory_of_python_environment>
-pyenv_name=<name_of_python_environment>
-smk_dir=<path_to_NovaScope_repository>
-
-mkdir -p $pyenv_dir
-cd $pyenv_dir
-
-python -m venv $pyenv_name
-source $pyenv_name/bin/activate
-pip install -r $smk_dir/installation/pyenv_req.txt
+```bash
+git clone https://github.com/seqscope/NovaScope.git
 ```
 
-## 3.2 Install the historef Package Using the whl File
 
-Below are codes to download historef's latest version at document creation. To access the most recent version, please see [its GitHub repository](https://github.com/seqscope/historef?tab=readme-ov-file).
+## Preparing Reference Genomes
 
+The reference genome for the species of interest must be downloaded and indexed for alignment. [STARsolo](https://github.com/alexdobin/STAR) accepts the reference genomes prepared by [cellranger](https://www.10xgenomics.com/support/software/cell-ranger), therefore, one of the simplest way is to download the reference genome from the [cellranger download](https://www.10xgenomics.com/support/software/cell-ranger/downloads) page.
+
+The recommended reference genome for mouse is GRCm39.
+
+```bash
+curl -O "https://cf.10xgenomics.com/supp/cell-exp/refdata-gex-GRCm39-2024-A.tar.gz"
 ```
-source $pyenv_dir/$pyenv_name/bin/activate
-wget -P $smk_dir/installation https://github.com/seqscope/historef/releases/download/v0.1.1/historef-0.1.1-py3-none-any.whl
-pip install $smk_dir/installation/historef-0.1.1-py3-none-any.whl
+
+The recommended reference genome for human is GRCh38.
+
+```bash
+curl -O "https://cf.10xgenomics.com/supp/cell-exp/refdata-gex-GRCh38-2024-A.tar.gz"
+```
+
+For other species, you may follow the instructions provided by [cellranger](https://www.10xgenomics.com/support/software/cell-ranger/downloads) or [STARsolo](https://github.com/alexdobin/STAR) to prepare the reference genome.
+
+## Configuring Python Virtual Environment
+
+We recommend creating a new Python environment for [NovaScope](../index.md) using the following steps. If you already have an existing Python environment all required packages (see [pyenv_req.txt](https://github.com/seqscope/NovaScope/blob/main/installation/pyenv_req.txt)), you may skip this step. 
+
+You may create a new Python environment using the following commands:
+
+```bash
+## set the path to the python virtual environment directory
+pyenv_dir=/path/to/python/virtual/environment/directory
+pyenv_name=name_of_python_virtual_environment
+smk_dir=/path/to/the/novascope/directory
+
+## create the python virtual environment (need to be done only once)
+mkdir -p ${pyenv_dir}
+cd ${pyenv_dir}
+python -m venv ${pyenv_name}
+
+## activate the python environment (every time you want to use the environment)
+source ${pyenv_name}/bin/activate
+
+## install the required packages (need to be done only once)
+pip install -r ${smk_dir}/installation/pyenv_req.txt
+```
+
+## (Optional) Install the historef Package from the whl File
+
+If you want to align your histology images with the spatial gene expression data, you may install the [historef](https://github.com/seqscope/historef) package from the whl file. Below is an example instruction to download historef's latest version at document creation. To access the most recent version, please see [its GitHub repository](https://github.com/seqscope/historef?tab=readme-ov-file).
+
+```bash
+## activate the python environment
+source ${pyenv_dir}/$pyenv_name/bin/activate
+
+### download the historef package
+wget -P ${smk_dir}/installation https://github.com/seqscope/historef/releases/download/v0.1.1/historef-0.1.1-py3-none-any.whl
+
+## install the historef package
+pip install ${smk_dir}/installation/historef-0.1.1-py3-none-any.whl
 ```
 

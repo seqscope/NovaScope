@@ -1,16 +1,17 @@
-# Setup A Environment YAML File
+# Setting up a Environment YAML File
 
-Create a `config_env.yaml` file for the environment setup, see our example [here](https://github.com/seqscope/NovaScope/blob/main/info/config_env.yaml).
+[NovaScope](../index.md) requires a YAML file to configure the environment. This file is used to specify the paths to the required tools, reference databases, and Python environment. To create your own `config_env.yaml` file for the environment setup, you may copy from [our example available in our GitHub repository](https://github.com/seqscope/NovaScope/blob/main/info/config_env.yaml).
 
-Below is a brief description of all the items in the YAML file. Replace the placeholders with your specific input variables to customize it according to your needs, and provide it via your `config_job.yaml`.
+Below is a brief description of all the items in the YAML file. Replace the placeholders with your specific input variables to customize it according to your needs, and prepare your own `config_job.yaml`.
 
 ## Tools 
+
 For tools that are not explicitly defined, the pipeline will automatically check if they are installed and include them in the system path for use. This allows the pipeline to utilize these tools without needing manual configuration for each one.
 ```
 tools:
-  spatula: <path_to_the_spatula_bin_file> 		## Default: "spatula"
-  samtools: <path_to_the_samtools_bin_file>		## Default: "samtools"
-  star: <path_to_the_starsolo_bin_file> 		  ## Default: "STAR"
+  spatula: /path/to/spatula/bin/spatula 		                ## Default: "spatula"
+  samtools: /path/to/samtools/samtools	                    ## Default: "samtools"
+  star: /path/to/STAR_2_7_11b/bin/Linux_x86_64_static/STAR  ## Default: "STAR"
 ```
 
 ## HPC-specific Configuration:
@@ -25,29 +26,30 @@ envmodules:
   gcc: "gcc/<version_information>"
   gdal: "gdal/<version_information>"
   imagemagick: "imagemagick/<version_information>"
-  #Bioinformatics: "Bioinformatics"
-  #samtools: "samtools/1.13-fwwss5n"
+  #snakemake: "snakemake/<version_information>"
 ```
 * `python`: If your python environment was set up using a Python version accessed through a module, your environment depends on certain shared files from that module. Therefore, you must add the `python: "python/<version_information>"`  in the `envmodules` section to load the same module you initially used to establish your environment. But if you set up with a locally installed Python (not using `module load`), comment out or remove the module line `python: "python/<version_information>"`.
-* `Bioinformatics` and `samtools`: It is also feasible to use `envmodules` to load samtools instead of defining its path in `tools`.
+* It is also feasible to use `envmodules` to load other tools, such as `samtools` instead of defining its path in `tools`.
 
 ## Reference Database
 
-Please list every reference database used for alignment here. The reference data are provided via . *TODO: add the download link*
+Please list every reference database used for alignment here. The reference data can be obtained via the [cellranger download](https://www.10xgenomics.com/support/software/cell-ranger/downloads) page.
 
-Please Ensure the reference database corresponds to the species of your input data. 
+Please ensure the reference database corresponds to the species of your input data. 
 
 ```
 ref:
   align:
-    <specie1>: <path_to_the_reference_genome_index_for_specie1>
-    <specie2>: <path_to_the_reference_genome_index_for_specie2>
+    mouse: "/path/to/refdata-gex-GRCm39-2024-A/star"
+    human: "/path/to/refdata-gex-GRCh39-2024-A/star"
    #...
 ```
 
 ## Python Environment
 
+You also need to specify the path of python virtual environment by modifying the following line.
+
 ```
-pyenv: <path_to_the_python_environment1>
+pyenv: "/path/to/python/virtual/env"
 ```
 

@@ -1,23 +1,16 @@
-# Welcome to NovaScope documantation
+# Welcome to NovaScope documentation
 
-This is the documentation for the NovaScope, a pipeline to preprocess the spatial transcriptomics data from Novaseq.
+## Introduction
 
-## Documentation Overview
+NovaScope is a [Snakemake](https://snakemake.readthedocs.io/en/stable/)-based pipeline that processes spatial transcriptomics data generated from the [Seq-Scope](https://doi.org/10.1016/j.cell.2021.05.010). Currently, it is tailored to process the spatial arrays generated from the Illumina [NovaSeq 6000](https://www.illumina.com/systems/sequencing-platforms/novaseq.html) platform.
 
-The current documentation include the following:
+The pipeline is designed to process raw sequencing data (1st-seq and 2nd-seq), align reads to the reference genome, and produce spatial gene expression at the submicron resolution. The pipeline is designed to be modular and flexible, allowing users to customize the pipeline to their specific needs. 
 
-* Installation:
-    * Requirements: Instructions on how to install necessary software tools and obtain reference datasets.
-    * Environment Setup: A quick guide to set up your environment YAML file.
-    * Slurm: (Optional) Instructions for creating a configuration file for the SLURM scheduler.
-* Getting Started:
-    * Preparing Input: How to ready your input data and configuration file.
-    * Execute NovaScope: Three options to execute the pipeline.
-    * Output: Details on the structure of the output directory and the usage of the produced data.
+The pipeline is designed to be run on a Unix-based high-performance computing (HPC) system, either locally or through the [Slurm](https://slurm.schedmd.com/documentation.html) workload manager.
 
-## An Overview of the Workflow Structure
+NovaScope consists of primarily two steps as shown in the figure below.
 
-![rulegraph](rulegraph.png)
-
-**Figure 1: The overall flow and dependencies between rules.**
-Each node in the graph represents a rule within your Snakemake workflow. Each arrow among nodes stands for the rule dependency among rules, with the direction that points from prerequisite rules to a dependent rule. The prerequisite rules must be executed before the dependent rule can start.
+<figure markdown="span">
+![Novascope Overview](images/novascope_overview.png){ width="100%" }
+</figure>
+**Figure 1: Overview of the NovaScope pipeline:** Step 1 processes the 1st-seq FASTQ files to generate spatial barcode maps for each "Chip", a 10x6 array of tiles. Step 2 processes the 2nd-seq FASTQ files, aligns reads to the reference genome, and produces spatial gene expression at submicron resolution.  

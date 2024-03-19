@@ -1,23 +1,25 @@
+## Path to the dependent software tools
+## Please replace /path/to the actual path to the binary of the software tools
 tools:
-  spatula: "/nfs/turbo/sph-hmkang/tools/dev/spatula/bin/spatula"
-  samtools: "/nfs/turbo/sph-hmkang/bin/samtools"
-  star: "/nfs/turbo/sph-hmkang/bin/STAR_2_7_11a"
+  spatula: "/path/to/spatula/bin/spatula"
+  samtools: "/path/to/samtools/samtools"
+  star: "/path/to/STAR_2_7_11b/bin/Linux_x86_64_static/STAR"
 
-# HPC-specific configuration:
-# Use this section exclusively for HPC execution mode to load the required software tools as modules.
-# This setup is not necessary for local executions; you may skip this section if running the pipeline on your local machine.
+# module-specific configuration:
+# If your system supports module loading, you may specify the module names for the required software tools.
 envmodules:
   python: "python/3.9.12"
   gcc: "gcc/10.3.0"
   gdal: "gdal/3.5.1"
   imagemagick: "imagemagick/7.1.0-25.lua"
 
+## Path to the reference genomes
+## For each species, you need to provide the path to the STAR index
 ref:
   align:
-    mouse: "/nfs/turbo/sph-hmkang/ref/cellranger/refdata-gex-mm39-ensembl110-custom/star_2_7_11a"
-    human: "/nfs/turbo/sph-hmkang/ref/cellranger/refdata-gex-GRCh38-2020-A/star_2_7_10a"
-    human_mouse: "/nfs/turbo/sph-hmkang/ref/cellranger/refdata-gex-GRCh38-and-mm10-2020-A/star_2_7_10a"
-    rat: "/nfs/turbo/sph-hmkang/ref/cellranger/refdata-gex-mRatBN7-custom/star_2_7_10a"
-    worm: "/nfs/turbo/sph-hmkang/ref/cellranger/refdata-gex-WBcel235-custom/star_2_7_10a"
+    mouse: "/path/to/refdata-gex-GRCm39-2024-A/star"
+    human: "/path/to/refdata-gex-GRCh39-2024-A/star"
+## you may add other reference data here
 
-pyenv: /nfs/turbo/sph-hmkang/index/data/weiqiuc/NovaScope_local/env/pyenv/py39
+## Path to the python virtual environment
+pyenv: "/path/to/python/virtual/env"
