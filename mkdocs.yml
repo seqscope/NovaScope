@@ -12,12 +12,31 @@ theme:
   - navigation.tabs
   - navigation.indexes
   - navigation.sections
-#  palette:
+  - content.code.annotate
+  palette:
+  - media: "(prefers-color-scheme)"
+    toggle:
+      icon: material/link
+      name: Switch to light mode
+  - media: "(prefers-color-scheme: light)"
+    scheme: default
+    primary: indigo
+    accent: indigo
+    toggle:
+      icon: material/toggle-switch
+      name: Switch to dark mode
+  - media: "(prefers-color-scheme: dark)"
+    scheme: slate
+    primary: black
+    accent: indigo
+    toggle:
+      icon: material/toggle-switch-off
+      name: Switch to system preference
 #    primary: 'deep purple'
 #    accent: 'lime'
-  palette:
-    primary: indigo
-    accent: grey
+#  palette:
+#    primary: indigo
+#    accent: grey
   font:
     text: 'Roboto'
     code: 'Roboto Mono'
@@ -33,20 +52,32 @@ nav:
       - Environment Setup: installation/env_setup.md
       - Slurm: installation/slurm.md
   - Getting Started:
-      - Preparing Input: getting_started/prep_input.md
-      - Executing NovaScope Pipeline: getting_started/execute.md
+      - Introduction: getting_started/intro.md
+      - Accessing Input Data: getting_started/access_data.md 
+      - Job Configuration : getting_started/job_config.md
+      - Executing NovaScope : getting_started/execute.md
       - Output: getting_started/output.md
 
 # Markdown Extensions
 markdown_extensions:
   - admonition
-  - codehilite:
-      guess_lang: false
+#  - codehilite:
+#      guess_lang: false 
   - toc:
       permalink: true
   - attr_list
   - md_in_html
+  - pymdownx.highlight:
+      linenums: true
+      css_class: 'highlight'
+  - pymdownx.superfences
+# - pymdownx.inlinehilite
+
 
 plugins:
   - search
   - open-in-new-tab
+
+# Extra CSS
+extra_css:
+  - css/custom.css

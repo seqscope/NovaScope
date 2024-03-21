@@ -1,13 +1,14 @@
 
-# Executing NovaScope Pipeline
+# Executing the NovaScope Pipeline
 
-## 1 Preliminary Steps 
+## Preliminary Steps 
 
-Executing a dry run is a critical initial step. It verifies that your `config_job.yaml` is properly configured and outlines the necessary jobs to be executed. 
+Before running the full pipeline, performing a sanity check by
+executing a dry run is highly recommended. A dry run verifies that your `config_job.yaml` is properly configured and outlines the necessary jobs to be executed. 
 
 Additionally, you can create a rule graph that visually represents the structure of the workflow or a DAG (Directed Acyclic Graph) to view all jobs and their actual dependency structure.
 
-```
+```bash
 # Paths
 smk_dir="<path_to_NovaScope_repository>"    # Replace <path_to_NovaScope_repository> with the path to the NovaScope repository
 job_dir="<job_directory>"                   # Replace <job_directory> with your specific job directory path, which has the `config_job.yaml` file.
@@ -27,16 +28,40 @@ snakemake --rulegraph  -s $smk_dir/NovaScope.smk --rerun-incomplete -d $job_dir 
 snakemake --dag  -s $smk_dir/NovaScope.smk --rerun-incomplete -d $job_dir | dot -Tpdf > dag.pdf
 ```
 
-## 2 Execution Options
+## Execution Options
 
-### Option A: SLURM using a Master Job
-This approach involves utilizing a master SLURM job to oversee and manage the status of all other jobs. 
+### Option A: Local Execution
+
+If your computing environment does not require a job scheduler such as Slurm, you can run the pipeline locally. You will need to specify the number of cores.
+
+An example script is provided below. Make sure to replace the variables to relevant paths and the number of cores.
+
+```bash
+smk_dir="<path_to_NovaScope_repository>"  # Replace <path_to_NovaScope_repository> with the path to the NovaScope repository
+job_dir="<path_to_the_job_directory>"     # Replace <job_directory> with your specific job directory path that contains the `config_job.yaml` file
+
+Ncores=8                                  # Replace to the number of available CPU cores you wish to use
+
+snakemake --latency-wait 120 -s ${smk_dir}/NovaScope.smk -d $job_dir --cores $Ncores --rerun-incomplete 
+```
+
+
+See the following examples to see how to execute the pipeline locally:
+
+* [Minimal Test Run](https://github.com/seqscope/NovaScope/blob/main/testrun/minimal_test_run/submit_local.sh)
+* [Shallow Liver Section](https://github.com/seqscope/NovaScope/blob/main/testrun/shallo_liver_section/submit_local.sh)
+* [Deep Liver Section](https://github.com/seqscope/NovaScope/blob/main/testrun/deep_liver_section/submit_local.sh)
+
+
+### Option B: Slurm using a Master Job
+
+If your computing environment expects to run jobs via a job scheduler such [Slurm](https://slurm.schedmd.com/documentation.html), a recommended approach to submit a 'Master Job' that oversees and manage the status of all other jobs. 
 
 First, you need to establish the master job. The primary role of this job is to monitor the progress of all tasks, handle job submissions based on dependencies and available resources. Thus, it requires minimal memory but an extended time limit. Its time limit should be longer than the total time required to complete all associated jobs.
 
-Create a file with the information below, e.g. submit_HPC.job. See examples in the [regional section](https://github.com/seqscope/NovaScope/blob/main/testrun/regional_section/submit_HPC.job), [full section shallow](https://github.com/seqscope/NovaScope/blob/main/testrun/full_section_shallow/submit_HPC.job), and [full section deep](https://github.com/seqscope/NovaScope/blob/main/testrun/full_section_deep/submit_HPC.job) test runs.
+Create a file similar to the information below. Note that the details of the contents may vary based on your specific computing environment. 
 
-```
+```bash
 #!/bin/bash
 ####  Job configuration
 #SBATCH --account=<account_name>               # Replace <account_name> with your account identifier
@@ -60,20 +85,27 @@ slurm_params="--profile <path_to_slurm_directory>"  # Replace <path_to_slurm_dir
 snakemake $slurm_params  --latency-wait 120  -s ${smk_dir}/NovaScope.smk  -d $job_dir 
 ```
 
-Then submit the master job:
+Specific examples prepared for the three datasets are provided below:
+
+* [Minimal Test Run](https://github.com/seqscope/NovaScope/blob/main/testrun/minimal_test_run/submit_HPC.job)
+* [Shallow Liver Section](https://github.com/seqscope/NovaScope/blob/main/testrun/shallow_liver_section/submit_HPC.job)
+* [Deep Liver Section](https://github.com/seqscope/NovaScope/blob/main/testrun/deep_liver_section/submit_HPC.job) test runs.
+
+Then submit the master job through `sbatch`:
 
 ```
 sbatch submit_HPC.job
 ```
 
-### Option B: SLURM via Command Line
+### Option C: SLURM via Command Line
 
+For a small number of quick jobs, you can submit them with a single command line without submitting a master job through [Slurm](https://slurm.schedmd.com/documentation.html).
 
-For a small number of quick jobs, you can submit them with a single command line. 
+This is similar to the local execution, but you need to specify the Slurm parameters.
 
-However, it's important to remember that if you log out before all jobs have been submitted to SLURM, any remaining jobs, i.e., those haven't been submitted, will not be submitted.
+It is important to remember that if you are logged out before all jobs have been submitted to Slurm, any remaining jobs, i.e., those haven't been submitted, will not be submitted.
 
-```
+```bash
 smk_dir="<path_to_NovaScope_repository>"            # Replace <path_to_NovaScope_repository> with the path to the NovaScope repository
 job_dir="<path_to_the_job_directory>"               # Replace <path_to_the_job_directory> with your specific job directory path
 slurm_params="--profile <path_to_slurm_directory>"  # Replace <path_to_slurm_directory> with your directory of the SLURM configuration file
@@ -81,14 +113,3 @@ slurm_params="--profile <path_to_slurm_directory>"  # Replace <path_to_slurm_dir
 snakemake $slurm_params --latency-wait 120 -s ${smk_dir}/NovaScope.smk -d $job_dir 
 ```
 
-### Option C: Local Execution
-Run the pipeline locally, with specifying the number of cores. See examples in the [regional section](https://github.com/seqscope/NovaScope/blob/main/testrun/regional_section/submit_local.sh), [full section shallow](https://github.com/seqscope/NovaScope/blob/main/testrun/full_section_shallow/submit_local.sh), and [full section deep](https://github.com/seqscope/NovaScope/blob/main/testrun/full_section_deep/submit_local.sh) test runs.
-
-```
-smk_dir="<path_to_NovaScope_repository>"       # Replace <path_to_NovaScope_repository> with the path to the NovaScope repository
-job_dir="<path_to_the_job_directory>"          # Replace <job_directory> with your specific job directory path
-
-Ncores=1 # Number of CPU cores
-
-snakemake --latency-wait 120 -s ${smk_dir}/NovaScope.smk -d $job_dir --cores $Ncores --rerun-incomplete 
-```

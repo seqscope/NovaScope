@@ -1,0 +1,40 @@
+## See more details for each parameter at https://github.com/seqscope/NovaScope/blob/main/docs/getting_started/job_config.md
+## IMPORTANT TODO: DOWNLOAD THE INPUT DATA from https://doi.org/10.5281/zenodo.10835761
+## IMPORTANT TODO: REPLACE THE FOLLOWING VARIABLES BEFORE USE
+## /path/to/input/dir  to the absolute path of the input data
+## /path/to/output/dir to the absolute path of the output directory
+## /path/to/config_env.yaml to the absolute path of the config_env.yaml file (e.g. NovaScope/info/config_env.yaml)
+
+input:
+  flowcell: N3-HG5MC
+  section: B08Ctest
+  species: "mouse"
+  lane: 3
+  seq1st:
+    prefix: L3_filt
+    ## IMPORTANT: REPLACE THE FOLLOWING VARIABLE BEFORE USE
+    fastq: "/path/to/input/dir/seq1st/fastqs/9203-AP.L3.2456_2556.R1_001.fastq.gz"
+    ## IMPORTANT: REPLACE THE FOLLOWING VARIABLE BEFORE USE
+    layout: "/path/to/input/dir/seq1st/layout/B08Csub.layout.tsv"
+  seq2nd:
+    - prefix: B08Cv1.filt
+      ## IMPORTANT: REPLACE THE FOLLOWING VARIABLES BEFORE USE
+      fastq_R1: "/path/to/input/dir/seq2nd/fastqs/B08Cv1.filt/B08Cv1.filt.R1.fastq.gz"
+      fastq_R2: "/path/to/input/dir/seq2nd/fastqs/B08Cv1.filt/B08Cv1.filt.R2.fastq.gz"
+  label: "v1"
+
+## IMPORTANT: REPLACE THE FOLLOWING VARIABLE BEFORE USE
+output: "/path/to/output/dir/"
+
+request:
+  - sge-per-section
+
+## IMPORTANT: REPLACE/MODIFY THE FOLLOWING VARIABLE BEFORE USE
+## It is important to configure the environment file for your specific environment.
+env_yml: /path/to/config_env.yaml
+
+preprocess:
+  fastq2sbcd:
+    format: DraI31
+  smatch:
+    skip_sbcd: 0

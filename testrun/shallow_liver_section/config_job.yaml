@@ -1,0 +1,38 @@
+## See more details for each parameter at https://github.com/seqscope/NovaScope/blob/main/docs/getting_started/job_config.md
+## IMPORTANT TODO: DOWNLOAD THE INPUT DATA from https://doi.org/10.5281/zenodo.10840696
+## IMPORTANT TODO: REPLACE THE FOLLOWING VARIABLES BEFORE USE
+## /path/to/input/dir  to the absolute path of the input data
+## /path/to/output/dir to the absolute path of the output directory
+## /path/to/config_env.yaml to the absolute path of the config_env.yaml file (e.g. NovaScope/info/config_env.yaml)
+
+input:
+  flowcell: N3-HG5MC
+  section: B08C
+  species: "mouse"
+  seq1st:
+    prefix: null
+    ## IMPORTANT: REPLACE THE FOLLOWING VARIABLE BEFORE USE
+    fastq: "/path/to/input/dir/9203-AP.L3.B08C.R1_001.fastq.gz"
+  seq2nd:
+    - prefix: N3_B08C_v1
+      ## IMPORTANT: REPLACE THE FOLLOWING VARIABLES BEFORE USE
+      fastq_R1: "/path/to/input/dir/9748-YK-3_CGAGGCTG_S3_R1_001.fastq.gz"
+      fastq_R2: "/path/to/input/dir/9748-YK-3_CGAGGCTG_S3_R2_001.fastq.gz"
+  label: v1
+  ## IMPORTANT: REPLACE THE FOLLOWING VARIABLE BEFORE USE
+  histology: "/path/to/input/dir/histology.tif"
+
+## IMPORTANT: REPLACE THE FOLLOWING VARIABLE BEFORE USE
+output: "/path/to/output/dir"
+
+request:
+  - sge-per-section
+  - hist-per-section
+
+## IMPORTANT: REPLACE/MODIFY THE FOLLOWING VARIABLE BEFORE USE
+## It is important to configure the environment file for your specific environment.
+env_yml: /path/to/config_env.yaml
+
+preprocess:
+  fastq2sbcd:
+    format: DraI31

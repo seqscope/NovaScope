@@ -4,16 +4,16 @@ rule a04_align:
         seq2_fqr2  = lambda wildcards: [os.path.join(main_dirs["seq2nd"], seq2_prefix, seq2_prefix + ".R2.fastq.gz" ) for seq2_prefix in sc2seq2[wildcards.section]],
         smatch_tsv = lambda wildcards: [os.path.join(main_dirs["align"],  "{flowcell}", wildcards.section, "match", seq2_prefix+".R1.match.sorted.uniq.tsv.gz") for seq2_prefix in sc2seq2[wildcards.section]],
     output:
-        dge_gf_bcd  = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{specie_with_seq2v}", "sttoolsSolo.out", "GeneFull", "raw", "barcodes.tsv.gz"),
-        dge_gf_ftr  = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{specie_with_seq2v}", "sttoolsSolo.out", "GeneFull", "raw", "features.tsv.gz"),
-        dge_gf_mtx  = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{specie_with_seq2v}", "sttoolsSolo.out", "GeneFull", "raw", "matrix.mtx.gz"),
-        dge_gn_mtx  = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{specie_with_seq2v}", "sttoolsSolo.out", "Gene",     "raw", "matrix.mtx.gz"),
-        dge_vl_spl  = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{specie_with_seq2v}", "sttoolsSolo.out", "Velocyto", "raw", "spliced.mtx.gz"),
-        dge_vl_uns  = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{specie_with_seq2v}", "sttoolsSolo.out", "Velocyto", "raw", "unspliced.mtx.gz"),
-        dge_vl_amb  = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{specie_with_seq2v}", "sttoolsSolo.out", "Velocyto", "raw", "ambiguous.mtx.gz"),
+        dge_gf_bcd  = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{species_with_seq2v}", "sttoolsSolo.out", "GeneFull", "raw", "barcodes.tsv.gz"),
+        dge_gf_ftr  = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{species_with_seq2v}", "sttoolsSolo.out", "GeneFull", "raw", "features.tsv.gz"),
+        dge_gf_mtx  = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{species_with_seq2v}", "sttoolsSolo.out", "GeneFull", "raw", "matrix.mtx.gz"),
+        dge_gn_mtx  = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{species_with_seq2v}", "sttoolsSolo.out", "Gene",     "raw", "matrix.mtx.gz"),
+        dge_vl_spl  = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{species_with_seq2v}", "sttoolsSolo.out", "Velocyto", "raw", "spliced.mtx.gz"),
+        dge_vl_uns  = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{species_with_seq2v}", "sttoolsSolo.out", "Velocyto", "raw", "unspliced.mtx.gz"),
+        dge_vl_amb  = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{species_with_seq2v}", "sttoolsSolo.out", "Velocyto", "raw", "ambiguous.mtx.gz"),
     params:
         # dir 
-        bam_dir        = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{specie_with_seq2v}"),
+        bam_dir        = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{species_with_seq2v}"),
         # params
         min_match_len  = config.get("preprocess", {}).get("align", {}).get('min_match_len', 30),
         min_match_frac = config.get("preprocess", {}).get("align", {}).get('min_match_frac', 0.66),
@@ -24,7 +24,7 @@ rule a04_align:
         len_r2         = config.get("preprocess", {}).get("align", {}).get('len_r2', 101),
         exist_action   = config.get("preprocess", {}).get("align", {}).get('exist_action', "overwrite"),
         # ref
-        refidx         = sp2alignref[specie],
+        refidx         = sp2alignref[species],
         # resource
         ram            = lambda wildcards: assign_resource_for_align(wildcards.section, config, sc2seq2, main_dirs)["ram"],
         # module

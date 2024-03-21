@@ -1,6 +1,6 @@
-# Output
+# Expected Output from NovaScope
 
-## 1. Output Directory Structure
+## Output Directory Structure
 
 The directory passed through `output` paramter in the `config_job.yaml` will be organized as follows, 
 
@@ -11,11 +11,11 @@ The directory passed through `output` paramter in the `config_job.yaml` will be 
 └── seq2nd
 ```
 
-### 1.1 seq1st
+### seq1st
 
 The seq1st directory is structured for organizing 1st sequencing FASTQ files and spatial barcode maps. It includes:
 
-* A fastqs subdirectory for all input 1st sequencing FASTQ files (`fastq`).
+* A `fastqs` subdirectory for all input 1st sequencing FASTQ files via symlink.
 * Two subdirectories for spatial barcode maps:
     * `sbcds` for maps of individual tiles from the 1st sequencing,
     * `nbcds` for a map organized on a per-chip basis, used in later processing.
@@ -28,15 +28,26 @@ The seq1st directory is structured for organizing 1st sequencing FASTQ files and
         └── sbcds
 ```
 
-### 1.2 seq2nd
+### seq2nd
 
-The seq2nd directory is dedicated to managing all input 2nd sequencing FASTQ files.
+The `seq2nd` directory is dedicated to managing all input 2nd sequencing FASTQ files via symlinks.
+The directory structure is as follows:
 
-### 1.3 histology
+```
+└── seq2nd
+    ├── <prefix1>
+    |   ├── <prefix1>.R1.fastq.gz
+    |   └── <prefix1>.R2.fastq.gz
+    └── <prefix2>
+        ├── <prefix2>.R1.fastq.gz
+        └── <prefix2>.R2.fastq.gz
+```
+
+### histology
 
 The `histology` directory is designated for holding all input histology files.
 
-### 1.4 align
+### align
 
 The `align` directory encompasses several subdirectories, including: 
 (1) `match`, which houses the outcomes of aligning second sequencing reads with spatial barcodes for the corresponding chip section; 
@@ -54,7 +65,7 @@ align
         └── sge
 ```
 
-## 2. Usage
+## Downstream Analysis 
 
 The aligned sequenced reads can be directly used for tasks that require read-level information, such as allele-specific expression or somatic variant analysis. The SGE matrix can also be analyzed with many software tools, such as Latent Dirichlet Allocation (LDA) and Seurat. 
 

@@ -7,10 +7,10 @@
 
 rule b02_historef:
     input:
-        sdge_3in1_png  = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "sge", "{specie_with_seq2v}", "{flowcell}"+"."+"{section}"+"."+"{specie_with_seq2v}"+".sge_match_sbcd.png"),
+        sdge_3in1_png  = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "sge", "{species_with_seq2v}", "{flowcell}"+"."+"{section}"+"."+"{species_with_seq2v}"+".sge_match_sbcd.png"),
     output:
-        hist_aligned   = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "histology", "{specie_with_seq2v}", hist_std_fn),
-        hist_fit       = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "histology", "{specie_with_seq2v}", hist_fit_fn),
+        hist_aligned   = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "histology", "{species_with_seq2v}", hist_std_fn),
+        hist_fit       = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "histology", "{species_with_seq2v}", hist_fit_fn),
     params:
         hist_std_tif   = hist_std_tif,
         module_cmd     = get_envmodules_for_rule(["python", "gcc", "gdal"], module_config)

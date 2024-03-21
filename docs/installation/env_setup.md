@@ -2,14 +2,14 @@
 
 [NovaScope](../index.md) requires a YAML file to configure the environment. This file is used to specify the paths to the required tools, reference databases, and Python environment. To create your own `config_env.yaml` file for the environment setup, you may copy from [our example available in our GitHub repository](https://github.com/seqscope/NovaScope/blob/main/info/config_env.yaml).
 
-Below is a brief description of all the items in the YAML file. Replace the placeholders with your specific input variables to customize it according to your needs, and prepare your own `config_job.yaml`.
+Below is a brief description of all the items in the YAML file. Replace the placeholders with your specific input variables to customize it according to your needs, and prepare your own `config_env.yaml`.
 
 ## Tools 
 
 For tools that are not explicitly defined, the pipeline will automatically check if they are installed and include them in the system path for use. This allows the pipeline to utilize these tools without needing manual configuration for each one.
 ```
 tools:
-  spatula: /path/to/spatula/bin/spatula 		                ## Default: "spatula"
+  spatula: /path/to/spatula/bin/spatula                     ## Default: "spatula"
   samtools: /path/to/samtools/samtools	                    ## Default: "samtools"
   star: /path/to/STAR_2_7_11b/bin/Linux_x86_64_static/STAR  ## Default: "STAR"
 ```

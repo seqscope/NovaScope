@@ -86,17 +86,17 @@ section = config["input"]["section"]
 assert section is not None, "Provide a valid Section."
 logging.info(f" - Section: {section}")
 
-# Specie
-specie = check_input(config["input"]["specie"], {"human","human_mouse","mouse","rat","worm"}, "specie", lower=False)
-logging.info(f" - Specie: {specie}")
+# Species
+species = check_input(config["input"]["species"], {"human","human_mouse","mouse","rat","worm"}, "specie", lower=False)
+logging.info(f" - Species: {species}")
 
 # Request
 request=check_input(config.get("request",["sge-per-section"]),{"sbcd-per-flowcell", "sbcd-per-section", "smatch-per-section", "align-per-section", "sge-per-section","hist-per-section"}, "request", lower=False)
 logging.info(f" - Request: {request}")
 
-# Label: if not provided, use specie as label, else use {specie}_{label}
+# Label: if not provided, use species as label, else use {species}_{label}
 label = config["input"].get("label", None)
-label = f"{specie}_{label}" if label is not None else specie
+label = f"{species}_{label}" if label is not None else species
 logging.info(f" - Label: {label}")
 
 # Seq1 
@@ -129,7 +129,7 @@ df_seq2 = pd.DataFrame({
     'seq2_prefix': [seq2.get('prefix') for seq2 in config.get('input', {}).get('seq2nd', [])],
     'seq2_fqr1_raw': [check_path(seq2.get('fastq_R1'), job_dir) for seq2 in config.get('input', {}).get('seq2nd', [])],
     'seq2_fqr2_raw': [check_path(seq2.get('fastq_R2'), job_dir) for seq2 in config.get('input', {}).get('seq2nd', [])],
-    "specie_with_seq2v": label
+    "species_with_seq2v": label
 })
 
 sc2seq2 = create_dict(df_seq2, key_col="section", val_cols="seq2_prefix",  dict_type="set", val_type="str")
@@ -157,14 +157,14 @@ if any(task in request for task in ["sbcd-per-section", "smatch-per-section", "a
 
 # Histology
 # std dir
-hist_std_dir = os.path.join(main_dirs["histology"], flowcell, section, specie)
+hist_std_dir = os.path.join(main_dirs["histology"], flowcell, section, species)
 
 # std fn, e.g. 10XN3-B09A-human-hne.tif
 hist_res = config.get("histology",{}).get("resolution","10")
 flowcell_abbr = config.get("input",{}).get("flowcell").split("-")[0]
 hist_type = check_input(config.get("histology",{}).get("figtype","hne"), ["hne","dapi","fl"], "Histology figure type")
-hist_std_fn = f"{hist_res}X{flowcell_abbr}-{section}-{specie}-{hist_type}.tif"
-hist_fit_fn = f"{hist_res}X{flowcell_abbr}-{section}-{specie}-{hist_type}-fit.tif"
+hist_std_fn = f"{hist_res}X{flowcell_abbr}-{section}-{species}-{hist_type}.tif"
+hist_fit_fn = f"{hist_res}X{flowcell_abbr}-{section}-{species}-{hist_type}-fit.tif"
 
 if "hist-per-section" in request:
     logging.info(f" - Histology file: Loading")
@@ -242,18 +242,18 @@ output_filename_conditions = [
         'flag': 'align-per-section',
         'root': main_dirs["align"],
         'subfolders_patterns': [
-                                (["{flowcell}", "{section}", "bam",  "{specie_with_seq2v}", "sttoolsSolo.out", "GeneFull", "raw", "barcodes.tsv.gz"], None),
-                                (["{flowcell}", "{section}", "bam",  "{specie_with_seq2v}", "sttoolsSolo.out", "GeneFull", "raw", "features.tsv.gz"], None),
-                                (["{flowcell}", "{section}", "bam",  "{specie_with_seq2v}", "sttoolsSolo.out", "GeneFull", "raw", "matrix.mtx.gz"], None),
-                                (["{flowcell}", "{section}", "bam",  "{specie_with_seq2v}", "sttoolsSolo.out", "Gene",     "raw", "matrix.mtx.gz"], None),
-                                (["{flowcell}", "{section}", "bam",  "{specie_with_seq2v}", "sttoolsSolo.out", "Velocyto", "raw", "spliced.mtx.gz"], None),
-                                (["{flowcell}", "{section}", "bam",  "{specie_with_seq2v}", "sttoolsSolo.out", "Velocyto", "raw", "unspliced.mtx.gz"], None),
-                                (["{flowcell}", "{section}", "bam",  "{specie_with_seq2v}", "sttoolsSolo.out", "Velocyto", "raw", "ambiguous.mtx.gz"], None),
+                                (["{flowcell}", "{section}", "bam",  "{species_with_seq2v}", "sttoolsSolo.out", "GeneFull", "raw", "barcodes.tsv.gz"], None),
+                                (["{flowcell}", "{section}", "bam",  "{species_with_seq2v}", "sttoolsSolo.out", "GeneFull", "raw", "features.tsv.gz"], None),
+                                (["{flowcell}", "{section}", "bam",  "{species_with_seq2v}", "sttoolsSolo.out", "GeneFull", "raw", "matrix.mtx.gz"], None),
+                                (["{flowcell}", "{section}", "bam",  "{species_with_seq2v}", "sttoolsSolo.out", "Gene",     "raw", "matrix.mtx.gz"], None),
+                                (["{flowcell}", "{section}", "bam",  "{species_with_seq2v}", "sttoolsSolo.out", "Velocyto", "raw", "spliced.mtx.gz"], None),
+                                (["{flowcell}", "{section}", "bam",  "{species_with_seq2v}", "sttoolsSolo.out", "Velocyto", "raw", "unspliced.mtx.gz"], None),
+                                (["{flowcell}", "{section}", "bam",  "{species_with_seq2v}", "sttoolsSolo.out", "Velocyto", "raw", "ambiguous.mtx.gz"], None),
         ],
         'zip_args': {
-            'flowcell':          df_seq2["flowcell"].values,
-            'section':           df_seq2["section"].values,
-            'specie_with_seq2v': df_seq2["specie_with_seq2v"].values,  
+            'flowcell':           df_seq2["flowcell"].values,
+            'section':            df_seq2["section"].values,
+            'species_with_seq2v': df_seq2["species_with_seq2v"].values,  
         },
     },
     # sge-per-section
@@ -261,17 +261,17 @@ output_filename_conditions = [
         'flag': 'sge-per-section',
         'root': main_dirs["align"],
         'subfolders_patterns': [
-                                (["{flowcell}", "{section}", "sge",   "{specie_with_seq2v}", "barcodes.tsv.gz"], None),
-                                (["{flowcell}", "{section}", "sge",   "{specie_with_seq2v}", "features.tsv.gz"], None),
-                                (["{flowcell}", "{section}", "sge",   "{specie_with_seq2v}", "matrix.mtx.gz"], None),
-                                (["{flowcell}", "{section}", "sge",   "{specie_with_seq2v}", "{flowcell}"+"."+"{section}"+"."+"{specie_with_seq2v}"+".gene_full_mito.png"], None),
-                                (["{flowcell}", "{section}", "sge",   "{specie_with_seq2v}", "{flowcell}"+"."+"{section}"+"."+"{specie_with_seq2v}"+".sge_match_sbcd.png"], None),
-                                (["{flowcell}", "{section}", "sge",   "{specie_with_seq2v}", "{flowcell}"+"."+"{section}"+"."+"{specie_with_seq2v}"+".gene_visual.tar.gz"], None),
+                                (["{flowcell}", "{section}", "sge",   "{species_with_seq2v}", "barcodes.tsv.gz"], None),
+                                (["{flowcell}", "{section}", "sge",   "{species_with_seq2v}", "features.tsv.gz"], None),
+                                (["{flowcell}", "{section}", "sge",   "{species_with_seq2v}", "matrix.mtx.gz"], None),
+                                (["{flowcell}", "{section}", "sge",   "{species_with_seq2v}", "{flowcell}"+"."+"{section}"+"."+"{species_with_seq2v}"+".gene_full_mito.png"], None),
+                                (["{flowcell}", "{section}", "sge",   "{species_with_seq2v}", "{flowcell}"+"."+"{section}"+"."+"{species_with_seq2v}"+".sge_match_sbcd.png"], None),
+                                (["{flowcell}", "{section}", "sge",   "{species_with_seq2v}", "{flowcell}"+"."+"{section}"+"."+"{species_with_seq2v}"+".gene_visual.tar.gz"], None),
         ],
         'zip_args': {
             'flowcell':          df_seq2["flowcell"].values,
             'section':           df_seq2["section"].values,
-            'specie_with_seq2v': df_seq2["specie_with_seq2v"].values,  
+            'species_with_seq2v': df_seq2["species_with_seq2v"].values,  
         },
     },
     # hist-per-section
@@ -279,15 +279,15 @@ output_filename_conditions = [
         'flag': 'hist-per-section',
         'root': main_dirs["align"],
         'subfolders_patterns': [
-                                (["{flowcell}", "{section}", "histology", "{specie_with_seq2v}", hist_std_fn], None),
-                                (["{flowcell}", "{section}", "histology", "{specie_with_seq2v}", hist_fit_fn], None),
+                                (["{flowcell}", "{section}", "histology", "{species_with_seq2v}", hist_std_fn], None),
+                                (["{flowcell}", "{section}", "histology", "{species_with_seq2v}", hist_fit_fn], None),
         ],
         'zip_args': {
-            'flowcell':          df_seq2["flowcell"].values,
-            'section':           df_seq2["section"].values,
-            'specie_with_seq2v': df_seq2["specie_with_seq2v"].values,  
-            'hist_std_tif':      [hist_std_fn],
-            'hist_fit_tif':      [hist_fit_fn],
+            'flowcell':           df_seq2["flowcell"].values,
+            'section':            df_seq2["section"].values,
+            'species_with_seq2v': df_seq2["species_with_seq2v"].values,  
+            'hist_std_tif':       [hist_std_fn],
+            'hist_fit_tif':       [hist_fit_fn],
         },
     }
 ]

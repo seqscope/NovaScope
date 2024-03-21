@@ -1,0 +1,20 @@
+####  Job name
+#SBATCH --account=userid                # [REPLACE] SLURM account name  
+#SBATCH --partition=standard            # [REPLACE] SLURM partition
+#SBATCH --job-name=minimal_test_run     # Job name
+#SBATCH --nodes=1                       # Number of nodes
+#SBATCH --ntasks-per-node=1             # Number of Tasks per node
+#SBATCH --cpus-per-task=1               # Number of CPUs per task
+#SBATCH --mem-per-cpu=2000m             # Suggested memory per CPU for this master job. As a master job overseeing the status of each step, minimal memory is required.
+#SBATCH --time=72:00:00                 # Suggested time limit for this master job. Allocating an extended time limit is advisable due to its supervisory function, ensuring it exceeds the total process duration.
+#SBATCH --mail-user=user.name@domain    # [REPLACE] Notification email
+#SBATCH --mail-type=END,FAIL,REQUEUE    # When to send email
+#SBATCH --output=./logs/NovaScope-master-%j_%x.out  # Log file path
+
+# Paths
+smk_dir="/path/to/NovaScope"                         # [REPLACE] Path to the NovaScope pipeline repo.
+job_dir="$smk_dir/testrun/shalloe_liver_section"          # Path to your Job directory, which should have a config_job.yaml file and will be used to save the log files.
+slurm_params="--profile $smk_dir/slurm"              # Path to the SLURM parameter directory, which should include a config.yaml file.
+
+# Execute the NovaScope pipeline via SLURM
+snakemake $slurm_params --latency-wait 120 -s $smk_dir/NovaScope.smk -d $job_dir

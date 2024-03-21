@@ -1,4 +1,4 @@
-# Snakemake with SLURM
+# Snakemake with Slurm
 
 It is recommended to integrate SLURM scheduler with Snakemake, which can automate the process of submitting your jobs.
 

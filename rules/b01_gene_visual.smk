@@ -1,10 +1,10 @@
 rule b01_gene_visual:
     input:
-        sdge_bcd      = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "sge", "{specie_with_seq2v}", "barcodes.tsv.gz"),
-        sdge_ftr      = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "sge", "{specie_with_seq2v}", "features.tsv.gz"),
-        sdge_mtx      = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "sge", "{specie_with_seq2v}", "matrix.mtx.gz"),
+        sdge_bcd      = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "sge", "{species_with_seq2v}", "barcodes.tsv.gz"),
+        sdge_ftr      = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "sge", "{species_with_seq2v}", "features.tsv.gz"),
+        sdge_mtx      = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "sge", "{species_with_seq2v}", "matrix.mtx.gz"),
     output:
-        gof_rgb_tar   = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "sge", "{specie_with_seq2v}", "{flowcell}"+"."+"{section}"+"."+"{specie_with_seq2v}"+".gene_visual.tar.gz"),
+        gof_rgb_tar   = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "sge", "{species_with_seq2v}", "{flowcell}"+"."+"{section}"+"."+"{species_with_seq2v}"+".gene_visual.tar.gz"),
     params:
         rgb_layout        = check_path(config.get("preprocess", {}).get("dge2sdge", {}).get('layout', None), job_dir, strict_mode=False),
         visual_gof        = config.get("preprocess", {}).get("gene_visual", None), # by default it will be the top five genes

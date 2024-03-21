@@ -10,13 +10,13 @@ Installing [NovaScope](../index.md) involves multiple steps. This document provi
 ### Checking Snakemake Installation
 If you are unsure whether [Snakemake](https://snakemake.readthedocs.io/en/stable/) is installed in your system or not, you can check by running the following command:
 
-```bash
+```sh
 snakemake --version
 ```
 
 In some systems that supports `module`, you may be able to load the `snakemake` module using the following command:
 
-```bash
+```sh
 ## check if snakemake is available as a module
 module avail snakemake
 
@@ -30,7 +30,7 @@ module load snakemake
 
 If you need to install [Snakemake](https://snakemake.readthedocs.io/en/stable/), below is a simplified sequence of instruction. Please refer to the official documentation for more detailed instructions.
 
-```bash
+```sh
 ## Download miniconda
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 
@@ -89,15 +89,57 @@ git clone https://github.com/seqscope/NovaScope.git
 The reference genome for the species of interest must be downloaded and indexed for alignment. [STARsolo](https://github.com/alexdobin/STAR) accepts the reference genomes prepared by [cellranger](https://www.10xgenomics.com/support/software/cell-ranger), therefore, one of the simplest way is to download the reference genome from the [cellranger download](https://www.10xgenomics.com/support/software/cell-ranger/downloads) page.
 
 The recommended reference genome for mouse is GRCm39.
+However, the STAR index provided with the package is outdated and will not be compatible with the latest version of STARsolo. Therefore, we recommend
+indexing it using the latest version of STARsolo.
 
 ```bash
+## download the reference genome package
 curl -O "https://cf.10xgenomics.com/supp/cell-exp/refdata-gex-GRCm39-2024-A.tar.gz"
+
+## uncompressed the tar file
+tar -xvf refdata-gex-GRCm39-2024-A.tar.gz
+cd refdata-gex-GRCm39-2024-A
+
+## uncompress GTF file
+gzip -d genes/genes.gtf.gz
+
+## index the reference genome
+STARBIN=/path/to/STAR_2.7.11b/Linux_x86_64_static/STAR
+${STARBIN} --runMode genomeGenerate \
+	--runThreadN 1 \
+	--genomeDir ./star_2_7_11b \
+	--genomeFastaFiles ./fasta/genome.fa \
+	--genomeSAindexNbases 14 \
+	--genomeChrBinNbits 18 \
+	--genomeSAsparseD 3 \
+	--limitGenomeGenerateRAM 17179869184 \
+	--sjdbGTFfile ./genes/genes.gtf
 ```
 
 The recommended reference genome for human is GRCh38.
 
 ```bash
+## download the reference genome package
 curl -O "https://cf.10xgenomics.com/supp/cell-exp/refdata-gex-GRCh38-2024-A.tar.gz"
+
+## uncompressed the tar file
+tar -xvf refdata-gex-GRCh38-2024-A.tar.gz
+cd refdata-gex-GRCh38-2024-A
+
+## uncompress GTF file
+gzip -d genes/genes.gtf.gz
+
+## index the reference genome
+STARBIN=/path/to/STAR_2.7.11b/Linux_x86_64_static/STAR
+${STARBIN} --runMode genomeGenerate \
+	--runThreadN 1 \
+	--genomeDir ./star_2_7_11b \
+	--genomeFastaFiles ./fasta/genome.fa \
+	--genomeSAindexNbases 14 \
+	--genomeChrBinNbits 18 \
+	--genomeSAsparseD 3 \
+	--limitGenomeGenerateRAM 17179869184 \
+	--sjdbGTFfile ./genes/genes.gtf
 ```
 
 For other species, you may follow the instructions provided by [cellranger](https://www.10xgenomics.com/support/software/cell-ranger/downloads) or [STARsolo](https://github.com/alexdobin/STAR) to prepare the reference genome.
@@ -111,7 +153,7 @@ You may create a new Python environment using the following commands:
 ```bash
 ## set the path to the python virtual environment directory
 pyenv_dir=/path/to/python/virtual/environment/directory
-pyenv_name=name_of_python_virtual_environment
+pyenv_name=name_of_python_venv
 smk_dir=/path/to/the/novascope/directory
 
 ## create the python virtual environment (need to be done only once)

@@ -1,97 +1,50 @@
 
-# Preparing Input
+# Configuring a NovaScope Run
 
-## 1. Input Data
+## Overview
 
-Begin by establishing a specific directory for your job. This directory will be used to organize the input configuration file (i.e., `config_job.yaml`, as outlined in *2. Prepare Input Config Files*) and to store log files. 
+Once you have [installed NovaScope](../installation/requirement.md) and [downloaded the input data](access_data.md), the next step is to configure a NovaScope run. This mainly involves preparing the input configuration files (in YAML) for the run.
 
-The required input data includes 1st-seq and 2nd-seq FASTQ files, with the option to include an additional histology file and a file listing genes of interest. Below, we provide [three examples](https://github.com/seqscope/NovaScope/tree/main/testrun) from the same section chip, highlighting differences in 2nd-Seq library sequencing depth and selected regions.
+## Preparing Input Config Files
 
-### Example 1 - Regional Section Test Run
+The pipeline requires to have `config_job.yaml` file in the working directory (specified by `-d` or `--directory`) to specify all input files, output files, and parameters. 
 
-The input data originates from a specific, limited region of a section chip, which was subjected to a relatively 2nd-Seq library sequencing depth. No histology files is provided.
+For user's convenience, we provide separate example `config_job.yaml` files for the [Minimal Test Run Dataset](https://github.com/seqscope/NovaScope/blob/main/testrun/minmal_test_run/config_job.yaml), [Shallow Liver Section Dataset](https://github.com/seqscope/NovaScope/blob/main/testrun/shallow_liver_section/config_job.yaml), and [Deep Liver Section Dataset](https://github.com/seqscope/NovaScope/blob/main/testrun/deep_liver_section/config_job.yaml) test runs are provided.  
 
-```
-smk_dir="<path_to_NovaScope_repository>"    # Replace <path_to_NovaScope_repository> with the path to the NovaScope repository
-job_dir="$smk_dir/testrun/regional_section"  
+The details of each item specified in the `config_job.yaml` is described below:
 
-mkdir -p  $job_dir && cd $job_dir
+### A Template of the Config File
 
-mkdir -p input_data 
-```
+Below is a template of the `config_job.yaml` file. 
+Mandatory fields are marked as "REQUIRED FIELD".
 
-### Example 2 - Full Section Shallow Sequencing Test Run 
-
-The input data was derived from one section chip and features a relatively shallow 2nd-Seq library sequencing depth (approximately 163 million reads). A histology file is also accessible. 
-
-```
-smk_dir="<path_to_NovaScope_repository>"    # Replace <path_to_NovaScope_repository> with the path to the NovaScope repository
-job_dir="$smk_dir/testrun/full_section_shallow"  
-
-mkdir -p  $job_dir && cd $job_dir
-
-# Download the histology file
-wget https://historef-sample-data.s3.amazonaws.com/sample/b08c/histology.tif
-```
-
-
-### Example 3 - Full Section Deep Sequencing Test Run 
-
-The input data is based on one section chip underwent deep sequencing, resulting in 2.61 billion reads, and this too comes with an available histology file.
-
-```
-smk_dir="<path_to_NovaScope_repository>"    # Replace <path_to_NovaScope_repository> with the path to the NovaScope repository
-job_dir="$smk_dir/testrun/full_section_deep"  
-
-mkdir -p  $job_dir && cd $job_dir
-
-# Download the histology file
-wget https://historef-sample-data.s3.amazonaws.com/sample/b08c/histology.tif
-```
-
-## 2. Prepare Input Config Files
-
-The pipeline necessitates a `config_job.yaml` file to define all inputs, outputs, and parameters. This `config_job.yaml` file should be provided in the `$job_dir`.
-
-Separate example `config_job.yaml` files for the [regional section](https://github.com/seqscope/NovaScope/blob/main/testrun/regional_section/config_job.yaml), [full section shallow](https://github.com/seqscope/NovaScope/blob/main/testrun/full_section_shallow/config_job.yaml), and [full section deep](https://github.com/seqscope/NovaScope/blob/main/testrun/full_section_deep/config_job.yaml) test runs are provided.  
-
-Below, you'll find explanations for each item specified in the `config_job.yaml`.
-
-### 2.1 A Config Template 
-
-```
-## ================================================
-##
-## Mandatory Fields:
-##
-## ================================================
-
-## Input
+```yaml
+## Section to Specify Input Datta
 input:
-  flowcell: <flowcell_id>
-  section: <section_chip_id>
-  specie: <specie_info>
+  flowcell: <flowcell_id>                       ## REQUIRED FIELD (e.g. N3-HG5MC)
+  section: <section_chip_id>                    ## REQUIRED FIELD (e.g. B08C)
+  species: <species_info>                       ## REQUIRED FIELD (e.g. "mouse")
   lane: <lane_id>                               ## Optional. Auto-assigned based on section's last letter if absent (A->1, B->2, C->3, D->4).
-  seq1st:
+  seq1st:                                       ## 1st-seq information
     prefix: <seq1st_id>                         ## Optional. Defaults to "L{lane}" if absent.
-    fastq: <path_to_seq1st_fastq_file>
-    layout: <path_to_sbcd_layout>               ## Optional. See 2.2.
-  seq2nd:                                       ## See 2.2.
-    - prefix: <seq2st_pair1_id>
-      fastq_R1: <path_to_seq2nd_pair1_fastq_Read1_file>
-      fastq_R2: <path_to_seq2nd_pair1_fastq_Read2_file>
-    - prefix: <seq2st_pair2_id>
+    fastq: <path_to_seq1st_fastq_file>          ## REQUIRED FIELD
+    layout: <path_to_sbcd_layout>               ## Optional. Default based on section_chip_id
+  seq2nd:                                       ## 2nd-seq information
+    - prefix: <seq2st_pair1_id>                 ## REQUIRED FIELD - for first pair of FASTQ files
+      fastq_R1: <path_to_seq2nd_pair1_fastq_Read1_file> ## REQUIRED FIELD - Read 1 FASTQ file
+      fastq_R2: <path_to_seq2nd_pair1_fastq_Read2_file> ## REQUIRED FIELD - Read 2 FASTQ file
+    - prefix: <seq2st_pair2_id>                 ## Optional - if there are >1 pair of FASTQs
       fastq_R1: <path_to_seq2nd_pair2_fastq_Read1_file>
       fastq_R2: <path_to_seq2nd_pair2_fastq_Read2_file>
-    # ...
-  label: <seq2nd_version>                       ## Optional. A version label for the input seq2 data, if applicable.
-  histology: <path_to_the_input_histology_file> ## Optional.
+    # ... (if there are more 2nd-seq FASTQ files)
+  label: <seq2nd_version>                       ## Optional. A version label (e.g. v1)
+  histology: <path_to_the_input_histology_file> ## Optional, only if histology alignment is needed.
 
 ## Output
-output: <output_directory>                      ## See 2.2.
-request:                                        ## See 2.2.
-  - <required_output1>
-  - <required_output2>
+output: <output_directory>                      ## REQUIRED FIELD (e.g. /path/to/output/directory)
+request:                                        
+  - <required_output1>                          ## REQUIRED FIELD (e.g. sge-per-section)
+  - <required_output2>                          ## Optionally, you can request multiple outputs
   # ...
 
 ## Environment
@@ -99,25 +52,29 @@ env_yml: <path_to_config_env.yaml_file>         ## If absent, the pipeline will 
 
 ## ================================================
 ##
-##  Optional Fields:
+##  Additional Fields:
 ## 
 ##    The "preprocess" and "histology" parameters are included below, along side the default values.
 ##    You only need to revise and enable the following parameters if you wish to utilize values different than the default.
 ##
 ## ================================================
 
+### UNCOMMENT RELEVANT LINES TO ENABLE THE ADDITIONAL PARAMETERS
 #preprocess:
 #  fastq2sbcd:
-#    format: DraI32
-#  sbcd2chip:
+#    format: DraI32          ## Example data uses DraI31, but DraI32 is a typical format.
+#
+#  sbcd2chip:                ## specify the parameters for sbcd2chip
 #    gap_row: 0.0517
 #    gap_col: 0.0048
 #    dup_maxnum: 1
 #    dup_maxdist: 1
-#  smatch:
-#    skip_sbcd: 1            ## If absent, skip_sbcd can be calculated follows the fastq2sbcd format: 1 for DraI31 and 0 for DraI32.
+#
+#  smatch:                   ## specify the parameters for smatch
+#    skip_sbcd: 1            ## If absent, default skip_sbcd follows the fastq2sbcd format: 1 for DraI31 and 0 for DraI32.
 #    match_len: 27           ## Length of spatial barcode considered to be a perfect match.
-#  align:
+#
+#  align:                    ## specify the parameters for align (STARsolo)
 #    min_match_len: 30       ## A minimum number of matching bases.
 #    min_match_frac: 0.66    ## A minimum fraction of matching bases.
 #    len_sbcd: 30            ## Length of spatial barcode (in Read 1) to be copied to output FASTQ file (Read 1).
@@ -130,23 +87,26 @@ env_yml: <path_to_config_env.yaml_file>         ## If absent, the pipeline will 
 #        partition: standard
 #        threads: 10
 #        memory: 70000m
-#  dge2sdge:
+#
+#  dge2sdge:                 ## specify the parameters for dge2sdge
 #    layout: null            ## If absent, the layout file in the info/assets/layout_per_section_basis/layout.1x1.tsv will be used for RGB plots.
+#
 #  gene_visual: null         ## If you have a specific set of genes to visualize, specify the path to a file containing a list of gene names (one per line) here. By default, the top five genes with the highest expression are visualized.
-#  visualization:
+#
+#  visualization:            ## specify the parameters for visualization
 #    drawxy:
 #      coord_per_pixel: 1000
 #      intensity_per_obs: 50
 #      icol_x: 3
 #      icol_y: 4
 #
-#histology:
+#histology:                  ## specify the parameters for histology alignment using historef
 #    resolution: 10
 #    figtype: "hne"          ## Options: "hne", "dapi", and "fl".
 
 ```
 
-### 2.2 Additional Information
+### Detailed Description of Individual Fields
 
 #### Input
 
@@ -160,7 +120,7 @@ The `prefix` will be used to organize the 1st-seq FASTQ files. Make sure the `pr
 
 A file to provide the layout of tiles in a section chip with the following format. If absent, NovaScope will automatically look for the sbcd layout within the NovaScope repository at [info/assets/layout_per_tile_basis](https://github.com/seqscope/NovaScope/tree/main/info/assets/layout_per_tile_basis), using the section chip ID for reference.
 
-```
+```yaml
 lane  tile  row  col  rowshift  colshift
 3     2556  1    1    0         0
 3     2456  2    1    0         0.1715
@@ -176,10 +136,10 @@ lane  tile  row  col  rowshift  colshift
 
 Every FASTQ pair associated with the input section chip should be supplied in `seq2nd`.  The `prefix` should be unique among all 2nd-seq FASTQ pairs, not just within this flowcell.
 
-#### output
+#### Output
 The output directory will be used to organize the input files and store output files. Please see the structure directory [here](output.md)
 
-#### request:
+#### Requests
 
 The pipeline interprets the requested output files via this parameter and determines which jobs need to be executed. 
 
@@ -204,7 +164,7 @@ The `resource` parameters are only applicable for HPC users. The `assign_type` i
 
 If using `"stdin"`, define the resource parameters in the `stdin`, including `partition`, `threads`, and `memory`, to fit your case. Such resource will be used for the *align* step. An example is provided below. 
 
-```
+```yaml
 preprocess:
 #  ...
   align:
@@ -219,7 +179,7 @@ preprocess:
 
 If using `"filesize"`, ensure to include details about the computing capabilities of all available nodes. This includes the partition name, the available number of CPUs, and the memory allocated per CPU (refer to the example provided). Resource allocation will be automatically adjusted based on the total size of the input 2nd-seq FASTQ files and the available computing resources. The preliminary strategy for resource allocation is as follows: for input 2nd-seq FASTQ files smaller than 200GB, allocate 70GB of memory for alignment processes; for file sizes ranging from 200GB to 400GB, allocate 140GB of memory; for anything larger, 330GB of memory will be designated for alignment step.
 
-```
+```yaml
 preprocess:
 #  ...
   align:
