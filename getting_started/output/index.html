@@ -46,6 +46,8 @@
       
     
     
+      <link rel="stylesheet" href="../../css/custom.css">
+    
     <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
@@ -58,10 +60,12 @@
   
     
     
+      
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="grey">
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -70,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#output" class="md-skip">
+        <a href="#expected-output-from-novascope" class="md-skip">
           Skip to content
         </a>
       
@@ -112,7 +116,43 @@
     </div>
     
       
+        <form class="md-header__option" data-md-component="palette">
+  
     
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1M8 13h8v-2H8v2m9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1 0 1.71-1.39 3.1-3.1 3.1h-4V17h4a5 5 0 0 0 5-5 5 5 0 0 0-5-5Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5M7 15a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
     
     
     
@@ -229,7 +269,7 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="../prep_input/" class="md-tabs__link">
+        <a href="../intro/" class="md-tabs__link">
           
   
     
@@ -531,6 +571,10 @@
       
         
       
+        
+      
+        
+      
     
     
       
@@ -574,11 +618,53 @@
   
   
     <li class="md-nav__item">
-      <a href="../prep_input/" class="md-nav__link">
+      <a href="../intro/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Preparing Input
+    Introduction
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../access_data/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Accessing Input Data
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../job_config/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Job Configuration
   </span>
   
 
@@ -599,7 +685,7 @@
         
   
   <span class="md-ellipsis">
-    Executing NovaScope Pipeline
+    Executing NovaScope
   </span>
   
 
@@ -662,46 +748,46 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-output-directory-structure" class="md-nav__link">
+  <a href="#output-directory-structure" class="md-nav__link">
     <span class="md-ellipsis">
-      1. Output Directory Structure
+      Output Directory Structure
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="1. Output Directory Structure">
+    <nav class="md-nav" aria-label="Output Directory Structure">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#11-seq1st" class="md-nav__link">
+  <a href="#seq1st" class="md-nav__link">
     <span class="md-ellipsis">
-      1.1 seq1st
+      seq1st
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#12-seq2nd" class="md-nav__link">
+  <a href="#seq2nd" class="md-nav__link">
     <span class="md-ellipsis">
-      1.2 seq2nd
+      seq2nd
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#13-histology" class="md-nav__link">
+  <a href="#histology" class="md-nav__link">
     <span class="md-ellipsis">
-      1.3 histology
+      histology
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#14-align" class="md-nav__link">
+  <a href="#align" class="md-nav__link">
     <span class="md-ellipsis">
-      1.4 align
+      align
     </span>
   </a>
   
@@ -713,9 +799,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-usage" class="md-nav__link">
+  <a href="#downstream-analysis" class="md-nav__link">
     <span class="md-ellipsis">
-      2. Usage
+      Downstream Analysis
     </span>
   </a>
   
@@ -764,46 +850,46 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-output-directory-structure" class="md-nav__link">
+  <a href="#output-directory-structure" class="md-nav__link">
     <span class="md-ellipsis">
-      1. Output Directory Structure
+      Output Directory Structure
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="1. Output Directory Structure">
+    <nav class="md-nav" aria-label="Output Directory Structure">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#11-seq1st" class="md-nav__link">
+  <a href="#seq1st" class="md-nav__link">
     <span class="md-ellipsis">
-      1.1 seq1st
+      seq1st
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#12-seq2nd" class="md-nav__link">
+  <a href="#seq2nd" class="md-nav__link">
     <span class="md-ellipsis">
-      1.2 seq2nd
+      seq2nd
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#13-histology" class="md-nav__link">
+  <a href="#histology" class="md-nav__link">
     <span class="md-ellipsis">
-      1.3 histology
+      histology
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#14-align" class="md-nav__link">
+  <a href="#align" class="md-nav__link">
     <span class="md-ellipsis">
-      1.4 align
+      align
     </span>
   </a>
   
@@ -815,9 +901,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-usage" class="md-nav__link">
+  <a href="#downstream-analysis" class="md-nav__link">
     <span class="md-ellipsis">
-      2. Usage
+      Downstream Analysis
     </span>
   </a>
   
@@ -841,52 +927,77 @@
   
 
 
-<h1 id="output">Output<a class="headerlink" href="#output" title="Permanent link">&para;</a></h1>
-<h2 id="1-output-directory-structure">1. Output Directory Structure<a class="headerlink" href="#1-output-directory-structure" title="Permanent link">&para;</a></h2>
+<h1 id="expected-output-from-novascope">Expected Output from NovaScope<a class="headerlink" href="#expected-output-from-novascope" title="Permanent link">&para;</a></h1>
+<h2 id="output-directory-structure">Output Directory Structure<a class="headerlink" href="#output-directory-structure" title="Permanent link">&para;</a></h2>
 <p>The directory passed through <code>output</code> paramter in the <code>config_job.yaml</code> will be organized as follows, </p>
-<div class="codehilite"><pre><span></span><code>├── align
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span></pre></div></td><td class="code"><div><pre><span></span><code>├── align
 ├── histology
 ├── seq1st
 └── seq2nd
-</code></pre></div>
-
-<h3 id="11-seq1st">1.1 seq1st<a class="headerlink" href="#11-seq1st" title="Permanent link">&para;</a></h3>
+</code></pre></div></td></tr></table></div>
+<h3 id="seq1st">seq1st<a class="headerlink" href="#seq1st" title="Permanent link">&para;</a></h3>
 <p>The seq1st directory is structured for organizing 1st sequencing FASTQ files and spatial barcode maps. It includes:</p>
 <ul>
-<li>A fastqs subdirectory for all input 1st sequencing FASTQ files (<code>fastq</code>).</li>
+<li>A <code>fastqs</code> subdirectory for all input 1st sequencing FASTQ files via symlink.</li>
 <li>Two subdirectories for spatial barcode maps:<ul>
 <li><code>sbcds</code> for maps of individual tiles from the 1st sequencing,</li>
 <li><code>nbcds</code> for a map organized on a per-chip basis, used in later processing.</li>
 </ul>
 </li>
 </ul>
-<div class="codehilite"><pre><span></span><code>└── seq1st
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code>└── seq1st
     └── &lt;flowcell_ID&gt;
         ├── fastqs
         ├── nbcds
         └── sbcds
-</code></pre></div>
-
-<h3 id="12-seq2nd">1.2 seq2nd<a class="headerlink" href="#12-seq2nd" title="Permanent link">&para;</a></h3>
-<p>The seq2nd directory is dedicated to managing all input 2nd sequencing FASTQ files.</p>
-<h3 id="13-histology">1.3 histology<a class="headerlink" href="#13-histology" title="Permanent link">&para;</a></h3>
+</code></pre></div></td></tr></table></div>
+<h3 id="seq2nd">seq2nd<a class="headerlink" href="#seq2nd" title="Permanent link">&para;</a></h3>
+<p>The <code>seq2nd</code> directory is dedicated to managing all input 2nd sequencing FASTQ files via symlinks.
+The directory structure is as follows:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code>└── seq2nd
+    ├── &lt;prefix1&gt;
+    |   ├── &lt;prefix1&gt;.R1.fastq.gz
+    |   └── &lt;prefix1&gt;.R2.fastq.gz
+    └── &lt;prefix2&gt;
+        ├── &lt;prefix2&gt;.R1.fastq.gz
+        └── &lt;prefix2&gt;.R2.fastq.gz
+</code></pre></div></td></tr></table></div>
+<h3 id="histology">histology<a class="headerlink" href="#histology" title="Permanent link">&para;</a></h3>
 <p>The <code>histology</code> directory is designated for holding all input histology files.</p>
-<h3 id="14-align">1.4 align<a class="headerlink" href="#14-align" title="Permanent link">&para;</a></h3>
+<h3 id="align">align<a class="headerlink" href="#align" title="Permanent link">&para;</a></h3>
 <p>The <code>align</code> directory encompasses several subdirectories, including: 
 (1) <code>match</code>, which houses the outcomes of aligning second sequencing reads with spatial barcodes for the corresponding chip section; 
 (2) <code>bam</code>, where alignment outcomes such as the BAM file, summary metrics, and visualizations are stored; 
 (3) <code>sge</code>, containing a spatial gene expression (SGE) matrix and its associated visualizations; 
 (4) <code>histology</code>, which stores histology images aligned with the spatial coordinates of the SGE matrix.</p>
-<div class="codehilite"><pre><span></span><code>align
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code>align
 └── &lt;flowcell_ID&gt;
     └── &lt;section_chip_ID&gt;
         ├── bam
         ├── histology
         ├── match
         └── sge
-</code></pre></div>
-
-<h2 id="2-usage">2. Usage<a class="headerlink" href="#2-usage" title="Permanent link">&para;</a></h2>
+</code></pre></div></td></tr></table></div>
+<h2 id="downstream-analysis">Downstream Analysis<a class="headerlink" href="#downstream-analysis" title="Permanent link">&para;</a></h2>
 <p>The aligned sequenced reads can be directly used for tasks that require read-level information, such as allele-specific expression or somatic variant analysis. The SGE matrix can also be analyzed with many software tools, such as Latent Dirichlet Allocation (LDA) and Seurat. </p>
 <p>An exemplary downstream analysis is provided at <a href="https://github.com/seqscope/NovaScope-exemplary-downstream-analysis">NovaScope-exemplary-downstream-analysis</a>.</p>
 
@@ -935,7 +1046,7 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.indexes", "navigation.sections"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.indexes", "navigation.sections", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
       <script src="../../assets/javascripts/bundle.8fd75fb4.min.js"></script>
