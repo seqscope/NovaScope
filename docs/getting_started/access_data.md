@@ -54,5 +54,5 @@ wget "https://zenodo.org/records/10840696/files/9748-YK-3_CGAGGCTG_S3_R2_001.fas
 ```
 
 * Deep Liver Section Dataset : [Link to Deep Blue Data](http://deepblue.lib.umich.edu/data/concern/data_sets/2227mq44w) 
-  * Note that this dataset only contains additional 2nd-seq FASTQ files, beyond those included in the Shallow Liver Section Dataset.
-  * Using the above URL, you can download additional 2nd-seq FASTQ files, either using browser or Globus.
+    * Note that this dataset only contains additional 2nd-seq FASTQ files, beyond those included in the Shallow Liver Section Dataset.
+    * Using the above URL, you can download additional 2nd-seq FASTQ files, either using browser or Globus.

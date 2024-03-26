@@ -15,7 +15,7 @@ tools:
   star: /path/to/STAR_2_7_11b/bin/Linux_x86_64_static/STAR  ## Default: "STAR"
 ```
 
-* `samtools`: For users in High-Performance Computing (HPC) environments with `samtools` installed, please use `envmodules` (see [Environment Modules](#environment-modules)) to load `samtools` rather than defining its path here.
+* `samtools`: For users in High-Performance Computing (HPC) environments with `samtools` installed, it's feasible to use `envmodules` (see [Environment Modules](#environment-modules)) to load `samtools` rather than defining its path here.
 
 
 ## Environment Modules
@@ -35,11 +35,11 @@ envmodules:
 ```
 
 * `python`: If your Python environment was set up using a Python version accessed through a module, your environment depends on certain shared files from that module. Therefore, you must add the `python: "python/<version_information>"`  in the `envmodules` section to load the same module you initially used to establish your environment. But if you set up with a locally installed Python (not using `module load`), comment out or remove the module line `python: "python/<version_information>"`.
-* `samtools`: Using `envmodules` to load `samtools` can be an alternative to specifying its path in `tools`. The given example is designed for instances where `samtools` is integrated into the `Bioinformatics` module system, which necessitates loading the `Bioinformatics` module prior to loading `samtools`. In this case, provide all modules that required to be loaded in the correct order, joint by `&&`.
+* `samtools`: Using `envmodules` to load `samtools` can be an alternative to specifying its path in [`tools`](#tools). The given example is designed for instances where `samtools` is integrated into the `Bioinformatics` module system, which necessitates loading the `Bioinformatics` module prior to loading `samtools`. In this case, provide all modules that required to be loaded in the correct order, joint by `&&`.
 
 ## Reference Database
 
-Please list every reference database used for alignment here. For instructions on preparing reference data, please consult the section on [Installing NovaScope](./requirement.md/#preparing-reference-genomes). 
+Please list every reference database used for alignment here. For instructions on preparing reference data, please consult the [Preparing Reference Genomes](./requirement.md/#preparing-reference-genomes). 
 
 It is imperative to ensure the reference database matches to the species of your input data. 
 
