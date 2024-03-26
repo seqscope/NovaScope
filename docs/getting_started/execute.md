@@ -53,11 +53,13 @@ See the following examples to see how to execute the pipeline locally:
 * [Deep Liver Section](https://github.com/seqscope/NovaScope/blob/main/testrun/deep_liver_section/submit_local.sh)
 
 
-### Option B: Slurm using a Master Job
+### Option B: SLURM using a Master Job
 
 If your computing environment expects to run jobs via a job scheduler such [Slurm](https://slurm.schedmd.com/documentation.html), a recommended approach to submit a 'Master Job' that oversees and manage the status of all other jobs. 
 
-First, you need to establish the master job. The primary role of this job is to monitor the progress of all tasks, handle job submissions based on dependencies and available resources. Thus, it requires minimal memory but an extended time limit. Its time limit should be longer than the total time required to complete all associated jobs.
+First, make sure you have the [slurm configuration file](../installation/slurm.md) available. The `--latency-wait` and `--rerun-incomplete` options is preset in the example slurm configuration file, eliminating the need for manual specification.
+
+Now you need to establish the master job. The primary role of this job is to monitor the progress of all tasks, handle job submissions based on dependencies and available resources. Thus, it requires minimal memory but an extended time limit. Its time limit should be longer than the total time required to complete all associated jobs. 
 
 Create a file similar to the information below. Note that the details of the contents may vary based on your specific computing environment. 
 
@@ -79,13 +81,10 @@ Create a file similar to the information below. Note that the details of the con
 # path
 smk_dir=/path/to/the/novascope/directory
 job_dir=/path/to/the/job/directory                                   # The job directory should has the `config_job.yaml` file.
-slurm_params="--profile /path/to/the/slurm/configuration/directory"  # The slurm directory should have the configuration file: `config.yaml`.
-
-# params
-wait_time=<time_to_wait>                        # Replace <time_to_wait> with a specific duration in seconds, e.g., 120. The pipeline pauses for the defined time awaiting an output file if not instantly accessible after a job, compensating for filesystem delay (default: 5).
+slurm_params="--profile /path/to/the/slurm/configuration/directory"  # The slurm configuration directory should have the slurm configuration file: `config.yaml`.
 
 # execute the NovaScope pipeline
-snakemake $slurm_params --latency-wait $wait_time -s ${smk_dir}/NovaScope.smk -d $job_dir 
+snakemake $slurm_params -s ${smk_dir}/NovaScope.smk -d $job_dir 
 ```
 
 Specific examples prepared for the three datasets are provided below:
@@ -100,11 +99,11 @@ Then submit the master job through `sbatch`:
 sbatch submit_HPC.job
 ```
 
-### Option C: SLURM via Command Line
+### Option C: SLURM via Command Lines
 
-For a small number of quick jobs, you can submit them with a single command line without submitting a master job through [Slurm](https://slurm.schedmd.com/documentation.html).
+For a small number of quick jobs, you can submit them with a single command line without submitting a master job through [Slurm](https://slurm.schedmd.com/documentation.html). 
 
-This is similar to the local execution, but you need to specify the Slurm parameters. 
+This is similar to the local execution, but you need to specify the Slurm parameters. Ensure the [slurm configuration file](../installation/slurm.md) is ready before proceeding. The `--latency-wait` and `--rerun-incomplete` options are pre-configured in the example slurm file.
 
 It is important to remember that if you are logged out before all jobs have been submitted to Slurm, any remaining jobs, i.e., those haven't been submitted, will not be submitted.
 
@@ -114,9 +113,7 @@ smk_dir=/path/to/the/novascope/directory
 job_dir=/path/to/the/job/directory                                   # The job directory should has the `config_job.yaml` file.
 slurm_params="--profile /path/to/the/slurm/configuration/directory"  # The slurm directory should have the configuration file: `config.yaml`.
 
-# params
-wait_time=<time_to_wait>                        # Replace <time_to_wait> with a specific duration in seconds, e.g., 120. The pipeline pauses for the defined time awaiting an output file if not instantly accessible after a job, compensating for filesystem delay (default: 5).
-
-snakemake $slurm_params --latency-wait $wait_time -s ${smk_dir}/NovaScope.smk -d $job_dir --rerun-incomplete
+# execute the NovaScope pipeline
+snakemake $slurm_params -s ${smk_dir}/NovaScope.smk -d $job_dir
 ```
 

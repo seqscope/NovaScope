@@ -14,11 +14,11 @@
         <link rel="prev" href="../env_setup/">
       
       
-        <link rel="next" href="../../getting_started/prep_input/">
+        <link rel="next" href="../../getting_started/intro/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.11">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.13">
     
     
       
@@ -48,6 +48,8 @@
       
     
     
+      <link rel="stylesheet" href="../../css/custom.css">
+    
     <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
@@ -60,10 +62,12 @@
   
     
     
+      
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="grey">
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -114,7 +118,43 @@
     </div>
     
       
+        <form class="md-header__option" data-md-component="palette">
+  
     
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1M8 13h8v-2H8v2m9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1 0 1.71-1.39 3.1-3.1 3.1h-4V17h4a5 5 0 0 0 5-5 5 5 0 0 0-5-5Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5M7 15a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
     
     
     
@@ -231,7 +271,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../getting_started/prep_input/" class="md-tabs__link">
+        <a href="../../getting_started/intro/" class="md-tabs__link">
           
   
     
@@ -462,7 +502,7 @@
         
   
   <span class="md-ellipsis">
-    Requirements
+    Installing NovaScope
   </span>
   
 
@@ -603,6 +643,10 @@
       
         
       
+        
+      
+        
+      
     
     
       
@@ -643,11 +687,53 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting_started/prep_input/" class="md-nav__link">
+      <a href="../../getting_started/intro/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Preparing Input
+    Introduction
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting_started/access_data/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Accessing Input Data
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting_started/job_config/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Job Configuration
   </span>
   
 
@@ -668,7 +754,7 @@
         
   
   <span class="md-ellipsis">
-    Executing NovaScope Pipeline
+    Executing NovaScope
   </span>
   
 
@@ -777,13 +863,52 @@
   
 
 
-<h1 id="snakemake-with-slurm">Snakemake with SLURM<a class="headerlink" href="#snakemake-with-slurm" title="Permanent link">&para;</a></h1>
+<h1 id="snakemake-with-slurm">Snakemake with Slurm<a class="headerlink" href="#snakemake-with-slurm" title="Permanent link">&para;</a></h1>
 <p>It is recommended to integrate SLURM scheduler with Snakemake, which can automate the process of submitting your jobs.</p>
-<p>Please be aware that Snakemake introduced significant updates for cluster Configuration starting from <strong>version 8</strong>. Thus, we advise checking to verify your Snakemake version using <code>snakemake --version</code>. </p>
+<p>Please be aware that Snakemake introduced significant updates for cluster configuration starting from <strong>version 8</strong>. Thus, we advise checking to verify your Snakemake version using <code>snakemake --version</code>. </p>
 <p>In NovaScope, we utilized a cluster configuration profile to define the details of the cluster and resources given its consistency and time-saving benefits. More details are provided below. Those files were crafted with inspiration from the <a href="https://github.com/jdblischak/smk-simple-slurm">smk-simple-slurm</a> repository.</p>
 <h2 id="a-cluster-configuration-file-for-snakemake-v7290">A Cluster Configuration file for Snakemake v7.29.0<a class="headerlink" href="#a-cluster-configuration-file-for-snakemake-v7290" title="Permanent link">&para;</a></h2>
-<p>Create a <code>config.yaml</code> with the following settings. Please substitute the placeholders below, marked with &lt;&gt;, to suit your specific case. Please see our example file at <a href="https://github.com/seqscope/NovaScope/blob/main/slurm/v7.29.0/config.yaml">slurm/v7.29.0/config.yaml</a>. </p>
-<div class="codehilite"><pre><span></span><code>## Cluster Configuration
+<p>Create a <code>config.yaml</code> with the following settings. Please substitute the placeholders below, marked with <code>&lt;&gt;</code>, to suit your specific case. Please see our example file at <a href="https://github.com/seqscope/NovaScope/blob/main/slurm/v7.29.0/config.yaml">slurm/v7.29.0/config.yaml</a>. </p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span></pre></div></td><td class="code"><div><pre><span></span><code>## Cluster Configuration
 ## The following setting also aids in organizing log files by creating rule-specific subdirectories within the job&#39;s log directory, each holding its own output and error files.
 cluster:
   mkdir -p logs/{rule}/ &amp;&amp;
@@ -801,37 +926,71 @@ cluster:
 
 ## Default Resources for Jobs
 default-resources:
-  - partition=&lt;your_default_partition&gt;    # Replace &lt;your_default_partition&gt; with your actual partition name
-  - mem=&lt;default_memory_allocation&gt;       # Replace &lt;default_memory_allocation&gt; with memory, e.g., &quot;4G&quot;
-  - time=&lt;default_time_limit&gt;             # Replace &lt;default_time_limit&gt; with time, e.g., &quot;01:00:00&quot;
-  - nodes=&lt;default_number_of_nodes&gt;       # Replace &lt;default_number_of_nodes&gt; with nodes, e.g., &quot;1&quot;
-  - account=&lt;default_account_information&gt; # Replace &lt;default_account_information&gt; with your account info
+  - partition=&lt;your_default_partition&gt;    # replace &lt;your_default_partition&gt; with your actual partition name
+  - mem=&lt;default_memory_allocation&gt;       # replace &lt;default_memory_allocation&gt; with memory, e.g., &quot;4G&quot;
+  - time=&lt;default_time_limit&gt;             # replace &lt;default_time_limit&gt; with time, e.g., &quot;01:00:00&quot;
+  - nodes=&lt;default_number_of_nodes&gt;       # replace &lt;default_number_of_nodes&gt; with nodes, e.g., &quot;1&quot;
+  - account=&lt;default_account_information&gt; # replace &lt;default_account_information&gt; with your account info
 
 ## General Snakemake Settings
-jobs: &lt;max_number_of_jobs&gt;               # Replace &lt;max_number_of_jobs&gt; with your desired maximum number of concurrent jobs, e.g., 10
-latency-wait: &lt;latency_seconds&gt;          # Replace &lt;latency_seconds&gt; with the number of seconds to wait if job output is not present, e.g., 120
-local-cores: &lt;local_core_count&gt;          # Replace &lt;local_core_count&gt; with the max number of cores to use locally, e.g., &quot;20&quot;
-restart-times: &lt;restart_attempts&gt;        # Replace &lt;restart_attempts&gt; with the number of times to retry failing jobs, e.g., &quot;0&quot; for no retries
-max-jobs-per-second: &lt;job_submission_rate&gt; # Replace &lt;job_submission_rate&gt; with the limit on how many jobs can be submitted per second, e.g., &quot;20&quot;
-keep-going: &lt;continue_after_failure&gt;     # Replace &lt;continue_after_failure&gt; with True or False to indicate whether to continue executing other jobs after a failure
-rerun-incomplete: &lt;rerun_incomplete_jobs&gt; # Replace &lt;rerun_incomplete_jobs&gt; with True or False to decide if incomplete jobs should be rerun
-printshellcmds: &lt;print_commands&gt;         # Replace &lt;print_commands&gt; with True or False to specify if shell commands should be printed before execution
+jobs: &lt;max_number_of_jobs&gt;                  # replace &lt;max_number_of_jobs&gt; with your desired maximum number of concurrent jobs, e.g., 10
+latency-wait: &lt;latency_seconds&gt;             # replace &lt;latency_seconds&gt; with the number of seconds to wait if job output is not present, e.g., 120
+local-cores: &lt;local_core_count&gt;             # replace &lt;local_core_count&gt; with the max number of cores to use locally, e.g., &quot;20&quot;
+restart-times: &lt;restart_attempts&gt;           # replace &lt;restart_attempts&gt; with the number of times to retry failing jobs, e.g., &quot;0&quot; for no retries
+max-jobs-per-second: &lt;job_submission_rate&gt;  # replace &lt;job_submission_rate&gt; with the limit on how many jobs can be submitted per second, e.g., &quot;20&quot;
+keep-going: &lt;continue_after_failure&gt;        # replace &lt;continue_after_failure&gt; with True or False to indicate whether to continue executing other jobs after a failure
+rerun-incomplete: &lt;rerun_incomplete_jobs&gt;   # replace &lt;rerun_incomplete_jobs&gt; with True or False to decide if incomplete jobs should be rerun
+printshellcmds: &lt;print_commands&gt;            # replace &lt;print_commands&gt; with True or False to specify if shell commands should be printed before execution
 
 ## Scheduler Settings
 #scheduler: greedy      
 
 ## Conda Environment Settings
-use-conda: &lt;True_or_False&gt;               # Enable use of Conda environments
-conda-frontend: conda                    # Specify Conda as the package manager frontend
-</code></pre></div>
-
+use-conda: &lt;True_or_False&gt;               # enable use of Conda environments
+conda-frontend: conda                    # specify Conda as the package manager frontend
+</code></pre></div></td></tr></table></div>
 <h2 id="a-cluster-configuration-file-for-snakemake-v860">A Cluster Configuration file for Snakemake v8.6.0<a class="headerlink" href="#a-cluster-configuration-file-for-snakemake-v860" title="Permanent link">&para;</a></h2>
 <p>Please first install the Snakemake executor plugin "cluster-generic":</p>
-<div class="codehilite"><pre><span></span><code>pip install snakemake-executor-plugin-cluster-generic
-</code></pre></div>
-
-<p>Then, create the cluster configuration file with below. Please substitute the placeholders below, marked with &lt;&gt;, to suit your specific case. Please see our example file at <a href="https://github.com/seqscope/NovaScope/blob/main/slurm/v8.6.0/config.yaml">slurm/v8.6.0/config.yaml</a>. </p>
-<div class="codehilite"><pre><span></span><code>executor: &quot;cluster-generic&quot;
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>pip install snakemake-executor-plugin-cluster-generic
+</code></pre></div></td></tr></table></div>
+<p>Then, create the cluster configuration file with below. Please substitute the placeholders below, marked with <code>&lt;&gt;</code>, to suit your specific case. Please see our example file at <a href="https://github.com/seqscope/NovaScope/blob/main/slurm/v8.6.0/config.yaml">slurm/v8.6.0/config.yaml</a>. </p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span></pre></div></td><td class="code"><div><pre><span></span><code>## Cluster Configuration
+## The following setting also aids in organizing log files by creating rule-specific subdirectories within the job&#39;s log directory, each holding its own output and error files.
+executor: &quot;cluster-generic&quot;
 cluster-generic-submit-cmd: &quot;mkdir -p logs/{rule}/ &amp;&amp;
   sbatch
     --job-name={rule}_{wildcards} \
@@ -844,25 +1003,27 @@ cluster-generic-submit-cmd: &quot;mkdir -p logs/{rule}/ &amp;&amp;
     --parsable \
     --nodes={resources.nodes} &quot;
 
+## Default Resources for Jobs
 default-resources:
-  - partition=&quot;main&quot;
-  - mem=&quot;6500MB&quot;
-  - time=&quot;05:00:00&quot;
-  - nodes=1
+  - partition=&lt;your_default_partition&gt;    # replace &lt;your_default_partition&gt; with your actual partition name
+  - mem=&lt;default_memory_allocation&gt;       # replace &lt;default_memory_allocation&gt; with memory, e.g., &quot;4G&quot;
+  - time=&lt;default_time_limit&gt;             # replace &lt;default_time_limit&gt; with time, e.g., &quot;01:00:00&quot;
+  - nodes=&lt;default_number_of_nodes&gt;       # replace &lt;default_number_of_nodes&gt; with nodes, e.g., &quot;1&quot;
+  - account=&lt;default_account_information&gt; # replace &lt;default_account_information&gt; with your account info
 
+## General Snakemake Settings
+jobs: &lt;max_number_of_jobs&gt;                  # replace &lt;max_number_of_jobs&gt; with your desired maximum number of concurrent jobs, e.g., 10
+latency-wait: &lt;latency_seconds&gt;             # replace &lt;latency_seconds&gt; with the number of seconds to wait if job output is not present, e.g., 120
+local-cores: &lt;local_core_count&gt;             # replace &lt;local_core_count&gt; with the max number of cores to use locally, e.g., &quot;20&quot;
+restart-times: &lt;restart_attempts&gt;           # replace &lt;restart_attempts&gt; with the number of times to retry failing jobs, e.g., &quot;0&quot; for no retries
+max-jobs-per-second: &lt;job_submission_rate&gt;  # replace &lt;job_submission_rate&gt; with the limit on how many jobs can be submitted per second, e.g., &quot;20&quot;
+keep-going: &lt;continue_after_failure&gt;        # replace &lt;continue_after_failure&gt; with True or False to indicate whether to continue executing other jobs after a failure
+rerun-incomplete: &lt;rerun_incomplete_jobs&gt;   # replace &lt;rerun_incomplete_jobs&gt; with True or False to decide if incomplete jobs should be rerun
+printshellcmds: &lt;print_commands&gt;            # replace &lt;print_commands&gt; with True or False to specify if shell commands should be printed before execution
 
-jobs: 10                       
-latency-wait: 120              
-local-cores: 20                
-restart-times: 0               
-max-jobs-per-second: 20
-keep-going: True
-rerun-incomplete: True
-printshellcmds: True
-
+## Conda Environment Settings
 software-deployment-method: conda
-</code></pre></div>
-
+</code></pre></div></td></tr></table></div>
 <h2 id="additional-functions">Additional functions<a class="headerlink" href="#additional-functions" title="Permanent link">&para;</a></h2>
 <p>If you encounter situations where your jobs fail without any warnings, it is feasible to using a cluster status script to keep track of your jobs. See details <a href="https://github.com/jdblischak/smk-simple-slurm/tree/main/extras">here</a>.</p>
 
@@ -911,10 +1072,10 @@ software-deployment-method: conda
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.indexes", "navigation.sections"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.indexes", "navigation.sections", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.8fd75fb4.min.js"></script>
+      <script src="../../assets/javascripts/bundle.c8d2eff1.min.js"></script>
       
         <script src="../../js/open_in_new_tab.js"></script>
       
