@@ -18,7 +18,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.11">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.13">
     
     
       
@@ -497,7 +497,7 @@
         
   
   <span class="md-ellipsis">
-    Requirements
+    Installing NovaScope
   </span>
   
 
@@ -759,16 +759,16 @@
           <li class="md-nav__item">
   <a href="#option-b-slurm-using-a-master-job" class="md-nav__link">
     <span class="md-ellipsis">
-      Option B: Slurm using a Master Job
+      Option B: SLURM using a Master Job
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#option-c-slurm-via-command-line" class="md-nav__link">
+  <a href="#option-c-slurm-via-command-lines" class="md-nav__link">
     <span class="md-ellipsis">
-      Option C: SLURM via Command Line
+      Option C: SLURM via Command Lines
     </span>
   </a>
   
@@ -873,16 +873,16 @@
           <li class="md-nav__item">
   <a href="#option-b-slurm-using-a-master-job" class="md-nav__link">
     <span class="md-ellipsis">
-      Option B: Slurm using a Master Job
+      Option B: SLURM using a Master Job
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#option-c-slurm-via-command-line" class="md-nav__link">
+  <a href="#option-c-slurm-via-command-lines" class="md-nav__link">
     <span class="md-ellipsis">
-      Option C: SLURM via Command Line
+      Option C: SLURM via Command Lines
     </span>
   </a>
   
@@ -913,8 +913,7 @@
 
 <h1 id="executing-the-novascope-pipeline">Executing the NovaScope Pipeline<a class="headerlink" href="#executing-the-novascope-pipeline" title="Permanent link">&para;</a></h1>
 <h2 id="preliminary-steps">Preliminary Steps<a class="headerlink" href="#preliminary-steps" title="Permanent link">&para;</a></h2>
-<p>Before running the full pipeline, performing a sanity check by
-executing a dry run is highly recommended. A dry run verifies that your <code>config_job.yaml</code> is properly configured and outlines the necessary jobs to be executed. </p>
+<p>Before running the full pipeline, performing a sanity check by executing a dry run is highly recommended. A dry run verifies that your <code>config_job.yaml</code> is properly configured and outlines the necessary jobs to be executed. </p>
 <p>Additionally, you can create a rule graph that visually represents the structure of the workflow or a DAG (Directed Acyclic Graph) to view all jobs and their actual dependency structure.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
@@ -932,19 +931,19 @@ executing a dry run is highly recommended. A dry run verifies that your <code>co
 <span class="normal">14</span>
 <span class="normal">15</span>
 <span class="normal">16</span>
-<span class="normal">17</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1"># Paths</span>
-<span class="nv">smk_dir</span><span class="o">=</span><span class="s2">&quot;&lt;path_to_NovaScope_repository&gt;&quot;</span><span class="w">    </span><span class="c1"># Replace &lt;path_to_NovaScope_repository&gt; with the path to the NovaScope repository</span>
-<span class="nv">job_dir</span><span class="o">=</span><span class="s2">&quot;&lt;job_directory&gt;&quot;</span><span class="w">                   </span><span class="c1"># Replace &lt;job_directory&gt; with your specific job directory path, which has the `config_job.yaml` file.</span>
+<span class="normal">17</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1"># paths</span>
+<span class="nv">smk_dir</span><span class="o">=</span>/path/to/the/novascope/directory
+<span class="nv">job_dir</span><span class="o">=</span>/path/to/the/job/directory<span class="w">              </span><span class="c1"># The job directory should has the `config_job.yaml` file.</span>
 
-<span class="c1">## (Recommended) Start with a dry run</span>
-<span class="c1">## - View all information:</span>
+<span class="c1">## (recommended) start with a dry run</span>
+<span class="c1">## - view all information:</span>
 snakemake<span class="w"> </span>-s<span class="w"> </span><span class="nv">$smk_dir</span>/NovaScope.smk<span class="w"> </span>--rerun-incomplete<span class="w"> </span>-d<span class="w"> </span><span class="nv">$job_dir</span><span class="w"> </span>--dry-run<span class="w"> </span>-p
 
-<span class="c1">## - Simply summarize the jobs to be executed without other information:</span>
+<span class="c1">## - simply summarize the jobs to be executed without other information:</span>
 snakemake<span class="w"> </span>-s<span class="w"> </span><span class="nv">$smk_dir</span>/NovaScope.smk<span class="w"> </span>--rerun-incomplete<span class="w"> </span>-d<span class="w"> </span><span class="nv">$job_dir</span><span class="w"> </span>--dry-run<span class="w"> </span>--quiet
 
-<span class="c1">## (Optional) Visualization.</span>
-<span class="c1">## - (1) Rulegraph</span>
+<span class="c1">## (optional) visualization:</span>
+<span class="c1">## - (1) rulegraph</span>
 snakemake<span class="w"> </span>--rulegraph<span class="w">  </span>-s<span class="w"> </span><span class="nv">$smk_dir</span>/NovaScope.smk<span class="w"> </span>--rerun-incomplete<span class="w"> </span>-d<span class="w"> </span><span class="nv">$job_dir</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>dot<span class="w"> </span>-Tpdf<span class="w"> </span>&gt;<span class="w"> </span>rulegraph.pdf
 
 <span class="c1">## - (2) DAG</span>
@@ -953,18 +952,20 @@ snakemake<span class="w"> </span>--dag<span class="w">  </span>-s<span class="w"
 <h2 id="execution-options">Execution Options<a class="headerlink" href="#execution-options" title="Permanent link">&para;</a></h2>
 <h3 id="option-a-local-execution">Option A: Local Execution<a class="headerlink" href="#option-a-local-execution" title="Permanent link">&para;</a></h3>
 <p>If your computing environment does not require a job scheduler such as Slurm, you can run the pipeline locally. You will need to specify the number of cores.</p>
-<p>An example script is provided below. Make sure to replace the variables to relevant paths and the number of cores.</p>
+<p>An example script is provided below. Make sure to replace the variables to relevant paths, the number of cores, and the time to wait for latency. The <code>--rerun-incomplete</code> enable the pipeline to re-run any jobs the output of which is identified as incomplete.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
 <span class="normal">4</span>
 <span class="normal">5</span>
-<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nv">smk_dir</span><span class="o">=</span><span class="s2">&quot;&lt;path_to_NovaScope_repository&gt;&quot;</span><span class="w">  </span><span class="c1"># Replace &lt;path_to_NovaScope_repository&gt; with the path to the NovaScope repository</span>
-<span class="nv">job_dir</span><span class="o">=</span><span class="s2">&quot;&lt;path_to_the_job_directory&gt;&quot;</span><span class="w">     </span><span class="c1"># Replace &lt;job_directory&gt; with your specific job directory path that contains the `config_job.yaml` file</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nv">smk_dir</span><span class="o">=</span>/path/to/the/novascope/directory
+<span class="nv">job_dir</span><span class="o">=</span>/path/to/the/job/directory<span class="w">              </span><span class="c1"># The job directory should has the `config_job.yaml` file.</span>
 
-<span class="nv">Ncores</span><span class="o">=</span><span class="m">8</span><span class="w">                                  </span><span class="c1"># Replace to the number of available CPU cores you wish to use</span>
+<span class="nv">Ncores</span><span class="o">=</span>&lt;number_of_cores&gt;<span class="w">                        </span><span class="c1"># replace &lt;number_of_cores&gt; by the number of available CPU cores you wish to use</span>
+<span class="nv">wait_time</span><span class="o">=</span>&lt;time_to_wait&gt;<span class="w">                        </span><span class="c1"># Replace &lt;time_to_wait&gt; with a specific duration in seconds, e.g., 120. The pipeline pauses for the defined time awaiting an output file if not instantly accessible after a job, compensating for filesystem delay (default: 5).</span>
 
-snakemake<span class="w"> </span>--latency-wait<span class="w"> </span><span class="m">120</span><span class="w"> </span>-s<span class="w"> </span><span class="si">${</span><span class="nv">smk_dir</span><span class="si">}</span>/NovaScope.smk<span class="w"> </span>-d<span class="w"> </span><span class="nv">$job_dir</span><span class="w"> </span>--cores<span class="w"> </span><span class="nv">$Ncores</span><span class="w"> </span>--rerun-incomplete<span class="w"> </span>
+snakemake<span class="w"> </span>--latency-wait<span class="w"> </span><span class="nv">$wait_time</span><span class="w"> </span>-s<span class="w"> </span><span class="si">${</span><span class="nv">smk_dir</span><span class="si">}</span>/NovaScope.smk<span class="w"> </span>-d<span class="w"> </span><span class="nv">$job_dir</span><span class="w"> </span>--cores<span class="w"> </span><span class="nv">$Ncores</span><span class="w"> </span>--rerun-incomplete<span class="w"> </span>
 </code></pre></div></td></tr></table></div>
 <p>See the following examples to see how to execute the pipeline locally:</p>
 <ul>
@@ -972,9 +973,10 @@ snakemake<span class="w"> </span>--latency-wait<span class="w"> </span><span cla
 <li><a href="https://github.com/seqscope/NovaScope/blob/main/testrun/shallo_liver_section/submit_local.sh">Shallow Liver Section</a></li>
 <li><a href="https://github.com/seqscope/NovaScope/blob/main/testrun/deep_liver_section/submit_local.sh">Deep Liver Section</a></li>
 </ul>
-<h3 id="option-b-slurm-using-a-master-job">Option B: Slurm using a Master Job<a class="headerlink" href="#option-b-slurm-using-a-master-job" title="Permanent link">&para;</a></h3>
+<h3 id="option-b-slurm-using-a-master-job">Option B: SLURM using a Master Job<a class="headerlink" href="#option-b-slurm-using-a-master-job" title="Permanent link">&para;</a></h3>
 <p>If your computing environment expects to run jobs via a job scheduler such <a href="https://slurm.schedmd.com/documentation.html">Slurm</a>, a recommended approach to submit a 'Master Job' that oversees and manage the status of all other jobs. </p>
-<p>First, you need to establish the master job. The primary role of this job is to monitor the progress of all tasks, handle job submissions based on dependencies and available resources. Thus, it requires minimal memory but an extended time limit. Its time limit should be longer than the total time required to complete all associated jobs.</p>
+<p>First, make sure you have the <a href="../../installation/slurm/">slurm configuration file</a> available. The <code>--latency-wait</code> and <code>--rerun-incomplete</code> options is preset in the example slurm configuration file, eliminating the need for manual specification.</p>
+<p>Now you need to establish the master job. The primary role of this job is to monitor the progress of all tasks, handle job submissions based on dependencies and available resources. Thus, it requires minimal memory but an extended time limit. Its time limit should be longer than the total time required to complete all associated jobs. </p>
 <p>Create a file similar to the information below. Note that the details of the contents may vary based on your specific computing environment. </p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
@@ -1010,13 +1012,13 @@ snakemake<span class="w"> </span>--latency-wait<span class="w"> </span><span cla
 <span class="c1">#SBATCH --mail-type=END,FAIL,REQUEUE           # Notification types for job status</span>
 <span class="c1">#SBATCH --output=./logs/&lt;log_filename&gt;         # Replace &lt;log_filename&gt; with the log file name pattern</span>
 
-<span class="c1"># Paths</span>
-<span class="nv">smk_dir</span><span class="o">=</span><span class="s2">&quot;&lt;path_to_NovaScope_repository&gt;&quot;</span><span class="w">            </span><span class="c1"># Replace &lt;path_to_NovaScope_repository&gt; with the path to the NovaScope repository</span>
-<span class="nv">job_dir</span><span class="o">=</span><span class="s2">&quot;&lt;path_to_the_job_directory&gt;&quot;</span><span class="w">               </span><span class="c1"># Replace &lt;path_to_the_job_directory&gt; with your specific job directory path</span>
-<span class="nv">slurm_params</span><span class="o">=</span><span class="s2">&quot;--profile &lt;path_to_slurm_directory&gt;&quot;</span><span class="w">  </span><span class="c1"># Replace &lt;path_to_slurm_directory&gt; with your directory of the SLURM configuration file</span>
+<span class="c1"># path</span>
+<span class="nv">smk_dir</span><span class="o">=</span>/path/to/the/novascope/directory
+<span class="nv">job_dir</span><span class="o">=</span>/path/to/the/job/directory<span class="w">                                   </span><span class="c1"># The job directory should has the `config_job.yaml` file.</span>
+<span class="nv">slurm_params</span><span class="o">=</span><span class="s2">&quot;--profile /path/to/the/slurm/configuration/directory&quot;</span><span class="w">  </span><span class="c1"># The slurm configuration directory should have the slurm configuration file: `config.yaml`.</span>
 
-<span class="c1"># Execute the NovaScope pipeline</span>
-snakemake<span class="w"> </span><span class="nv">$slurm_params</span><span class="w">  </span>--latency-wait<span class="w"> </span><span class="m">120</span><span class="w">  </span>-s<span class="w"> </span><span class="si">${</span><span class="nv">smk_dir</span><span class="si">}</span>/NovaScope.smk<span class="w">  </span>-d<span class="w"> </span><span class="nv">$job_dir</span><span class="w"> </span>
+<span class="c1"># execute the NovaScope pipeline</span>
+snakemake<span class="w"> </span><span class="nv">$slurm_params</span><span class="w"> </span>-s<span class="w"> </span><span class="si">${</span><span class="nv">smk_dir</span><span class="si">}</span>/NovaScope.smk<span class="w"> </span>-d<span class="w"> </span><span class="nv">$job_dir</span><span class="w"> </span>
 </code></pre></div></td></tr></table></div>
 <p>Specific examples prepared for the three datasets are provided below:</p>
 <ul>
@@ -1027,19 +1029,23 @@ snakemake<span class="w"> </span><span class="nv">$slurm_params</span><span clas
 <p>Then submit the master job through <code>sbatch</code>:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>sbatch submit_HPC.job
 </code></pre></div></td></tr></table></div>
-<h3 id="option-c-slurm-via-command-line">Option C: SLURM via Command Line<a class="headerlink" href="#option-c-slurm-via-command-line" title="Permanent link">&para;</a></h3>
-<p>For a small number of quick jobs, you can submit them with a single command line without submitting a master job through <a href="https://slurm.schedmd.com/documentation.html">Slurm</a>.</p>
-<p>This is similar to the local execution, but you need to specify the Slurm parameters.</p>
+<h3 id="option-c-slurm-via-command-lines">Option C: SLURM via Command Lines<a class="headerlink" href="#option-c-slurm-via-command-lines" title="Permanent link">&para;</a></h3>
+<p>For a small number of quick jobs, you can submit them with a single command line without submitting a master job through <a href="https://slurm.schedmd.com/documentation.html">Slurm</a>. </p>
+<p>This is similar to the local execution, but you need to specify the Slurm parameters. Ensure the <a href="../../installation/slurm/">slurm configuration file</a> is ready before proceeding. The <code>--latency-wait</code> and <code>--rerun-incomplete</code> options are pre-configured in the example slurm file.</p>
 <p>It is important to remember that if you are logged out before all jobs have been submitted to Slurm, any remaining jobs, i.e., those haven't been submitted, will not be submitted.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
 <span class="normal">4</span>
-<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nv">smk_dir</span><span class="o">=</span><span class="s2">&quot;&lt;path_to_NovaScope_repository&gt;&quot;</span><span class="w">            </span><span class="c1"># Replace &lt;path_to_NovaScope_repository&gt; with the path to the NovaScope repository</span>
-<span class="nv">job_dir</span><span class="o">=</span><span class="s2">&quot;&lt;path_to_the_job_directory&gt;&quot;</span><span class="w">               </span><span class="c1"># Replace &lt;path_to_the_job_directory&gt; with your specific job directory path</span>
-<span class="nv">slurm_params</span><span class="o">=</span><span class="s2">&quot;--profile &lt;path_to_slurm_directory&gt;&quot;</span><span class="w">  </span><span class="c1"># Replace &lt;path_to_slurm_directory&gt; with your directory of the SLURM configuration file</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1"># path</span>
+<span class="nv">smk_dir</span><span class="o">=</span>/path/to/the/novascope/directory
+<span class="nv">job_dir</span><span class="o">=</span>/path/to/the/job/directory<span class="w">                                   </span><span class="c1"># The job directory should has the `config_job.yaml` file.</span>
+<span class="nv">slurm_params</span><span class="o">=</span><span class="s2">&quot;--profile /path/to/the/slurm/configuration/directory&quot;</span><span class="w">  </span><span class="c1"># The slurm directory should have the configuration file: `config.yaml`.</span>
 
-snakemake<span class="w"> </span><span class="nv">$slurm_params</span><span class="w"> </span>--latency-wait<span class="w"> </span><span class="m">120</span><span class="w"> </span>-s<span class="w"> </span><span class="si">${</span><span class="nv">smk_dir</span><span class="si">}</span>/NovaScope.smk<span class="w"> </span>-d<span class="w"> </span><span class="nv">$job_dir</span><span class="w"> </span>
+<span class="c1"># execute the NovaScope pipeline</span>
+snakemake<span class="w"> </span><span class="nv">$slurm_params</span><span class="w"> </span>-s<span class="w"> </span><span class="si">${</span><span class="nv">smk_dir</span><span class="si">}</span>/NovaScope.smk<span class="w"> </span>-d<span class="w"> </span><span class="nv">$job_dir</span>
 </code></pre></div></td></tr></table></div>
 
 
@@ -1090,7 +1096,7 @@ snakemake<span class="w"> </span><span class="nv">$slurm_params</span><span clas
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.indexes", "navigation.sections", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.8fd75fb4.min.js"></script>
+      <script src="../../assets/javascripts/bundle.c8d2eff1.min.js"></script>
       
         <script src="../../js/open_in_new_tab.js"></script>
       

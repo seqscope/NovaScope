@@ -18,7 +18,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.11">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.13">
     
     
       
@@ -502,7 +502,7 @@
         
   
   <span class="md-ellipsis">
-    Requirements
+    Installing NovaScope
   </span>
   
 
@@ -897,7 +897,7 @@
 <h2 id="hpc-specific-configuration">HPC-specific Configuration:<a class="headerlink" href="#hpc-specific-configuration" title="Permanent link">&para;</a></h2>
 <p>For HPC users, use the <code>envmodules</code> section to load the required software tools as modules. If a tool is not listed in the envmodules section, the pipeline will assume it's installed system-wide. For local executions, you may remove this section if running the pipeline on your local machine.</p>
 <p>Please specify the <strong>version</strong> information. </p>
-<p><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
 <span class="normal">4</span>
@@ -909,11 +909,13 @@
   imagemagick: &quot;imagemagick/&lt;version_information&gt;&quot;
   #snakemake: &quot;snakemake/&lt;version_information&gt;&quot;
 </code></pre></div></td></tr></table></div>
-* <code>python</code>: If your python environment was set up using a Python version accessed through a module, your environment depends on certain shared files from that module. Therefore, you must add the <code>python: "python/&lt;version_information&gt;"</code>  in the <code>envmodules</code> section to load the same module you initially used to establish your environment. But if you set up with a locally installed Python (not using <code>module load</code>), comment out or remove the module line <code>python: "python/&lt;version_information&gt;"</code>.
-* It is also feasible to use <code>envmodules</code> to load other tools, such as <code>samtools</code> instead of defining its path in <code>tools</code>.</p>
+<ul>
+<li><code>python</code>: If your Python environment was set up using a Python version accessed through a module, your environment depends on certain shared files from that module. Therefore, you must add the <code>python: "python/&lt;version_information&gt;"</code>  in the <code>envmodules</code> section to load the same module you initially used to establish your environment. But if you set up with a locally installed Python (not using <code>module load</code>), comment out or remove the module line <code>python: "python/&lt;version_information&gt;"</code>.</li>
+<li>It is also feasible to use <code>envmodules</code> to load other tools, such as <code>samtools</code> instead of defining its path in <code>tools</code>.</li>
+</ul>
 <h2 id="reference-database">Reference Database<a class="headerlink" href="#reference-database" title="Permanent link">&para;</a></h2>
-<p>Please list every reference database used for alignment here. The reference data can be obtained via the <a href="https://www.10xgenomics.com/support/software/cell-ranger/downloads">cellranger download</a> page.</p>
-<p>Please ensure the reference database corresponds to the species of your input data. </p>
+<p>Please list every reference database used for alignment here. For instructions on preparing reference data, please consult the section on <a href="../requirement/#preparing-reference-genomes">Installing NovaScope</a>. </p>
+<p>It is imperative to ensure the reference database matches to the species of your input data. </p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
@@ -977,7 +979,7 @@
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.indexes", "navigation.sections", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.8fd75fb4.min.js"></script>
+      <script src="../../assets/javascripts/bundle.c8d2eff1.min.js"></script>
       
         <script src="../../js/open_in_new_tab.js"></script>
       

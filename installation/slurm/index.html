@@ -18,7 +18,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.11">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.13">
     
     
       
@@ -502,7 +502,7 @@
         
   
   <span class="md-ellipsis">
-    Requirements
+    Installing NovaScope
   </span>
   
 
@@ -865,10 +865,10 @@
 
 <h1 id="snakemake-with-slurm">Snakemake with Slurm<a class="headerlink" href="#snakemake-with-slurm" title="Permanent link">&para;</a></h1>
 <p>It is recommended to integrate SLURM scheduler with Snakemake, which can automate the process of submitting your jobs.</p>
-<p>Please be aware that Snakemake introduced significant updates for cluster Configuration starting from <strong>version 8</strong>. Thus, we advise checking to verify your Snakemake version using <code>snakemake --version</code>. </p>
+<p>Please be aware that Snakemake introduced significant updates for cluster configuration starting from <strong>version 8</strong>. Thus, we advise checking to verify your Snakemake version using <code>snakemake --version</code>. </p>
 <p>In NovaScope, we utilized a cluster configuration profile to define the details of the cluster and resources given its consistency and time-saving benefits. More details are provided below. Those files were crafted with inspiration from the <a href="https://github.com/jdblischak/smk-simple-slurm">smk-simple-slurm</a> repository.</p>
 <h2 id="a-cluster-configuration-file-for-snakemake-v7290">A Cluster Configuration file for Snakemake v7.29.0<a class="headerlink" href="#a-cluster-configuration-file-for-snakemake-v7290" title="Permanent link">&para;</a></h2>
-<p>Create a <code>config.yaml</code> with the following settings. Please substitute the placeholders below, marked with &lt;&gt;, to suit your specific case. Please see our example file at <a href="https://github.com/seqscope/NovaScope/blob/main/slurm/v7.29.0/config.yaml">slurm/v7.29.0/config.yaml</a>. </p>
+<p>Create a <code>config.yaml</code> with the following settings. Please substitute the placeholders below, marked with <code>&lt;&gt;</code>, to suit your specific case. Please see our example file at <a href="https://github.com/seqscope/NovaScope/blob/main/slurm/v7.29.0/config.yaml">slurm/v7.29.0/config.yaml</a>. </p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -926,34 +926,34 @@ cluster:
 
 ## Default Resources for Jobs
 default-resources:
-  - partition=&lt;your_default_partition&gt;    # Replace &lt;your_default_partition&gt; with your actual partition name
-  - mem=&lt;default_memory_allocation&gt;       # Replace &lt;default_memory_allocation&gt; with memory, e.g., &quot;4G&quot;
-  - time=&lt;default_time_limit&gt;             # Replace &lt;default_time_limit&gt; with time, e.g., &quot;01:00:00&quot;
-  - nodes=&lt;default_number_of_nodes&gt;       # Replace &lt;default_number_of_nodes&gt; with nodes, e.g., &quot;1&quot;
-  - account=&lt;default_account_information&gt; # Replace &lt;default_account_information&gt; with your account info
+  - partition=&lt;your_default_partition&gt;    # replace &lt;your_default_partition&gt; with your actual partition name
+  - mem=&lt;default_memory_allocation&gt;       # replace &lt;default_memory_allocation&gt; with memory, e.g., &quot;4G&quot;
+  - time=&lt;default_time_limit&gt;             # replace &lt;default_time_limit&gt; with time, e.g., &quot;01:00:00&quot;
+  - nodes=&lt;default_number_of_nodes&gt;       # replace &lt;default_number_of_nodes&gt; with nodes, e.g., &quot;1&quot;
+  - account=&lt;default_account_information&gt; # replace &lt;default_account_information&gt; with your account info
 
 ## General Snakemake Settings
-jobs: &lt;max_number_of_jobs&gt;               # Replace &lt;max_number_of_jobs&gt; with your desired maximum number of concurrent jobs, e.g., 10
-latency-wait: &lt;latency_seconds&gt;          # Replace &lt;latency_seconds&gt; with the number of seconds to wait if job output is not present, e.g., 120
-local-cores: &lt;local_core_count&gt;          # Replace &lt;local_core_count&gt; with the max number of cores to use locally, e.g., &quot;20&quot;
-restart-times: &lt;restart_attempts&gt;        # Replace &lt;restart_attempts&gt; with the number of times to retry failing jobs, e.g., &quot;0&quot; for no retries
-max-jobs-per-second: &lt;job_submission_rate&gt; # Replace &lt;job_submission_rate&gt; with the limit on how many jobs can be submitted per second, e.g., &quot;20&quot;
-keep-going: &lt;continue_after_failure&gt;     # Replace &lt;continue_after_failure&gt; with True or False to indicate whether to continue executing other jobs after a failure
-rerun-incomplete: &lt;rerun_incomplete_jobs&gt; # Replace &lt;rerun_incomplete_jobs&gt; with True or False to decide if incomplete jobs should be rerun
-printshellcmds: &lt;print_commands&gt;         # Replace &lt;print_commands&gt; with True or False to specify if shell commands should be printed before execution
+jobs: &lt;max_number_of_jobs&gt;                  # replace &lt;max_number_of_jobs&gt; with your desired maximum number of concurrent jobs, e.g., 10
+latency-wait: &lt;latency_seconds&gt;             # replace &lt;latency_seconds&gt; with the number of seconds to wait if job output is not present, e.g., 120
+local-cores: &lt;local_core_count&gt;             # replace &lt;local_core_count&gt; with the max number of cores to use locally, e.g., &quot;20&quot;
+restart-times: &lt;restart_attempts&gt;           # replace &lt;restart_attempts&gt; with the number of times to retry failing jobs, e.g., &quot;0&quot; for no retries
+max-jobs-per-second: &lt;job_submission_rate&gt;  # replace &lt;job_submission_rate&gt; with the limit on how many jobs can be submitted per second, e.g., &quot;20&quot;
+keep-going: &lt;continue_after_failure&gt;        # replace &lt;continue_after_failure&gt; with True or False to indicate whether to continue executing other jobs after a failure
+rerun-incomplete: &lt;rerun_incomplete_jobs&gt;   # replace &lt;rerun_incomplete_jobs&gt; with True or False to decide if incomplete jobs should be rerun
+printshellcmds: &lt;print_commands&gt;            # replace &lt;print_commands&gt; with True or False to specify if shell commands should be printed before execution
 
 ## Scheduler Settings
 #scheduler: greedy      
 
 ## Conda Environment Settings
-use-conda: &lt;True_or_False&gt;               # Enable use of Conda environments
-conda-frontend: conda                    # Specify Conda as the package manager frontend
+use-conda: &lt;True_or_False&gt;               # enable use of Conda environments
+conda-frontend: conda                    # specify Conda as the package manager frontend
 </code></pre></div></td></tr></table></div>
 <h2 id="a-cluster-configuration-file-for-snakemake-v860">A Cluster Configuration file for Snakemake v8.6.0<a class="headerlink" href="#a-cluster-configuration-file-for-snakemake-v860" title="Permanent link">&para;</a></h2>
 <p>Please first install the Snakemake executor plugin "cluster-generic":</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>pip install snakemake-executor-plugin-cluster-generic
 </code></pre></div></td></tr></table></div>
-<p>Then, create the cluster configuration file with below. Please substitute the placeholders below, marked with &lt;&gt;, to suit your specific case. Please see our example file at <a href="https://github.com/seqscope/NovaScope/blob/main/slurm/v8.6.0/config.yaml">slurm/v8.6.0/config.yaml</a>. </p>
+<p>Then, create the cluster configuration file with below. Please substitute the placeholders below, marked with <code>&lt;&gt;</code>, to suit your specific case. Please see our example file at <a href="https://github.com/seqscope/NovaScope/blob/main/slurm/v8.6.0/config.yaml">slurm/v8.6.0/config.yaml</a>. </p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -983,7 +983,14 @@ conda-frontend: conda                    # Specify Conda as the package manager 
 <span class="normal">27</span>
 <span class="normal">28</span>
 <span class="normal">29</span>
-<span class="normal">30</span></pre></div></td><td class="code"><div><pre><span></span><code>executor: &quot;cluster-generic&quot;
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span></pre></div></td><td class="code"><div><pre><span></span><code>## Cluster Configuration
+## The following setting also aids in organizing log files by creating rule-specific subdirectories within the job&#39;s log directory, each holding its own output and error files.
+executor: &quot;cluster-generic&quot;
 cluster-generic-submit-cmd: &quot;mkdir -p logs/{rule}/ &amp;&amp;
   sbatch
     --job-name={rule}_{wildcards} \
@@ -996,22 +1003,25 @@ cluster-generic-submit-cmd: &quot;mkdir -p logs/{rule}/ &amp;&amp;
     --parsable \
     --nodes={resources.nodes} &quot;
 
+## Default Resources for Jobs
 default-resources:
-  - partition=&quot;main&quot;
-  - mem=&quot;6500MB&quot;
-  - time=&quot;05:00:00&quot;
-  - nodes=1
+  - partition=&lt;your_default_partition&gt;    # replace &lt;your_default_partition&gt; with your actual partition name
+  - mem=&lt;default_memory_allocation&gt;       # replace &lt;default_memory_allocation&gt; with memory, e.g., &quot;4G&quot;
+  - time=&lt;default_time_limit&gt;             # replace &lt;default_time_limit&gt; with time, e.g., &quot;01:00:00&quot;
+  - nodes=&lt;default_number_of_nodes&gt;       # replace &lt;default_number_of_nodes&gt; with nodes, e.g., &quot;1&quot;
+  - account=&lt;default_account_information&gt; # replace &lt;default_account_information&gt; with your account info
 
+## General Snakemake Settings
+jobs: &lt;max_number_of_jobs&gt;                  # replace &lt;max_number_of_jobs&gt; with your desired maximum number of concurrent jobs, e.g., 10
+latency-wait: &lt;latency_seconds&gt;             # replace &lt;latency_seconds&gt; with the number of seconds to wait if job output is not present, e.g., 120
+local-cores: &lt;local_core_count&gt;             # replace &lt;local_core_count&gt; with the max number of cores to use locally, e.g., &quot;20&quot;
+restart-times: &lt;restart_attempts&gt;           # replace &lt;restart_attempts&gt; with the number of times to retry failing jobs, e.g., &quot;0&quot; for no retries
+max-jobs-per-second: &lt;job_submission_rate&gt;  # replace &lt;job_submission_rate&gt; with the limit on how many jobs can be submitted per second, e.g., &quot;20&quot;
+keep-going: &lt;continue_after_failure&gt;        # replace &lt;continue_after_failure&gt; with True or False to indicate whether to continue executing other jobs after a failure
+rerun-incomplete: &lt;rerun_incomplete_jobs&gt;   # replace &lt;rerun_incomplete_jobs&gt; with True or False to decide if incomplete jobs should be rerun
+printshellcmds: &lt;print_commands&gt;            # replace &lt;print_commands&gt; with True or False to specify if shell commands should be printed before execution
 
-jobs: 10                       
-latency-wait: 120              
-local-cores: 20                
-restart-times: 0               
-max-jobs-per-second: 20
-keep-going: True
-rerun-incomplete: True
-printshellcmds: True
-
+## Conda Environment Settings
 software-deployment-method: conda
 </code></pre></div></td></tr></table></div>
 <h2 id="additional-functions">Additional functions<a class="headerlink" href="#additional-functions" title="Permanent link">&para;</a></h2>
@@ -1065,7 +1075,7 @@ software-deployment-method: conda
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.indexes", "navigation.sections", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.8fd75fb4.min.js"></script>
+      <script src="../../assets/javascripts/bundle.c8d2eff1.min.js"></script>
       
         <script src="../../js/open_in_new_tab.js"></script>
       
