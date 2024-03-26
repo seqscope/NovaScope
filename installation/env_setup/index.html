@@ -895,7 +895,7 @@
 <span class="w">  </span><span class="nt">star</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/STAR_2_7_11b/bin/Linux_x86_64_static/STAR</span><span class="w">  </span><span class="c1">## Default: &quot;STAR&quot;</span>
 </code></pre></div></td></tr></table></div>
 <ul>
-<li><code>samtools</code>: For users in High-Performance Computing (HPC) environments with <code>samtools</code> installed, please use <code>envmodules</code> (see <a href="#environment-modules">Environment Modules</a>) to load <code>samtools</code> rather than defining its path here.</li>
+<li><code>samtools</code>: For users in High-Performance Computing (HPC) environments with <code>samtools</code> installed, it's feasible to use <code>envmodules</code> (see <a href="#environment-modules">Environment Modules</a>) to load <code>samtools</code> rather than defining its path here.</li>
 </ul>
 <h2 id="environment-modules">Environment Modules<a class="headerlink" href="#environment-modules" title="Permanent link">&para;</a></h2>
 <p>For HPC users, use the <code>envmodules</code> section to load the required software tools as modules. If a tool is not listed in the <code>envmodules</code> section, the pipeline will assume it's installed system-wide. For local executions, you may remove this section if running the pipeline on your local machine.</p>
@@ -916,10 +916,10 @@
 </code></pre></div></td></tr></table></div>
 <ul>
 <li><code>python</code>: If your Python environment was set up using a Python version accessed through a module, your environment depends on certain shared files from that module. Therefore, you must add the <code>python: "python/&lt;version_information&gt;"</code>  in the <code>envmodules</code> section to load the same module you initially used to establish your environment. But if you set up with a locally installed Python (not using <code>module load</code>), comment out or remove the module line <code>python: "python/&lt;version_information&gt;"</code>.</li>
-<li><code>samtools</code>: Using <code>envmodules</code> to load <code>samtools</code> can be an alternative to specifying its path in <code>tools</code>. The given example is designed for instances where <code>samtools</code> is integrated into the <code>Bioinformatics</code> module system, which necessitates loading the <code>Bioinformatics</code> module prior to loading <code>samtools</code>. In this case, provide all modules that required to be loaded in the correct order, joint by <code>&amp;&amp;</code>.</li>
+<li><code>samtools</code>: Using <code>envmodules</code> to load <code>samtools</code> can be an alternative to specifying its path in <a href="#tools"><code>tools</code></a>. The given example is designed for instances where <code>samtools</code> is integrated into the <code>Bioinformatics</code> module system, which necessitates loading the <code>Bioinformatics</code> module prior to loading <code>samtools</code>. In this case, provide all modules that required to be loaded in the correct order, joint by <code>&amp;&amp;</code>.</li>
 </ul>
 <h2 id="reference-database">Reference Database<a class="headerlink" href="#reference-database" title="Permanent link">&para;</a></h2>
-<p>Please list every reference database used for alignment here. For instructions on preparing reference data, please consult the section on <a href="../requirement/#preparing-reference-genomes">Installing NovaScope</a>. </p>
+<p>Please list every reference database used for alignment here. For instructions on preparing reference data, please consult the <a href="../requirement/#preparing-reference-genomes">Preparing Reference Genomes</a>. </p>
 <p>It is imperative to ensure the reference database matches to the species of your input data. </p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
