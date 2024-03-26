@@ -3,25 +3,24 @@
 
 ## Preliminary Steps 
 
-Before running the full pipeline, performing a sanity check by
-executing a dry run is highly recommended. A dry run verifies that your `config_job.yaml` is properly configured and outlines the necessary jobs to be executed. 
+Before running the full pipeline, performing a sanity check by executing a dry run is highly recommended. A dry run verifies that your `config_job.yaml` is properly configured and outlines the necessary jobs to be executed. 
 
 Additionally, you can create a rule graph that visually represents the structure of the workflow or a DAG (Directed Acyclic Graph) to view all jobs and their actual dependency structure.
 
 ```bash
-# Paths
-smk_dir="<path_to_NovaScope_repository>"    # Replace <path_to_NovaScope_repository> with the path to the NovaScope repository
-job_dir="<job_directory>"                   # Replace <job_directory> with your specific job directory path, which has the `config_job.yaml` file.
+# paths
+smk_dir=/path/to/the/novascope/directory
+job_dir=/path/to/the/job/directory              # The job directory should has the `config_job.yaml` file.
 
-## (Recommended) Start with a dry run
-## - View all information:
+## (recommended) start with a dry run
+## - view all information:
 snakemake -s $smk_dir/NovaScope.smk --rerun-incomplete -d $job_dir --dry-run -p
 
-## - Simply summarize the jobs to be executed without other information:
+## - simply summarize the jobs to be executed without other information:
 snakemake -s $smk_dir/NovaScope.smk --rerun-incomplete -d $job_dir --dry-run --quiet
 
-## (Optional) Visualization.
-## - (1) Rulegraph
+## (optional) visualization:
+## - (1) rulegraph
 snakemake --rulegraph  -s $smk_dir/NovaScope.smk --rerun-incomplete -d $job_dir | dot -Tpdf > rulegraph.pdf
 
 ## - (2) DAG
@@ -34,15 +33,16 @@ snakemake --dag  -s $smk_dir/NovaScope.smk --rerun-incomplete -d $job_dir | dot 
 
 If your computing environment does not require a job scheduler such as Slurm, you can run the pipeline locally. You will need to specify the number of cores.
 
-An example script is provided below. Make sure to replace the variables to relevant paths and the number of cores.
+An example script is provided below. Make sure to replace the variables to relevant paths, the number of cores, and the time to wait for latency. The `--rerun-incomplete` enable the pipeline to re-run any jobs the output of which is identified as incomplete.
 
 ```bash
-smk_dir="<path_to_NovaScope_repository>"  # Replace <path_to_NovaScope_repository> with the path to the NovaScope repository
-job_dir="<path_to_the_job_directory>"     # Replace <job_directory> with your specific job directory path that contains the `config_job.yaml` file
+smk_dir=/path/to/the/novascope/directory
+job_dir=/path/to/the/job/directory              # The job directory should has the `config_job.yaml` file.
 
-Ncores=8                                  # Replace to the number of available CPU cores you wish to use
+Ncores=<number_of_cores>                        # replace <number_of_cores> by the number of available CPU cores you wish to use
+wait_time=<time_to_wait>                        # Replace <time_to_wait> with a specific duration in seconds, e.g., 120. The pipeline pauses for the defined time awaiting an output file if not instantly accessible after a job, compensating for filesystem delay (default: 5).
 
-snakemake --latency-wait 120 -s ${smk_dir}/NovaScope.smk -d $job_dir --cores $Ncores --rerun-incomplete 
+snakemake --latency-wait $wait_time -s ${smk_dir}/NovaScope.smk -d $job_dir --cores $Ncores --rerun-incomplete 
 ```
 
 
@@ -76,13 +76,16 @@ Create a file similar to the information below. Note that the details of the con
 #SBATCH --mail-type=END,FAIL,REQUEUE           # Notification types for job status
 #SBATCH --output=./logs/<log_filename>         # Replace <log_filename> with the log file name pattern
 
-# Paths
-smk_dir="<path_to_NovaScope_repository>"            # Replace <path_to_NovaScope_repository> with the path to the NovaScope repository
-job_dir="<path_to_the_job_directory>"               # Replace <path_to_the_job_directory> with your specific job directory path
-slurm_params="--profile <path_to_slurm_directory>"  # Replace <path_to_slurm_directory> with your directory of the SLURM configuration file
+# path
+smk_dir=/path/to/the/novascope/directory
+job_dir=/path/to/the/job/directory                                   # The job directory should has the `config_job.yaml` file.
+slurm_params="--profile /path/to/the/slurm/configuration/directory"  # The slurm directory should have the configuration file: `config.yaml`.
 
-# Execute the NovaScope pipeline
-snakemake $slurm_params  --latency-wait 120  -s ${smk_dir}/NovaScope.smk  -d $job_dir 
+# params
+wait_time=<time_to_wait>                        # Replace <time_to_wait> with a specific duration in seconds, e.g., 120. The pipeline pauses for the defined time awaiting an output file if not instantly accessible after a job, compensating for filesystem delay (default: 5).
+
+# execute the NovaScope pipeline
+snakemake $slurm_params --latency-wait $wait_time -s ${smk_dir}/NovaScope.smk -d $job_dir 
 ```
 
 Specific examples prepared for the three datasets are provided below:
@@ -101,15 +104,19 @@ sbatch submit_HPC.job
 
 For a small number of quick jobs, you can submit them with a single command line without submitting a master job through [Slurm](https://slurm.schedmd.com/documentation.html).
 
-This is similar to the local execution, but you need to specify the Slurm parameters.
+This is similar to the local execution, but you need to specify the Slurm parameters. 
 
 It is important to remember that if you are logged out before all jobs have been submitted to Slurm, any remaining jobs, i.e., those haven't been submitted, will not be submitted.
 
 ```bash
-smk_dir="<path_to_NovaScope_repository>"            # Replace <path_to_NovaScope_repository> with the path to the NovaScope repository
-job_dir="<path_to_the_job_directory>"               # Replace <path_to_the_job_directory> with your specific job directory path
-slurm_params="--profile <path_to_slurm_directory>"  # Replace <path_to_slurm_directory> with your directory of the SLURM configuration file
+# path
+smk_dir=/path/to/the/novascope/directory
+job_dir=/path/to/the/job/directory                                   # The job directory should has the `config_job.yaml` file.
+slurm_params="--profile /path/to/the/slurm/configuration/directory"  # The slurm directory should have the configuration file: `config.yaml`.
 
-snakemake $slurm_params --latency-wait 120 -s ${smk_dir}/NovaScope.smk -d $job_dir 
+# params
+wait_time=<time_to_wait>                        # Replace <time_to_wait> with a specific duration in seconds, e.g., 120. The pipeline pauses for the defined time awaiting an output file if not instantly accessible after a job, compensating for filesystem delay (default: 5).
+
+snakemake $slurm_params --latency-wait $wait_time -s ${smk_dir}/NovaScope.smk -d $job_dir --rerun-incomplete
 ```
 

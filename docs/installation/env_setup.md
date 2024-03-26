@@ -28,14 +28,15 @@ envmodules:
   imagemagick: "imagemagick/<version_information>"
   #snakemake: "snakemake/<version_information>"
 ```
-* `python`: If your python environment was set up using a Python version accessed through a module, your environment depends on certain shared files from that module. Therefore, you must add the `python: "python/<version_information>"`  in the `envmodules` section to load the same module you initially used to establish your environment. But if you set up with a locally installed Python (not using `module load`), comment out or remove the module line `python: "python/<version_information>"`.
+
+* `python`: If your Python environment was set up using a Python version accessed through a module, your environment depends on certain shared files from that module. Therefore, you must add the `python: "python/<version_information>"`  in the `envmodules` section to load the same module you initially used to establish your environment. But if you set up with a locally installed Python (not using `module load`), comment out or remove the module line `python: "python/<version_information>"`.
 * It is also feasible to use `envmodules` to load other tools, such as `samtools` instead of defining its path in `tools`.
 
 ## Reference Database
 
-Please list every reference database used for alignment here. The reference data can be obtained via the [cellranger download](https://www.10xgenomics.com/support/software/cell-ranger/downloads) page.
+Please list every reference database used for alignment here. For instructions on preparing reference data, please consult the section on [Installing NovaScope](./requirement.md/#preparing-reference-genomes). 
 
-Please ensure the reference database corresponds to the species of your input data. 
+It is imperative to ensure the reference database matches to the species of your input data. 
 
 ```
 ref:

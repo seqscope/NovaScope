@@ -7,9 +7,9 @@ Once you have [installed NovaScope](../installation/requirement.md) and [downloa
 
 ## Preparing Input Config Files
 
-The pipeline requires to have `config_job.yaml` file in the working directory (specified by `-d` or `--directory`) to specify all input files, output files, and parameters. 
+The pipeline requires to have `config_job.yaml` file in the working directory (indicated by `-d` or `--directory`) to specify all input files, output files, and parameters. 
 
-For user's convenience, we provide separate example `config_job.yaml` files for the [Minimal Test Run Dataset](https://github.com/seqscope/NovaScope/blob/main/testrun/minmal_test_run/config_job.yaml), [Shallow Liver Section Dataset](https://github.com/seqscope/NovaScope/blob/main/testrun/shallow_liver_section/config_job.yaml), and [Deep Liver Section Dataset](https://github.com/seqscope/NovaScope/blob/main/testrun/deep_liver_section/config_job.yaml) test runs are provided.  
+For user's convenience, we provide separate example `config_job.yaml` files for the [Minimal Test Run Dataset](https://github.com/seqscope/NovaScope/blob/main/testrun/minmal_test_run/config_job.yaml), [Shallow Liver Section Dataset](https://github.com/seqscope/NovaScope/blob/main/testrun/shallow_liver_section/config_job.yaml), and [Deep Liver Section Dataset](https://github.com/seqscope/NovaScope/blob/main/testrun/deep_liver_section/config_job.yaml) test runs.  
 
 The details of each item specified in the `config_job.yaml` is described below:
 
@@ -118,7 +118,7 @@ The `prefix` will be used to organize the 1st-seq FASTQ files. Make sure the `pr
 
 *`layout`*
 
-A file to provide the layout of tiles in a section chip with the following format. If absent, NovaScope will automatically look for the sbcd layout within the NovaScope repository at [info/assets/layout_per_tile_basis](https://github.com/seqscope/NovaScope/tree/main/info/assets/layout_per_tile_basis), using the section chip ID for reference.
+A file to provide the layout of tiles in a section chip with the following format. If absent, NovaScope will automatically look for the spatial barcode (sbcd) layout within the NovaScope repository at [info/assets/layout_per_tile_basis](https://github.com/seqscope/NovaScope/tree/main/info/assets/layout_per_tile_basis), using the section chip ID for reference.
 
 ```yaml
 lane  tile  row  col  rowshift  colshift
@@ -143,16 +143,16 @@ The output directory will be used to organize the input files and store output f
 
 The pipeline interprets the requested output files via this parameter and determines which jobs need to be executed. 
 
-Simply define the **final output** required, and all intermediary files contributing to this output will be automatically generated (i.e.,  the dependencies between rules). For instance, outputs from `"sbcd-per-flowcell"` serve as inputs for `"sbcd-per-section"`. Thus, by requesting `"sbcd-per-section"`, the pipeline will generate not only the files for `"sbcd-per-section"` but also those for `"sbcd-per-flowcell"`. For detailed insights into these dependencies, please consult the [rulegraph](https://seqscope.github.io/NovaScope/#an-overview-of-the-workflow-structure).
+Simply define the **final output** required, and all intermediary files contributing to this output will be automatically generated (i.e., the dependencies between rules). For instance, outputs from `"sbcd-per-flowcell"` serve as inputs for `"sbcd-per-section"`. Thus, by requesting `"sbcd-per-section"`, the pipeline will generate not only the files for `"sbcd-per-section"` but also those for `"sbcd-per-flowcell"`. For detailed insights into these dependencies, please consult the [rulegraph](https://seqscope.github.io/NovaScope/#an-overview-of-the-workflow-structure).
 
 The options and corresponding output files are listed below:
 
-  * `"sbcd-per-flowcell"`: A spatial barcode map for a flowcell organzied on a per-tile basis. Each tile has a compressed tab-delimited file for barcodes and corresponding local coordinates in the tile.
-  * `"sbcd-per-section"`: A spatial barcode map for a section chip, including a compressed tab-delimited file for barcodes and corresponding global coordinates in the section chip, and an image displaying the spatial distribution of the barcodes' coordinates.
-  * `"smatch-per-section"`: A compressed tab-delimited file with spatial barcodes corresponding to the 2nd-seq reads, a "smatch" image depicting the distribution of spatial coordinates for the matching barcodes, and a summary file of the matching results. 
-  * `"align-per-section"`: A BAM file accompanied by alignment summary metrics, along with spatial digital gene expression (sDGE) matrices for Gene, GeneFull, splice junctions (SJ), and Velocyto.
-  * `"sge-per-section"`: An sDGE matrix, an "sge" image depicting the spatial alignment of transcripts, and an RGB image representing the sDGE matrix and selected genes. In the absence of specified genes of interest, the RGB image will display the top 5 genes with the highest expression levels.
-  * `"hist-per-section"`: Two aligned histology files, one of which is a referenced geotiff file facilitating the coordinate transformation between the SGE matrix and the histology image. The other is a tiff file matching the dimensions of both the "smatch" and "sge" images.
+  * `"sbcd-per-flowcell"`: This option generates a spatial barcode map specific for a flowcell organzied on a per-tile basis. For each tile, this returns a compressed tab-delimited file for barcodes and their local coordinates within that tile.
+  * `"sbcd-per-section"`: This option returns: a spatial barcode map for a section chip, including a compressed tab-delimited file for barcodes and their global coordinates in the section chip; an "sbcd" image displaying the spatial distribution of the barcodes' coordinates.
+  * `"smatch-per-section"`: This option produces: a compressed, tab-delimited file with spatial barcodes matched to the 2nd-seq reads; a "smatch" image depicting the distribution of spatial coordinates for the matching barcodes; a summary file of the matching results. 
+  * `"align-per-section"`: This option creates: a [Binary Alignment Map (BAM)](https://en.wikipedia.org/wiki/Binary_Alignment_Map) file accompanied by alignment summary metrics; a spatial digital gene expression matrices (SGEs) for each genomic feature, including: Gene, GeneFull, splice junctions (SJ), and Velocyto.
+  * `"sge-per-section"`: This option crafts: an SGE encompassing all genomic features; an "sge" image illustrating the spatial alignment of transcripts; an "sge_match_sbcd" image showcasing the "sbcd," "smatch," and "sge" images side-by-side for a comprehensive view; an RGB image for each gene of interest, showing the spatial distribution of its transcripts. In the absence of specified genes of interest, the pipeline visualizes the top 5 genes with the highest expression levels.
+  * `"hist-per-section"`: Two aligned histology files, one is a geotiff file serving as a reference to enable coordinate transformation between the SGE matrix and the histology image, while the other is a tiff file that conforms to the dimensions of both the "smatch" and "sge" images.
 
 #### preprocess
 
@@ -177,7 +177,9 @@ preprocess:
         memory: 70000m
 ```
 
-If using `"filesize"`, ensure to include details about the computing capabilities of all available nodes. This includes the partition name, the available number of CPUs, and the memory allocated per CPU (refer to the example provided). Resource allocation will be automatically adjusted based on the total size of the input 2nd-seq FASTQ files and the available computing resources. The preliminary strategy for resource allocation is as follows: for input 2nd-seq FASTQ files smaller than 200GB, allocate 70GB of memory for alignment processes; for file sizes ranging from 200GB to 400GB, allocate 140GB of memory; for anything larger, 330GB of memory will be designated for alignment step.
+If using `"filesize"`, the resource allocation will be automatically adjusted based on the total size of the input 2nd-seq FASTQ files and the available computing resources. Thus, ensure to include details about the computing capabilities of all available nodes. This includes the partition name, the available number of CPUs, and the memory allocated per CPU (refer to the example provided). 
+
+The current strategy for resource allocation operates on the following basis: 1) For input 2nd-seq FASTQ files with a combined size under 200GB, allocate 70GB of memory for alignment processes; 2) When the total file size ranges from 200GB to 400GB, memory allocation increases to 140GB; 3) For file sizes exceeding 400GB, 330GB of memory is allocated specifically for the alignment.
 
 ```yaml
 preprocess:
