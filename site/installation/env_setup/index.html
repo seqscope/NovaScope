@@ -574,9 +574,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#hpc-specific-configuration" class="md-nav__link">
+  <a href="#environment-modules" class="md-nav__link">
     <span class="md-ellipsis">
-      HPC-specific Configuration:
+      Environment Modules
     </span>
   </a>
   
@@ -837,9 +837,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#hpc-specific-configuration" class="md-nav__link">
+  <a href="#environment-modules" class="md-nav__link">
     <span class="md-ellipsis">
-      HPC-specific Configuration:
+      Environment Modules
     </span>
   </a>
   
@@ -885,33 +885,38 @@
 <p><a href="../../">NovaScope</a> requires a YAML file to configure the environment. This file is used to specify the paths to the required tools, reference databases, and Python environment. To create your own <code>config_env.yaml</code> file for the environment setup, you may copy from <a href="https://github.com/seqscope/NovaScope/blob/main/info/config_env.yaml">our example available in our GitHub repository</a>.</p>
 <p>Below is a brief description of all the items in the YAML file. Replace the placeholders with your specific input variables to customize it according to your needs, and prepare your own <code>config_env.yaml</code>.</p>
 <h2 id="tools">Tools<a class="headerlink" href="#tools" title="Permanent link">&para;</a></h2>
-<p>For tools that are not explicitly defined, the pipeline will automatically check if they are installed and include them in the system path for use. This allows the pipeline to utilize these tools without needing manual configuration for each one.
+<p>For tools that are not explicitly defined, the pipeline will automatically check if they are installed and include them in the system path for use. This allows the pipeline to utilize these tools without needing manual configuration for each one.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
-<span class="normal">4</span></pre></div></td><td class="code"><div><pre><span></span><code>tools:
-  spatula: /path/to/spatula/bin/spatula                     ## Default: &quot;spatula&quot;
-  samtools: /path/to/samtools/samtools                      ## Default: &quot;samtools&quot;
-  star: /path/to/STAR_2_7_11b/bin/Linux_x86_64_static/STAR  ## Default: &quot;STAR&quot;
-</code></pre></div></td></tr></table></div></p>
-<h2 id="hpc-specific-configuration">HPC-specific Configuration:<a class="headerlink" href="#hpc-specific-configuration" title="Permanent link">&para;</a></h2>
-<p>For HPC users, use the <code>envmodules</code> section to load the required software tools as modules. If a tool is not listed in the envmodules section, the pipeline will assume it's installed system-wide. For local executions, you may remove this section if running the pipeline on your local machine.</p>
+<span class="normal">4</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nt">tools</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">spatula</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/spatula/bin/spatula</span><span class="w">                     </span><span class="c1">## Default: &quot;spatula&quot;</span>
+<span class="w">  </span><span class="nt">samtools</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/samtools/samtools</span><span class="w">                      </span><span class="c1">## Default: &quot;samtools&quot;</span>
+<span class="w">  </span><span class="nt">star</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/STAR_2_7_11b/bin/Linux_x86_64_static/STAR</span><span class="w">  </span><span class="c1">## Default: &quot;STAR&quot;</span>
+</code></pre></div></td></tr></table></div>
+<ul>
+<li><code>samtools</code>: For users in High-Performance Computing (HPC) environments with <code>samtools</code> installed, please use <code>envmodules</code> (see <a href="#environment-modules">Environment Modules</a>) to load <code>samtools</code> rather than defining its path here.</li>
+</ul>
+<h2 id="environment-modules">Environment Modules<a class="headerlink" href="#environment-modules" title="Permanent link">&para;</a></h2>
+<p>For HPC users, use the <code>envmodules</code> section to load the required software tools as modules. If a tool is not listed in the <code>envmodules</code> section, the pipeline will assume it's installed system-wide. For local executions, you may remove this section if running the pipeline on your local machine.</p>
 <p>Please specify the <strong>version</strong> information. </p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
 <span class="normal">4</span>
 <span class="normal">5</span>
-<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span><code>envmodules:
-  python: &quot;python/&lt;version_information&gt;&quot;
-  gcc: &quot;gcc/&lt;version_information&gt;&quot;
-  gdal: &quot;gdal/&lt;version_information&gt;&quot;
-  imagemagick: &quot;imagemagick/&lt;version_information&gt;&quot;
-  #snakemake: &quot;snakemake/&lt;version_information&gt;&quot;
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nt">envmodules</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">python</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;python/&lt;version_information&gt;&quot;</span>
+<span class="w">  </span><span class="nt">gcc</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;gcc/&lt;version_information&gt;&quot;</span>
+<span class="w">  </span><span class="nt">gdal</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;gdal/&lt;version_information&gt;&quot;</span>
+<span class="w">  </span><span class="nt">imagemagick</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;imagemagick/&lt;version_information&gt;&quot;</span>
+<span class="w">  </span><span class="c1"># snakemake: &quot;snakemake/&lt;version_information&gt;&quot;</span>
+<span class="w">  </span><span class="c1"># samtools: &quot;Bioinformatics &amp;&amp; samtools&quot;</span>
 </code></pre></div></td></tr></table></div>
 <ul>
 <li><code>python</code>: If your Python environment was set up using a Python version accessed through a module, your environment depends on certain shared files from that module. Therefore, you must add the <code>python: "python/&lt;version_information&gt;"</code>  in the <code>envmodules</code> section to load the same module you initially used to establish your environment. But if you set up with a locally installed Python (not using <code>module load</code>), comment out or remove the module line <code>python: "python/&lt;version_information&gt;"</code>.</li>
-<li>It is also feasible to use <code>envmodules</code> to load other tools, such as <code>samtools</code> instead of defining its path in <code>tools</code>.</li>
+<li><code>samtools</code>: Using <code>envmodules</code> to load <code>samtools</code> can be an alternative to specifying its path in <code>tools</code>. The given example is designed for instances where <code>samtools</code> is integrated into the <code>Bioinformatics</code> module system, which necessitates loading the <code>Bioinformatics</code> module prior to loading <code>samtools</code>. In this case, provide all modules that required to be loaded in the correct order, joint by <code>&amp;&amp;</code>.</li>
 </ul>
 <h2 id="reference-database">Reference Database<a class="headerlink" href="#reference-database" title="Permanent link">&para;</a></h2>
 <p>Please list every reference database used for alignment here. For instructions on preparing reference data, please consult the section on <a href="../requirement/#preparing-reference-genomes">Installing NovaScope</a>. </p>
@@ -920,15 +925,15 @@
 <span class="normal">2</span>
 <span class="normal">3</span>
 <span class="normal">4</span>
-<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code>ref:
-  align:
-    mouse: &quot;/path/to/refdata-gex-GRCm39-2024-A/star&quot;
-    human: &quot;/path/to/refdata-gex-GRCh39-2024-A/star&quot;
-   #...
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nt">ref</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">align</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">mouse</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/to/refdata-gex-GRCm39-2024-A/star&quot;</span>
+<span class="w">    </span><span class="nt">human</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/to/refdata-gex-GRCh39-2024-A/star&quot;</span>
+<span class="w">   </span><span class="c1">#...</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="python-environment">Python Environment<a class="headerlink" href="#python-environment" title="Permanent link">&para;</a></h2>
 <p>You also need to specify the path of python virtual environment by modifying the following line.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>pyenv: &quot;/path/to/python/virtual/env&quot;
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nt">pyenv</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/to/python/virtual/env&quot;</span>
 </code></pre></div></td></tr></table></div>
 
 

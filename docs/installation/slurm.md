@@ -10,7 +10,7 @@ In NovaScope, we utilized a cluster configuration profile to define the details 
 
 Create a `config.yaml` with the following settings. Please substitute the placeholders below, marked with `<>`, to suit your specific case. Please see our example file at [slurm/v7.29.0/config.yaml](https://github.com/seqscope/NovaScope/blob/main/slurm/v7.29.0/config.yaml). 
 
-```
+```yaml
 ## Cluster Configuration
 ## The following setting also aids in organizing log files by creating rule-specific subdirectories within the job's log directory, each holding its own output and error files.
 cluster:
@@ -57,13 +57,13 @@ conda-frontend: conda                    # specify Conda as the package manager 
 
 Please first install the Snakemake executor plugin "cluster-generic":
 
-```
+```bash
 pip install snakemake-executor-plugin-cluster-generic
 ```
 
 Then, create the cluster configuration file with below. Please substitute the placeholders below, marked with `<>`, to suit your specific case. Please see our example file at [slurm/v8.6.0/config.yaml](https://github.com/seqscope/NovaScope/blob/main/slurm/v8.6.0/config.yaml). 
 
-```
+```yaml
 ## Cluster Configuration
 ## The following setting also aids in organizing log files by creating rule-specific subdirectories within the job's log directory, each holding its own output and error files.
 executor: "cluster-generic"

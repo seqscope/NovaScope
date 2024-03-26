@@ -908,50 +908,50 @@
 <span class="normal">37</span>
 <span class="normal">38</span>
 <span class="normal">39</span>
-<span class="normal">40</span></pre></div></td><td class="code"><div><pre><span></span><code>## Cluster Configuration
-## The following setting also aids in organizing log files by creating rule-specific subdirectories within the job&#39;s log directory, each holding its own output and error files.
-cluster:
-  mkdir -p logs/{rule}/ &amp;&amp;
-  sbatch
-    --job-name={rule}_{wildcards}
-    --output=logs/{rule}/{rule}___{wildcards}___%j.out
-    --error=logs/{rule}/{rule}___{wildcards}___%j.err
-    --account={resources.account}
-    --partition={resources.partition}
-    --mem={resources.mem}
-    --time={resources.time}
-    --cpus-per-task={threads}
-    --parsable
-    --nodes={resources.nodes}
+<span class="normal">40</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1">## Cluster Configuration</span>
+<span class="c1">## The following setting also aids in organizing log files by creating rule-specific subdirectories within the job&#39;s log directory, each holding its own output and error files.</span>
+<span class="nt">cluster</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">mkdir -p logs/{rule}/ &amp;&amp;</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">sbatch</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">--job-name={rule}_{wildcards}</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">--output=logs/{rule}/{rule}___{wildcards}___%j.out</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">--error=logs/{rule}/{rule}___{wildcards}___%j.err</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">--account={resources.account}</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">--partition={resources.partition}</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">--mem={resources.mem}</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">--time={resources.time}</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">--cpus-per-task={threads}</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">--parsable</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">--nodes={resources.nodes}</span>
 
-## Default Resources for Jobs
-default-resources:
-  - partition=&lt;your_default_partition&gt;    # replace &lt;your_default_partition&gt; with your actual partition name
-  - mem=&lt;default_memory_allocation&gt;       # replace &lt;default_memory_allocation&gt; with memory, e.g., &quot;4G&quot;
-  - time=&lt;default_time_limit&gt;             # replace &lt;default_time_limit&gt; with time, e.g., &quot;01:00:00&quot;
-  - nodes=&lt;default_number_of_nodes&gt;       # replace &lt;default_number_of_nodes&gt; with nodes, e.g., &quot;1&quot;
-  - account=&lt;default_account_information&gt; # replace &lt;default_account_information&gt; with your account info
+<span class="c1">## Default Resources for Jobs</span>
+<span class="nt">default-resources</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">partition=&lt;your_default_partition&gt;</span><span class="w">    </span><span class="c1"># replace &lt;your_default_partition&gt; with your actual partition name</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mem=&lt;default_memory_allocation&gt;</span><span class="w">       </span><span class="c1"># replace &lt;default_memory_allocation&gt; with memory, e.g., &quot;4G&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">time=&lt;default_time_limit&gt;</span><span class="w">             </span><span class="c1"># replace &lt;default_time_limit&gt; with time, e.g., &quot;01:00:00&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nodes=&lt;default_number_of_nodes&gt;</span><span class="w">       </span><span class="c1"># replace &lt;default_number_of_nodes&gt; with nodes, e.g., &quot;1&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">account=&lt;default_account_information&gt;</span><span class="w"> </span><span class="c1"># replace &lt;default_account_information&gt; with your account info</span>
 
-## General Snakemake Settings
-jobs: &lt;max_number_of_jobs&gt;                  # replace &lt;max_number_of_jobs&gt; with your desired maximum number of concurrent jobs, e.g., 10
-latency-wait: &lt;latency_seconds&gt;             # replace &lt;latency_seconds&gt; with the number of seconds to wait if job output is not present, e.g., 120
-local-cores: &lt;local_core_count&gt;             # replace &lt;local_core_count&gt; with the max number of cores to use locally, e.g., &quot;20&quot;
-restart-times: &lt;restart_attempts&gt;           # replace &lt;restart_attempts&gt; with the number of times to retry failing jobs, e.g., &quot;0&quot; for no retries
-max-jobs-per-second: &lt;job_submission_rate&gt;  # replace &lt;job_submission_rate&gt; with the limit on how many jobs can be submitted per second, e.g., &quot;20&quot;
-keep-going: &lt;continue_after_failure&gt;        # replace &lt;continue_after_failure&gt; with True or False to indicate whether to continue executing other jobs after a failure
-rerun-incomplete: &lt;rerun_incomplete_jobs&gt;   # replace &lt;rerun_incomplete_jobs&gt; with True or False to decide if incomplete jobs should be rerun
-printshellcmds: &lt;print_commands&gt;            # replace &lt;print_commands&gt; with True or False to specify if shell commands should be printed before execution
+<span class="c1">## General Snakemake Settings</span>
+<span class="nt">jobs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;max_number_of_jobs&gt;</span><span class="w">                  </span><span class="c1"># replace &lt;max_number_of_jobs&gt; with your desired maximum number of concurrent jobs, e.g., 10</span>
+<span class="nt">latency-wait</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;latency_seconds&gt;</span><span class="w">             </span><span class="c1"># replace &lt;latency_seconds&gt; with the number of seconds to wait if job output is not present, e.g., 120</span>
+<span class="nt">local-cores</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;local_core_count&gt;</span><span class="w">             </span><span class="c1"># replace &lt;local_core_count&gt; with the max number of cores to use locally, e.g., &quot;20&quot;</span>
+<span class="nt">restart-times</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;restart_attempts&gt;</span><span class="w">           </span><span class="c1"># replace &lt;restart_attempts&gt; with the number of times to retry failing jobs, e.g., &quot;0&quot; for no retries</span>
+<span class="nt">max-jobs-per-second</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;job_submission_rate&gt;</span><span class="w">  </span><span class="c1"># replace &lt;job_submission_rate&gt; with the limit on how many jobs can be submitted per second, e.g., &quot;20&quot;</span>
+<span class="nt">keep-going</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;continue_after_failure&gt;</span><span class="w">        </span><span class="c1"># replace &lt;continue_after_failure&gt; with True or False to indicate whether to continue executing other jobs after a failure</span>
+<span class="nt">rerun-incomplete</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;rerun_incomplete_jobs&gt;</span><span class="w">   </span><span class="c1"># replace &lt;rerun_incomplete_jobs&gt; with True or False to decide if incomplete jobs should be rerun</span>
+<span class="nt">printshellcmds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;print_commands&gt;</span><span class="w">            </span><span class="c1"># replace &lt;print_commands&gt; with True or False to specify if shell commands should be printed before execution</span>
 
-## Scheduler Settings
-#scheduler: greedy      
+<span class="c1">## Scheduler Settings</span>
+<span class="c1">#scheduler: greedy      </span>
 
-## Conda Environment Settings
-use-conda: &lt;True_or_False&gt;               # enable use of Conda environments
-conda-frontend: conda                    # specify Conda as the package manager frontend
+<span class="c1">## Conda Environment Settings</span>
+<span class="nt">use-conda</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;True_or_False&gt;</span><span class="w">               </span><span class="c1"># enable use of Conda environments</span>
+<span class="nt">conda-frontend</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">conda</span><span class="w">                    </span><span class="c1"># specify Conda as the package manager frontend</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="a-cluster-configuration-file-for-snakemake-v860">A Cluster Configuration file for Snakemake v8.6.0<a class="headerlink" href="#a-cluster-configuration-file-for-snakemake-v860" title="Permanent link">&para;</a></h2>
 <p>Please first install the Snakemake executor plugin "cluster-generic":</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>pip install snakemake-executor-plugin-cluster-generic
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>snakemake-executor-plugin-cluster-generic
 </code></pre></div></td></tr></table></div>
 <p>Then, create the cluster configuration file with below. Please substitute the placeholders below, marked with <code>&lt;&gt;</code>, to suit your specific case. Please see our example file at <a href="https://github.com/seqscope/NovaScope/blob/main/slurm/v8.6.0/config.yaml">slurm/v8.6.0/config.yaml</a>. </p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
@@ -988,41 +988,41 @@ conda-frontend: conda                    # specify Conda as the package manager 
 <span class="normal">32</span>
 <span class="normal">33</span>
 <span class="normal">34</span>
-<span class="normal">35</span></pre></div></td><td class="code"><div><pre><span></span><code>## Cluster Configuration
-## The following setting also aids in organizing log files by creating rule-specific subdirectories within the job&#39;s log directory, each holding its own output and error files.
-executor: &quot;cluster-generic&quot;
-cluster-generic-submit-cmd: &quot;mkdir -p logs/{rule}/ &amp;&amp;
-  sbatch
-    --job-name={rule}_{wildcards} \
-    --output=logs/{rule}/{rule}___{wildcards}___%j.out \
-    --error=logs/{rule}/{rule}___{wildcards}___%j.err \
-    --partition={resources.partition} \
-    --mem={resources.mem} \
-    --time={resources.time} \
-    --cpus-per-task={threads} \
-    --parsable \
-    --nodes={resources.nodes} &quot;
+<span class="normal">35</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1">## Cluster Configuration</span>
+<span class="c1">## The following setting also aids in organizing log files by creating rule-specific subdirectories within the job&#39;s log directory, each holding its own output and error files.</span>
+<span class="nt">executor</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cluster-generic&quot;</span>
+<span class="nt">cluster-generic-submit-cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;mkdir</span><span class="nv"> </span><span class="s">-p</span><span class="nv"> </span><span class="s">logs/{rule}/</span><span class="nv"> </span><span class="s">&amp;&amp;</span>
+<span class="w">  </span><span class="s">sbatch</span>
+<span class="w">    </span><span class="s">--job-name={rule}_{wildcards}</span><span class="nv"> </span><span class="s">\</span>
+<span class="w">    </span><span class="s">--output=logs/{rule}/{rule}___{wildcards}___%j.out</span><span class="nv"> </span><span class="s">\</span>
+<span class="w">    </span><span class="s">--error=logs/{rule}/{rule}___{wildcards}___%j.err</span><span class="nv"> </span><span class="s">\</span>
+<span class="w">    </span><span class="s">--partition={resources.partition}</span><span class="nv"> </span><span class="s">\</span>
+<span class="w">    </span><span class="s">--mem={resources.mem}</span><span class="nv"> </span><span class="s">\</span>
+<span class="w">    </span><span class="s">--time={resources.time}</span><span class="nv"> </span><span class="s">\</span>
+<span class="w">    </span><span class="s">--cpus-per-task={threads}</span><span class="nv"> </span><span class="s">\</span>
+<span class="w">    </span><span class="s">--parsable</span><span class="nv"> </span><span class="s">\</span>
+<span class="w">    </span><span class="s">--nodes={resources.nodes}</span><span class="nv"> </span><span class="s">&quot;</span>
 
-## Default Resources for Jobs
-default-resources:
-  - partition=&lt;your_default_partition&gt;    # replace &lt;your_default_partition&gt; with your actual partition name
-  - mem=&lt;default_memory_allocation&gt;       # replace &lt;default_memory_allocation&gt; with memory, e.g., &quot;4G&quot;
-  - time=&lt;default_time_limit&gt;             # replace &lt;default_time_limit&gt; with time, e.g., &quot;01:00:00&quot;
-  - nodes=&lt;default_number_of_nodes&gt;       # replace &lt;default_number_of_nodes&gt; with nodes, e.g., &quot;1&quot;
-  - account=&lt;default_account_information&gt; # replace &lt;default_account_information&gt; with your account info
+<span class="c1">## Default Resources for Jobs</span>
+<span class="nt">default-resources</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">partition=&lt;your_default_partition&gt;</span><span class="w">    </span><span class="c1"># replace &lt;your_default_partition&gt; with your actual partition name</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mem=&lt;default_memory_allocation&gt;</span><span class="w">       </span><span class="c1"># replace &lt;default_memory_allocation&gt; with memory, e.g., &quot;4G&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">time=&lt;default_time_limit&gt;</span><span class="w">             </span><span class="c1"># replace &lt;default_time_limit&gt; with time, e.g., &quot;01:00:00&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nodes=&lt;default_number_of_nodes&gt;</span><span class="w">       </span><span class="c1"># replace &lt;default_number_of_nodes&gt; with nodes, e.g., &quot;1&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">account=&lt;default_account_information&gt;</span><span class="w"> </span><span class="c1"># replace &lt;default_account_information&gt; with your account info</span>
 
-## General Snakemake Settings
-jobs: &lt;max_number_of_jobs&gt;                  # replace &lt;max_number_of_jobs&gt; with your desired maximum number of concurrent jobs, e.g., 10
-latency-wait: &lt;latency_seconds&gt;             # replace &lt;latency_seconds&gt; with the number of seconds to wait if job output is not present, e.g., 120
-local-cores: &lt;local_core_count&gt;             # replace &lt;local_core_count&gt; with the max number of cores to use locally, e.g., &quot;20&quot;
-restart-times: &lt;restart_attempts&gt;           # replace &lt;restart_attempts&gt; with the number of times to retry failing jobs, e.g., &quot;0&quot; for no retries
-max-jobs-per-second: &lt;job_submission_rate&gt;  # replace &lt;job_submission_rate&gt; with the limit on how many jobs can be submitted per second, e.g., &quot;20&quot;
-keep-going: &lt;continue_after_failure&gt;        # replace &lt;continue_after_failure&gt; with True or False to indicate whether to continue executing other jobs after a failure
-rerun-incomplete: &lt;rerun_incomplete_jobs&gt;   # replace &lt;rerun_incomplete_jobs&gt; with True or False to decide if incomplete jobs should be rerun
-printshellcmds: &lt;print_commands&gt;            # replace &lt;print_commands&gt; with True or False to specify if shell commands should be printed before execution
+<span class="c1">## General Snakemake Settings</span>
+<span class="nt">jobs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;max_number_of_jobs&gt;</span><span class="w">                  </span><span class="c1"># replace &lt;max_number_of_jobs&gt; with your desired maximum number of concurrent jobs, e.g., 10</span>
+<span class="nt">latency-wait</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;latency_seconds&gt;</span><span class="w">             </span><span class="c1"># replace &lt;latency_seconds&gt; with the number of seconds to wait if job output is not present, e.g., 120</span>
+<span class="nt">local-cores</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;local_core_count&gt;</span><span class="w">             </span><span class="c1"># replace &lt;local_core_count&gt; with the max number of cores to use locally, e.g., &quot;20&quot;</span>
+<span class="nt">restart-times</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;restart_attempts&gt;</span><span class="w">           </span><span class="c1"># replace &lt;restart_attempts&gt; with the number of times to retry failing jobs, e.g., &quot;0&quot; for no retries</span>
+<span class="nt">max-jobs-per-second</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;job_submission_rate&gt;</span><span class="w">  </span><span class="c1"># replace &lt;job_submission_rate&gt; with the limit on how many jobs can be submitted per second, e.g., &quot;20&quot;</span>
+<span class="nt">keep-going</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;continue_after_failure&gt;</span><span class="w">        </span><span class="c1"># replace &lt;continue_after_failure&gt; with True or False to indicate whether to continue executing other jobs after a failure</span>
+<span class="nt">rerun-incomplete</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;rerun_incomplete_jobs&gt;</span><span class="w">   </span><span class="c1"># replace &lt;rerun_incomplete_jobs&gt; with True or False to decide if incomplete jobs should be rerun</span>
+<span class="nt">printshellcmds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;print_commands&gt;</span><span class="w">            </span><span class="c1"># replace &lt;print_commands&gt; with True or False to specify if shell commands should be printed before execution</span>
 
-## Conda Environment Settings
-software-deployment-method: conda
+<span class="c1">## Conda Environment Settings</span>
+<span class="nt">software-deployment-method</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">conda</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="additional-functions">Additional functions<a class="headerlink" href="#additional-functions" title="Permanent link">&para;</a></h2>
 <p>If you encounter situations where your jobs fail without any warnings, it is feasible to using a cluster status script to keep track of your jobs. See details <a href="https://github.com/jdblischak/smk-simple-slurm/tree/main/extras">here</a>.</p>

@@ -914,7 +914,7 @@
 <h1 id="executing-the-novascope-pipeline">Executing the NovaScope Pipeline<a class="headerlink" href="#executing-the-novascope-pipeline" title="Permanent link">&para;</a></h1>
 <h2 id="preliminary-steps">Preliminary Steps<a class="headerlink" href="#preliminary-steps" title="Permanent link">&para;</a></h2>
 <p>Before running the full pipeline, performing a sanity check by executing a dry run is highly recommended. A dry run verifies that your <code>config_job.yaml</code> is properly configured and outlines the necessary jobs to be executed. </p>
-<p>Additionally, you can create a rule graph that visually represents the structure of the workflow or a DAG (Directed Acyclic Graph) to view all jobs and their actual dependency structure.</p>
+<p>Additionally, you can create <a href="../../home/workflow_structure/">a rule graph</a> that visually represents the structure of the workflow or a <a href="https://snakemake.readthedocs.io/en/stable/tutorial/basics.html#step-4-indexing-read-alignments-and-visualizing-the-dag-of-jobs">Directed Acyclic Graph (DAG)</a> to view all jobs and their actual dependency structure.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -975,7 +975,7 @@ snakemake<span class="w"> </span>--latency-wait<span class="w"> </span><span cla
 </ul>
 <h3 id="option-b-slurm-using-a-master-job">Option B: SLURM using a Master Job<a class="headerlink" href="#option-b-slurm-using-a-master-job" title="Permanent link">&para;</a></h3>
 <p>If your computing environment expects to run jobs via a job scheduler such <a href="https://slurm.schedmd.com/documentation.html">Slurm</a>, a recommended approach to submit a 'Master Job' that oversees and manage the status of all other jobs. </p>
-<p>First, make sure you have the <a href="../../installation/slurm/">slurm configuration file</a> available. The <code>--latency-wait</code> and <code>--rerun-incomplete</code> options is preset in the example slurm configuration file, eliminating the need for manual specification.</p>
+<p>First, make sure you have the <a href="../../installation/slurm/">slurm configuration file</a> available. The <code>--latency-wait</code> and <code>--rerun-incomplete</code> options are preset in the example slurm configuration file, eliminating the need for manual specification.</p>
 <p>Now you need to establish the master job. The primary role of this job is to monitor the progress of all tasks, handle job submissions based on dependencies and available resources. Thus, it requires minimal memory but an extended time limit. Its time limit should be longer than the total time required to complete all associated jobs. </p>
 <p>Create a file similar to the information below. Note that the details of the contents may vary based on your specific computing environment. </p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>

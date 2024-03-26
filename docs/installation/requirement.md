@@ -65,10 +65,10 @@ snakemake --version
 [NovaScope](../index.md) depends on a number of software tools, detailed below. The versions specified for each software tool have been verified for compatibility with our pipeline, though other versions may also be compatible.
 
 * [STARsolo](https://github.com/alexdobin/STAR) (v2.7.11b)
-* [samtools](https://www.htslib.org/) (v1.14 or v1.19)
+* [samtools](https://www.htslib.org/) (v1.13; v1.14; v1.19)
 * [spatula](https://seqscope.github.io/spatula/) (v0.1.0)
-* [Python](https://www.python.org/) (v3.9.12, v3.10, or v3.12.2)
-* [ImageMagick](https://imagemagick.org/) (7.1.0-25.lua and 7.1.1-30)
+* [Python](https://www.python.org/) (v3.9.12; v3.10; v3.12.2)
+* [ImageMagick](https://imagemagick.org/) (7.1.0-25.lua; 7.1.1-30)
 * [GDAL](https://gdal.org/) (v3.5.1)
 
 We provide an [example work log](https://github.com/seqscope/NovaScope/blob/main/installation/requirement_install_log.md) documenting the installation of the aforementioned software tools.
@@ -80,7 +80,6 @@ To install [NovaScope](../index.md), clone the repository from GitHub using the 
 ```bash
 git clone https://github.com/seqscope/NovaScope.git
 ```
-
 
 ## Preparing Reference Genomes
 

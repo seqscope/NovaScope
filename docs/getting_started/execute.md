@@ -5,7 +5,7 @@
 
 Before running the full pipeline, performing a sanity check by executing a dry run is highly recommended. A dry run verifies that your `config_job.yaml` is properly configured and outlines the necessary jobs to be executed. 
 
-Additionally, you can create a rule graph that visually represents the structure of the workflow or a DAG (Directed Acyclic Graph) to view all jobs and their actual dependency structure.
+Additionally, you can create [a rule graph](../home/workflow_structure.md) that visually represents the structure of the workflow or a [Directed Acyclic Graph (DAG)](https://snakemake.readthedocs.io/en/stable/tutorial/basics.html#step-4-indexing-read-alignments-and-visualizing-the-dag-of-jobs) to view all jobs and their actual dependency structure.
 
 ```bash
 # paths
@@ -57,7 +57,7 @@ See the following examples to see how to execute the pipeline locally:
 
 If your computing environment expects to run jobs via a job scheduler such [Slurm](https://slurm.schedmd.com/documentation.html), a recommended approach to submit a 'Master Job' that oversees and manage the status of all other jobs. 
 
-First, make sure you have the [slurm configuration file](../installation/slurm.md) available. The `--latency-wait` and `--rerun-incomplete` options is preset in the example slurm configuration file, eliminating the need for manual specification.
+First, make sure you have the [slurm configuration file](../installation/slurm.md) available. The `--latency-wait` and `--rerun-incomplete` options are preset in the example slurm configuration file, eliminating the need for manual specification.
 
 Now you need to establish the master job. The primary role of this job is to monitor the progress of all tasks, handle job submissions based on dependencies and available resources. Thus, it requires minimal memory but an extended time limit. Its time limit should be longer than the total time required to complete all associated jobs. 
 
