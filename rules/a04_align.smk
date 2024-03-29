@@ -28,7 +28,7 @@ rule a04_align:
         # resource
         ram            = lambda wildcards: assign_resource_for_align(wildcards.section, config, sc2seq2, main_dirs)["ram"],
         # module
-        module_cmd        = get_envmodules_for_rule(["python", "Bioinformatics", "samtools"], module_config),
+        module_cmd        = get_envmodules_for_rule(["python", "samtools"], module_config),
     threads: 
         lambda wildcards:  assign_resource_for_align(wildcards.section, config, sc2seq2, main_dirs)["threads"], 
     resources: 

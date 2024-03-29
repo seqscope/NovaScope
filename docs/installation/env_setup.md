@@ -7,37 +7,49 @@ Below is a brief description of all the items in the YAML file. Replace the plac
 ## Tools 
 
 For tools that are not explicitly defined, the pipeline will automatically check if they are installed and include them in the system path for use. This allows the pipeline to utilize these tools without needing manual configuration for each one.
-```
+
+```yaml
 tools:
   spatula: /path/to/spatula/bin/spatula                     ## Default: "spatula"
   samtools: /path/to/samtools/samtools	                    ## Default: "samtools"
   star: /path/to/STAR_2_7_11b/bin/Linux_x86_64_static/STAR  ## Default: "STAR"
 ```
 
-## HPC-specific Configuration:
+* `samtools`: For users in High-Performance Computing (HPC) environments with `samtools` installed, it's feasible to use `envmodules` (see [Environment Modules](#environment-modules)) to load `samtools` rather than defining its path here.
 
-For HPC users, use the `envmodules` section to load the required software tools as modules. If a tool is not listed in the envmodules section, the pipeline will assume it's installed system-wide. For local executions, you may remove this section if running the pipeline on your local machine.
+
+## Environment Modules
+
+For HPC users, use the `envmodules` section to load the required software tools as modules. If a tool is not listed in the `envmodules` section, the pipeline will assume it's installed system-wide. For local executions, you may remove this section if running the pipeline on your local machine.
 
 Please specify the **version** information. 
 
-```
+```yaml
 envmodules:
   python: "python/<version_information>"
   gcc: "gcc/<version_information>"
   gdal: "gdal/<version_information>"
   imagemagick: "imagemagick/<version_information>"
-  #snakemake: "snakemake/<version_information>"
+  # snakemake: "snakemake/<version_information>"
+  # samtools: "Bioinformatics && samtools"
 ```
-* `python`: If your python environment was set up using a Python version accessed through a module, your environment depends on certain shared files from that module. Therefore, you must add the `python: "python/<version_information>"`  in the `envmodules` section to load the same module you initially used to establish your environment. But if you set up with a locally installed Python (not using `module load`), comment out or remove the module line `python: "python/<version_information>"`.
-* It is also feasible to use `envmodules` to load other tools, such as `samtools` instead of defining its path in `tools`.
+
+* `python`: If your Python environment was set up using a Python version accessed through a module, your environment depends on certain shared files from that module. Therefore, you must add the `python: "python/<version_information>"`  in the `envmodules` section to load the same module you initially used to establish your environment. But if you set up with a locally installed Python (not using `module load`), comment out or remove the module line `python: "python/<version_information>"`.
+* `samtools`: Using `envmodules` to load `samtools` can be an alternative to specifying its path in [`tools`](#tools). The given example is designed for instances where `samtools` is integrated into the `Bioinformatics` module system, which necessitates loading the `Bioinformatics` module prior to loading `samtools`. In this case, provide all modules that required to be loaded in the correct order, joint by `&&`.
 
 ## Reference Genome Index
 
+<<<<<<< HEAD
 Please list every reference database used for alignment here. The reference data can be obtained via the [cellranger download](https://www.10xgenomics.com/support/software/cell-ranger/downloads) page. Example instructions to build STAR index from the reference file is described in the [Requirements](requirements.md) section.
 
 Please ensure the reference genome indices correspond to the species of your input data. 
+=======
+Please list every reference database used for alignment here. For instructions on preparing reference data, please consult the [Preparing Reference Genomes](./requirement.md/#preparing-reference-genomes). 
 
-```
+It is imperative to ensure the reference database matches to the species of your input data. 
+>>>>>>> main
+
+```yaml
 ref:
   align:
     mouse: "/path/to/refdata-gex-GRCm39-2024-A/star_2.7_11b"
@@ -49,7 +61,7 @@ ref:
 
 You also need to specify the path of python virtual environment by modifying the following line.
 
-```
+```yaml
 pyenv: "/path/to/python/virtual/env"
 ```
 

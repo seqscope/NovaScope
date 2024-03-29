@@ -1,11 +1,21 @@
-The current documentation of [NovaScope](../index.md) 
-include the following sections:
+The current documentation of [NovaScope](../index.md) include the following sections:
 
-* [Installation](installation/requirement.md):
-    * [Requirements](installation/requirement.md): Instructions on how to install necessary software tools and obtain reference datasets.
-    * [Environment Setup](installation/env_setup.md): A quick guide to set up your environment YAML file.
-    * [Slurm](installation/slurm.md): (Optional) Instructions for creating a configuration file for the SLURM scheduler.
-* [Getting Started](getting_started/prep_input.md):
-    * [Preparing Input](getting_started/prep_input.md): How to ready your input data and configuration file.
-    * [Execute NovaScope](getting_started/execute.md): Three options to execute the pipeline.
-    * [Output](getting_started/output.md): Details on the structure of the output directory and the usage of the produced data.
+
+[**Home**](../index.md):
+
+* [Documentation Overview](./documentation_overview.md): Summarizes the contents and structure of the NovaScope documentation.
+* [Workflow Structure](./workflow_structure.md): Describes NovaScope's workflow, including rules and their dependencies.
+
+[**Installation**](../installation/requirement.md):
+
+* [Installing NovaScope](../installation/requirement.md): Details of installing required softwares and acquiring reference database.
+* [Environment Setup](../installation/env_setup.md): Outlines how to prepare a configuration file for computing environment.
+* [Slurm](../installation/slurm.md): (Optional) Guidance on setting up a configuration for the SLURM job scheduler.
+
+[**Getting Started**](../getting_started/intro.md):
+
+* [Introduction](../getting_started/intro.md): A quick introduction of using NovaScope with example datasets.
+* [Accessing Input Data](../getting_started/access_data.md): Information on accessing three provided example datasets.
+* [Job Configuration](../getting_started/job_config.md): Instructions for preparing a configuration file for a job.
+* [Execute NovaScope](../getting_started/execute.md): Describes three ways for running NovaScope.
+* [Output](../getting_started/output.md): Explains the output directory structure and how to utilize the generated data.

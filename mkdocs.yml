@@ -48,7 +48,7 @@ nav:
       - Documentation Overview: home/documentation_overview.md
       - Workflow Structure: home/workflow_structure.md
   - Installation:
-      - Requirements: installation/requirement.md
+      - Installing NovaScope: installation/requirement.md
       - Environment Setup: installation/env_setup.md
       - Slurm: installation/slurm.md
   - Getting Started:

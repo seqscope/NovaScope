@@ -28,21 +28,26 @@ module load snakemake
 
 ### Installing Snakemake Using Conda and Mamba
 
-If you need to install [Snakemake](https://snakemake.readthedocs.io/en/stable/), below is a simplified sequence of instruction. Please refer to the official documentation for more detailed instructions.
+If you need to install [Snakemake](https://snakemake.readthedocs.io/en/stable/), below is a simplified sequence of instruction. Please refer to [official Snakemake documentation](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html) for more detailed instructions.
 
 ```sh
-## Download miniconda
+## download miniconda
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 
 ## install miniconda
 bash Miniconda3-latest-Linux-x86_64.sh
 ## Follow the on-screen instructions to complete the installation. 
 
+<<<<<<< HEAD
 ## Activate the Miniconda installation:
 ## IMPORTANT: change /path/to/miniconda to the path you installed miniconda
 eval "$(/path/to/miniconda3/bin/conda shell.bash hook)"
 ## If you included conda initialization in .bashrc the above line can be replaced with
 ## source ~/.bashrc
+=======
+## activate the Miniconda installation:
+source ~/.bashrc
+>>>>>>> main
 
 ## create a new conda environment
 conda create -n snakemake-env python=3.9
@@ -94,16 +99,20 @@ pip install -r ${smk_dir}/installation/pyenv_req.txt
 
 ## Installing Other Dependent Tools
 
-[NovaScope](../index.md) depends on a number has been tested for compatibility with [Snakemake](https://snakemake.readthedocs.io/en/stable/) v7.29.0 and v8.6.0.
-
-The dependent software tools are listed below. The versions specified for each software tool have been verified for compatibility with our pipeline, though other versions may also be compatible.
+[NovaScope](../index.md) depends on a number of software tools, detailed below. The versions specified for each software tool have been verified for compatibility with our pipeline, though other versions may also be compatible.
 
 * [STARsolo](https://github.com/alexdobin/STAR) (v2.7.11b)
-* [samtools](https://www.htslib.org/) (v1.14 or v1.19)
+* [samtools](https://www.htslib.org/) (v1.13; v1.14; v1.19)
 * [spatula](https://seqscope.github.io/spatula/) (v0.1.0)
+<<<<<<< HEAD
 * [Python](https://www.python.org/) (v3.9.12, v3.10, or v3.12.2)
 * [ImageMagick](https://imagemagick.org/) (7.1.0-25.lua and 7.1.1-30)
 * [GDAL](https://gdal.org/) (v3.5.1) (Required for histology alignments)
+=======
+* [Python](https://www.python.org/) (v3.9.12; v3.10; v3.12.2)
+* [ImageMagick](https://imagemagick.org/) (7.1.0-25.lua; 7.1.1-30)
+* [GDAL](https://gdal.org/) (v3.5.1)
+>>>>>>> main
 
 We provide an [example work log](https://github.com/seqscope/NovaScope/blob/main/installation/requirement_install_log.md) documenting the installation of the aforementioned software tools.
 
@@ -115,16 +124,19 @@ To install [NovaScope](../index.md), clone the repository from GitHub using the 
 git clone https://github.com/seqscope/NovaScope.git
 ```
 
-
 ## Preparing Reference Genomes
 
 The reference genome for the species of interest must be downloaded and indexed for alignment. [STARsolo](https://github.com/alexdobin/STAR) accepts the reference genomes prepared by [cellranger](https://www.10xgenomics.com/support/software/cell-ranger), therefore, one of the simplest way is to download the reference genome from the [cellranger download](https://www.10xgenomics.com/support/software/cell-ranger/downloads) page.
 
 The recommended reference genome for mouse is GRCm39.
+<<<<<<< HEAD
 However, the STAR index provided with the package is outdated and will not be compatible with the latest version of STARsolo. Therefore, we recommend
 indexing it using the latest version of STARsolo. 
 
 Note that this process will take A LOT OF TIME, typically a few to several hours.
+=======
+However, the STAR index provided with the package is outdated and will not be compatible with the latest version of STARsolo. Therefore, we recommend indexing it using the latest version of STARsolo.
+>>>>>>> main
 
 ```bash
 ## download the reference genome package
@@ -192,4 +204,3 @@ wget -P ${smk_dir}/installation https://github.com/seqscope/historef/releases/do
 ## install the historef package
 pip install ${smk_dir}/installation/historef-0.1.1-py3-none-any.whl
 ```
-

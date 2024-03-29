@@ -52,8 +52,8 @@ The `histology` directory is designated for holding all input histology files.
 The `align` directory encompasses several subdirectories, including: 
 (1) `match`, which houses the outcomes of aligning second sequencing reads with spatial barcodes for the corresponding chip section; 
 (2) `bam`, where alignment outcomes such as the BAM file, summary metrics, and visualizations are stored; 
-(3) `sge`, containing a spatial gene expression (SGE) matrix and its associated visualizations; 
-(4) `histology`, which stores histology images aligned with the spatial coordinates of the SGE matrix.
+(3) `sge`, containing a spatial gene expression matrix (SGE)  and its associated visualizations; 
+(4) `histology`, which stores histology images aligned with the spatial coordinates of the SGE.
 
 ```
 align
@@ -67,6 +67,6 @@ align
 
 ## Downstream Analysis 
 
-The aligned sequenced reads can be directly used for tasks that require read-level information, such as allele-specific expression or somatic variant analysis. The SGE matrix can also be analyzed with many software tools, such as Latent Dirichlet Allocation (LDA) and Seurat. 
+The aligned sequenced reads can be directly used for tasks that require read-level information, such as allele-specific expression or somatic variant analysis. The SGE can also be analyzed with many software tools, such as Latent Dirichlet Allocation (LDA) and Seurat. 
 
 An exemplary downstream analysis is provided at [NovaScope-exemplary-downstream-analysis](https://github.com/seqscope/NovaScope-exemplary-downstream-analysis).
