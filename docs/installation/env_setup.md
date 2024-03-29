@@ -31,17 +31,17 @@ envmodules:
 * `python`: If your python environment was set up using a Python version accessed through a module, your environment depends on certain shared files from that module. Therefore, you must add the `python: "python/<version_information>"`  in the `envmodules` section to load the same module you initially used to establish your environment. But if you set up with a locally installed Python (not using `module load`), comment out or remove the module line `python: "python/<version_information>"`.
 * It is also feasible to use `envmodules` to load other tools, such as `samtools` instead of defining its path in `tools`.
 
-## Reference Database
+## Reference Genome Index
 
-Please list every reference database used for alignment here. The reference data can be obtained via the [cellranger download](https://www.10xgenomics.com/support/software/cell-ranger/downloads) page.
+Please list every reference database used for alignment here. The reference data can be obtained via the [cellranger download](https://www.10xgenomics.com/support/software/cell-ranger/downloads) page. Example instructions to build STAR index from the reference file is described in the [Requirements](requirements.md) section.
 
-Please ensure the reference database corresponds to the species of your input data. 
+Please ensure the reference genome indices correspond to the species of your input data. 
 
 ```
 ref:
   align:
-    mouse: "/path/to/refdata-gex-GRCm39-2024-A/star"
-    human: "/path/to/refdata-gex-GRCh39-2024-A/star"
+    mouse: "/path/to/refdata-gex-GRCm39-2024-A/star_2.7_11b"
+    human: "/path/to/refdata-gex-GRCh39-2024-A/star_2.7_11b"
    #...
 ```
 

@@ -39,7 +39,10 @@ bash Miniconda3-latest-Linux-x86_64.sh
 ## Follow the on-screen instructions to complete the installation. 
 
 ## Activate the Miniconda installation:
-source ~/.bashrc
+## IMPORTANT: change /path/to/miniconda to the path you installed miniconda
+eval "$(/path/to/miniconda3/bin/conda shell.bash hook)"
+## If you included conda initialization in .bashrc the above line can be replaced with
+## source ~/.bashrc
 
 ## create a new conda environment
 conda create -n snakemake-env python=3.9
@@ -60,6 +63,35 @@ mamba install snakemake
 snakemake --version
 ```
 
+## Configuring Python Virtual Environment
+
+We recommend creating a new Python environment for [NovaScope](../index.md) using the following steps. If you already have an existing Python environment all required packages (see [pyenv_req.txt](https://github.com/seqscope/NovaScope/blob/main/installation/pyenv_req.txt)), you may skip this step. 
+
+You may create a new Python environment using the following commands:
+
+```bash
+## First, we recommend activating conda/mamba environment before setting up venv, using:
+# eval "$(/path/to/miniconda3/bin/conda shell.bash hook)"
+# conda activate snakemake-env
+##
+## set the path to the python virtual environment directory
+pyenv_dir=/path/to/python/virtual/environment/directory  ## provide the path of venv
+## pyenv_dir=./venvs   ## uncomment this line if you want to create virtual environment locally
+pyenv_name=novascope_venv
+smk_dir=/path/to/the/novascope/directory
+
+## create the python virtual environment (need to be done only once)
+mkdir -p ${pyenv_dir}
+cd ${pyenv_dir}
+python -m venv ${pyenv_name}
+
+## activate the python environment (every time you want to use the environment)
+source ${pyenv_name}/bin/activate
+
+## install the required packages (need to be done only once)
+pip install -r ${smk_dir}/installation/pyenv_req.txt
+```
+
 ## Installing Other Dependent Tools
 
 [NovaScope](../index.md) depends on a number has been tested for compatibility with [Snakemake](https://snakemake.readthedocs.io/en/stable/) v7.29.0 and v8.6.0.
@@ -71,7 +103,7 @@ The dependent software tools are listed below. The versions specified for each s
 * [spatula](https://seqscope.github.io/spatula/) (v0.1.0)
 * [Python](https://www.python.org/) (v3.9.12, v3.10, or v3.12.2)
 * [ImageMagick](https://imagemagick.org/) (7.1.0-25.lua and 7.1.1-30)
-* [GDAL](https://gdal.org/) (v3.5.1)
+* [GDAL](https://gdal.org/) (v3.5.1) (Required for histology alignments)
 
 We provide an [example work log](https://github.com/seqscope/NovaScope/blob/main/installation/requirement_install_log.md) documenting the installation of the aforementioned software tools.
 
@@ -90,7 +122,9 @@ The reference genome for the species of interest must be downloaded and indexed 
 
 The recommended reference genome for mouse is GRCm39.
 However, the STAR index provided with the package is outdated and will not be compatible with the latest version of STARsolo. Therefore, we recommend
-indexing it using the latest version of STARsolo.
+indexing it using the latest version of STARsolo. 
+
+Note that this process will take A LOT OF TIME, typically a few to several hours.
 
 ```bash
 ## download the reference genome package
@@ -143,30 +177,6 @@ ${STARBIN} --runMode genomeGenerate \
 ```
 
 For other species, you may follow the instructions provided by [cellranger](https://www.10xgenomics.com/support/software/cell-ranger/downloads) or [STARsolo](https://github.com/alexdobin/STAR) to prepare the reference genome.
-
-## Configuring Python Virtual Environment
-
-We recommend creating a new Python environment for [NovaScope](../index.md) using the following steps. If you already have an existing Python environment all required packages (see [pyenv_req.txt](https://github.com/seqscope/NovaScope/blob/main/installation/pyenv_req.txt)), you may skip this step. 
-
-You may create a new Python environment using the following commands:
-
-```bash
-## set the path to the python virtual environment directory
-pyenv_dir=/path/to/python/virtual/environment/directory
-pyenv_name=name_of_python_venv
-smk_dir=/path/to/the/novascope/directory
-
-## create the python virtual environment (need to be done only once)
-mkdir -p ${pyenv_dir}
-cd ${pyenv_dir}
-python -m venv ${pyenv_name}
-
-## activate the python environment (every time you want to use the environment)
-source ${pyenv_name}/bin/activate
-
-## install the required packages (need to be done only once)
-pip install -r ${smk_dir}/installation/pyenv_req.txt
-```
 
 ## (Optional) Install the historef Package from the whl File
 

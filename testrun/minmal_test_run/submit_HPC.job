@@ -14,7 +14,7 @@
 
 # Paths
 smk_dir="/path/to/NovaScope"                         # [REPLACE] Path to the NovaScope pipeline repo.
-job_dir="$smk_dir/testrun/regional_section"          # Path to your Job directory, which should have a config_job.yaml file and will be used to save the log files.
+job_dir="$smk_dir/testrun/minimal_test_run"          # Path to your Job directory, which should have a config_job.yaml file and will be used to save the log files.
 slurm_params="--profile $smk_dir/slurm"              # Path to the SLURM parameter directory, which should include a config.yaml file.
 
 # Execute the NovaScope pipeline via SLURM

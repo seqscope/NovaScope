@@ -48,6 +48,8 @@
       
     
     
+      <link rel="stylesheet" href="../../css/custom.css">
+    
     <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
@@ -60,10 +62,12 @@
   
     
     
+      
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="grey">
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -114,7 +118,43 @@
     </div>
     
       
+        <form class="md-header__option" data-md-component="palette">
+  
     
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1M8 13h8v-2H8v2m9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1 0 1.71-1.39 3.1-3.1 3.1h-4V17h4a5 5 0 0 0 5-5 5 5 0 0 0-5-5Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5M7 15a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
     
     
     
@@ -231,7 +271,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../getting_started/prep_input/" class="md-tabs__link">
+        <a href="../../getting_started/intro/" class="md-tabs__link">
           
   
     
@@ -612,6 +652,10 @@
       
         
       
+        
+      
+        
+      
     
     
       
@@ -652,11 +696,53 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting_started/prep_input/" class="md-nav__link">
+      <a href="../../getting_started/intro/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Preparing Input
+    Introduction
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting_started/access_data/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Accessing Input Data
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting_started/job_config/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Job Configuration
   </span>
   
 
@@ -677,7 +763,7 @@
         
   
   <span class="md-ellipsis">
-    Executing NovaScope Pipeline
+    Executing NovaScope
   </span>
   
 
@@ -797,44 +883,51 @@
 
 <h1 id="setting-up-a-environment-yaml-file">Setting up a Environment YAML File<a class="headerlink" href="#setting-up-a-environment-yaml-file" title="Permanent link">&para;</a></h1>
 <p><a href="../../">NovaScope</a> requires a YAML file to configure the environment. This file is used to specify the paths to the required tools, reference databases, and Python environment. To create your own <code>config_env.yaml</code> file for the environment setup, you may copy from <a href="https://github.com/seqscope/NovaScope/blob/main/info/config_env.yaml">our example available in our GitHub repository</a>.</p>
-<p>Below is a brief description of all the items in the YAML file. Replace the placeholders with your specific input variables to customize it according to your needs, and prepare your own <code>config_job.yaml</code>.</p>
+<p>Below is a brief description of all the items in the YAML file. Replace the placeholders with your specific input variables to customize it according to your needs, and prepare your own <code>config_env.yaml</code>.</p>
 <h2 id="tools">Tools<a class="headerlink" href="#tools" title="Permanent link">&para;</a></h2>
-<p>For tools that are not explicitly defined, the pipeline will automatically check if they are installed and include them in the system path for use. This allows the pipeline to utilize these tools without needing manual configuration for each one.</p>
-<div class="codehilite"><pre><span></span><code>tools:
-  spatula: /path/to/spatula/bin/spatula                         ## Default: &quot;spatula&quot;
+<p>For tools that are not explicitly defined, the pipeline will automatically check if they are installed and include them in the system path for use. This allows the pipeline to utilize these tools without needing manual configuration for each one.
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span></pre></div></td><td class="code"><div><pre><span></span><code>tools:
+  spatula: /path/to/spatula/bin/spatula                     ## Default: &quot;spatula&quot;
   samtools: /path/to/samtools/samtools                      ## Default: &quot;samtools&quot;
   star: /path/to/STAR_2_7_11b/bin/Linux_x86_64_static/STAR  ## Default: &quot;STAR&quot;
-</code></pre></div>
-
+</code></pre></div></td></tr></table></div></p>
 <h2 id="hpc-specific-configuration">HPC-specific Configuration:<a class="headerlink" href="#hpc-specific-configuration" title="Permanent link">&para;</a></h2>
 <p>For HPC users, use the <code>envmodules</code> section to load the required software tools as modules. If a tool is not listed in the envmodules section, the pipeline will assume it's installed system-wide. For local executions, you may remove this section if running the pipeline on your local machine.</p>
 <p>Please specify the <strong>version</strong> information. </p>
-<div class="codehilite"><pre><span></span><code>envmodules:
+<p><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span><code>envmodules:
   python: &quot;python/&lt;version_information&gt;&quot;
   gcc: &quot;gcc/&lt;version_information&gt;&quot;
   gdal: &quot;gdal/&lt;version_information&gt;&quot;
   imagemagick: &quot;imagemagick/&lt;version_information&gt;&quot;
   #snakemake: &quot;snakemake/&lt;version_information&gt;&quot;
-</code></pre></div>
-
-<ul>
-<li><code>python</code>: If your python environment was set up using a Python version accessed through a module, your environment depends on certain shared files from that module. Therefore, you must add the <code>python: "python/&lt;version_information&gt;"</code>  in the <code>envmodules</code> section to load the same module you initially used to establish your environment. But if you set up with a locally installed Python (not using <code>module load</code>), comment out or remove the module line <code>python: "python/&lt;version_information&gt;"</code>.</li>
-<li>It is also feasible to use <code>envmodules</code> to load other tools, such as <code>samtools</code> instead of defining its path in <code>tools</code>.</li>
-</ul>
+</code></pre></div></td></tr></table></div>
+* <code>python</code>: If your python environment was set up using a Python version accessed through a module, your environment depends on certain shared files from that module. Therefore, you must add the <code>python: "python/&lt;version_information&gt;"</code>  in the <code>envmodules</code> section to load the same module you initially used to establish your environment. But if you set up with a locally installed Python (not using <code>module load</code>), comment out or remove the module line <code>python: "python/&lt;version_information&gt;"</code>.
+* It is also feasible to use <code>envmodules</code> to load other tools, such as <code>samtools</code> instead of defining its path in <code>tools</code>.</p>
 <h2 id="reference-database">Reference Database<a class="headerlink" href="#reference-database" title="Permanent link">&para;</a></h2>
 <p>Please list every reference database used for alignment here. The reference data can be obtained via the <a href="https://www.10xgenomics.com/support/software/cell-ranger/downloads">cellranger download</a> page.</p>
 <p>Please ensure the reference database corresponds to the species of your input data. </p>
-<div class="codehilite"><pre><span></span><code>ref:
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code>ref:
   align:
     mouse: &quot;/path/to/refdata-gex-GRCm39-2024-A/star&quot;
     human: &quot;/path/to/refdata-gex-GRCh39-2024-A/star&quot;
    #...
-</code></pre></div>
-
+</code></pre></div></td></tr></table></div>
 <h2 id="python-environment">Python Environment<a class="headerlink" href="#python-environment" title="Permanent link">&para;</a></h2>
 <p>You also need to specify the path of python virtual environment by modifying the following line.</p>
-<div class="codehilite"><pre><span></span><code>pyenv: &quot;/path/to/python/virtual/env&quot;
-</code></pre></div>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>pyenv: &quot;/path/to/python/virtual/env&quot;
+</code></pre></div></td></tr></table></div>
 
 
 
@@ -881,7 +974,7 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.indexes", "navigation.sections"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.indexes", "navigation.sections", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
       <script src="../../assets/javascripts/bundle.8fd75fb4.min.js"></script>
