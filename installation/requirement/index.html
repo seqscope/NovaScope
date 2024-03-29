@@ -22,7 +22,7 @@
     
     
       
-        <title>Requirements - NovaScope</title>
+        <title>Installing NovaScope - NovaScope</title>
       
     
     
@@ -110,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Requirements
+              Installing NovaScope
             
           </span>
         </div>
@@ -511,7 +511,7 @@
           
   
   <span class="md-ellipsis">
-    Requirements
+    Installing NovaScope
   </span>
   
 
@@ -522,7 +522,7 @@
         
   
   <span class="md-ellipsis">
-    Requirements
+    Installing NovaScope
   </span>
   
 
@@ -986,7 +986,7 @@ module<span class="w"> </span>load<span class="w"> </span>snakemake
 </code></pre></div></td></tr></table></div>
 <p><a href="../../">NovaScope</a> has been tested for compatibility with <a href="https://snakemake.readthedocs.io/en/stable/">Snakemake</a> v7.29.0 and v8.6.0.</p>
 <h3 id="installing-snakemake-using-conda-and-mamba">Installing Snakemake Using Conda and Mamba<a class="headerlink" href="#installing-snakemake-using-conda-and-mamba" title="Permanent link">&para;</a></h3>
-<p>If you need to install <a href="https://snakemake.readthedocs.io/en/stable/">Snakemake</a>, below is a simplified sequence of instruction. Please refer to the official documentation for more detailed instructions.</p>
+<p>If you need to install <a href="https://snakemake.readthedocs.io/en/stable/">Snakemake</a>, below is a simplified sequence of instruction. Please refer to <a href="https://snakemake.readthedocs.io/en/stable/getting_started/installation.html">official Snakemake documentation</a> for more detailed instructions.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -1016,7 +1016,8 @@ module<span class="w"> </span>load<span class="w"> </span>snakemake
 <span class="normal">27</span>
 <span class="normal">28</span>
 <span class="normal">29</span>
-<span class="normal">30</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1">## Download miniconda</span>
+<span class="normal">30</span>
+<span class="normal">31</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1">## download miniconda</span>
 wget<span class="w"> </span>https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 
 <span class="c1">## install miniconda</span>
@@ -1026,6 +1027,7 @@ bash<span class="w"> </span>Miniconda3-latest-Linux-x86_64.sh
 <span class="c1">## Activate the Miniconda installation:</span>
 <span class="c1">## IMPORTANT: change /path/to/miniconda to the path you installed miniconda</span>
 <span class="nb">eval</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>/path/to/miniconda3/bin/conda<span class="w"> </span>shell.bash<span class="w"> </span>hook<span class="k">)</span><span class="s2">&quot;</span>
+
 <span class="c1">## If you included conda initialization in .bashrc the above line can be replaced with</span>
 <span class="c1">## source ~/.bashrc</span>
 
@@ -1091,11 +1093,10 @@ python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </s
 pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span><span class="si">${</span><span class="nv">smk_dir</span><span class="si">}</span>/installation/pyenv_req.txt
 </code></pre></div></td></tr></table></div>
 <h2 id="installing-other-dependent-tools">Installing Other Dependent Tools<a class="headerlink" href="#installing-other-dependent-tools" title="Permanent link">&para;</a></h2>
-<p><a href="../../">NovaScope</a> depends on a number has been tested for compatibility with <a href="https://snakemake.readthedocs.io/en/stable/">Snakemake</a> v7.29.0 and v8.6.0.</p>
-<p>The dependent software tools are listed below. The versions specified for each software tool have been verified for compatibility with our pipeline, though other versions may also be compatible.</p>
+<p><a href="../../">NovaScope</a> depends on a number of software tools, detailed below. The versions specified for each software tool have been verified for compatibility with our pipeline, though other versions may also be compatible.</p>
 <ul>
 <li><a href="https://github.com/alexdobin/STAR">STARsolo</a> (v2.7.11b)</li>
-<li><a href="https://www.htslib.org/">samtools</a> (v1.14 or v1.19)</li>
+<li><a href="https://www.htslib.org/">samtools</a> (v1.13; v1.14; v1.19)</li>
 <li><a href="https://seqscope.github.io/spatula/">spatula</a> (v0.1.0)</li>
 <li><a href="https://www.python.org/">Python</a> (v3.9.12, v3.10, or v3.12.2)</li>
 <li><a href="https://imagemagick.org/">ImageMagick</a> (7.1.0-25.lua and 7.1.1-30)</li>
@@ -1108,8 +1109,10 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 </code></pre></div></td></tr></table></div>
 <h2 id="preparing-reference-genomes">Preparing Reference Genomes<a class="headerlink" href="#preparing-reference-genomes" title="Permanent link">&para;</a></h2>
 <p>The reference genome for the species of interest must be downloaded and indexed for alignment. <a href="https://github.com/alexdobin/STAR">STARsolo</a> accepts the reference genomes prepared by <a href="https://www.10xgenomics.com/support/software/cell-ranger">cellranger</a>, therefore, one of the simplest way is to download the reference genome from the <a href="https://www.10xgenomics.com/support/software/cell-ranger/downloads">cellranger download</a> page.</p>
-<p>The recommended reference genome for mouse is GRCm39.
-However, the STAR index provided with the package is outdated and will not be compatible with the latest version of STARsolo. Therefore, we recommend
+<p>The recommended reference genome for mouse is GRCm39.</p>
+<p>However, the STAR index packaged by the
+<a href="https://www.10xgenomics.com/support/software/cell-ranger/downloads">cellranger download</a>
+is outdated and will not be compatible with the latest version of STARsolo. Therefore, we recommend
 indexing it using the latest version of STARsolo. </p>
 <p>Note that this process will take A LOT OF TIME, typically a few to several hours.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>

@@ -495,7 +495,7 @@
         
   
   <span class="md-ellipsis">
-    Requirements
+    Installing NovaScope
   </span>
   
 
@@ -981,8 +981,8 @@ The directory structure is as follows:</p>
 <p>The <code>align</code> directory encompasses several subdirectories, including: 
 (1) <code>match</code>, which houses the outcomes of aligning second sequencing reads with spatial barcodes for the corresponding chip section; 
 (2) <code>bam</code>, where alignment outcomes such as the BAM file, summary metrics, and visualizations are stored; 
-(3) <code>sge</code>, containing a spatial gene expression (SGE) matrix and its associated visualizations; 
-(4) <code>histology</code>, which stores histology images aligned with the spatial coordinates of the SGE matrix.</p>
+(3) <code>sge</code>, containing a spatial gene expression matrix (SGE)  and its associated visualizations; 
+(4) <code>histology</code>, which stores histology images aligned with the spatial coordinates of the SGE.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
@@ -998,7 +998,7 @@ The directory structure is as follows:</p>
         └── sge
 </code></pre></div></td></tr></table></div>
 <h2 id="downstream-analysis">Downstream Analysis<a class="headerlink" href="#downstream-analysis" title="Permanent link">&para;</a></h2>
-<p>The aligned sequenced reads can be directly used for tasks that require read-level information, such as allele-specific expression or somatic variant analysis. The SGE matrix can also be analyzed with many software tools, such as Latent Dirichlet Allocation (LDA) and Seurat. </p>
+<p>The aligned sequenced reads can be directly used for tasks that require read-level information, such as allele-specific expression or somatic variant analysis. The SGE can also be analyzed with many software tools, such as Latent Dirichlet Allocation (LDA) and Seurat. </p>
 <p>An exemplary downstream analysis is provided at <a href="https://github.com/seqscope/NovaScope-exemplary-downstream-analysis">NovaScope-exemplary-downstream-analysis</a>.</p>
 
 
