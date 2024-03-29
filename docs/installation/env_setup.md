@@ -39,15 +39,9 @@ envmodules:
 
 ## Reference Genome Index
 
-<<<<<<< HEAD
 Please list every reference database used for alignment here. The reference data can be obtained via the [cellranger download](https://www.10xgenomics.com/support/software/cell-ranger/downloads) page. Example instructions to build STAR index from the reference file is described in the [Requirements](requirements.md) section.
 
 Please ensure the reference genome indices correspond to the species of your input data. 
-=======
-Please list every reference database used for alignment here. For instructions on preparing reference data, please consult the [Preparing Reference Genomes](./requirement.md/#preparing-reference-genomes). 
-
-It is imperative to ensure the reference database matches to the species of your input data. 
->>>>>>> main
 
 ```yaml
 ref:
