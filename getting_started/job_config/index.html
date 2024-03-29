@@ -18,7 +18,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.13">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.11">
     
     
       
@@ -497,7 +497,7 @@
         
   
   <span class="md-ellipsis">
-    Installing NovaScope
+    Requirements
   </span>
   
 
@@ -981,8 +981,8 @@
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
 <p>Once you have <a href="../../installation/requirement/">installed NovaScope</a> and <a href="../access_data/">downloaded the input data</a>, the next step is to configure a NovaScope run. This mainly involves preparing the input configuration files (in YAML) for the run.</p>
 <h2 id="preparing-input-config-files">Preparing Input Config Files<a class="headerlink" href="#preparing-input-config-files" title="Permanent link">&para;</a></h2>
-<p>The pipeline requires to have <code>config_job.yaml</code> file in the working directory (indicated by <code>-d</code> or <code>--directory</code>) to specify all input files, output files, and parameters. </p>
-<p>For user's convenience, we provide separate example <code>config_job.yaml</code> files for the <a href="https://github.com/seqscope/NovaScope/blob/main/testrun/minmal_test_run/config_job.yaml">Minimal Test Run Dataset</a>, <a href="https://github.com/seqscope/NovaScope/blob/main/testrun/shallow_liver_section/config_job.yaml">Shallow Liver Section Dataset</a>, and <a href="https://github.com/seqscope/NovaScope/blob/main/testrun/deep_liver_section/config_job.yaml">Deep Liver Section Dataset</a> test runs.  </p>
+<p>The pipeline requires to have <code>config_job.yaml</code> file in the working directory (specified by <code>-d</code> or <code>--directory</code>) to specify all input files, output files, and parameters. </p>
+<p>For user's convenience, we provide separate example <code>config_job.yaml</code> files for the <a href="https://github.com/seqscope/NovaScope/blob/main/testrun/minmal_test_run/config_job.yaml">Minimal Test Run Dataset</a>, <a href="https://github.com/seqscope/NovaScope/blob/main/testrun/shallow_liver_section/config_job.yaml">Shallow Liver Section Dataset</a>, and <a href="https://github.com/seqscope/NovaScope/blob/main/testrun/deep_liver_section/config_job.yaml">Deep Liver Section Dataset</a> test runs are provided.  </p>
 <p>The details of each item specified in the <code>config_job.yaml</code> is described below:</p>
 <h3 id="a-template-of-the-config-file">A Template of the Config File<a class="headerlink" href="#a-template-of-the-config-file" title="Permanent link">&para;</a></h3>
 <p>Below is a template of the <code>config_job.yaml</code> file. 
@@ -1161,7 +1161,7 @@ Mandatory fields are marked as "REQUIRED FIELD".</p>
 <p><em><code>prefix</code></em></p>
 <p>The <code>prefix</code> will be used to organize the 1st-seq FASTQ files. Make sure the <code>prefix</code> parameter in the corresponding flowcell is unique.  </p>
 <p><em><code>layout</code></em></p>
-<p>A file to provide the layout of tiles in a section chip with the following format. If absent, NovaScope will automatically look for the spatial barcode (sbcd) layout within the NovaScope repository at <a href="https://github.com/seqscope/NovaScope/tree/main/info/assets/layout_per_tile_basis">info/assets/layout_per_tile_basis</a>, using the section chip ID for reference.</p>
+<p>A file to provide the layout of tiles in a section chip with the following format. If absent, NovaScope will automatically look for the sbcd layout within the NovaScope repository at <a href="https://github.com/seqscope/NovaScope/tree/main/info/assets/layout_per_tile_basis">info/assets/layout_per_tile_basis</a>, using the section chip ID for reference.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="l l-Scalar l-Scalar-Plain">lane  tile  row  col  rowshift  colshift</span>
@@ -1180,15 +1180,15 @@ Mandatory fields are marked as "REQUIRED FIELD".</p>
 <p>The output directory will be used to organize the input files and store output files. Please see the structure directory <a href="../output/">here</a></p>
 <h4 id="requests">Requests<a class="headerlink" href="#requests" title="Permanent link">&para;</a></h4>
 <p>The pipeline interprets the requested output files via this parameter and determines which jobs need to be executed. </p>
-<p>Simply define the <strong>final output</strong> required, and all intermediary files contributing to this output will be automatically generated (i.e., the dependencies between rules). For instance, outputs from <code>"sbcd-per-flowcell"</code> serve as inputs for <code>"sbcd-per-section"</code>. Thus, by requesting <code>"sbcd-per-section"</code>, the pipeline will generate not only the files for <code>"sbcd-per-section"</code> but also those for <code>"sbcd-per-flowcell"</code>. For detailed insights into these dependencies, please consult the <a href="https://seqscope.github.io/NovaScope/#an-overview-of-the-workflow-structure">rulegraph</a>.</p>
+<p>Simply define the <strong>final output</strong> required, and all intermediary files contributing to this output will be automatically generated (i.e.,  the dependencies between rules). For instance, outputs from <code>"sbcd-per-flowcell"</code> serve as inputs for <code>"sbcd-per-section"</code>. Thus, by requesting <code>"sbcd-per-section"</code>, the pipeline will generate not only the files for <code>"sbcd-per-section"</code> but also those for <code>"sbcd-per-flowcell"</code>. For detailed insights into these dependencies, please consult the <a href="https://seqscope.github.io/NovaScope/#an-overview-of-the-workflow-structure">rulegraph</a>.</p>
 <p>The options and corresponding output files are listed below:</p>
 <ul>
-<li><code>"sbcd-per-flowcell"</code>: This option generates a spatial barcode map specific for a flowcell organzied on a per-tile basis. For each tile, this returns a compressed tab-delimited file for barcodes and their local coordinates within that tile.</li>
-<li><code>"sbcd-per-section"</code>: This option returns: a spatial barcode map for a section chip, including a compressed tab-delimited file for barcodes and their global coordinates in the section chip; an "sbcd" image displaying the spatial distribution of the barcodes' coordinates.</li>
-<li><code>"smatch-per-section"</code>: This option produces: a compressed, tab-delimited file with spatial barcodes matched to the 2nd-seq reads; a "smatch" image depicting the distribution of spatial coordinates for the matching barcodes; a summary file of the matching results. </li>
-<li><code>"align-per-section"</code>: This option creates: a <a href="https://en.wikipedia.org/wiki/Binary_Alignment_Map">Binary Alignment Map (BAM)</a> file accompanied by alignment summary metrics; a spatial digital gene expression matrices (SGEs) for each genomic feature, including: Gene, GeneFull, splice junctions (SJ), and Velocyto.</li>
-<li><code>"sge-per-section"</code>: This option crafts: an SGE encompassing all genomic features; an "sge" image illustrating the spatial alignment of transcripts; an "sge_match_sbcd" image showcasing the "sbcd," "smatch," and "sge" images side-by-side for a comprehensive view; an RGB image for each gene of interest, showing the spatial distribution of its transcripts. In the absence of specified genes of interest, the pipeline visualizes the top 5 genes with the highest expression levels.</li>
-<li><code>"hist-per-section"</code>: Two aligned histology files, one is a geotiff file serving as a reference to enable coordinate transformation between the SGE matrix and the histology image, while the other is a tiff file that conforms to the dimensions of both the "smatch" and "sge" images.</li>
+<li><code>"sbcd-per-flowcell"</code>: A spatial barcode map for a flowcell organzied on a per-tile basis. Each tile has a compressed tab-delimited file for barcodes and corresponding local coordinates in the tile.</li>
+<li><code>"sbcd-per-section"</code>: A spatial barcode map for a section chip, including a compressed tab-delimited file for barcodes and corresponding global coordinates in the section chip, and an image displaying the spatial distribution of the barcodes' coordinates.</li>
+<li><code>"smatch-per-section"</code>: A compressed tab-delimited file with spatial barcodes corresponding to the 2nd-seq reads, a "smatch" image depicting the distribution of spatial coordinates for the matching barcodes, and a summary file of the matching results. </li>
+<li><code>"align-per-section"</code>: A BAM file accompanied by alignment summary metrics, along with spatial digital gene expression (sDGE) matrices for Gene, GeneFull, splice junctions (SJ), and Velocyto.</li>
+<li><code>"sge-per-section"</code>: An sDGE matrix, an "sge" image depicting the spatial alignment of transcripts, and an RGB image representing the sDGE matrix and selected genes. In the absence of specified genes of interest, the RGB image will display the top 5 genes with the highest expression levels.</li>
+<li><code>"hist-per-section"</code>: Two aligned histology files, one of which is a referenced geotiff file facilitating the coordinate transformation between the SGE matrix and the histology image. The other is a tiff file matching the dimensions of both the "smatch" and "sge" images.</li>
 </ul>
 <h4 id="preprocess">preprocess<a class="headerlink" href="#preprocess" title="Permanent link">&para;</a></h4>
 <p><strong><code>align</code></strong></p>
@@ -1215,8 +1215,7 @@ Mandatory fields are marked as "REQUIRED FIELD".</p>
 <span class="w">        </span><span class="nt">threads</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
 <span class="w">        </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">70000m</span>
 </code></pre></div></td></tr></table></div>
-<p>If using <code>"filesize"</code>, the resource allocation will be automatically adjusted based on the total size of the input 2nd-seq FASTQ files and the available computing resources. Thus, ensure to include details about the computing capabilities of all available nodes. This includes the partition name, the available number of CPUs, and the memory allocated per CPU (refer to the example provided). </p>
-<p>The current strategy for resource allocation operates on the following basis: 1) For input 2nd-seq FASTQ files with a combined size under 200GB, allocate 70GB of memory for alignment processes; 2) When the total file size ranges from 200GB to 400GB, memory allocation increases to 140GB; 3) For file sizes exceeding 400GB, 330GB of memory is allocated specifically for the alignment.</p>
+<p>If using <code>"filesize"</code>, ensure to include details about the computing capabilities of all available nodes. This includes the partition name, the available number of CPUs, and the memory allocated per CPU (refer to the example provided). Resource allocation will be automatically adjusted based on the total size of the input 2nd-seq FASTQ files and the available computing resources. The preliminary strategy for resource allocation is as follows: for input 2nd-seq FASTQ files smaller than 200GB, allocate 70GB of memory for alignment processes; for file sizes ranging from 200GB to 400GB, allocate 140GB of memory; for anything larger, 330GB of memory will be designated for alignment step.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -1292,7 +1291,7 @@ Mandatory fields are marked as "REQUIRED FIELD".</p>
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.indexes", "navigation.sections", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.c8d2eff1.min.js"></script>
+      <script src="../../assets/javascripts/bundle.8fd75fb4.min.js"></script>
       
         <script src="../../js/open_in_new_tab.js"></script>
       

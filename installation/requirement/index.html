@@ -18,11 +18,11 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.13">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.11">
     
     
       
-        <title>Installing NovaScope - NovaScope</title>
+        <title>Requirements - NovaScope</title>
       
     
     
@@ -110,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Installing NovaScope
+              Requirements
             
           </span>
         </div>
@@ -511,7 +511,7 @@
           
   
   <span class="md-ellipsis">
-    Installing NovaScope
+    Requirements
   </span>
   
 
@@ -522,7 +522,7 @@
         
   
   <span class="md-ellipsis">
-    Installing NovaScope
+    Requirements
   </span>
   
 
@@ -577,6 +577,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#configuring-python-virtual-environment" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuring Python Virtual Environment
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#installing-other-dependent-tools" class="md-nav__link">
     <span class="md-ellipsis">
       Installing Other Dependent Tools
@@ -598,15 +607,6 @@
   <a href="#preparing-reference-genomes" class="md-nav__link">
     <span class="md-ellipsis">
       Preparing Reference Genomes
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#configuring-python-virtual-environment" class="md-nav__link">
-    <span class="md-ellipsis">
-      Configuring Python Virtual Environment
     </span>
   </a>
   
@@ -903,6 +903,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#configuring-python-virtual-environment" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuring Python Virtual Environment
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#installing-other-dependent-tools" class="md-nav__link">
     <span class="md-ellipsis">
       Installing Other Dependent Tools
@@ -924,15 +933,6 @@
   <a href="#preparing-reference-genomes" class="md-nav__link">
     <span class="md-ellipsis">
       Preparing Reference Genomes
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#configuring-python-virtual-environment" class="md-nav__link">
-    <span class="md-ellipsis">
-      Configuring Python Virtual Environment
     </span>
   </a>
   
@@ -986,7 +986,7 @@ module<span class="w"> </span>load<span class="w"> </span>snakemake
 </code></pre></div></td></tr></table></div>
 <p><a href="../../">NovaScope</a> has been tested for compatibility with <a href="https://snakemake.readthedocs.io/en/stable/">Snakemake</a> v7.29.0 and v8.6.0.</p>
 <h3 id="installing-snakemake-using-conda-and-mamba">Installing Snakemake Using Conda and Mamba<a class="headerlink" href="#installing-snakemake-using-conda-and-mamba" title="Permanent link">&para;</a></h3>
-<p>If you need to install <a href="https://snakemake.readthedocs.io/en/stable/">Snakemake</a>, below is a simplified sequence of instruction. Please refer to <a href="https://snakemake.readthedocs.io/en/stable/getting_started/installation.html">official Snakemake documentation</a> for more detailed instructions.</p>
+<p>If you need to install <a href="https://snakemake.readthedocs.io/en/stable/">Snakemake</a>, below is a simplified sequence of instruction. Please refer to the official documentation for more detailed instructions.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -1013,15 +1013,21 @@ module<span class="w"> </span>load<span class="w"> </span>snakemake
 <span class="normal">24</span>
 <span class="normal">25</span>
 <span class="normal">26</span>
-<span class="normal">27</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1">## download miniconda</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1">## Download miniconda</span>
 wget<span class="w"> </span>https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 
 <span class="c1">## install miniconda</span>
 bash<span class="w"> </span>Miniconda3-latest-Linux-x86_64.sh
 <span class="c1">## Follow the on-screen instructions to complete the installation. </span>
 
-<span class="c1">## activate the Miniconda installation:</span>
-<span class="nb">source</span><span class="w"> </span>~/.bashrc
+<span class="c1">## Activate the Miniconda installation:</span>
+<span class="c1">## IMPORTANT: change /path/to/miniconda to the path you installed miniconda</span>
+<span class="nb">eval</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>/path/to/miniconda3/bin/conda<span class="w"> </span>shell.bash<span class="w"> </span>hook<span class="k">)</span><span class="s2">&quot;</span>
+<span class="c1">## If you included conda initialization in .bashrc the above line can be replaced with</span>
+<span class="c1">## source ~/.bashrc</span>
 
 <span class="c1">## create a new conda environment</span>
 conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>snakemake-env<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.9
@@ -1041,15 +1047,59 @@ mamba<span class="w"> </span>install<span class="w"> </span>snakemake
 <span class="c1">## verify the installation of snakemake</span>
 snakemake<span class="w"> </span>--version
 </code></pre></div></td></tr></table></div>
+<h2 id="configuring-python-virtual-environment">Configuring Python Virtual Environment<a class="headerlink" href="#configuring-python-virtual-environment" title="Permanent link">&para;</a></h2>
+<p>We recommend creating a new Python environment for <a href="../../">NovaScope</a> using the following steps. If you already have an existing Python environment all required packages (see <a href="https://github.com/seqscope/NovaScope/blob/main/installation/pyenv_req.txt">pyenv_req.txt</a>), you may skip this step. </p>
+<p>You may create a new Python environment using the following commands:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1">## First, we recommend activating conda/mamba environment before setting up venv, using:</span>
+<span class="c1"># eval &quot;$(/path/to/miniconda3/bin/conda shell.bash hook)&quot;</span>
+<span class="c1"># conda activate snakemake-env</span>
+<span class="c1">##</span>
+<span class="c1">## set the path to the python virtual environment directory</span>
+<span class="nv">pyenv_dir</span><span class="o">=</span>/path/to/python/virtual/environment/directory<span class="w">  </span><span class="c1">## provide the path of venv</span>
+<span class="c1">## pyenv_dir=./venvs   ## uncomment this line if you want to create virtual environment locally</span>
+<span class="nv">pyenv_name</span><span class="o">=</span>novascope_venv
+<span class="nv">smk_dir</span><span class="o">=</span>/path/to/the/novascope/directory
+
+<span class="c1">## create the python virtual environment (need to be done only once)</span>
+mkdir<span class="w"> </span>-p<span class="w"> </span><span class="si">${</span><span class="nv">pyenv_dir</span><span class="si">}</span>
+<span class="nb">cd</span><span class="w"> </span><span class="si">${</span><span class="nv">pyenv_dir</span><span class="si">}</span>
+python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span><span class="si">${</span><span class="nv">pyenv_name</span><span class="si">}</span>
+
+<span class="c1">## activate the python environment (every time you want to use the environment)</span>
+<span class="nb">source</span><span class="w"> </span><span class="si">${</span><span class="nv">pyenv_name</span><span class="si">}</span>/bin/activate
+
+<span class="c1">## install the required packages (need to be done only once)</span>
+pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span><span class="si">${</span><span class="nv">smk_dir</span><span class="si">}</span>/installation/pyenv_req.txt
+</code></pre></div></td></tr></table></div>
 <h2 id="installing-other-dependent-tools">Installing Other Dependent Tools<a class="headerlink" href="#installing-other-dependent-tools" title="Permanent link">&para;</a></h2>
-<p><a href="../../">NovaScope</a> depends on a number of software tools, detailed below. The versions specified for each software tool have been verified for compatibility with our pipeline, though other versions may also be compatible.</p>
+<p><a href="../../">NovaScope</a> depends on a number has been tested for compatibility with <a href="https://snakemake.readthedocs.io/en/stable/">Snakemake</a> v7.29.0 and v8.6.0.</p>
+<p>The dependent software tools are listed below. The versions specified for each software tool have been verified for compatibility with our pipeline, though other versions may also be compatible.</p>
 <ul>
 <li><a href="https://github.com/alexdobin/STAR">STARsolo</a> (v2.7.11b)</li>
-<li><a href="https://www.htslib.org/">samtools</a> (v1.13; v1.14; v1.19)</li>
+<li><a href="https://www.htslib.org/">samtools</a> (v1.14 or v1.19)</li>
 <li><a href="https://seqscope.github.io/spatula/">spatula</a> (v0.1.0)</li>
-<li><a href="https://www.python.org/">Python</a> (v3.9.12; v3.10; v3.12.2)</li>
-<li><a href="https://imagemagick.org/">ImageMagick</a> (7.1.0-25.lua; 7.1.1-30)</li>
-<li><a href="https://gdal.org/">GDAL</a> (v3.5.1)</li>
+<li><a href="https://www.python.org/">Python</a> (v3.9.12, v3.10, or v3.12.2)</li>
+<li><a href="https://imagemagick.org/">ImageMagick</a> (7.1.0-25.lua and 7.1.1-30)</li>
+<li><a href="https://gdal.org/">GDAL</a> (v3.5.1) (Required for histology alignments)</li>
 </ul>
 <p>We provide an <a href="https://github.com/seqscope/NovaScope/blob/main/installation/requirement_install_log.md">example work log</a> documenting the installation of the aforementioned software tools.</p>
 <h2 id="installing-novascope_1">Installing NovaScope<a class="headerlink" href="#installing-novascope_1" title="Permanent link">&para;</a></h2>
@@ -1059,7 +1109,9 @@ snakemake<span class="w"> </span>--version
 <h2 id="preparing-reference-genomes">Preparing Reference Genomes<a class="headerlink" href="#preparing-reference-genomes" title="Permanent link">&para;</a></h2>
 <p>The reference genome for the species of interest must be downloaded and indexed for alignment. <a href="https://github.com/alexdobin/STAR">STARsolo</a> accepts the reference genomes prepared by <a href="https://www.10xgenomics.com/support/software/cell-ranger">cellranger</a>, therefore, one of the simplest way is to download the reference genome from the <a href="https://www.10xgenomics.com/support/software/cell-ranger/downloads">cellranger download</a> page.</p>
 <p>The recommended reference genome for mouse is GRCm39.
-However, the STAR index provided with the package is outdated and will not be compatible with the latest version of STARsolo. Therefore, we recommend indexing it using the latest version of STARsolo.</p>
+However, the STAR index provided with the package is outdated and will not be compatible with the latest version of STARsolo. Therefore, we recommend
+indexing it using the latest version of STARsolo. </p>
+<p>Note that this process will take A LOT OF TIME, typically a few to several hours.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -1146,39 +1198,6 @@ gzip<span class="w"> </span>-d<span class="w"> </span>genes/genes.gtf.gz
 <span class="w">    </span>--sjdbGTFfile<span class="w"> </span>./genes/genes.gtf
 </code></pre></div></td></tr></table></div>
 <p>For other species, you may follow the instructions provided by <a href="https://www.10xgenomics.com/support/software/cell-ranger/downloads">cellranger</a> or <a href="https://github.com/alexdobin/STAR">STARsolo</a> to prepare the reference genome.</p>
-<h2 id="configuring-python-virtual-environment">Configuring Python Virtual Environment<a class="headerlink" href="#configuring-python-virtual-environment" title="Permanent link">&para;</a></h2>
-<p>We recommend creating a new Python environment for <a href="../../">NovaScope</a> using the following steps. If you already have an existing Python environment all required packages (see <a href="https://github.com/seqscope/NovaScope/blob/main/installation/pyenv_req.txt">pyenv_req.txt</a>), you may skip this step. </p>
-<p>You may create a new Python environment using the following commands:</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1">## set the path to the python virtual environment directory</span>
-<span class="nv">pyenv_dir</span><span class="o">=</span>/path/to/python/virtual/environment/directory
-<span class="nv">pyenv_name</span><span class="o">=</span>name_of_python_venv
-<span class="nv">smk_dir</span><span class="o">=</span>/path/to/the/novascope/directory
-
-<span class="c1">## create the python virtual environment (need to be done only once)</span>
-mkdir<span class="w"> </span>-p<span class="w"> </span><span class="si">${</span><span class="nv">pyenv_dir</span><span class="si">}</span>
-<span class="nb">cd</span><span class="w"> </span><span class="si">${</span><span class="nv">pyenv_dir</span><span class="si">}</span>
-python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span><span class="si">${</span><span class="nv">pyenv_name</span><span class="si">}</span>
-
-<span class="c1">## activate the python environment (every time you want to use the environment)</span>
-<span class="nb">source</span><span class="w"> </span><span class="si">${</span><span class="nv">pyenv_name</span><span class="si">}</span>/bin/activate
-
-<span class="c1">## install the required packages (need to be done only once)</span>
-pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span><span class="si">${</span><span class="nv">smk_dir</span><span class="si">}</span>/installation/pyenv_req.txt
-</code></pre></div></td></tr></table></div>
 <h2 id="optional-install-the-historef-package-from-the-whl-file">(Optional) Install the historef Package from the whl File<a class="headerlink" href="#optional-install-the-historef-package-from-the-whl-file" title="Permanent link">&para;</a></h2>
 <p>If you want to align your histology images with the spatial gene expression data, you may install the <a href="https://github.com/seqscope/historef">historef</a> package from the whl file. Below is an example instruction to download historef's latest version at document creation. To access the most recent version, please see <a href="https://github.com/seqscope/historef?tab=readme-ov-file">its GitHub repository</a>.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
@@ -1246,7 +1265,7 @@ pip<span class="w"> </span>install<span class="w"> </span><span class="si">${</s
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.indexes", "navigation.sections", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.c8d2eff1.min.js"></script>
+      <script src="../../assets/javascripts/bundle.8fd75fb4.min.js"></script>
       
         <script src="../../js/open_in_new_tab.js"></script>
       

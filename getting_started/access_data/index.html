@@ -18,7 +18,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.13">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.11">
     
     
       
@@ -497,7 +497,7 @@
         
   
   <span class="md-ellipsis">
-    Installing NovaScope
+    Requirements
   </span>
   
 
@@ -917,13 +917,14 @@
 <h3 id="minimal-test-run-dataset">Minimal Test Run Dataset<a class="headerlink" href="#minimal-test-run-dataset" title="Permanent link">&para;</a></h3>
 <p>This is a small (1.14GB) test run dataset comprising of a subset of the (shallow) liver section data described in <a href="#shallow-liver-section-dataset">Shallow Liver Section Dataset</a>. This dataset is meant to be used to test the sanity of the pipeline, without necessarily offering biologically meaningful interpretation of data. </p>
 <h3 id="shallow-liver-section-dataset">Shallow Liver Section Dataset<a class="headerlink" href="#shallow-liver-section-dataset" title="Permanent link">&para;</a></h3>
-<p>This dataset is a typical (23.7GB) example of Seq-Scope dataset that can be initially generated for a tissue section. Typically, the 2nd-seq FASTQ files contain 150-200M paired-end reads. This should be sufficient to examine the spatial distribution of the transcripts across the tissue, assess the quality of dataset, identify major cell types and marker genes, and perform basic pixel-level decoding of the spatial transcriptome. If the quality of the initial dataset look great, one may decide to sequence the library much more deeply to maximize the information content. (see <a href="#deep-liver-section-dataset">Deep Liver Section Dataset</a> for more details)</p>
+<p>This dataset is a typical (23.7GB) example of Seq-Scope dataset that can be initially generated for a tissue section. Typically, the 2nd-seq FASTQ files contain 150-200M paired-end reads. This should be sufficient to examine the spatial distribution of the transcripts across the tissue, assess the quality of
+dataset, identify major cell types and marker genes, and perform basic pixel-level decoding of the spatial transcriptome. If the quality of the initial dataset look great, one may decide to sequence the library much more deeply to maximize the information content. (see <a href="#deep-liver-section-dataset">Deep Liver Section Dataset</a> for more details)</p>
 <h3 id="deep-liver-section-dataset">Deep Liver Section Dataset<a class="headerlink" href="#deep-liver-section-dataset" title="Permanent link">&para;</a></h3>
-<p>If the initial examination of the <a href="#shallow-liver-section-dataset">shallow dataset</a> looks promising, one can sequence the library much more deeply, to the level of saturating the library. This dataset typically contains multiple pairs of FASTQ files, possibly across multiple sequencing runs. </p>
+<p>If the initial examination of the <a href="#shallow-liver-section-dataset">shallow dataset</a> looks promising, one can sequence the library much more deeply, to the level of saturating the library. A deeply sequenced dataset typically contains multiple pairs of FASTQ files, possibly across multiple sequencing runs. The deeply sequenced liver section dataset, available at <a href="https://doi.org/10.7302/tw62-4f97">https://doi.org/10.7302/tw62-4f97</a>, has 7 pairs of FASTQ files (250GB) in addition to the <a href="#shallow-liver-section-dataset">shallow dataset</a>.</p>
 <h2 id="downloading-the-datasets">Downloading the Datasets<a class="headerlink" href="#downloading-the-datasets" title="Permanent link">&para;</a></h2>
 <p>Each of the three datasets have their own DOIs, which can be accessed using the URLs below.</p>
 <ul>
-<li>Minimal Test Run Dataset : <a href="https://doi.org/10.5281/zenodo.10835761">https://doi.org/10.5281/zenodo.10835761</a></li>
+<li>Minimal Test Run Dataset (1.14GB) : <a href="https://doi.org/10.5281/zenodo.10835761">https://doi.org/10.5281/zenodo.10835761</a></li>
 </ul>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
@@ -940,7 +941,7 @@ mkdir<span class="w"> </span>B08Ctest
 tar<span class="w"> </span>xzvf<span class="w"> </span>../B08Csub_20240318_raw.tar.gz
 </code></pre></div></td></tr></table></div>
 <ul>
-<li>Shallow Liver Section Dataset : <a href="https://doi.org/10.5281/zenodo.10840696">https://doi.org/10.5281/zenodo.10840696</a> </li>
+<li>Shallow Liver Section Dataset (23.7GB) : <a href="https://doi.org/10.5281/zenodo.10840696">https://doi.org/10.5281/zenodo.10840696</a> </li>
 </ul>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
@@ -973,9 +974,9 @@ wget<span class="w"> </span><span class="s2">&quot;https://zenodo.org/records/10
 <span class="c1">## to verify the integrity of the downloaded files</span>
 </code></pre></div></td></tr></table></div>
 <ul>
-<li>Deep Liver Section Dataset : <a href="http://deepblue.lib.umich.edu/data/concern/data_sets/2227mq44w">Link to Deep Blue Data</a> <ul>
-<li>Note that this dataset only contains additional 2nd-seq FASTQ files, beyond those included in the Shallow Liver Section Dataset.</li>
-<li>Using the above URL, you can download additional 2nd-seq FASTQ files, either using browser or Globus.</li>
+<li>Deep Liver Section Dataset (250GB) : <a href="https://doi.org/10.7302/tw62-4f97">Link to Deep Blue Data</a> <ul>
+<li>Note that you need to use <a href="https://www.globus.org/">Globus</a> to download the dataset.</li>
+<li>Note that this dataset contains only additional 2nd-seq FASTQ files in addition to the <a href="#shallow-liver-section-dataset">Shallow Liver Section Dataset</a>, so you need to download the shallow dataset first. </li>
 </ul>
 </li>
 </ul>
@@ -1028,7 +1029,7 @@ wget<span class="w"> </span><span class="s2">&quot;https://zenodo.org/records/10
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.indexes", "navigation.sections", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.c8d2eff1.min.js"></script>
+      <script src="../../assets/javascripts/bundle.8fd75fb4.min.js"></script>
       
         <script src="../../js/open_in_new_tab.js"></script>
       
