@@ -102,26 +102,24 @@ preprocess:
 ```
 
 * **The `sbcd2chip` Parameters**
+    Those parameters are used to pass values to the [`combine_sbcds`](https://seqscope.github.io/spatula/tools/combine_sbcds/) function in [spatula](https://seqscope.github.io/spatula/). Below, for each parameter, the corresponding parameters in [spatula](https://seqscope.github.io/spatula/), description, and the default value in NovaScope are provided.
 
-Parameters for `sbcd2chip`, used to pass values to the [`combine_sbcds`](https://seqscope.github.io/spatula/tools/combine_sbcds/) function in [spatula](https://seqscope.github.io/spatula/). Below, for each parameter, the corresponding parameters in [spatula](https://seqscope.github.io/spatula/), description, and the default value in NovaScope are provided.
-
-| Parameter     | `spatula` parameter | Description                                                                                   | Default Value |
-|---------------|---------------------|-----------------------------------------------------------------------------------------------|----------------------------|
-| `gap_row`     | `--rowgap`          | Extra gap between rows, based on tile height, for spatial adjustment.                         | 0.0517                     |
-| `gap_col`     | `--colgap`          | Additional gap between columns, based on tile width, for spatial adjustment.                  | 0.0048                     |
-| `dup_maxnum`  | `--max-dup`         | Allowable duplicate count for each barcode, within `dup_maxdist`.                             | 1                          |  
-| `dup_maxdist` | `--max-dup-dist-nm` | Max distance for duplicates, in nanometers.                                                   | 1000                       |
+    | Parameter     | `spatula` parameter | Description                                                                                   | Default Value |
+    |---------------|---------------------|-----------------------------------------------------------------------------------------------|----------------------------|
+    | `gap_row`     | `--rowgap`          | Extra gap between rows, based on tile height, for spatial adjustment.                         | 0.0517                     |
+    | `gap_col`     | `--colgap`          | Additional gap between columns, based on tile width, for spatial adjustment.                  | 0.0048                     |
+    | `dup_maxnum`  | `--max-dup`         | Allowable duplicate count for each barcode, within `dup_maxdist`.                             | 1                          |  
+    | `dup_maxdist` | `--max-dup-dist-nm` | Max distance for duplicates, in nanometers.                                                   | 1000                       |
 
 * **The `visualization` Parameters**
+    Those are parameters for the [`draw-xy`](https://seqscope.github.io/spatula/tools/draw_xy/) function in [spatula](https://seqscope.github.io/spatula/).
 
-Parameters for the `visualization` step, provided to the [`draw-xy`](https://seqscope.github.io/spatula/tools/draw_xy/) function in [spatula](https://seqscope.github.io/spatula/).
-
-| Parameter         | `spatula` parameter     | Description                                                                     | Default Value |
-|-------------------|-------------------------|---------------------------------------------------------------------------------|----------------------------|
-| `coord_per_pixel` | `--coord-per-pixel`     | Coordinates per pixel, as a divisor of input coordinate.                        | 1000                       |
-| `intensity_per_obs` | `--intensity-per-obs` | Intensity of points per pixel, max 255.                                         | 50                         |
-| `icol_x`          | `--icol-x`              | (0-based) index of X coordinate in input TSV.                                   | 3                          |
-| `icol_y`          | `--icol-y`              | (0-based) index of Y coordinate in input TSV.                                   | 4                          |
+    | Parameter         | `spatula` parameter     | Description                                                                     | Default Value |
+    |-------------------|-------------------------|---------------------------------------------------------------------------------|----------------------------|
+    | `coord_per_pixel` | `--coord-per-pixel`     | Coordinates per pixel, as a divisor of input coordinate.                        | 1000                       |
+    | `intensity_per_obs` | `--intensity-per-obs` | Intensity of points per pixel, max 255.                                         | 50                         |
+    | `icol_x`          | `--icol-x`              | (0-based) index of X coordinate in input TSV.                                   | 3                          |
+    | `icol_y`          | `--icol-y`              | (0-based) index of Y coordinate in input TSV.                                   | 4                          |
 
 ## Dependencies
 Rule `sbcd2chip` is designed to process data that Rule [`fastq2sbcd`](./fastq2sbcd.md) generates. Therefore, if the [input files](#input-files) are not available, `sbcd2chip` depends on the successful execution of [`fastq2sbcd`](./fastq2sbcd.md) to function correctly. An overview of the rule dependencies are provided in the [Workflow Structure](../../home/workflow_structure.md).

@@ -105,8 +105,9 @@ It is suggested to review the ["sge" image](#2-an-sge-image) along with the [com
   dge2sdge:
     layout: null
 ```
+
 * **The `layout` Parameter**
-The applies as the layout for the RGB plots. When absent, NovaScope use the [predefined layout file]().
+The applies as the layout for the RGB plots. When absent, NovaScope use the [predefined layout file](https://github.com/seqscope/NovaScope/blob/docs2/info/assets/layout_per_section_basis/layout.1x1.tsv).
 
 ## Dependencies
 Given the input from Rule `sbcd2chip`, `smatch`, and `align` serve as the necessary input for `dge2sdge`. This linkage ensures Rule `dge2sdge` can only execute after `sbcd2chip`, `smatch`, and `align` have successfully completed their operations. See an overview of the rule dependencies in the [Workflow Structure](../../home/workflow_structure.md).

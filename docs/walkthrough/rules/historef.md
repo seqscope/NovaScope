@@ -73,10 +73,11 @@ histology:
     figtype: "hne"
 ```
 
-The `resolution` and `figtype` indicates the resolution and type of the input histology file. The [`historef`](https://github.com/seqscope/historef) currently support the following types:
-(1) "hne": [Hematoxylin and Eosin (H&E) stained](https://en.wikipedia.org/wiki/H%26E_stain) histology images;
-(2) "dapi": [DAPI or 4',6-diamidino-2-phenylindole stained](https://en.wikipedia.org/wiki/DAPI) histology images;
-(3) "fl": Fluorescence stained histology images.
+* **The `histology` Parameters**
+    The `resolution` and `figtype` indicates the resolution and type of the input histology file. The [`historef`](https://github.com/seqscope/historef) currently support the following types:
+    * `"hne"`: [Hematoxylin and Eosin (H&E) stained](https://en.wikipedia.org/wiki/H%26E_stain) histology images;
+    * `"dapi"`: [DAPI or 4',6-diamidino-2-phenylindole stained](https://en.wikipedia.org/wiki/DAPI) histology images;
+    * `"fl"`: Fluorescence stained histology images.
 
 ## Dependencies
 Rule `historef` commences only after Rule [`dge2sdge`](./dge2sdge.md) has successfully executed. An overview of the rule dependencies are provided in the [Workflow Structure](../../home/workflow_structure.md).
