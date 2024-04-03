@@ -57,7 +57,18 @@ nav:
       - Job Configuration : getting_started/job_config.md
       - Executing NovaScope : getting_started/execute.md
       - Output: getting_started/output.md
-
+  - NovaScope Walkthrough:
+      - Introduction: walkthrough/intro.md
+      - Rule Execution Guide: 
+        - Core Concepts: walkthrough/execution_guide/core_concepts.md
+        - Execution Flow by Request: walkthrough/execution_guide/rule_execution.md
+      - Rules:
+        - fastq2sbcd: walkthrough/rules/fastq2sbcd.md 
+        - sbcd2chip : walkthrough/rules/sbcd2chip.md
+        - smatch : walkthrough/rules/smatch.md
+        - align: walkthrough/rules/align.md
+        - dge2sdge: walkthrough/rules/dge2sdge.md
+        - historef: walkthrough/rules/historef.md
 # Markdown Extensions
 markdown_extensions:
   - admonition

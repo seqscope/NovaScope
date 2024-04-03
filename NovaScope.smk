@@ -82,16 +82,16 @@ assert flowcell is not None, "Provide a valid Flowcell."
 logging.info(f" - Flowcell: {flowcell}")
 
 # Section
-section = config["input"]["section"]
-assert section is not None, "Provide a valid Section."
-logging.info(f" - Section: {section}")
+section = config["input"]["chip"]
+assert section is not None, "Provide a valid Section Chip."
+logging.info(f" - Section Chip: {section}")
 
 # Species
 species = check_input(config["input"]["species"], {"human","human_mouse","mouse","rat","worm"}, "specie", lower=False)
 logging.info(f" - Species: {species}")
 
 # Request
-request=check_input(config.get("request",["sge-per-section"]),{"sbcd-per-flowcell", "sbcd-per-section", "smatch-per-section", "align-per-section", "sge-per-section","hist-per-section"}, "request", lower=False)
+request=check_input(config.get("request",["sge-per-chip"]),{"sbcd-per-flowcell", "sbcd-per-chip", "smatch-per-chip", "align-per-chip", "sge-per-chip","hist-per-chip"}, "request", lower=False)
 logging.info(f" - Request: {request}")
 
 # Label: if not provided, use species as label, else use {species}_{label}
@@ -137,7 +137,7 @@ sc2seq2 = create_dict(df_seq2, key_col="section", val_cols="seq2_prefix",  dict_
 logging.info("     Seq2 input summary table:\n%s", df_seq2)
 
 # STD fq files  (TO-DO: do this only when the std file is needed)
-if any(task in request for task in ["sbcd-per-section", "smatch-per-section", "align-per-section", "sge-per-section"]):
+if any(task in request for task in ["sbcd-per-chip", "smatch-per-chip", "align-per-chip", "sge-per-chip"]):
     logging.info(f" - Standardzing fastq file names.")
 
     logging.info("     Creating symlinks to standardize the file names for seq1.")
@@ -166,7 +166,7 @@ hist_type = check_input(config.get("histology",{}).get("figtype","hne"), ["hne",
 hist_std_fn = f"{hist_res}X{flowcell_abbr}-{section}-{species}-{hist_type}.tif"
 hist_fit_fn = f"{hist_res}X{flowcell_abbr}-{section}-{species}-{hist_type}-fit.tif"
 
-if "hist-per-section" in request:
+if "hist-per-chip" in request:
     logging.info(f" - Histology file: Loading")
     os.makedirs(hist_std_dir, exist_ok=True)    
 
@@ -207,9 +207,9 @@ output_filename_conditions = [
             'seq1_prefix':      df_seq1["seq1_prefix"].values,
         },
     },
-    # sbcd-per-section
+    # sbcd-per-chip
     {
-        'flag': 'sbcd-per-section',
+        'flag': 'sbcd-per-chip',
         'root': main_dirs["seq1st"],
         'subfolders_patterns': [
                                 (["{flowcell}", "nbcds", "{section}", "1_1.sbcds.sorted.tsv.gz"], None),
@@ -221,9 +221,9 @@ output_filename_conditions = [
             'section':          df_seq1["section"].values,
         },
     },
-    # smatch-per-section
+    # smatch-per-chip
     {
-        'flag': 'smatch-per-section',
+        'flag': 'smatch-per-chip',
         'root': main_dirs["align"],
         'subfolders_patterns': [
                                 (["{flowcell}", "{section}", "match", "{seq2_prefix}"+".R1.match.sorted.uniq.tsv.gz"], None),
@@ -237,9 +237,9 @@ output_filename_conditions = [
             'seq2_prefix':       df_seq2["seq2_prefix"].values,  
         },
     },
-   # align-per-section
+   # align-per-chip
     {
-        'flag': 'align-per-section',
+        'flag': 'align-per-chip',
         'root': main_dirs["align"],
         'subfolders_patterns': [
                                 (["{flowcell}", "{section}", "bam",  "{species_with_seq2v}", "sttoolsSolo.out", "GeneFull", "raw", "barcodes.tsv.gz"], None),
@@ -256,9 +256,9 @@ output_filename_conditions = [
             'species_with_seq2v': df_seq2["species_with_seq2v"].values,  
         },
     },
-    # sge-per-section
+    # sge-per-chip
     {
-        'flag': 'sge-per-section',
+        'flag': 'sge-per-chip',
         'root': main_dirs["align"],
         'subfolders_patterns': [
                                 (["{flowcell}", "{section}", "sge",   "{species_with_seq2v}", "barcodes.tsv.gz"], None),
@@ -274,9 +274,9 @@ output_filename_conditions = [
             'species_with_seq2v': df_seq2["species_with_seq2v"].values,  
         },
     },
-    # hist-per-section
+    # hist-per-chip
     {
-        'flag': 'hist-per-section',
+        'flag': 'hist-per-chip',
         'root': main_dirs["align"],
         'subfolders_patterns': [
                                 (["{flowcell}", "{section}", "histology", "{species_with_seq2v}", hist_std_fn], None),
@@ -314,6 +314,6 @@ include: "rules/a05_dge2sdge.smk"
 
 include: "rules/b01_gene_visual.smk"
 
-if "hist-per-section" in request:
+if "hist-per-chip" in request:
     include: "rules/b02_historef.smk"
 
