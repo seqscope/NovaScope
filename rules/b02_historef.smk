@@ -1,19 +1,13 @@
-
-#==============================================
-#
-# cart step3. Processing Backgrounds - histology H&E  
-#
-#==============================================
-
 rule b02_historef:
     input:
-        sdge_3in1_png  = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "sge", "{species_with_seq2v}", "{flowcell}"+"."+"{section}"+"."+"{species_with_seq2v}"+".sge_match_sbcd.png"),
+        sdge_3in1_png     = os.path.join(main_dirs["align"],      "{flowcell}", "{chip}", "{run_id}", "sge", "{run_id}.sge_match_sbcd.png"),
+        hist_raw          = os.path.join(main_dirs["histology"],  "{flowcell}", "{chip}", "raw", "{hist_std_prefix}.tif"),
     output:
-        hist_aligned   = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "histology", "{species_with_seq2v}", hist_std_fn),
-        hist_fit       = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "histology", "{species_with_seq2v}", hist_fit_fn),
+        hist_aligned      = os.path.join(main_dirs["histology"],  "{flowcell}", "{chip}", "aligned", "{run_id}", "{hist_std_prefix}.tif"),
+        hist_fit          = os.path.join(main_dirs["histology"],  "{flowcell}", "{chip}", "aligned", "{run_id}", "{hist_std_prefix}-fit.tif"),
     params:
-        hist_std_tif   = hist_std_tif,
-        module_cmd     = get_envmodules_for_rule(["python", "gcc", "gdal"], module_config)
+        #hist_raw_stdpath  = hist_raw_stdpath,
+        module_cmd        = get_envmodules_for_rule(["python", "gcc", "gdal"], module_config)
     run:
         shell(
         r"""
@@ -25,7 +19,7 @@ rule b02_historef:
         # aligned histology
         {python} -m historef.referencer \
             --nge  {input.sdge_3in1_png}\
-            --hne {params.hist_std_tif} \
+            --hne  {input.hist_raw} \
             --aligned {output.hist_aligned}
       
         # fit histology

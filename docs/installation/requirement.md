@@ -188,8 +188,13 @@ If you want to align your histology images with the spatial gene expression data
 source ${pyenv_dir}/$pyenv_name/bin/activate
 
 ### download the historef package
-wget -P ${smk_dir}/installation https://github.com/seqscope/historef/releases/download/v0.1.1/historef-0.1.1-py3-none-any.whl
+wget -P ${smk_dir}/installation https://github.com/seqscope/historef/releases/download/v0.1.2/historef-0.1.2-py3-none-any.whl
 
 ## install the historef package
-pip install ${smk_dir}/installation/historef-0.1.1-py3-none-any.whl
+pip install ${smk_dir}/installation/historef-0.1.2-py3-none-any.whl
 ```
+
+
+## (Optional) Install the ficture Package from the whl File
+
+https://seqscope.github.io/ficture/install/

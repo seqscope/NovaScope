@@ -1,30 +1,31 @@
 rule a05_dge2sdge:
     input:
         #nbcds
-        nbcd_tsv      = os.path.join(main_dirs["seq1st"], "{flowcell}", "nbcds", "{section}", "1_1.sbcds.sorted.tsv.gz"),
-        nbcd_mnfst    = os.path.join(main_dirs["seq1st"], "{flowcell}", "nbcds", "{section}", "manifest.tsv"),
+        nbcd_tsv      = os.path.join(main_dirs["seq1st"], "{flowcell}", "nbcds", "{chip}", "1_1.sbcds.sorted.tsv.gz"),
+        nbcd_mnfst    = os.path.join(main_dirs["seq1st"], "{flowcell}", "nbcds", "{chip}", "manifest.tsv"),
         #smatch
-        smatch_tsv    = lambda wildcards: [os.path.join(main_dirs["align"],  "{flowcell}", wildcards.section, "match", seq2_prefix+".R1.match.sorted.uniq.tsv.gz") for seq2_prefix in sc2seq2[wildcards.section]],
+        smatch_tsv    = lambda wildcards: [os.path.join(main_dirs["match"],  "{flowcell}", "{chip}", seq2_id, seq2_id+".R1.match.sorted.uniq.tsv.gz") for seq2_id in rid2seq2[wildcards.run_id]],
         #align
-        dge_gf_bcd    = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{species_with_seq2v}","sttoolsSolo.out", "GeneFull", "raw", "barcodes.tsv.gz"),
-        dge_gf_ftr    = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{species_with_seq2v}","sttoolsSolo.out", "GeneFull", "raw", "features.tsv.gz"),
-        dge_gf_mtx    = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{species_with_seq2v}","sttoolsSolo.out", "GeneFull", "raw", "matrix.mtx.gz"),
-        dge_gn_mtx    = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{species_with_seq2v}","sttoolsSolo.out", "Gene",     "raw", "matrix.mtx.gz"),
-        dge_vl_spl    = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{species_with_seq2v}","sttoolsSolo.out", "Velocyto", "raw", "spliced.mtx.gz"),
-        dge_vl_uns    = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{species_with_seq2v}","sttoolsSolo.out", "Velocyto", "raw", "unspliced.mtx.gz"),
-        dge_vl_amb    = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "bam", "{species_with_seq2v}","sttoolsSolo.out", "Velocyto", "raw", "ambiguous.mtx.gz"),
+        dge_gf_bcd    = os.path.join(main_dirs["align"],  "{flowcell}", "{chip}", "{run_id}", "bam", "sttoolsSolo.out", "GeneFull", "raw", "barcodes.tsv.gz"),
+        dge_gf_ftr    = os.path.join(main_dirs["align"],  "{flowcell}", "{chip}", "{run_id}", "bam", "sttoolsSolo.out", "GeneFull", "raw", "features.tsv.gz"),
+        dge_gf_mtx    = os.path.join(main_dirs["align"],  "{flowcell}", "{chip}", "{run_id}", "bam", "sttoolsSolo.out", "GeneFull", "raw", "matrix.mtx.gz"),
+        dge_gn_mtx    = os.path.join(main_dirs["align"],  "{flowcell}", "{chip}", "{run_id}", "bam", "sttoolsSolo.out", "Gene",     "raw", "matrix.mtx.gz"),
+        dge_vl_spl    = os.path.join(main_dirs["align"],  "{flowcell}", "{chip}", "{run_id}", "bam", "sttoolsSolo.out", "Velocyto", "raw", "spliced.mtx.gz"),
+        dge_vl_uns    = os.path.join(main_dirs["align"],  "{flowcell}", "{chip}", "{run_id}", "bam", "sttoolsSolo.out", "Velocyto", "raw", "unspliced.mtx.gz"),
+        dge_vl_amb    = os.path.join(main_dirs["align"],  "{flowcell}", "{chip}", "{run_id}", "bam", "sttoolsSolo.out", "Velocyto", "raw", "ambiguous.mtx.gz"),
     output:
-        sdge_bcd      = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "sge", "{species_with_seq2v}", "barcodes.tsv.gz"),
-        sdge_ftr      = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "sge", "{species_with_seq2v}", "features.tsv.gz"),
-        sdge_mtx      = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "sge", "{species_with_seq2v}", "matrix.mtx.gz"),
-        sdge_rgb_png  = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "sge", "{species_with_seq2v}", "{flowcell}"+"."+"{section}"+"."+"{species_with_seq2v}"+".gene_full_mito.png"),
-        sdge_3in1_png = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "sge", "{species_with_seq2v}", "{flowcell}"+"."+"{section}"+"."+"{species_with_seq2v}"+".sge_match_sbcd.png"),
+        sdge_bcd      = os.path.join(main_dirs["align"],  "{flowcell}", "{chip}", "{run_id}", "sge", "barcodes.tsv.gz"),
+        sdge_ftr      = os.path.join(main_dirs["align"],  "{flowcell}", "{chip}", "{run_id}", "sge", "features.tsv.gz"),
+        sdge_mtx      = os.path.join(main_dirs["align"],  "{flowcell}", "{chip}", "{run_id}", "sge", "matrix.mtx.gz"),
+        sdge_rgb_png  = os.path.join(main_dirs["align"],  "{flowcell}", "{chip}", "{run_id}", "sge", "{run_id}.gene_full_mito.png"),
+        sdge_3in1_png = os.path.join(main_dirs["align"],  "{flowcell}", "{chip}", "{run_id}", "sge", "{run_id}.sge_match_sbcd.png"),
+        sdge_xyrange  = os.path.join(main_dirs["align"],  "{flowcell}", "{chip}", "{run_id}", "sge", "barcodes.minmax.tsv"),
     params:
-        rgb_layout       = check_path(config.get("preprocess", {}).get("dge2sdge", {}).get('layout', None), job_dir, strict_mode=False),
+        rgb_layout       = check_path(config.get("preprocess", {}).get("dge2sdge", {}).get("layout", None), job_dir, strict_mode=False),
         visual_max_scale = config.get("preprocess", {}).get("visualization", {}).get("rgb",{}).get("max_scale", 50),
         visual_res       = config.get("preprocess", {}).get("visualization", {}).get("rgb",{}).get("resolution", 1000),
         # module
-        module_cmd        = get_envmodules_for_rule(["python", "imagemagick"], module_config)
+        module_cmd       = get_envmodules_for_rule(["python", "imagemagick"], module_config)
     resources: 
         mem           = "24000MB", 
         time          = "3:00:00"  
@@ -34,19 +35,24 @@ rule a05_dge2sdge:
         # Generate smatch_csvjoin.
         smatch_tsv_warg_match  = " --match ".join(expand(input.smatch_tsv))
         smatch_tsv_warg_smatch = " --smatch ".join(expand(input.smatch_tsv))
-
+        
         # Check the layout for rgb-gene-image.
         if params.rgb_layout is not None:
             rgb_layout = params.rgb_layout
             assert os.path.exists(params.rgb_layout), f"The provided RGB layout file does not exist: {params.rgb_layout}"
             print(f"Using the provided RGB layout file: {params.rgb_layout}.")
         else: 
-            rgb_layout = os.path.join(smk_dir, "info", "assets", "layout_per_section_basis", "layout.1x1.tsv")
+            rgb_layout = os.path.join(smk_dir, "info", "assets", "layout_per_chip_basis", "layout.1x1.tsv")
             assert os.path.exists(rgb_layout), f"The default RGB layout file does not exist: {rgb_layout}."
             print(f"Using the default RGB layout file: {rgb_layout}.")
 
+        # Create minmax files.
+        print("Creating minmax files...")
+        df_mnfst=pd.read_csv(input.nbcd_mnfst, sep="\t")
+        df_minmax=df_mnfst[["xmin", "xmax", "ymin", "ymax"]]
+        df_minmax.to_csv(output.sdge_xyrange, sep="\t", index=False)
         shell(
-        r"""
+        """
         set -euo pipefail
         {params.module_cmd}
 
@@ -83,4 +89,6 @@ rule a05_dge2sdge:
             --max-scale {params.visual_max_scale} \
             --res {params.visual_res} \
             --transpose
-        """)
+        """
+        )
+        

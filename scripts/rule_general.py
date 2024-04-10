@@ -1,11 +1,25 @@
-import os, sys
+import os, sys, csv
 import pandas as pd
 from math import ceil
 
 local_scripts = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(local_scripts)
-from bricks import create_symlink
+from bricks import create_symlink,  create_symlinks_by_list
 
+#===============================================================================
+# Table of Contents
+
+# * Setup RGB Layout
+# * Get skip_sbcd
+# * Calculate resource for alignment by input file size
+# * Assign resource for align
+# * Get module (name+version) by key
+# * Link sdge to sdgeAR
+
+# ===============================================================================
+#
+# create a 1x1 layout (not in use, 20240409)
+#
 def setup_rgb_layout(rgb_layout_path, sdge_dir):
     """
     Sets up an RGB layout file. Creates a default 1x1 layout if no layout is specified,
@@ -30,6 +44,10 @@ def setup_rgb_layout(rgb_layout_path, sdge_dir):
         create_symlink(rgb_layout_path, target_layout_file)
         return target_layout_file
     
+# ===============================================================================
+#
+# get skip_sbcd parameter by sbcd_format
+#
 def get_skip_sbcd(config):
     sbcd_format = config.get("preprocess", {}).get("fastq2sbcd", {}).get('format', "DraI32") 
     skip_sbcd   = config.get("preprocess", {}).get("smatch", {}).get('skip_sbcd', None)
@@ -43,7 +61,10 @@ def get_skip_sbcd(config):
     return skip_sbcd
 
 
-## alignment resource
+# ===============================================================================
+#
+# calculate resource for alignment by input file size
+#
 def convert_mem_unit_to_gb(x):
     lower_x = x.lower()
     if lower_x.endswith('mb') or lower_x.endswith('m'):
@@ -66,12 +87,12 @@ def calculate_default_memory(fqsize):
         return 140
     return 330
 
-def cal_resource_by_filesize(section, sc2seq2, main_dirs, avail_resource_list):
+def cal_resource_by_filesize(run, rid2seq2, main_dirs, avail_resource_list):
     # calculate the 2nd-seq fastq size
     fqsize = 0
-    for seq2_prefix in sc2seq2[section]:
-        seq2_fqr1 = os.path.join(main_dirs["seq2nd"], seq2_prefix, seq2_prefix + ".R1.fastq.gz" )
-        seq2_fqr2 = os.path.join(main_dirs["seq2nd"], seq2_prefix, seq2_prefix + ".R2.fastq.gz" )
+    for seq2_id in rid2seq2[run]:
+        seq2_fqr1 = os.path.join(main_dirs["seq2nd"], seq2_id, seq2_id + ".R1.fastq.gz" )
+        seq2_fqr2 = os.path.join(main_dirs["seq2nd"], seq2_id, seq2_id + ".R2.fastq.gz" )
         fqsize += ( os.path.getsize(seq2_fqr1) / 1e9 )
         fqsize += ( os.path.getsize(seq2_fqr2) / 1e9 )
     
@@ -96,14 +117,13 @@ def cal_resource_by_filesize(section, sc2seq2, main_dirs, avail_resource_list):
             "partition": resource["partition"],
         }
 
-
-def assign_resource_for_align(section, config, sc2seq2, main_dirs):
+def assign_resource_for_align(run, config, rid2seq2, main_dirs):
     assign_option=config.get("preprocess", {}).get("align", {}).get("resource", {}).get("assign_type", "stdin") 
     
     if assign_option=="filesize":
         avail_resource_list=config.get("preprocess", {}).get("align", {}).get("resource", {}).get("filesize", None)
         assert avail_resource_list is not None, "Please provide filesize resource list for alignment."
-        resources = cal_resource_by_filesize(section, sc2seq2, main_dirs, avail_resource_list)
+        resources = cal_resource_by_filesize(run, rid2seq2, main_dirs, avail_resource_list)
     elif assign_option=="stdin":
         resources = {
         "mem":  config.get("preprocess", {}).get("align", {}).get("resource", {}).get("stdin", {}).get("memory", "70000m"),
@@ -130,8 +150,10 @@ def assign_resource_for_align(section, config, sc2seq2, main_dirs):
 
     return resources
 
+# ===============================================================================
+#
+# get module names by key
 
-# Define a function to handle environment modules based on execution mode
 # Update: 
 # * 20240326: Updated function to correctly load nested modules, e.g., 'samtools' under 'Bioinformatics'.
 def get_envmodules_for_rule(required_modules, module_config):
@@ -148,3 +170,67 @@ def get_envmodules_for_rule(required_modules, module_config):
     else:
         # For local execution or HPC without a modules system, return an empty list
         return ""
+
+# ===============================================================================
+
+# link sdge to sdgeAR 
+
+def link_sdge_to_sdgeAR(input_path, output_path, run_id, unit_id):
+    os.makedirs(output_path, exist_ok=True)
+    create_symlinks_by_list(input_path, output_path, 
+                            ["barcodes.tsv.gz", "matrix.mtx.gz", "features.tsv.gz", "barcodes.minmax.tsv"], 
+                            match_by_suffix=False)
+    create_symlinks_by_list(input_path, output_path, 
+                            ["gene_full_mito.png", "sge_match_sbcd.png"], 
+                            input_id=run_id, output_id=unit_id, 
+                            match_by_suffix=True)
+
+# ===============================================================================
+#
+# find_major_axis
+
+def find_major_axis(filename, format):
+    # Usage: 
+    #   - It was suggested to use the longer axis as the major axis 
+    #   - Once the major axis was set, the QCed.matrix.tsv.gz and merged.matrix.tsv.gz should be sorted by the major axis
+    # Update:
+    #   2024.02: Since the longer axis may change after postsdge_QC, use the barcodes.minmax.tsv to determine the major axis.
+    # (1) detect from the "{uid}.coordinate_minmax.tsv"  
+    if format == "row":
+        data = {}
+        with open(filename, 'r') as file:
+            for line in file:
+                key, value = line.split()
+                data[key] = float(value)
+        if not all(k in data for k in ['xmin', 'xmax', 'ymin', 'ymax']):
+            raise ValueError("Missing one or more required keys (xmin, xmax, ymin, ymax)")
+        xmin = data['xmin']
+        xmax = data['xmax']
+        ymin = data['ymin']
+        ymax = data['ymax']
+    # (2) detect from the barcodes.minmax.tsv
+    elif format == "col":
+        # read filename and read the header from the first line
+        with open(filename, 'r') as file:
+            reader = csv.DictReader(file, delimiter='\t')
+            try:
+                row = next(reader)  # Read the first row
+            except StopIteration:
+                raise ValueError("File is empty")
+            # Check if there is more than one row
+            try:
+                next(reader)
+                raise ValueError("Error: More than one row of data found.")
+            except StopIteration:
+                pass  # Only one row of data, which is expected
+            xmin = int(row['xmin'])
+            xmax = int(row['xmax'])
+            ymin = int(row['ymin'])
+            ymax = int(row['ymax'])
+    deltaX = xmax - xmin
+    deltaY = ymax - ymin
+    if deltaX > deltaY:
+        return "X"
+    else:
+        return "Y"
+        

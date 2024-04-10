@@ -8,9 +8,23 @@ import datetime
 import logging 
 from collections import OrderedDict
 
-#from snakemake.io import expand
+#================================================================================================
 
-# 1. Set up logging func:
+# Table of Contents
+
+# * logging-related func
+# * load configs func
+# * check input func
+# * check path func
+# * create dict func
+# * create symlink func
+# * expand func
+# * misc
+
+#================================================================================================
+
+# logging-related functions
+
 def setup_logging(job_dir,log_prefix):
     timestamp = datetime.datetime.now().strftime('%Y-%m-%d')
     log_dir = os.path.join(job_dir, "logs")
@@ -33,7 +47,10 @@ def end_logging():
             handler.close()
             root_logger.removeHandler(handler)
 
-# 2. Load configs func:
+#================================================================================================
+
+# load configs func:
+
 def load_configs(job_dir, config_files):
     """
     Parameters:
@@ -67,8 +84,12 @@ def load_configs(job_dir, config_files):
                 raise
     return config
 
+#================================================================================================
 
-# 2. Check input func:
+# check input func:
+# - check if the input value fits the valid options
+# - check if the input path is valid
+
 def check_input(value, valid_options, label, lower=True):
     """
     Parameters:
@@ -137,7 +158,10 @@ def check_path(file_path, work_dir, strict_mode=True, flag="The path"):
     else:
         return None
 
-# 3. Create dict func:
+#================================================================================================
+
+# create dict func:
+
 def create_dict(df, key_col, val_cols, dict_type, val_type):
     if isinstance(val_cols, list):
         all_cols = val_cols.copy()
@@ -170,7 +194,10 @@ def create_dict(df, key_col, val_cols, dict_type, val_type):
             my_dict2[key] = list(values)
     return my_dict2
 
-# 4. Create symlink func:
+#================================================================================================
+
+# create symlink func:
+
 def log_info(message, silent):
     """Log a message unless silenced."""
     if not silent:
@@ -188,7 +215,6 @@ def check_missing_input(input_path, action_if_missing, output_path, silent):
         else:
             raise ValueError("Invalid option for handle_missing_input.")
     return False
-
 
 def check_and_handle_existing_output(output_path, input_path, action_if_existing, silent):
     """Handle scenarios where the output path already exists. action_if_existing valid options: replace, warn. (update: I deleted the skip option)"""
@@ -240,39 +266,31 @@ def create_symlink(input_path, output_path, handle_missing_input="warn", handle_
     except Exception as e:
         raise ValueError(f"Failed to create symlink: {e}")
 
-
-def create_symlinks_by_list(input_path, output_path, items, match_by_suffix=False):
+def create_symlinks_by_list(input_path, output_path, items, input_id=None, output_id=None, match_by_suffix=False):
     """
     Creates symlinks for files in the input directory at the output directory.
     Handles both exact filenames and files matching a given suffix.
-
-    Args:
-    - input_path (str): Path to the input directory.
-    - output_path (str): Path to the output directory.
-    - items (list of str): A list of filenames or suffixes.
-    - is_suffix (bool): If True, treats items as suffixes and searches for matching files.
-                        If False, treats items as exact filenames.
     """
     for item in items:
         if match_by_suffix:
-            matched_files = [f for f in os.listdir(input_path) if f.endswith(item)]
-            if len(matched_files) == 1:
+            output_fn = f"{output_id}.{item}" if output_id else item
+            if input_id is not None:
+                source_path = os.path.join(input_path, input_id+"."+item)
+                target_path = os.path.join(output_path, output_fn)
+            elif input_id is None:
+                matched_files = [f for f in os.listdir(input_path) if f.endswith(item)]
+                assert len(matched_files) == 1, f"None file or more than 1 file matched the suffix '{item}' in {input_path}."                
                 source_path = os.path.join(input_path, matched_files[0])
-                target_path = os.path.join(output_path, item)
-                create_symlink(source_path, target_path)
-            elif len(matched_files) > 1:
-                raise ValueError(f"Multiple files match the suffix '{item}' in {input_path}.")
-            else:
-                raise ValueError(f"No files match the suffix '{item}' in {input_path}.")
+                target_path = os.path.join(output_path, output_fn)
         else:
             source_path = os.path.join(input_path, item)
             target_path = os.path.join(output_path, item)
-            if os.path.exists(source_path):
-                create_symlink(source_path, target_path)
-            else:
-                raise ValueError(f"Required input file {source_path} does not exist.")
+        create_symlink(source_path, target_path)
     
-# 5. the expand function to list the file names
+#================================================================================================
+
+#  expand function to list the file names
+
 def expand(path_pattern, product_args):
     return [path_pattern.format(**dict(zip(product_args.keys(), values)))
             for values in itertools.product(*product_args.values())]
@@ -304,6 +322,7 @@ def list_outputfn_by_request(output_filename_conditions, request, debug=False):
     ]
 
     requested_files=list(set(requested_files))
+
     # sort the list by alphabetical order
     requested_files.sort()
 
@@ -315,19 +334,31 @@ def list_outputfn_by_request(output_filename_conditions, request, debug=False):
     return requested_files
 
 
-# 6. Download file
+#================================================================================================
+
+# misc
+
+# download files
 def download_file(url, local_path):
     if not os.path.exists(local_path):
         subprocess.run(["wget", "-O", local_path, url], check=True)
 
-# 7. Display pandas dataframe
+# get the last 5 characters of an MD5 hash
+import hashlib
+def get_last5_from_md5(input_string):
+    hash_object = hashlib.md5(input_string.encode())
+    hash_hex = hash_object.hexdigest()
+    return hash_hex[-5:]
+
+# display pandas dataframe
 def configure_pandas_display():
     pd.set_option('display.max_columns', None)  # display all columns
     pd.set_option('display.max_rows', None)     # display all rows
     pd.set_option('display.width', None)        # auto-detect the display width for wrapping
     pd.set_option('display.max_colwidth', None) # display all content of each cell
 
-# 9. Create dirs and get paths
+
+# Create dirs and get paths
 def create_dirs_and_get_paths(main_dir, sub_dirnames):
     sub_dirpaths = {}
     os.makedirs(main_dir, exist_ok=True)
