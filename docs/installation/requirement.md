@@ -194,7 +194,7 @@ wget -P ${smk_dir}/installation https://github.com/seqscope/historef/releases/do
 pip install ${smk_dir}/installation/historef-0.1.2-py3-none-any.whl
 ```
 
+## (Optional) Install FICTURE
+NovaScope provides additional features that allow users to convert their output into two different formats. Specifically, it allows the transformation of the spatial digital gene expression matrix (SGE) into a format compatible with [FICTURE](https://seqscope.github.io/ficture/). It also enables pixel organization into user-defined hexagonal grids, creating a hexagon-based SGE in the 10x genomics format. 
 
-## (Optional) Install the ficture Package from the whl File
-
-https://seqscope.github.io/ficture/install/
+To utilize these features, users are advised to follow the [FICTURE](https://seqscope.github.io/ficture/) installation guidelines provided in its [tutorial](https://seqscope.github.io/ficture/install/).

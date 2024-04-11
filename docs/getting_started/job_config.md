@@ -38,7 +38,7 @@ input:
       fastq_R2: <path_to_seq2nd_pair2_fastq_Read2_file>
     # ... (if there are more 2nd-seq FASTQ files)
   label: <seq2nd_version>                       ## Optional. A version label (e.g. v1)
-  histology: <path_to_the_input_histology_file> ## Optional, only if histology alignment is needed.
+  histology: <path_to_the_input_histology_file> ## Optional. Only if histology alignment is needed.
 
 ## Output
 output: <output_directory>                      ## REQUIRED FIELD (e.g. /path/to/output/directory)
@@ -103,7 +103,21 @@ env_yml: <path_to_config_env.yaml_file>         ## If absent, the pipeline will 
 #histology:                  ## specify the parameters for histology alignment using historef
 #    resolution: 10
 #    figtype: "hne"          ## Options: "hne", "dapi", and "fl".
-
+#
+#sdgeAR:
+#  reformat:
+#    keep_gene_type: "protein_coding,lncRNA"
+#    rm_gene_regex: "^Gm\\d+|^mt-|^MT-"
+#  segment:
+#    precision: 2
+#    min_pixel_per_unit: 10
+#
+#analysis:
+#  mu_scale: 1000
+#  params:
+#    - solofeature: gn
+#      trainwidth: 24
+#      segmentmove: 1
 ```
 
 ### Detailed Description of Individual Fields
@@ -138,9 +152,12 @@ Below are the options with their output files and links to detailed output infor
 | `sbcd-per-flowcell` | Spatial barcode map (per-tile basis) and Manifest file for a flowcell                                         | [fastq2sbcd](../walkthrough/rules/fastq2sbcd.md#output-files)       |
 | `sbcd-per-chip`  | Spatial barcode map for a section chip, Image of spatial barcode distribution                                    | [sbcd2chip](../walkthrough/rules/sbcd2chip.md#output-files)         |
 | `smatch-per-chip`| File with matched spatial barcodes, Image of matched barcode spatial distribution                                 | [smatch](../walkthrough/rules/smatch.md#output-files)               |
-| `align-per-chip` | Binary Alignment Map (BAM) file, Digital gene expression matrix (DGE) for genomic features                       | [align](../walkthrough/rules/align.md)                              |
-| `sge-per-chip`   | Spatial digital gene expression matrix (SGE), Spatial distribution images for all transcripts and specific genes of interest. | [dge2sdge](../walkthrough/rules/dge2sdge.md)                        |
-| `hist-per-chip`  | Geotiff file for coordinate transformation between SGE and histology image, A Resized TIFF file                  | [historef](../walkthrough/rules/historef.md)                        |
+| `align-per-run` | Binary Alignment Map (BAM) file, Digital gene expression matrix (DGE) for genomic features                       | [align](../walkthrough/rules/align.md)                              |
+| `sge-per-run`   | Spatial digital gene expression matrix (SGE), Spatial distribution images for all transcripts and specific genes of interest. | [dge2sdge](../walkthrough/rules/dge2sdge.md)                        |
+| `hist-per-run`  | Geotiff file for coordinate transformation between SGE and histology image, A Resized TIFF file                  | [historef](../walkthrough/rules/historef.md)                        |
+| `transcript-per-unit`  | SGE in in a FICTURE-compatible format                  | [sdgeAR_reformat](../walkthrough/rules/sdgeAR_reformat.md)                        |
+| `segment-per-unit`     | hexagon-based SGE in the 10x genomics format           | [sdgeAR_segment](../walkthrough/rules/sdgeAR_segment.md)                        |
+
 
 #### preprocess
 

@@ -2,9 +2,9 @@ rule a08_sdgeAR_QC:
     input:
         sdgeAR_xyrange    = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "sgeAR", "barcodes.minmax.tsv"),
         sdgeAR_ftr_tabqc  = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.feature.clean.tsv.gz"),
-        sdgeAR_transcript = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.merged.matrix.tsv.gz"),
+        sdgeAR_transcript = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.transcripts.tsv.gz"),
     output:
-        sdgeAR_transcript_qc = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.filtered.matrix.tsv.gz"),
+        sdgeAR_transcript_qc = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.transcripts.filtered.tsv.gz"),
         sdgeAR_xyrange_qc    = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.coordinate_minmax.tsv"),
         sdgeAR_bd_strict     = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.boundary.strict.geojson"), 
         sdgeAR_bd_lenient    = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.boundary.lenient.geojson"), 
@@ -39,7 +39,6 @@ rule a08_sdgeAR_QC:
             tabix_column="-b3 -e3"
         fi
 
-        # TO be revised, there will be no strict boundary if skip_density_QC
         echo "==> Perform QC on {input.sdgeAR_transcript} based on the density!"
         command time -v {python} {ficture}/script/filter_poly.py \
             --input {input.sdgeAR_transcript} \

@@ -99,7 +99,7 @@ request=check_input(config.get("request",["sge-per-run"]),
                     {   "sbcd-per-flowcell", 
                         "sbcd-per-chip", "smatch-per-chip", 
                         "align-per-run", "sge-per-run", "hist-per-run", 
-                        "segment-per-unit"
+                        "transcript-per-unit", "segment-per-unit"
                     },
                      "request", lower=False)
 logging.info(f" - Request(s): {request}")
@@ -115,10 +115,10 @@ logging.info(f"3. Processing input by requests.")
 output_filename_conditions = []
 
 # per-unit or per-run:
-if any(task in request for task in ["align-per-run", "sge-per-run", "hist-per-run", "segment-per-unit"]):
+if any(task in request for task in ["align-per-run", "sge-per-run", "hist-per-run", "segment-per-unit", "transcript-per-unit"]):
     run_id, rid2seq2 = read_config_for_runid(config, job_dir)
 
-if "segment-per-unit" in request:
+if any(task in request for task in["segment-per-unit","transcript-per-unit" ]):
     # run ID: to distinguish different input 2nd-seq data for the same flowcell and chip.
     run_id, rid2seq2 = read_config_for_runid(config, job_dir)
 
@@ -143,7 +143,7 @@ else:
 
 # per-chip:
 # - smatch-per-chip, sbcd-per-chip (and above)
-if any(task in request for task in ["smatch-per-chip", "sbcd-per-chip", "align-per-run", "sge-per-run", "hist-per-run", "segment-per-unit"]):
+if any(task in request for task in ["smatch-per-chip", "sbcd-per-chip", "align-per-run", "sge-per-run", "hist-per-run", "segment-per-unit", "transcript-per-unit"]):
     # seq2 info (multiple pairs)
     df_seq2 = read_config_for_seq2(config, job_dir, log_option=True)
 else:
@@ -287,12 +287,9 @@ output_filename_conditions = [
             'root': main_dirs["analysis"],
             'subfolders_patterns': [
                 
-                                    ([ "{run_id}", "{unit_id}", "segment", "{sf}", "d_{tw}", "raw_{seg_nmove}",      "barcodes.tsv.gz"], None),
-                                    ([ "{run_id}", "{unit_id}", "segment", "{sf}", "d_{tw}", "raw_{seg_nmove}",      "features.tsv.gz"], None),
-                                    ([ "{run_id}", "{unit_id}", "segment", "{sf}", "d_{tw}", "raw_{seg_nmove}",      "matrix.mtx.gz"  ], None),
-                                    ([ "{run_id}", "{unit_id}", "segment", "{sf}", "d_{tw}", "filtered_{seg_nmove}", "barcodes.tsv.gz"], None),
-                                    ([ "{run_id}", "{unit_id}", "segment", "{sf}", "d_{tw}", "filtered_{seg_nmove}", "features.tsv.gz"], None),
-                                    ([ "{run_id}", "{unit_id}", "segment", "{sf}", "d_{tw}", "filtered_{seg_nmove}", "matrix.mtx.gz"  ], None),                              
+                                    ([ "{run_id}", "{unit_id}", "segment", "{sf}.d_{tw}.raw_{seg_nmove}", "barcodes.tsv.gz"], None),
+                                    ([ "{run_id}", "{unit_id}", "segment", "{sf}.d_{tw}.raw_{seg_nmove}", "features.tsv.gz"], None),
+                                    ([ "{run_id}", "{unit_id}", "segment", "{sf}.d_{tw}.raw_{seg_nmove}", "matrix.mtx.gz"  ], None),                     
             ],
             'zip_args': {
                 'run_id':       df_analysis["run_id"].values,  
@@ -300,6 +297,21 @@ output_filename_conditions = [
                 'sf':           df_analysis["solofeature"].values,
                 'tw':           df_analysis["trainwidth"].values,
                 'seg_nmove':    df_analysis['segmentmove'].values,
+            },
+    },
+    # transcript-per-unit
+    {
+            'flag': 'transcript-per-unit',
+            'root': main_dirs["analysis"],
+            'subfolders_patterns': [
+                
+                                    ([ "{run_id}", "{unit_id}", "preprocess", "{unit_id}.merged.matrix.tsv.gz"  ], None),
+                                    ([ "{run_id}", "{unit_id}", "preprocess", "{unit_id}.feature.clean.tsv.gz"], None),
+                                    ([ "{run_id}", "{unit_id}", "preprocess", "{unit_id}.feature.tsv.gz"      ], None),                     
+            ],
+            'zip_args': {
+                'run_id':       df_analysis["run_id"].values,  
+                'unit_id':      df_analysis["unit_id"].values,
             },
     },
 ]
@@ -328,8 +340,10 @@ include: "rules/b01_gene_visual.smk"
 if "hist-per-run" in request:
     include: "rules/b02_historef.smk"
 
-if "segment-per-unit" in request:
+if "segment-per-unit" in request or "transcript-per-unit" in request:
     include: "rules/a06_sdge2sdgeAR.smk"
     include: "rules/a07_sdgeAR_reformat.smk"
-    include: "rules/a08_sdgeAR_QC.smk"
-    include: "rules/a09_sdgeAR_segment.smk"
+
+if "segment-per-unit" in request:
+    include: "rules/a08_sdgeAR_segment.smk"
+    #include: "rules/a08_sdgeAR_QC.smk"

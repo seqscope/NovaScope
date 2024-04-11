@@ -19,9 +19,9 @@ The rule generates the following output in the specified directory path:
 
 ### (1) Spatial Digital Gene Expression Matrix (SGE)
 
-**Description**: A spatial digital gene expression matrix (SGE) is generated, which contains all available genomic feature,
+**Description**: A spatial digital gene expression matrix (SGE) in 10x Genomics format is generated, which contains all available genomic feature. 
 
-**File Naming Convention**: The SGE is composed of `barcodes.tsv.gz`, `features.tsv.gz`, and `matrix.mtx.gz`.
+**File Naming Convention**: The SGE is composed of `barcodes.tsv.gz`, `features.tsv.gz`, and `matrix.mtx.gz`. 
 
 **File Format**:
 

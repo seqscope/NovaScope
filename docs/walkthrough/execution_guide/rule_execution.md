@@ -47,3 +47,20 @@ The `"sge-per-run"` option inquires: 1) a spatial digital gene expression matrix
 ![rg_sge](../../images/rulegraph_sgeperrun.png){ width="100%" }
 </figure>
 
+### Request `"transcript-per-unit"`
+* **Description**:
+The `"transcript-per-unit"` option requests a SGE in a FICTURE-compatible format. It requests the execution of Rule `sdgeAR_reformat`, alongside the prerequisite rules: `sdge2sdgeAR`, [`dge2sdge`](../rules/dge2sdge.md), [`align`](../rules/align.md), [`smatch`](../rules/smatch.md), [`sbcd2chip`](../rules/sbcd2chip.md), and [`fastq2sbcd`](../rules/fastq2sbcd.md).
+
+* **Rule Graph**:
+<figure markdown="span">
+![rg_sge](../../images/rulegraph_transcriptperunit.png){ width="100%" }
+</figure>
+
+### Request `"segment-per-unit"`
+* **Description**:
+The `"segment-per-unit"` option requests a hexagon-based SGE in the 10x genomics format. It requests the execution of Rule `sdgeAR_segment`, alongside the prerequisite rules: `sdgeAR_reformat`, `sdge2sdgeAR`, [`dge2sdge`](../rules/dge2sdge.md), [`align`](../rules/align.md), [`smatch`](../rules/smatch.md), [`sbcd2chip`](../rules/sbcd2chip.md), and [`fastq2sbcd`](../rules/fastq2sbcd.md).
+
+* **Rule Graph**:
+<figure markdown="span">
+![rg_sge](../../images/rulegraph_sgementperunit.png){ width="100%" }
+</figure>
