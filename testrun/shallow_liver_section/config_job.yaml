@@ -33,6 +33,6 @@ request:
 ## It is important to configure the environment file for your specific environment.
 env_yml: /path/to/config_env.yaml
 
-preprocess:
+upstream:
   fastq2sbcd:
     format: DraI31

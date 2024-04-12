@@ -4,7 +4,7 @@ rule a01_fastq2sbcd:
     output:
         sbcd_mnfst  = os.path.join(main_dirs["seq1st"], "{flowcell}", "sbcds", "{seq1_id}", "manifest.tsv"),
     params:
-        sbcd_format = config.get("preprocess", {}).get("fastq2sbcd", {}).get('format', "DraI32"),  
+        sbcd_format = config.get("upstream", {}).get("fastq2sbcd", {}).get('format', "DraI32"),  
         # module
         module_cmd  = get_envmodules_for_rule(["python"], module_config)
     resources:

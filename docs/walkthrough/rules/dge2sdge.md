@@ -1,7 +1,7 @@
 # Rule `dge2sdge`:
 
 ## Purpose
-The `dge2sdge` generates a spatial digital gene expression (SGE) matrix using the digital gene expression matrix (DGE) from alignment and spatial maps.
+The `dge2sdge` generates a spatial digital gene expression matrix (SGE) using the digital gene expression matrix (DGE) from alignment and spatial maps.
 
 ## Input Files
 * **Per-Chip Spatial Barcode Map and Manifest File**
@@ -14,7 +14,7 @@ DGEs for each genomic feature, including Gene, GeneFull, splice junctions (SJ), 
 ## Output Files
 The rule generates the following output in the specified directory path:
 ```
-<output_directory>/align/<flowcell_id>/<chip_id>/sge/<species>_<seq2nd_version>
+<output_directory>/align/<flowcell_id>/<chip_id>/<run_id>/sge
 ```
 
 ### (1) Spatial Digital Gene Expression Matrix (SGE)
@@ -30,8 +30,6 @@ The rule generates the following output in the specified directory path:
 AAAAAAGGTACCCGCAGTGCGGACAAACGA	1	1	1	1	1214343	1498113	1,1,1,0,0
 AAAACAGGAGATTCAGAATGCAAAAATGAA	2	2	1	1	1029766	1669474	0,1,0,1,0
 AAAACTTGTCGAGCTCAGTGACGCGGGCTT	3	3	1	1	1366819	1170486	2,2,1,0,1
-AAAAGCGGTACAGCGTACTCCTATAAGAGT	4	4	1	1	1302024	1519190	6,6,5,0,1
-AAAAGGAATAAATGACCTCACGGATAACGT	5	5	1	1	1099465	2041759	1,2,1,1,0
 ```
     * Column 1: sorted spatial barcodes
     * Column 2: 1-based integer index of the spatial barcode
@@ -47,8 +45,6 @@ AAAAGGAATAAATGACCTCACGGATAACGT	5	5	1	1	1099465	2041759	1,2,1,1,0
 ENSMUSG00000100764	Gm29155	1	2,2,1,0,1
 ENSMUSG00000100635	Gm29157	2	0,0,0,0,0
 ENSMUSG00000100480	Gm29156	3	0,0,0,0,0
-ENSMUSG00000051285	Pcmtd1	4	164,38,35,3,0
-ENSMUSG00000097797	Gm26901	5	0,0,0,0,0
 ```
     * Column 1: Gene Ensemble ID
     * Column 2: Gene symbol
@@ -63,8 +59,6 @@ ENSMUSG00000097797	Gm26901	5	0,0,0,0,0
 5743 1 1 1 1 0 0
 6002 2 0 1 0 1 0
 7279 3 1 1 1 0 0
-7691 3 1 1 0 0 1
-2982 4 1 1 0 0 1
 ```
     * `Header`: Initial lines form the header, declaring the matrix's adherence to the [Market Matrix (MTX) format](https://math.nist.gov/MatrixMarket/formats.html), outlining its traits. This may include comments (lines beginning with `%`) for extra metadata, all marked by a “%”.
     * `Dimensions`: Following the header, the first line details the matrix dimensions: the count of rows (features), columns (barcodes), and non-zero entries.
@@ -75,7 +69,7 @@ ENSMUSG00000097797	Gm26901	5	0,0,0,0,0
 
 **File Naming Convention**:
 ```
-<flowcell_id>.<chip_id>.<species>_<seq2nd_version>.gene_full_mito.png
+<run_id>.gene_full_mito.png
 ```
 
 **File Visualization**:
@@ -88,7 +82,7 @@ ENSMUSG00000097797	Gm26901	5	0,0,0,0,0
 
 **File Naming Convention**:
 ```
-<flowcell_id>.<chip_id>.<species>_<seq2nd_version>.sge_match_sbcd.png
+<run_id>.sge_match_sbcd.png
 ```
 
 **File Visualization**:
@@ -96,12 +90,31 @@ ENSMUSG00000097797	Gm26901	5	0,0,0,0,0
 ![sge_match_sbcd_image](../../images/sge_match_sbcd.png){ width="80%" }
 </figure>
 
+### (4) A Metadata File for X Y Coordinates
+**Description**: This file contains the minimum and maximum X Y coordinates, which are essential for the reformatting features.
+
+**File Naming Convention**:
+```
+barcodes.minmax.tsv
+```
+
+**File Format**:
+```
+xmin  xmax      ymin  ymax
+0     12810899  0     6950609
+```
+
+- `xmin`: The minimum x-coordinate in nanometers across all barcodes in the SGE.
+- `xmax`: The maximum x-coordinate in nanometers across all barcodes in the SGE.
+- `ymin`: The minimum y-coordinate in nanometers across all barcodes in the SGE.
+- `ymax`: The maximum y-coordinate in nanometers across all barcodes in the SGE.
 
 ## Output Guidelines
 It is suggested to review the ["sge" image](#2-an-sge-image) along with the [composite image](#3-a-comprehensive-view-of-sbcd-smatch-and-sge-images) displaying "sbcd", "smatch", and "sge" images together, to confirm: 1) that the "sge" image's spatial distribution of aligned transcripts corresponds with the tissue area, and 2) there is coherence among the "smatch", and "sge" images.
 
 ## Parameters
-```
+```yaml
+upstream:
   dge2sdge:
     layout: null
 ```

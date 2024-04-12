@@ -14,7 +14,7 @@ The directory passed through `output` paramter in the `config_job.yaml` will be 
 
 ### seq1st
 
-The seq1st directory is structured for organizing 1st sequencing FASTQ files and spatial barcode maps. It includes:
+The `seq1st` directory is structured for organizing 1st sequencing FASTQ files and spatial barcode maps. It includes:
 
 * A `fastqs` subdirectory for all input 1st sequencing FASTQ files via symlink.
 * Two subdirectories for spatial barcode maps:
@@ -23,18 +23,19 @@ The seq1st directory is structured for organizing 1st sequencing FASTQ files and
 
 ```
 └── seq1st
-    └── <flowcell_ID>
+    └── <flowcell_id>
         ├── fastqs
         |   └── <seq1st_id>.fastq.gz
         ├── nbcds
-        |   └── <chip_ID>
-        |       └── ...    # spatial maps of individual tile, and a manifest file 
+        |   └── <chip_id>
+        |       ├── 1_1.sbcds.sorted.tsv.gz
+        |       ├── 1_1.sbcds.sorted.png
+        |       ├── dupstats.tsv.gz
+        |       └── manifest.tsv
         └── sbcds
-            └── <chip_ID>
-                ├── 1_1.sbcds.sorted.tsv.gz
-                ├── 1_1.sbcds.sorted.png
-                ├── dupstats.tsv.gz
-                └── manifest.tsv
+           └── <chip_id>
+                └── ...    # spatial maps of individual tile, and a manifest file 
+
 ```
 
 ### seq2nd
@@ -45,12 +46,12 @@ The following example demonstrates the directory structure using two pairs of in
 
 ```
 └── seq2nd
-    ├── <seq2nd_ID1>
-    |   ├── <seq2nd_ID1>.R1.fastq.gz
-    |   └── <seq2nd_ID1>.R2.fastq.gz
-    └── <seq2nd_ID2>
-        ├── <seq2nd_ID2>.R1.fastq.gz
-        └── <seq2nd_ID2>.R2.fastq.gz
+    ├── <seq2nd_id1>
+    |   ├── <seq2nd_id1>.R1.fastq.gz
+    |   └── <seq2nd_id1>.R2.fastq.gz
+    └── <seq2nd_id2>
+        ├── <seq2nd_id2>.R1.fastq.gz
+        └── <seq2nd_id2>.R2.fastq.gz
 ```
 
 ### match
@@ -58,13 +59,13 @@ The `match` directory houses the outcomes of aligning second sequencing reads wi
 
 ```
 └── match
-    └── <flowcell_ID>
-        └── <chip_ID>
-            └── <seq2nd_ID1>
-                ├── <seq2nd_ID1>.R1.counts.tsv
-                ├── <seq2nd_ID1>.R1.match.png
-                ├── <seq2nd_ID1>.match.sorted.uniq.tsv.gz
-                └── <seq2nd_ID1>.summary.tsv
+    └── <flowcell_id>
+        └── <chip_id>
+            └── <seq2nd_id1>
+                ├── <seq2nd_id1>.R1.counts.tsv
+                ├── <seq2nd_id1>.R1.match.png
+                ├── <seq2nd_id1>.match.sorted.uniq.tsv.gz
+                └── <seq2nd_id1>.summary.tsv
 ```
 
 ### histology
@@ -73,8 +74,8 @@ The `histology` directory is designated for holding both the input histology fil
 
 ```
 └── histology
-    └── <flowcell_ID>
-        └── <chip_ID>
+    └── <flowcell_id>
+        └── <chip_id>
             ├── raw
             |   └── ...     # a raw histology file
             └── aligned
@@ -84,35 +85,56 @@ The `histology` directory is designated for holding both the input histology fil
 ### align
 
 The `align` directory encompasses several subdirectories, including: 
-(1) `bam`, where alignment outcomes such as the BAM file, summary metrics, and visualizations are stored; 
-(2) `sge`, containing a spatial gene expression matrix (SGE) and its associated visualizations; 
+
+* `bam` for alignment outcomes such as the BAM file, summary metrics, and visualizations;
+* `sge` for a spatial gene expression matrix (SGE) and visualizations; 
 
 ```
-align
-└── <flowcell_ID>
-    └── <chip_ID>
-        └── <run_ID>
-            ├── bam
-            |   └── ...     
-            └── sge
-                └── ...     
+└── align
+    └── <flowcell_id>
+        └── <chip_id>
+           └── <run_id>
+                ├── bam
+                |   └── ...     
+               └── sge
+                    └── ...     
 ```
 
 ### analysis
 
-The `analysis` directory includes a `preprocess` subdirectory for FICTURE-compatible SGE, and a `segment` subdirectory for the hexagon-based SGE in the 10x genomics format.
+The `analysis` directory includes three subdirectory mainly for the reformatting SGE:
+
+* `sgeAR` for the SGE before reformatting, where the "AR" stands for analysis-ready,
+* `preprocess` for the SGE in the FICTURE format,
+* `segment` for the hexagon-based SGE in the 10x genomics format.
 
 ```
-analysis
-└── <run_ID>
-    └── <unit_ID>
-        ├── preprocess
-        |   └── ...  
-        ├── segment
-        |   └── ...  
-        └── sgeAR
-            └── ...  
+└── analysis
+    └── <run_id>
+        └── <unit_id>
+            ├── preprocess
+            |   └── ...  
+            ├── segment
+            |   └── ...  
+            └── sgeAR
+                └── ...  
 ```
+
+??? Note "The `sgeAR` Subfolder and Manual Preprocess"
+    The `sgeAR` subfolder is specifically designed to host input SGEs that require reformatting. This subfolder is particularly useful when users wish to manually preprocess SGEs, such as applying boundary filtering, before they undergo reformatting.
+
+    **To manually preprocess an SGE:**
+    
+    - **Preprocess the SGE:** Users must manually preprocess the SGE according to their specific requirements.
+    - **Name the dataset:** After preprocessing, the dataset should be named and referred to as `unit_id`.
+    - **Save the preprocessed SGE:** Place the manually preprocessed SGE in the `sgeAR` subfolder.
+    - **Preprare a coordinate meta file** Prepare a `barcodes.minmax.tsv` with the minimum and maximum of X and Y coordinates in the `sgeAR` subfolder.
+    - **Update the job configuration file:** Provide the `unit_id` in the [job configuration file](../getting_started/job_config.md) to ensure it is recognized in subsequent processing steps.
+
+    **Automatic Handling:**
+    If reformatting features are requested without manually preparing the SGE in the `sgeAR` as outlined, NovaScope will automatically generate a `unit_id`. It will then link the original SGE from the `sge` subdirectory to the `sgeAR`, facilitating seamless processing.
+
+
 ## Downstream Analysis 
 
 The aligned sequenced reads can be directly used for tasks that require read-level information, such as allele-specific expression or somatic variant analysis. The SGE can also be analyzed with many software tools, such as Latent Dirichlet Allocation (LDA) and Seurat. 

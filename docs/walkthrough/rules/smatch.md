@@ -15,7 +15,7 @@ Required input files also include the read 1 file for a pair of 2nd-seq FASTQ fi
 The following files are generated for each pair of 2nd-seq FASTQ files in the specified directory path below:
 
 ```
-<output_directory>/align/<flowcell_id>/<chip_id>/match
+<output_directory>/match/<flowcell_id>/<chip_id>/<seq2nd_id>
 ```
 
 ### (1) A Matched Spatial Barcode File
@@ -95,7 +95,7 @@ id   filepath                 barcodes   matches   unique
 1_1  1_1.sbcds.sorted.tsv.gz  175135683  83363295  17641021
 ```
 
-- `id`: The `id` is composed of `<lane_id>_<tile_id>`. Given only one spatial barcode map is created for a chip, the id is designed as `1_1`.
+- `id`: The `id` is composed of `<lane_id>_<tile_id>`. Given only one spatial barcode map is created for a chip, the ID is designed as `1_1`.
 - `filepath`: The file name is the corresponding spatial barcode map.
 - `barcodes`: The number of spatial barcodes in the chip.
 - `matches`: The number of barcodes match to the expected pattern.
@@ -110,8 +110,8 @@ Suggested review steps:
 ## Parameters
 The following parameter in the [job configuration](../../getting_started/job_config.md) file will be applied in this rule.
 
-```
-preprocess:
+```yaml
+upstream:
   smatch:                  
     skip_sbcd: 1            
     match_len: 27           

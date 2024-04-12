@@ -12,12 +12,12 @@ rule a03_smatch:
     params:
         # smatch
         skip_sbcd       = get_skip_sbcd(config), 
-        match_len       = config.get("preprocess", {}).get("smatch", {}).get('match_len', 27), 
+        match_len       = config.get("upstream", {}).get("smatch", {}).get('match_len', 27), 
         # visualization
-        visual_coord_per_pixel    = config.get("preprocess", {}).get("visualization", {}).get("drawxy",{}).get("coord_per_pixel", 1000),
-        visual_intensity_per_obs  = config.get("preprocess", {}).get("visualization", {}).get("drawxy",{}).get("intensity_per_obs", 50),
-        visual_icol_x             = config.get("preprocess", {}).get("visualization", {}).get("drawxy",{}).get("icol_x", 3),
-        visual_icol_y             = config.get("preprocess", {}).get("visualization", {}).get("drawxy",{}).get("col_y", 4),
+        visual_coord_per_pixel    = config.get("upstream", {}).get("visualization", {}).get("drawxy",{}).get("coord_per_pixel", 1000),
+        visual_intensity_per_obs  = config.get("upstream", {}).get("visualization", {}).get("drawxy",{}).get("intensity_per_obs", 50),
+        visual_icol_x             = config.get("upstream", {}).get("visualization", {}).get("drawxy",{}).get("icol_x", 3),
+        visual_icol_y             = config.get("upstream", {}).get("visualization", {}).get("drawxy",{}).get("col_y", 4),
         # module
         module_cmd        = get_envmodules_for_rule(["python", "imagemagick"], module_config)
     resources:

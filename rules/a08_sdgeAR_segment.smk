@@ -10,9 +10,9 @@ rule a08_sdgeAR_segment:
     params:
         solofeature         = "{sf}",
         train_width         = "{tw}",
-        precision           = config.get("sdgeAR", {}).get("segment", {}).get('precision', 2), 
+        precision           = config.get("downstream", {}).get('segment', {}).get('precision', 2), 
         n_move              = "{seg_nmove}",
-        min_pixel_per_unit  = config.get("sdgeAR", {}).get("segment", {}).get('min_pixel_per_unit', 10), 
+        min_pixel_per_unit  = config.get("downstream", {}).get('segment', {}).get('min_pixel_per_unit', 10), 
         # module
         module_cmd        = get_envmodules_for_rule(["python", "samtools"], module_config),
     resources:

@@ -1,10 +1,13 @@
 This page provides an overview of the rule execution flow tailored to different **`request`** specified in the [job configuration](../getting_started/job_config.md) file of [NovaScope](https://seqscope.github.io/NovaScope/). 
 
-Each `request` option triggers a specific set of rules. Thus, below provides a rulegraph for each `request` option to outline the triggered rules and their interdependencies, detailing distinct processing paths. It's important to note that these visual guides are constructed from a **baseline scenario** where only the initial input 1st-seq and 2nd-seq FASTQ files are present, with no prior processing or intermediate files generated.
+Each `request` option triggers a specific set of rules. Thus, below provides a rulegraph for each `request` option to outline the triggered rules and their interdependencies, detailing distinct processing paths.
+
+!!! info
+    The visual guides below are constructed from a **baseline scenario** where only the initial input 1st-seq and 2nd-seq FASTQ files are present, with no prior processing or intermediate files generated.
 
 ### Request `"sbcd-per-flowcell"`
 * **Description**:
-The `"sbcd-per-flowcell"` option initiates the generation of a spatial barcode map specific to a flow cell. Consequently, [NovaScope](https://seqscope.github.io/NovaScope/) triggers the execution of Rule [`fastq2sbcd`](../rules/fastq2sbcd.md).
+The `"sbcd-per-flowcell"` option initiates the generation of a spatial barcode map specific to a flow cell. Consequently, it triggers the execution of Rule [`fastq2sbcd`](../rules/fastq2sbcd.md).
 
 * **Rule Graph**:
 <figure markdown="span">
@@ -49,7 +52,7 @@ The `"sge-per-run"` option inquires: 1) a spatial digital gene expression matrix
 
 ### Request `"transcript-per-unit"`
 * **Description**:
-The `"transcript-per-unit"` option requests a SGE in a FICTURE-compatible format. It requests the execution of Rule `sdgeAR_reformat`, alongside the prerequisite rules: `sdge2sdgeAR`, [`dge2sdge`](../rules/dge2sdge.md), [`align`](../rules/align.md), [`smatch`](../rules/smatch.md), [`sbcd2chip`](../rules/sbcd2chip.md), and [`fastq2sbcd`](../rules/fastq2sbcd.md).
+The `"transcript-per-unit"` option requests a SGE in a FICTURE-compatible format. It requests the execution of Rule [`sdgeAR_reformat`](../rules/sdgeAR_reformat.md), alongside the prerequisite rules: [`sdge2sdgeAR`](../rules/sdge2sdgeAR.md), [`dge2sdge`](../rules/dge2sdge.md), [`align`](../rules/align.md), [`smatch`](../rules/smatch.md), [`sbcd2chip`](../rules/sbcd2chip.md), and [`fastq2sbcd`](../rules/fastq2sbcd.md).
 
 * **Rule Graph**:
 <figure markdown="span">
@@ -58,7 +61,7 @@ The `"transcript-per-unit"` option requests a SGE in a FICTURE-compatible format
 
 ### Request `"segment-per-unit"`
 * **Description**:
-The `"segment-per-unit"` option requests a hexagon-based SGE in the 10x genomics format. It requests the execution of Rule `sdgeAR_segment`, alongside the prerequisite rules: `sdgeAR_reformat`, `sdge2sdgeAR`, [`dge2sdge`](../rules/dge2sdge.md), [`align`](../rules/align.md), [`smatch`](../rules/smatch.md), [`sbcd2chip`](../rules/sbcd2chip.md), and [`fastq2sbcd`](../rules/fastq2sbcd.md).
+The `"segment-per-unit"` option requests a hexagon-based SGE in the 10x genomics format. It requests the execution of Rule [`sdgeAR_segment`](../rules/sdgeAR_segment.md), alongside the prerequisite rules: [`sdgeAR_reformat`](../rules/sdgeAR_reformat.md), [`sdge2sdgeAR`](../rules/sdge2sdgeAR.md), [`dge2sdge`](../rules/dge2sdge.md), [`align`](../rules/align.md), [`smatch`](../rules/smatch.md), [`sbcd2chip`](../rules/sbcd2chip.md), and [`fastq2sbcd`](../rules/fastq2sbcd.md).
 
 * **Rule Graph**:
 <figure markdown="span">

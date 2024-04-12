@@ -25,7 +25,7 @@ from bricks import check_input, check_path, create_dict, create_symlink, create_
 from bricks import list_outputfn_by_request
 from rule_general import assign_resource_for_align, get_envmodules_for_rule
 from rule_general import get_skip_sbcd, link_sdge_to_sdgeAR, find_major_axis
-from pipe_utils_upstream import read_config_for_runid, read_config_for_unitid, read_config_for_analysis, read_config_for_hist, read_config_for_seq1, read_config_for_seq2
+from pipe_utils_upstream import read_config_for_runid, read_config_for_unitid, read_config_for_segment, read_config_for_hist, read_config_for_seq1, read_config_for_seq2
 
 # set up display and log
 configure_pandas_display()
@@ -119,16 +119,13 @@ if any(task in request for task in ["align-per-run", "sge-per-run", "hist-per-ru
     run_id, rid2seq2 = read_config_for_runid(config, job_dir)
 
 if any(task in request for task in["segment-per-unit","transcript-per-unit" ]):
-    # run ID: to distinguish different input 2nd-seq data for the same flowcell and chip.
-    run_id, rid2seq2 = read_config_for_runid(config, job_dir)
-
     # unit ID: to distinguish the default sge and the sge with manual boundary filtering.
     unit_id, unit_ann, boundary = read_config_for_unitid(config, job_dir, run_id)
 
-    # analysis info (multiple pairs)
-    df_analysis, mu_scale = read_config_for_analysis(config, run_id, unit_id)
+    # segment info (multiple pairs)
+    df_segment_char, mu_scale = read_config_for_segment(config, run_id, unit_id)
 else:
-    df_analysis = pd.DataFrame({
+    df_segment_char = pd.DataFrame({
         'run_id': pd.Series(dtype='object'),
         'unit_id': pd.Series(dtype='object'),
         'solofeature': pd.Series(dtype='object'),
@@ -177,7 +174,7 @@ for _, row in df_seq2.iterrows():
 # Rule all
 #
 # - If all variable in the zip_args is a list of one element, it's ok to use the list directly. Otherwise, use a dataframe will be safer to avoid wrong combination.
-#   Currently, only the df_seq2 and df_analysis are in the dataframe format.
+#   Currently, only the df_seq2 and df_segment_char are in the dataframe format.
 # - Please note that The order of results affects the order of execution.
 #
 #==============================================
@@ -292,11 +289,11 @@ output_filename_conditions = [
                                     ([ "{run_id}", "{unit_id}", "segment", "{sf}.d_{tw}.raw_{seg_nmove}", "matrix.mtx.gz"  ], None),                     
             ],
             'zip_args': {
-                'run_id':       df_analysis["run_id"].values,  
-                'unit_id':      df_analysis["unit_id"].values,
-                'sf':           df_analysis["solofeature"].values,
-                'tw':           df_analysis["trainwidth"].values,
-                'seg_nmove':    df_analysis['segmentmove'].values,
+                'run_id':       df_segment_char["run_id"].values,  
+                'unit_id':      df_segment_char["unit_id"].values,
+                'sf':           df_segment_char["solofeature"].values,
+                'tw':           df_segment_char["trainwidth"].values,
+                'seg_nmove':    df_segment_char['segmentmove'].values,
             },
     },
     # transcript-per-unit
@@ -310,8 +307,8 @@ output_filename_conditions = [
                                     ([ "{run_id}", "{unit_id}", "preprocess", "{unit_id}.feature.tsv.gz"      ], None),                     
             ],
             'zip_args': {
-                'run_id':       df_analysis["run_id"].values,  
-                'unit_id':      df_analysis["unit_id"].values,
+                'run_id':       df_segment_char["run_id"].values,  
+                'unit_id':      df_segment_char["unit_id"].values,
             },
     },
 ]

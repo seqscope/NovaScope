@@ -10,15 +10,15 @@ rule a02_sbcd2chip:
         sbcd_layout      = check_path(config.get('input', {}).get('seq1st', {}).get('layout', None), job_dir, strict_mode=False),
         sbcd_layout_def  = lambda wildcards: os.path.join(smk_dir, "info", "assets", "layout_per_tile_basis", wildcards.chip+".layout.tsv"),
         # combine 
-        gap_row             = config.get("preprocess", {}).get("sbcd2chip", {}).get('gap_row', 0.0517),
-        gap_col             = config.get("preprocess", {}).get("sbcd2chip", {}).get('gap_col', 0.0048),
-        dup_maxnum          = config.get("preprocess", {}).get("sbcd2chip", {}).get('dup_maxnum', 1),
-        dup_maxdist         = config.get("preprocess", {}).get("sbcd2chip", {}).get('dup_maxdist', 1),
+        gap_row             = config.get("upstream", {}).get("sbcd2chip", {}).get('gap_row', 0.0517),
+        gap_col             = config.get("upstream", {}).get("sbcd2chip", {}).get('gap_col', 0.0048),
+        dup_maxnum          = config.get("upstream", {}).get("sbcd2chip", {}).get('dup_maxnum', 1),
+        dup_maxdist         = config.get("upstream", {}).get("sbcd2chip", {}).get('dup_maxdist', 1),
         # visualization
-        visual_coord_per_pixel    = config.get("preprocess", {}).get("visualization", {}).get("drawxy",{}).get("coord_per_pixel", 1000),
-        visual_intensity_per_obs  = config.get("preprocess", {}).get("visualization", {}).get("drawxy",{}).get("intensity_per_obs", 50),
-        visual_icol_x             = config.get("preprocess", {}).get("visualization", {}).get("drawxy",{}).get("icol_x", 3),
-        visual_icol_y             = config.get("preprocess", {}).get("visualization", {}).get("drawxy",{}).get("icol_y", 4),
+        visual_coord_per_pixel    = config.get("upstream", {}).get("visualization", {}).get("drawxy",{}).get("coord_per_pixel", 1000),
+        visual_intensity_per_obs  = config.get("upstream", {}).get("visualization", {}).get("drawxy",{}).get("intensity_per_obs", 50),
+        visual_icol_x             = config.get("upstream", {}).get("visualization", {}).get("drawxy",{}).get("icol_x", 3),
+        visual_icol_y             = config.get("upstream", {}).get("visualization", {}).get("drawxy",{}).get("icol_y", 4),
         # module
         module_cmd        = get_envmodules_for_rule(["python", "imagemagick"], module_config)
     resources:

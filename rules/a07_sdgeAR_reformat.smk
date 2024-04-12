@@ -10,8 +10,8 @@ rule a07_sdgeAR_reformat:
         sdgeAR_transcript = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.merged.matrix.tsv.gz"),
     params:
         # gene filtering parameters
-        kept_gene_type    = config.get("sdgeAR", {}).get('reformat', {}).get('kept_gene_type', "protein_coding,lncRNA"),
-        rm_gene_regex     = r"{0}".format(config.get("sdgeAR", {}).get('reformat', {}).get('rm_gene_regex', "^Gm\\d+|^mt-|^MT-")), 
+        kept_gene_type    = config.get("downstream", {}).get('gene_filter', {}).get('kept_gene_type', "protein_coding,lncRNA"),
+        rm_gene_regex     = r"{0}".format(config.get("downstream", {}).get('gene_filter', {}).get('rm_gene_regex', "^Gm\\d+|^mt-|^MT-")), 
         # geneinfo
         geneinfo          = sp2geneinfo[species],
         # module

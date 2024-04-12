@@ -47,6 +47,25 @@ def end_logging():
             handler.close()
             root_logger.removeHandler(handler)
 
+def log_dataframe(df, log_message="DataFrame Info:"): 
+    ## purpose:format the log messages so that each column value occupies a fixed width
+
+    # Calculate column widths
+    col_widths = {col: max(df[col].astype(str).apply(len).max(), len(col)) for col in df.columns}
+
+    # Prepare the header string with column names aligned
+    header = ' | '.join([col.ljust(col_widths[col]) for col in df.columns])
+
+    # Log the header
+    logging.info(f"{log_message}")
+    logging.info(header)
+    logging.info("-" * len(header))  # Divider line
+
+    # Iterate over DataFrame rows and log each, maintaining alignment
+    for _, row in df.iterrows():
+        row_str = ' | '.join([str(row[col]).ljust(col_widths[col]) for col in df.columns])
+        logging.info(row_str)
+
 #================================================================================================
 
 # load configs func:

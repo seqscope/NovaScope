@@ -4,7 +4,10 @@ Installing [NovaScope](../index.md) involves multiple steps. This document provi
 
 ## Installing Snakemake 
 
-[Snakemake](https://snakemake.readthedocs.io/en/stable/) orchestrates the workflow of [NovaScope](../index.md) pipeline. We recommend installing [Snakemake](https://snakemake.readthedocs.io/en/stable/) using [conda](https://docs.conda.io/en/latest/) and/or [mamba](https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html). For detailed installation instructions of these tools, please refer to the [official Snakemake documentation](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html). 
+[Snakemake](https://snakemake.readthedocs.io/en/stable/) orchestrates the workflow of [NovaScope](../index.md) pipeline. 
+
+!!! info
+	[NovaScope](../index.md) has been tested for compatibility with [Snakemake](https://snakemake.readthedocs.io/en/stable/) v7.29.0 and v8.6.0.
 
 
 ### Checking Snakemake Installation
@@ -24,11 +27,16 @@ module avail snakemake
 module load snakemake
 ``` 
 
-[NovaScope](../index.md) has been tested for compatibility with [Snakemake](https://snakemake.readthedocs.io/en/stable/) v7.29.0 and v8.6.0.
-
 ### Installing Snakemake Using Conda and Mamba
 
 If you need to install [Snakemake](https://snakemake.readthedocs.io/en/stable/), below is a simplified sequence of instruction. Please refer to [official Snakemake documentation](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html) for more detailed instructions.
+
+!!! tip
+
+	It is recommended to install [Snakemake](https://snakemake.readthedocs.io/en/stable/) using [conda](https://docs.conda.io/en/latest/) and/or [mamba](https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html). 
+
+!!! info
+	If you do not have Python, it will be installed as part of setting up Miniconda.
 
 ```sh
 ## download miniconda
@@ -46,7 +54,9 @@ eval "$(/path/to/miniconda3/bin/conda shell.bash hook)"
 ## source ~/.bashrc
 
 ## create a new conda environment
-conda create -n snakemake-env python=3.9
+## this step ensures that this version of Python is installed within the environment if it isn't already available
+python_version=3.9		# replace 3.9 by your desired version
+conda create -n snakemake-env python=$python_version
 
 ## activate the new environment
 conda activate snakemake-env
@@ -65,10 +75,21 @@ snakemake --version
 ```
 
 ## Configuring Python Virtual Environment
+### Python 
 
-We recommend creating a new Python environment for [NovaScope](../index.md) using the following steps. If you already have an existing Python environment all required packages (see [pyenv_req.txt](https://github.com/seqscope/NovaScope/blob/main/installation/pyenv_req.txt)), you may skip this step. 
+!!! info
+	[NovaScope](../index.md) has been tested for compatibility with [Python](https://www.python.org/) v3.9.12, v3.10, and v3.12.2.
 
-You may create a new Python environment using the following commands:
+If you don't have Python installed on your system and you follow the above [Snakemake installation instructions](#installing-snakemake-using-conda-and-mamba), Python of the specified version should be installed during the process. 
+
+If you want to verify the installation or the version of Python on your system, run the following command:
+
+```
+python --version
+```
+### Python Environment
+
+We recommend creating a new Python environment for [NovaScope](../index.md). If you already have an existing Python environment with all required packages (see [pyenv_req.txt](https://github.com/seqscope/NovaScope/blob/main/installation/pyenv_req.txt)), you may skip this step. Below is an example of creating a new Python environment:
 
 ```bash
 ## First, we recommend activating conda/mamba environment before setting up venv, using:
@@ -100,9 +121,8 @@ pip install -r ${smk_dir}/installation/pyenv_req.txt
 * [STARsolo](https://github.com/alexdobin/STAR) (v2.7.11b)
 * [samtools](https://www.htslib.org/) (v1.13; v1.14; v1.19)
 * [spatula](https://seqscope.github.io/spatula/) (v0.1.0)
-* [Python](https://www.python.org/) (v3.9.12, v3.10, or v3.12.2)
 * [ImageMagick](https://imagemagick.org/) (7.1.0-25.lua and 7.1.1-30)
-* [GDAL](https://gdal.org/) (v3.5.1) (Required for histology alignments)
+* [GDAL](https://gdal.org/) (v3.5.1) (Optional, required for histology alignments)
 
 We provide an [example work log](https://github.com/seqscope/NovaScope/blob/main/installation/requirement_install_log.md) documenting the installation of the aforementioned software tools.
 
@@ -118,73 +138,74 @@ git clone https://github.com/seqscope/NovaScope.git
 
 The reference genome for the species of interest must be downloaded and indexed for alignment. [STARsolo](https://github.com/alexdobin/STAR) accepts the reference genomes prepared by [cellranger](https://www.10xgenomics.com/support/software/cell-ranger), therefore, one of the simplest way is to download the reference genome from the [cellranger download](https://www.10xgenomics.com/support/software/cell-ranger/downloads) page.
 
-The recommended reference genome for mouse is GRCm39.
+Given STAR index packaged by the [cellranger download](https://www.10xgenomics.com/support/software/cell-ranger/downloads) is outdated and will not be compatible with the latest version of STARsolo, we recommend indexing it using the latest version of STARsolo. For human and mouse, we provided examples below to prepare the reference genome. For other species, please follow the instructions provided by [cellranger](https://www.10xgenomics.com/support/software/cell-ranger/downloads) or [STARsolo](https://github.com/alexdobin/STAR) to prepare the reference genome. Please note that this indexing process will take A LOT OF TIME, typically a few to several hours.
 
-However, the STAR index packaged by the
-[cellranger download](https://www.10xgenomics.com/support/software/cell-ranger/downloads)
-is outdated and will not be compatible with the latest version of STARsolo. Therefore, we recommend
-indexing it using the latest version of STARsolo. 
+???+ Mouse
+	The recommended reference genome for mouse is GRCm39. 
 
-Note that this process will take A LOT OF TIME, typically a few to several hours.
+	```bash
+	## download the reference genome package
+	curl -O "https://cf.10xgenomics.com/supp/cell-exp/refdata-gex-GRCm39-2024-A.tar.gz"
+
+	## uncompressed the tar file
+	tar -xvf refdata-gex-GRCm39-2024-A.tar.gz
+	cd refdata-gex-GRCm39-2024-A
+
+	## uncompress GTF file
+	gzip -d genes/genes.gtf.gz
+
+	## index the reference genome
+	STARBIN=/path/to/STAR_2.7.11b/Linux_x86_64_static/STAR
+	${STARBIN} --runMode genomeGenerate \
+		--runThreadN 1 \
+		--genomeDir ./star_2_7_11b \
+		--genomeFastaFiles ./fasta/genome.fa \
+		--genomeSAindexNbases 14 \
+		--genomeChrBinNbits 18 \
+		--genomeSAsparseD 3 \
+		--limitGenomeGenerateRAM 17179869184 \
+		--sjdbGTFfile ./genes/genes.gtf
+	```
+
+???+ Human
+	The recommended reference genome for human is GRCh38.
+
+	```bash
+	## download the reference genome package
+	curl -O "https://cf.10xgenomics.com/supp/cell-exp/refdata-gex-GRCh38-2024-A.tar.gz"
+
+	## uncompressed the tar file
+	tar -xvf refdata-gex-GRCh38-2024-A.tar.gz
+	cd refdata-gex-GRCh38-2024-A
+
+	## uncompress GTF file
+	gzip -d genes/genes.gtf.gz
+
+	## index the reference genome
+	STARBIN=/path/to/STAR_2.7.11b/Linux_x86_64_static/STAR
+	${STARBIN} --runMode genomeGenerate \
+		--runThreadN 1 \
+		--genomeDir ./star_2_7_11b \
+		--genomeFastaFiles ./fasta/genome.fa \
+		--genomeSAindexNbases 14 \
+		--genomeChrBinNbits 18 \
+		--genomeSAsparseD 3 \
+		--limitGenomeGenerateRAM 17179869184 \
+		--sjdbGTFfile ./genes/genes.gtf
+	```
+
+
+## (Optional) Install the historef Package
+!!! info 
+	Only required if you want to align your histology images with the spatial gene expression data. 
+
+Below is an example instruction to install the [historef](https://github.com/seqscope/historef) package in the same python environment you built in [Configuring Python Virtual Environment](#configuring-python-virtual-environment).
+
+To access the most recent version, please see [its GitHub repository](https://github.com/seqscope/historef?tab=readme-ov-file).
 
 ```bash
-## download the reference genome package
-curl -O "https://cf.10xgenomics.com/supp/cell-exp/refdata-gex-GRCm39-2024-A.tar.gz"
-
-## uncompressed the tar file
-tar -xvf refdata-gex-GRCm39-2024-A.tar.gz
-cd refdata-gex-GRCm39-2024-A
-
-## uncompress GTF file
-gzip -d genes/genes.gtf.gz
-
-## index the reference genome
-STARBIN=/path/to/STAR_2.7.11b/Linux_x86_64_static/STAR
-${STARBIN} --runMode genomeGenerate \
-	--runThreadN 1 \
-	--genomeDir ./star_2_7_11b \
-	--genomeFastaFiles ./fasta/genome.fa \
-	--genomeSAindexNbases 14 \
-	--genomeChrBinNbits 18 \
-	--genomeSAsparseD 3 \
-	--limitGenomeGenerateRAM 17179869184 \
-	--sjdbGTFfile ./genes/genes.gtf
-```
-
-The recommended reference genome for human is GRCh38.
-
-```bash
-## download the reference genome package
-curl -O "https://cf.10xgenomics.com/supp/cell-exp/refdata-gex-GRCh38-2024-A.tar.gz"
-
-## uncompressed the tar file
-tar -xvf refdata-gex-GRCh38-2024-A.tar.gz
-cd refdata-gex-GRCh38-2024-A
-
-## uncompress GTF file
-gzip -d genes/genes.gtf.gz
-
-## index the reference genome
-STARBIN=/path/to/STAR_2.7.11b/Linux_x86_64_static/STAR
-${STARBIN} --runMode genomeGenerate \
-	--runThreadN 1 \
-	--genomeDir ./star_2_7_11b \
-	--genomeFastaFiles ./fasta/genome.fa \
-	--genomeSAindexNbases 14 \
-	--genomeChrBinNbits 18 \
-	--genomeSAsparseD 3 \
-	--limitGenomeGenerateRAM 17179869184 \
-	--sjdbGTFfile ./genes/genes.gtf
-```
-
-For other species, you may follow the instructions provided by [cellranger](https://www.10xgenomics.com/support/software/cell-ranger/downloads) or [STARsolo](https://github.com/alexdobin/STAR) to prepare the reference genome.
-
-## (Optional) Install the historef Package from the whl File
-
-If you want to align your histology images with the spatial gene expression data, you may install the [historef](https://github.com/seqscope/historef) package from the whl file. Below is an example instruction to download historef's latest version at document creation. To access the most recent version, please see [its GitHub repository](https://github.com/seqscope/historef?tab=readme-ov-file).
-
-```bash
-## activate the python environment
+### activate your python environment
+### Both the $pyenv_dir and $pyenv_name were defined in Configuring Python Virtual Environment.
 source ${pyenv_dir}/$pyenv_name/bin/activate
 
 ### download the historef package
@@ -194,7 +215,8 @@ wget -P ${smk_dir}/installation https://github.com/seqscope/historef/releases/do
 pip install ${smk_dir}/installation/historef-0.1.2-py3-none-any.whl
 ```
 
-## (Optional) Install FICTURE
-NovaScope provides additional features that allow users to convert their output into two different formats. Specifically, it allows the transformation of the spatial digital gene expression matrix (SGE) into a format compatible with [FICTURE](https://seqscope.github.io/ficture/). It also enables pixel organization into user-defined hexagonal grids, creating a hexagon-based SGE in the 10x genomics format. 
+## (Optional) Install the FICTURE Package
+!!! info 
+	Only required if you want to apply the NovaScope additional reformat features.
 
-To utilize these features, users are advised to follow the [FICTURE](https://seqscope.github.io/ficture/) installation guidelines provided in its [tutorial](https://seqscope.github.io/ficture/install/).
+NovaScope additional reformat features including the transformation of the spatial digital gene expression matrix (SGE) into a format compatible with [FICTURE](https://seqscope.github.io/ficture/), and the pixel organization into user-defined hexagonal grids in the 10x genomics format. To utilize these features, users are advised to follow the [FICTURE](https://seqscope.github.io/ficture/) installation guidelines provided in its [tutorial](https://seqscope.github.io/ficture/install/).

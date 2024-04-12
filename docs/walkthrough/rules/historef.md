@@ -14,7 +14,7 @@ The [composite image](./align.md#3-a-comprehensive-view-of-sbcd-smatch-and-sge-i
 ## Output Files
 The rule generates the following output in the specified directory path:
 ```
-<output_directory>/align/<flowcell_id>/<chip_id>/histology/<species>_<seq2nd_version>
+<output_directory>/histology/<flowcell_id>/<chip_id>/aligned/<run_id>
 ```
 
 ### (1) A referenced Histology File
@@ -67,7 +67,7 @@ To verify the accuracy of the alignment, it is recommended to compare the [re-si
 
 The following parameter in the [job configuration](../../getting_started/job_config.md) file will be applied in this rule.
 
-```
+```yaml
 histology:
     resolution: 10
     figtype: "hne"

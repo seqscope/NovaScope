@@ -3,7 +3,7 @@ import logging, os, sys
 
 local_scripts = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(local_scripts)
-from bricks import check_input, check_path, create_dict, get_last5_from_md5, create_symlink
+from bricks import check_input, check_path, create_dict, get_last5_from_md5, create_symlink, log_dataframe
 
 
 def read_config_for_seq1(config, job_dir):
@@ -84,26 +84,72 @@ def read_config_for_unitid(config, job_dir, run_id):
     logging.info(f"     Boundary: {boundary}")
     return unit_id, unit_ann, boundary
 
-def read_config_for_analysis(config, run_id, unit_id):
-    
-    df_analysis = pd.DataFrame(config["analysis"]["params"])
-    
-    if "solofeature" not in df_analysis.columns: df_analysis["solofeature"] = "gn"
-    if "trainwidth" not in df_analysis.columns: df_analysis["trainwidth"] = 24
-    if "segmentmove" not in df_analysis.columns: df_analysis["segmentmove"] = 1
+def add_or_expand_column(df, col_name, cols, default_values):
+    if col_name not in df.columns and col_name in cols:
+        if isinstance(default_values, list) and len(default_values) > 1:
+            temp_dfs = []
+            for value in default_values:
+                temp_df = df.copy()
+                temp_df[col_name] = value
+                temp_dfs.append(temp_df)
+            df = pd.concat(temp_dfs).sort_index(kind='merge').reset_index(drop=True)
+        else:
+            single_value = default_values if not isinstance(default_values, list) else default_values[0]
+            df[col_name] = single_value
+    return df
 
-    df_analysis["run_id"]  = run_id
-    df_analysis["unit_id"] = unit_id
+def add_default_for_char(df_char, run_id, unit_id, cols=["solofeature", "trainwidth", "segmentmove"]):
+    df_char["run_id"] = run_id
+    df_char["unit_id"] = unit_id
 
-    mu_scale = config.get("analysis", {}).get("mu_scale", 1000)
+    df_char = add_or_expand_column(df_char, 'solofeature', cols, "gn")
+    df_char = add_or_expand_column(df_char, 'trainwidth', cols, 24)
+    df_char = add_or_expand_column(df_char, 'segmentmove', cols, 1)
+    df_char = add_or_expand_column(df_char, 'nfactor', cols, [6, 12])
+    df_char = add_or_expand_column(df_char, 'trainnepoch', cols, 3)
+    df_char = add_or_expand_column(df_char, 'fitwidth', cols, 24)
+    df_char = add_or_expand_column(df_char, 'anchor', cols, 4)
 
-    logging.info(f" - Analysis info:")
-    logging.info(f"     genomic feature: {df_analysis['solofeature'].values}")
-    logging.info(f"     training width: {df_analysis['trainwidth'].values}")
-    logging.info(f"     segment n_move: {df_analysis['segmentmove'].values}")
-    logging.info(f"     mu scale: {mu_scale}")
+    return df_char
 
-    return df_analysis, mu_scale
+def read_config_for_segment(config, run_id, unit_id, log_option=False):
+    # segment_char_info
+    segment_char_info= config.get("downstream", {}).get("reformat",{}).get("segment",{}).get("char", None)
+    if segment_char_info is None:
+        df_segment_char = read_config_for_keychar(config, run_id, unit_id)
+        df_segment_char = df_segment_char[["solofeature", "trainwidth", "segmentmove"]].drop_duplicates()
+    else:
+        df_segment_char = pd.DataFrame(segment_char_info)
+        df_segment_char = add_default_for_char(df_segment_char, run_id, unit_id)
+    # mu_scale
+    mu_scale = config.get("downstream", {}).get("reformat",{}).get("mu_scale", None)
+    if mu_scale is None:
+        mu_scale = config.get("downstream", {}).get("mu_scale", 1000)
+    if log_option:
+        log_dataframe(df_segment_char, log_message=" - Downstream segment character info: ")
+        logging.info(f"     mu scale: {mu_scale}")
+    return df_segment_char, mu_scale
+
+def read_config_for_keychar(config, run_id, unit_id, log_option=False):
+    key_char_info = config.get("downstream", {}).get("key_char", None)
+    if key_char_info is None:
+        df_key_char = pd.DataFrame({
+            "solofeature": ["gn", "gn"],
+            "trainwidth": [24, 24],
+            "segmentmove": [1, 1],
+            "nfactor": [6, 12],
+            "trainnepoch": [3, 3],
+            "fitwidth": [24, 24],
+            "anchor": [4, 4]
+        }
+        )
+    else:
+        df_key_char = pd.DataFrame(key_char_info)
+        df_key_char = add_default_for_char(df_key_char, run_id, unit_id, cols=["solofeature", "trainwidth", "segmentmove", "nfactor", "trainnepoch", "fitwidth", "anchor"])
+    if log_option:
+        logging.info(f" ")
+        log_dataframe(df_key_char, log_message=" - Downstream key character info:")
+
 
 def read_config_for_hist(config, job_dir, main_dir_histology):
     logging.info(f" - Histology file: Loading")

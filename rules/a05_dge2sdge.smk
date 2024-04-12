@@ -21,9 +21,9 @@ rule a05_dge2sdge:
         sdge_3in1_png = os.path.join(main_dirs["align"],  "{flowcell}", "{chip}", "{run_id}", "sge", "{run_id}.sge_match_sbcd.png"),
         sdge_xyrange  = os.path.join(main_dirs["align"],  "{flowcell}", "{chip}", "{run_id}", "sge", "barcodes.minmax.tsv"),
     params:
-        rgb_layout       = check_path(config.get("preprocess", {}).get("dge2sdge", {}).get("layout", None), job_dir, strict_mode=False),
-        visual_max_scale = config.get("preprocess", {}).get("visualization", {}).get("rgb",{}).get("max_scale", 50),
-        visual_res       = config.get("preprocess", {}).get("visualization", {}).get("rgb",{}).get("resolution", 1000),
+        rgb_layout       = check_path(config.get("upstream", {}).get("dge2sdge", {}).get("layout", None), job_dir, strict_mode=False),
+        visual_max_scale = config.get("upstream", {}).get("visualization", {}).get("rgb",{}).get("max_scale", 50),
+        visual_res       = config.get("upstream", {}).get("visualization", {}).get("rgb",{}).get("resolution", 1000),
         # module
         module_cmd       = get_envmodules_for_rule(["python", "imagemagick"], module_config)
     resources: 

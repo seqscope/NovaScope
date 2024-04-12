@@ -12,11 +12,11 @@ rule a08_sdgeAR_QC:
         sdgeAR_ftr_lenient   = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.feature.lenient.tsv.gz"), 
     params:
         outpref              = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}"), 
-        solofeature          = config.get("sdgeAR", {}).get("QC", {}).get('solofeature', "gn"),  
-        polygon_min_size     = config.get("sdgeAR", {}).get("QC", {}).get('polygon_min_size', 500),  
-        radius               = config.get("sdgeAR", {}).get("QC", {}).get("radius", 15),
-        n_move               = config.get("sdgeAR", {}).get("QC", {}).get('n_move', 2),   
-        quartile             = config.get("sdgeAR", {}).get("QC", {}).get('quartile', 2),       
+        solofeature          = config.get("downstream", {}).get('density_filter', {}).get('solofeature', "gn"),  
+        polygon_min_size     = config.get("downstream", {}).get('density_filter', {}).get('polygon_min_size', 500),  
+        radius               = config.get("downstream", {}).get('density_filter', {}).get("radius", 15),
+        n_move               = config.get("downstream", {}).get('density_filter', {}).get('n_move', 2),   
+        quartile             = config.get("downstream", {}).get('density_filter', {}).get('quartile', 2),       
         # module
         module_cmd           = get_envmodules_for_rule(["python", "samtools"], module_config)
     threads: 2

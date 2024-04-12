@@ -15,26 +15,26 @@ rule a04_align:
         # dir 
         bam_dir        = os.path.join(main_dirs["align"],  "{flowcell}", "{chip}", "{run_id}", "bam"),
         # params
-        min_match_len  = config.get("preprocess", {}).get("align", {}).get('min_match_len', 30),
-        min_match_frac = config.get("preprocess", {}).get("align", {}).get('min_match_frac', 0.66),
-        match_len      = config.get("preprocess", {}).get("smatch", {}).get('match_len', 27), 
+        min_match_len  = config.get("upstream", {}).get("align", {}).get('min_match_len', 30),
+        min_match_frac = config.get("upstream", {}).get("align", {}).get('min_match_frac', 0.66),
+        match_len      = config.get("upstream", {}).get("smatch", {}).get('match_len', 27), 
         skip_sbcd      = get_skip_sbcd(config), 
-        len_sbcd       = config.get("preprocess", {}).get("align", {}).get('len_sbcd', 30),
-        len_umi        = config.get("preprocess", {}).get("align", {}).get('len_umi', 9),
-        len_r2         = config.get("preprocess", {}).get("align", {}).get('len_r2', 101),
-        exist_action   = config.get("preprocess", {}).get("align", {}).get('exist_action', "overwrite"),
+        len_sbcd       = config.get("upstream", {}).get("align", {}).get('len_sbcd', 30),
+        len_umi        = config.get("upstream", {}).get("align", {}).get('len_umi', 9),
+        len_r2         = config.get("upstream", {}).get("align", {}).get('len_r2', 101),
+        exist_action   = config.get("upstream", {}).get("align", {}).get('exist_action', "overwrite"),
         # ref
         refidx         = sp2alignref[species],
         # resource
-        ram            = lambda wildcards: assign_resource_for_align(wildcards.run_id, config, rid2seq2, main_dirs)["ram"],
+        ram            = lambda wildcards: assign_resource_for_align(wildcards.run_id, config, env_config, rid2seq2, main_dirs)["ram"],
         # module
         module_cmd        = get_envmodules_for_rule(["python", "samtools"], module_config),
     threads: 
-        lambda wildcards:  assign_resource_for_align(wildcards.run_id, config, rid2seq2, main_dirs)["threads"], 
+        lambda wildcards:  assign_resource_for_align(wildcards.run_id, config, env_config, rid2seq2, main_dirs)["threads"], 
     resources: 
         time      = "100:00:00",
-        mem       = lambda wildcards: assign_resource_for_align(wildcards.run_id, config, rid2seq2, main_dirs)["mem"],
-        partition = lambda wildcards: assign_resource_for_align(wildcards.run_id, config, rid2seq2, main_dirs)["partition"],
+        mem       = lambda wildcards: assign_resource_for_align(wildcards.run_id, config, env_config, rid2seq2, main_dirs)["mem"],
+        partition = lambda wildcards: assign_resource_for_align(wildcards.run_id, config, env_config, rid2seq2, main_dirs)["partition"],
     run:
         # exist action
         exist_action = ""

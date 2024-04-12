@@ -49,8 +49,8 @@ def setup_rgb_layout(rgb_layout_path, sdge_dir):
 # get skip_sbcd parameter by sbcd_format
 #
 def get_skip_sbcd(config):
-    sbcd_format = config.get("preprocess", {}).get("fastq2sbcd", {}).get('format', "DraI32") 
-    skip_sbcd   = config.get("preprocess", {}).get("smatch", {}).get('skip_sbcd', None)
+    sbcd_format = config.get("upstream", {}).get("fastq2sbcd", {}).get('format', "DraI32") 
+    skip_sbcd   = config.get("upstream", {}).get("smatch", {}).get('skip_sbcd', None)
     if skip_sbcd is None:
         if sbcd_format == "DraI31":
             skip_sbcd = 1
@@ -117,18 +117,18 @@ def cal_resource_by_filesize(run, rid2seq2, main_dirs, avail_resource_list):
             "partition": resource["partition"],
         }
 
-def assign_resource_for_align(run, config, rid2seq2, main_dirs):
-    assign_option=config.get("preprocess", {}).get("align", {}).get("resource", {}).get("assign_type", "stdin") 
+def assign_resource_for_align(run, config, env_config, rid2seq2, main_dirs):
+    assign_option=config.get("upstream", {}).get("align", {}).get("resource", {}).get("assign_type", "stdin") 
     
     if assign_option=="filesize":
-        avail_resource_list=config.get("preprocess", {}).get("align", {}).get("resource", {}).get("filesize", None)
+        avail_resource_list=env_config.get("available_nodes", None)
         assert avail_resource_list is not None, "Please provide filesize resource list for alignment."
         resources = cal_resource_by_filesize(run, rid2seq2, main_dirs, avail_resource_list)
     elif assign_option=="stdin":
         resources = {
-        "mem":  config.get("preprocess", {}).get("align", {}).get("resource", {}).get("stdin", {}).get("memory", "70000m"),
-        "threads": config.get("preprocess", {}).get("align", {}).get("resource", {}).get("stdin", {}).get("threads", 10),
-        "partition": config.get("preprocess", {}).get("align", {}).get("resource", {}).get("stdin", {}).get("partition", "standard"),
+        "mem":  config.get("upstream", {}).get("align", {}).get("resource", {}).get("stdin", {}).get("memory", "70000m"),
+        "threads": config.get("upstream", {}).get("align", {}).get("resource", {}).get("stdin", {}).get("threads", 10),
+        "partition": config.get("upstream", {}).get("align", {}).get("resource", {}).get("stdin", {}).get("partition", "standard"),
         }  
     else:
         raise ValueError(f"Unknown assign_option: {assign_option}")
