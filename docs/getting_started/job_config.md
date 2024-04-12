@@ -45,7 +45,7 @@ input:
 ## Output
 output: <output_directory>                      ## REQUIRED FIELD (e.g. /path/to/output/directory)
 request:                                        ## See the "Detailed Description of Individual Fields" below.
-  - <required_output1>                          ## REQUIRED FIELD (e.g. sge-per-chip)
+  - <required_output1>                          ## REQUIRED FIELD (e.g. sge-per-run)
   - <required_output2>                          ## Optionally, you can request multiple outputs
   # ...
 
