@@ -962,18 +962,36 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#request-align-per-chip" class="md-nav__link">
+  <a href="#request-align-per-run" class="md-nav__link">
     <span class="md-ellipsis">
-      Request "align-per-chip"
+      Request "align-per-run"
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#request-sge-per-chip" class="md-nav__link">
+  <a href="#request-sge-per-run" class="md-nav__link">
     <span class="md-ellipsis">
-      Request "sge-per-chip"
+      Request "sge-per-run"
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#request-transcript-per-unit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Request "transcript-per-unit"
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#request-segment-per-unit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Request "segment-per-unit"
     </span>
   </a>
   
@@ -1004,6 +1022,12 @@
   
     
     
+      
+        
+      
+        
+      
+        
       
         
       
@@ -1179,6 +1203,69 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rules/sdge2sdgeAR/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    sdge2sdgeAR
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rules/sdgeAR_reformat/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    sdgeAR_reformat
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rules/sdgeAR_segment/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    sdgeAR_segment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1246,18 +1333,36 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#request-align-per-chip" class="md-nav__link">
+  <a href="#request-align-per-run" class="md-nav__link">
     <span class="md-ellipsis">
-      Request "align-per-chip"
+      Request "align-per-run"
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#request-sge-per-chip" class="md-nav__link">
+  <a href="#request-sge-per-run" class="md-nav__link">
     <span class="md-ellipsis">
-      Request "sge-per-chip"
+      Request "sge-per-run"
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#request-transcript-per-unit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Request "transcript-per-unit"
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#request-segment-per-unit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Request "segment-per-unit"
     </span>
   </a>
   
@@ -1283,13 +1388,17 @@
 
   <h1>Execution Flow by Request</h1>
 
-<p>This page provides an overview of the rule execution flow tailored to different <strong><code>request</code></strong> specified in the <a href="../getting_started/job_config.md">job configuration</a> file of <a href="https://seqscope.github.io/NovaScope/">NovaScope</a>. </p>
-<p>Each <code>request</code> option triggers a specific set of rules. Thus, below provides a rulegraph for each <code>request</code> option to outline the triggered rules and their interdependencies, detailing distinct processing paths. It's important to note that these visual guides are constructed from a <strong>baseline scenario</strong> where only the initial input 1st-seq and 2nd-seq FASTQ files are present, with no prior processing or intermediate files generated.</p>
+<p>This page provides an overview of the rule execution flow tailored to different <strong><code>request</code></strong> specified in the <a href="../../../getting_started/job_config/">job configuration</a> file of <a href="https://seqscope.github.io/NovaScope/">NovaScope</a>. </p>
+<p>Each <code>request</code> option triggers a specific set of rules. Thus, below provides a rulegraph for each <code>request</code> option to outline the triggered rules and their interdependencies, detailing distinct processing paths.</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>The visual guides below are constructed from a <strong>baseline scenario</strong> where only the initial input 1st-seq and 2nd-seq FASTQ files are present, with no prior processing or intermediate files generated.</p>
+</div>
 <h3 id="request-sbcd-per-flowcell">Request <code>"sbcd-per-flowcell"</code><a class="headerlink" href="#request-sbcd-per-flowcell" title="Permanent link">&para;</a></h3>
 <ul>
 <li>
 <p><strong>Description</strong>:
-The <code>"sbcd-per-flowcell"</code> option initiates the generation of a spatial barcode map specific to a flow cell. Consequently, <a href="https://seqscope.github.io/NovaScope/">NovaScope</a> triggers the execution of Rule <a href="../../rules/fastq2sbcd/"><code>fastq2sbcd</code></a>.</p>
+The <code>"sbcd-per-flowcell"</code> option initiates the generation of a spatial barcode map specific to a flow cell. Consequently, it triggers the execution of Rule <a href="../../rules/fastq2sbcd/"><code>fastq2sbcd</code></a>.</p>
 </li>
 <li>
 <p><strong>Rule Graph</strong>:</p>
@@ -1324,31 +1433,57 @@ For each pair of input 2nd-seq FASTQ files associated with a given chip, the <co
 <figure>
 <img alt="rg_smatch" src="../../../images/rulegraph_smatchpersc.png" width="100%" />
 </figure>
-<h3 id="request-align-per-chip">Request <code>"align-per-chip"</code><a class="headerlink" href="#request-align-per-chip" title="Permanent link">&para;</a></h3>
+<h3 id="request-align-per-run">Request <code>"align-per-run"</code><a class="headerlink" href="#request-align-per-run" title="Permanent link">&para;</a></h3>
 <ul>
 <li>
 <p><strong>Description</strong>:
-The <code>"align-per-chip"</code> option request a <a href="http://127.0.0.1:8000/NovaScope/getting_started/job_config/#:~:text=Binary%20Alignment%20Map%20(BAM)">Binary Alignment Map (BAM)</a> from the alignment as well as the digital gene expression matrices (DGEs) for Gene, GeneFull, splice junctions (SJ), and Velocyto. It provokes the execution of Rule <a href="../../rules/align/"><code>align</code></a> and its prerequisite rules including <a href="../../rules/smatch/"><code>smatch</code></a>, <a href="../../rules/sbcd2chip/"><code>sbcd2chip</code></a>, and <a href="../../rules/fastq2sbcd/"><code>fastq2sbcd</code></a>.</p>
+The <code>"align-per-run"</code> option request a <a href="http://127.0.0.1:8000/NovaScope/getting_started/job_config/#:~:text=Binary%20Alignment%20Map%20(BAM)">Binary Alignment Map (BAM)</a> from the alignment as well as the digital gene expression matrices (DGEs) for Gene, GeneFull, splice junctions (SJ), and Velocyto. It provokes the execution of Rule <a href="../../rules/align/"><code>align</code></a> and its prerequisite rules including <a href="../../rules/smatch/"><code>smatch</code></a>, <a href="../../rules/sbcd2chip/"><code>sbcd2chip</code></a>, and <a href="../../rules/fastq2sbcd/"><code>fastq2sbcd</code></a>.</p>
 </li>
 <li>
 <p><strong>Rule Graph</strong>:</p>
 </li>
 </ul>
 <figure>
-<img alt="rg_align" src="../../../images/rulegraph_alignpersc.png" width="100%" />
+<img alt="rg_align" src="../../../images/rulegraph_alignperrun.png" width="100%" />
 </figure>
-<h3 id="request-sge-per-chip">Request <code>"sge-per-chip"</code><a class="headerlink" href="#request-sge-per-chip" title="Permanent link">&para;</a></h3>
+<h3 id="request-sge-per-run">Request <code>"sge-per-run"</code><a class="headerlink" href="#request-sge-per-run" title="Permanent link">&para;</a></h3>
 <ul>
 <li>
 <p><strong>Description</strong>:
-The <code>"sge-per-chip"</code> option inquires: 1) a spatial digital gene expression matrix (SGE) encompassing all genomic features with two plots visualizing the distribution of the aligned spatial barcodes; 2) visualization for genes of interest provided in the <a href="../getting_started/job_config.md">job configuration</a> file. It requests the execution of Rule <a href="../../rules/dge2sdge/"><code>dge2sdge</code></a> and <code>gene_visual</code>, alongside the prerequisite rules: <a href="../../rules/align/"><code>align</code></a>, <a href="../../rules/smatch/"><code>smatch</code></a>, <a href="../../rules/sbcd2chip/"><code>sbcd2chip</code></a>, and <a href="../../rules/fastq2sbcd/"><code>fastq2sbcd</code></a>.</p>
+The <code>"sge-per-run"</code> option inquires: 1) a spatial digital gene expression matrix (SGE) encompassing all genomic features with two plots visualizing the distribution of the aligned spatial barcodes; 2) visualization for genes of interest provided in the <a href="../../../getting_started/job_config/">job configuration</a> file. It requests the execution of Rule <a href="../../rules/dge2sdge/"><code>dge2sdge</code></a> and <code>gene_visual</code>, alongside the prerequisite rules: <a href="../../rules/align/"><code>align</code></a>, <a href="../../rules/smatch/"><code>smatch</code></a>, <a href="../../rules/sbcd2chip/"><code>sbcd2chip</code></a>, and <a href="../../rules/fastq2sbcd/"><code>fastq2sbcd</code></a>.</p>
 </li>
 <li>
 <p><strong>Rule Graph</strong>:</p>
 </li>
 </ul>
 <figure>
-<img alt="rg_sge" src="../../../images/rulegraph_sgepersc.png" width="100%" />
+<img alt="rg_sge" src="../../../images/rulegraph_sgeperrun.png" width="100%" />
+</figure>
+<h3 id="request-transcript-per-unit">Request <code>"transcript-per-unit"</code><a class="headerlink" href="#request-transcript-per-unit" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Description</strong>:
+The <code>"transcript-per-unit"</code> option requests a SGE in a FICTURE-compatible format. It requests the execution of Rule <a href="../../rules/sdgeAR_reformat/"><code>sdgeAR_reformat</code></a>, alongside the prerequisite rules: <a href="../../rules/sdge2sdgeAR/"><code>sdge2sdgeAR</code></a>, <a href="../../rules/dge2sdge/"><code>dge2sdge</code></a>, <a href="../../rules/align/"><code>align</code></a>, <a href="../../rules/smatch/"><code>smatch</code></a>, <a href="../../rules/sbcd2chip/"><code>sbcd2chip</code></a>, and <a href="../../rules/fastq2sbcd/"><code>fastq2sbcd</code></a>.</p>
+</li>
+<li>
+<p><strong>Rule Graph</strong>:</p>
+</li>
+</ul>
+<figure>
+<img alt="rg_sge" src="../../../images/rulegraph_transcriptperunit.png" width="100%" />
+</figure>
+<h3 id="request-segment-per-unit">Request <code>"segment-per-unit"</code><a class="headerlink" href="#request-segment-per-unit" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Description</strong>:
+The <code>"segment-per-unit"</code> option requests a hexagon-based SGE in the 10x genomics format. It requests the execution of Rule <a href="../../rules/sdgeAR_segment/"><code>sdgeAR_segment</code></a>, alongside the prerequisite rules: <a href="../../rules/sdgeAR_reformat/"><code>sdgeAR_reformat</code></a>, <a href="../../rules/sdge2sdgeAR/"><code>sdge2sdgeAR</code></a>, <a href="../../rules/dge2sdge/"><code>dge2sdge</code></a>, <a href="../../rules/align/"><code>align</code></a>, <a href="../../rules/smatch/"><code>smatch</code></a>, <a href="../../rules/sbcd2chip/"><code>sbcd2chip</code></a>, and <a href="../../rules/fastq2sbcd/"><code>fastq2sbcd</code></a>.</p>
+</li>
+<li>
+<p><strong>Rule Graph</strong>:</p>
+</li>
+</ul>
+<figure>
+<img alt="rg_sge" src="../../../images/rulegraph_sgementperunit.png" width="100%" />
 </figure>
 
 

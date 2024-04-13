@@ -14,6 +14,8 @@
         <link rel="prev" href="../dge2sdge/">
       
       
+        <link rel="next" href="../sdge2sdgeAR/">
+      
       
       <link rel="icon" href="../../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.13">
@@ -934,6 +936,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
       
@@ -1223,6 +1231,69 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sdge2sdgeAR/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    sdge2sdgeAR
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sdgeAR_reformat/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    sdgeAR_reformat
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sdgeAR_segment/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    sdgeAR_segment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1385,7 +1456,7 @@ The <a href="../align/#3-a-comprehensive-view-of-sbcd-smatch-and-sge-images">com
 </ul>
 <h2 id="output-files">Output Files<a class="headerlink" href="#output-files" title="Permanent link">&para;</a></h2>
 <p>The rule generates the following output in the specified directory path:
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>&lt;output_directory&gt;/align/&lt;flowcell_id&gt;/&lt;chip_id&gt;/histology/&lt;species&gt;_&lt;seq2nd_version&gt;
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>&lt;output_directory&gt;/histology/&lt;flowcell_id&gt;/&lt;chip_id&gt;/aligned/&lt;run_id&gt;
 </code></pre></div></td></tr></table></div></p>
 <h3 id="1-a-referenced-histology-file">(1) A referenced Histology File<a class="headerlink" href="#1-a-referenced-histology-file" title="Permanent link">&para;</a></h3>
 <p><strong>Description</strong>:
@@ -1424,9 +1495,9 @@ An TIFF file shares the identical dimensions with both the <a href="../smatch/#2
 <p>The following parameter in the <a href="../../../getting_started/job_config/">job configuration</a> file will be applied in this rule.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
-<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code>histology:
-    resolution: 10
-    figtype: &quot;hne&quot;
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nt">histology</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">resolution</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="w">    </span><span class="nt">figtype</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;hne&quot;</span>
 </code></pre></div></td></tr></table></div>
 <ul>
 <li><strong>The <code>histology</code> Parameters</strong>

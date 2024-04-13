@@ -594,9 +594,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#environment-modules" class="md-nav__link">
+  <a href="#optional-environment-modules" class="md-nav__link">
     <span class="md-ellipsis">
-      Environment Modules
+      (Optional) Environment Modules
     </span>
   </a>
   
@@ -615,6 +615,15 @@
   <a href="#python-environment" class="md-nav__link">
     <span class="md-ellipsis">
       Python Environment
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-computing-capabilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      (Optional) Computing Capabilities
     </span>
   </a>
   
@@ -1007,6 +1016,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
       
@@ -1166,6 +1181,69 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../walkthrough/rules/sdge2sdgeAR/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    sdge2sdgeAR
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../walkthrough/rules/sdgeAR_reformat/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    sdgeAR_reformat
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../walkthrough/rules/sdgeAR_segment/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    sdgeAR_segment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1217,9 +1295,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#environment-modules" class="md-nav__link">
+  <a href="#optional-environment-modules" class="md-nav__link">
     <span class="md-ellipsis">
-      Environment Modules
+      (Optional) Environment Modules
     </span>
   </a>
   
@@ -1238,6 +1316,15 @@
   <a href="#python-environment" class="md-nav__link">
     <span class="md-ellipsis">
       Python Environment
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-computing-capabilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      (Optional) Computing Capabilities
     </span>
   </a>
   
@@ -1262,24 +1349,38 @@
 
 
 <h1 id="setting-up-a-environment-yaml-file">Setting up a Environment YAML File<a class="headerlink" href="#setting-up-a-environment-yaml-file" title="Permanent link">&para;</a></h1>
-<p><a href="../../">NovaScope</a> requires a YAML file to configure the environment. This file is used to specify the paths to the required tools, reference databases, and Python environment. To create your own <code>config_env.yaml</code> file for the environment setup, you may copy from <a href="https://github.com/seqscope/NovaScope/blob/main/info/config_env.yaml">our example available in our GitHub repository</a>.</p>
-<p>Below is a brief description of all the items in the YAML file. Replace the placeholders with your specific input variables to customize it according to your needs, and prepare your own <code>config_env.yaml</code>.</p>
+<p><a href="../../">NovaScope</a> requires a YAML file to configure the environment. This environment configuration file (<code>config_env.yaml</code>) is used to specify the paths to the required tools, reference databases, and Python environment. </p>
+<p>Below is a brief description of all the items in the YAML file. </p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>To create your own <code>config_env.yaml</code> file for the environment setup, you may copy from <a href="https://github.com/seqscope/NovaScope/blob/main/info/config_env.yaml">our example available in our GitHub repository</a>. Remember to replace the placeholders with your specific input variables to customize it according to your needs.</p>
+</div>
 <h2 id="tools">Tools<a class="headerlink" href="#tools" title="Permanent link">&para;</a></h2>
-<p>For tools that are not explicitly defined, the pipeline will automatically check if they are installed and include them in the system path for use. This allows the pipeline to utilize these tools without needing manual configuration for each one.</p>
+<p>The pipeline automatically detects and includes undefined tools in the system path, allowing for their use without manual configuration.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
-<span class="normal">4</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nt">tools</span><span class="p">:</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nt">tools</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">spatula</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/spatula/bin/spatula</span><span class="w">                     </span><span class="c1">## Default: &quot;spatula&quot;</span>
 <span class="w">  </span><span class="nt">samtools</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/samtools/samtools</span><span class="w">                      </span><span class="c1">## Default: &quot;samtools&quot;</span>
 <span class="w">  </span><span class="nt">star</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/STAR_2_7_11b/bin/Linux_x86_64_static/STAR</span><span class="w">  </span><span class="c1">## Default: &quot;STAR&quot;</span>
+<span class="w">  </span><span class="nt">ficture</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/ficture/repository</span><span class="w">                      </span><span class="c1">## (Optional) Default: &quot;ficture&quot;     </span>
 </code></pre></div></td></tr></table></div>
-<ul>
-<li><code>samtools</code>: For users in High-Performance Computing (HPC) environments with <code>samtools</code> installed, it's feasible to use <code>envmodules</code> (see <a href="#environment-modules">Environment Modules</a>) to load <code>samtools</code> rather than defining its path here.</li>
-</ul>
-<h2 id="environment-modules">Environment Modules<a class="headerlink" href="#environment-modules" title="Permanent link">&para;</a></h2>
-<p>For HPC users, use the <code>envmodules</code> section to load the required software tools as modules. If a tool is not listed in the <code>envmodules</code> section, the pipeline will assume it's installed system-wide. For local executions, you may remove this section if running the pipeline on your local machine.</p>
-<p>Please specify the <strong>version</strong> information. </p>
+<details class="note">
+<summary><code>samtools</code></summary>
+<p>For users in High-Performance Computing (HPC) environments with <code>samtools</code> installed, it's feasible to use <code>envmodules</code> (see <a href="#environment-modules">Environment Modules</a>) to load <code>samtools</code> rather than defining its path here.</p>
+</details>
+<h2 id="optional-environment-modules">(Optional) Environment Modules<a class="headerlink" href="#optional-environment-modules" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Only applicable to HPC environments. For local executions, remove this section from <code>config_env.yaml</code>.</p>
+</div>
+<p>For HPC users, it is feasible to use the <code>envmodules</code> section to load the required software tools as modules. If a tool is not listed in the <code>envmodules</code> section, the pipeline will assume it's installed system-wide. </p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The <strong>version</strong> information is required.</p>
+</div>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
@@ -1294,13 +1395,20 @@
 <span class="w">  </span><span class="c1"># snakemake: &quot;snakemake/&lt;version_information&gt;&quot;</span>
 <span class="w">  </span><span class="c1"># samtools: &quot;Bioinformatics &amp;&amp; samtools&quot;</span>
 </code></pre></div></td></tr></table></div>
-<ul>
-<li><code>python</code>: If your Python environment was set up using a Python version accessed through a module, your environment depends on certain shared files from that module. Therefore, you must add the <code>python: "python/&lt;version_information&gt;"</code>  in the <code>envmodules</code> section to load the same module you initially used to establish your environment. But if you set up with a locally installed Python (not using <code>module load</code>), comment out or remove the module line <code>python: "python/&lt;version_information&gt;"</code>.</li>
-<li><code>samtools</code>: Using <code>envmodules</code> to load <code>samtools</code> can be an alternative to specifying its path in <a href="#tools"><code>tools</code></a>. The given example is designed for instances where <code>samtools</code> is integrated into the <code>Bioinformatics</code> module system, which necessitates loading the <code>Bioinformatics</code> module prior to loading <code>samtools</code>. In this case, provide all modules that required to be loaded in the correct order, joint by <code>&amp;&amp;</code>.</li>
-</ul>
+<details class="note">
+<summary><code>python</code></summary>
+<p>If your Python environment was set up using a Python accessed through a module, specify the same Python module in the envmodules section to maintain the environment. If using a local Python installation (not through <code>module load</code>), DO NOT INCLUDE any Python module here.</p>
+</details>
+<details class="note">
+<summary><code>samtools</code></summary>
+<p>Using <code>envmodules</code> to load <code>samtools</code> can be an alternative to specifying its path in <a href="#tools"><code>tools</code></a>. The given example is designed for instances where <code>samtools</code> is integrated into the <code>Bioinformatics</code> module system, which necessitates loading the <code>Bioinformatics</code> module prior to loading <code>samtools</code>. In this case, provide all modules that required to be loaded in the correct order, joint by <code>&amp;&amp;</code>.</p>
+</details>
 <h2 id="reference-genome-index">Reference Genome Index<a class="headerlink" href="#reference-genome-index" title="Permanent link">&para;</a></h2>
-<p>Please list every reference database used for alignment here. The reference data can be obtained via the <a href="https://www.10xgenomics.com/support/software/cell-ranger/downloads">cellranger download</a> page. Example instructions to build STAR index from the reference file is described in the <a href="requirements.md">Requirements</a> section.</p>
+<p>Please list every reference database used for alignment here. The reference data can be obtained via the <a href="https://www.10xgenomics.com/support/software/cell-ranger/downloads">cellranger download</a> page. Example instructions to build STAR index from the reference file is described in the <a href="../requirement/">Requirements</a> section.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
 <p>Please ensure the reference genome indices correspond to the species of your input data. </p>
+</div>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
@@ -1312,8 +1420,34 @@
 <span class="w">   </span><span class="c1">#...</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="python-environment">Python Environment<a class="headerlink" href="#python-environment" title="Permanent link">&para;</a></h2>
-<p>You also need to specify the path of python virtual environment by modifying the following line.</p>
+<p>You also need to specify the path of Python virtual environment by modifying the following line.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nt">pyenv</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/to/python/virtual/env&quot;</span>
+</code></pre></div></td></tr></table></div>
+<h2 id="optional-computing-capabilities">(Optional) Computing Capabilities<a class="headerlink" href="#optional-computing-capabilities" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Only applicable to HPC environments.</p>
+</div>
+<p>NovaScope provides two methods for specifying resources for the alignment process:</p>
+<ul>
+<li><strong>Option <code>stdin</code></strong> allows users to define resources manually in the <a href="../../getting_started/job_config/#a-template-of-the-config-file">job configuration file</a>.</li>
+<li><strong>Option <code>filesize</code></strong> allows NovaScope to automatically allocate resources based on the size of the input files and the available computational resources defined in this environment configuration file. <strong>ONLY</strong> when using Option <code>filesize</code> must users specify the computing resources available. </li>
+</ul>
+<p>For more information on activating Option <code>stdin</code> or <code>filesize</code> and the resource allocation strategy for Option <code>filesize</code>, visit the <a href="../../getting_started/job_config/#upstream">Job Configuration</a> page.</p>
+<p>An example of how to configure these settings.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nt">available_nodes</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">partition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">standard</span><span class="w">     </span><span class="c1"># partition name</span>
+<span class="w">    </span><span class="nt">max_n_cpus</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span><span class="w">          </span><span class="c1"># the maximum number of CPUs per node</span>
+<span class="w">    </span><span class="nt">mem_per_cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">7g</span><span class="w">         </span><span class="c1"># the memory allocation per CPU </span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">partition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">largemem</span>
+<span class="w">    </span><span class="nt">max_n_cpus</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="w">    </span><span class="nt">mem_per_cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">25g</span>
 </code></pre></div></td></tr></table></div>
 
 

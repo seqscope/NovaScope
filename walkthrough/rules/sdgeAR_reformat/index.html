@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="https://seqscope.github.io/NovaScope/walkthrough/rules/sbcd2chip/">
+        <link rel="canonical" href="https://seqscope.github.io/NovaScope/walkthrough/rules/sdgeAR_reformat/">
       
       
-        <link rel="prev" href="../fastq2sbcd/">
+        <link rel="prev" href="../sdge2sdgeAR/">
       
       
-        <link rel="next" href="../smatch/">
+        <link rel="next" href="../sdgeAR_segment/">
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
@@ -22,7 +22,7 @@
     
     
       
-        <title>sbcd2chip - NovaScope</title>
+        <title>sdgeAR_reformat - NovaScope</title>
       
     
     
@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#rule-sbcd2chip" class="md-skip">
+        <a href="#rule-sdgear_reformat" class="md-skip">
           Skip to content
         </a>
       
@@ -110,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              sbcd2chip
+              sdgeAR_reformat
             
           </span>
         </div>
@@ -1003,30 +1003,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    sbcd2chip
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../sbcd2chip/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1035,131 +1015,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#purpose" class="md-nav__link">
-    <span class="md-ellipsis">
-      Purpose
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#input-files" class="md-nav__link">
-    <span class="md-ellipsis">
-      Input Files
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#output-files" class="md-nav__link">
-    <span class="md-ellipsis">
-      Output Files
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Output Files">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-per-chip-spatial-barcode-mape" class="md-nav__link">
-    <span class="md-ellipsis">
-      (1) Per-Chip Spatial Barcode Mape
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-per-chip-manifest-file" class="md-nav__link">
-    <span class="md-ellipsis">
-      (2) Per-Chip Manifest File
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-an-sbcd-image" class="md-nav__link">
-    <span class="md-ellipsis">
-      (3) An "sbcd" Image
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#4-a-summary-for-duplicate-barcodes" class="md-nav__link">
-    <span class="md-ellipsis">
-      (4) A Summary for Duplicate Barcodes
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#output-guidelines" class="md-nav__link">
-    <span class="md-ellipsis">
-      Output Guidelines
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#parameters" class="md-nav__link">
-    <span class="md-ellipsis">
-      Parameters
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#dependencies" class="md-nav__link">
-    <span class="md-ellipsis">
-      Dependencies
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#code-snippet" class="md-nav__link">
-    <span class="md-ellipsis">
-      Code Snippet
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1274,10 +1129,30 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../sdgeAR_reformat/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    sdgeAR_reformat
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -1286,6 +1161,113 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#purpose" class="md-nav__link">
+    <span class="md-ellipsis">
+      Purpose
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#input-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      Input Files
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#output-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      Output Files
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Output Files">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-ficture-compatible-sge" class="md-nav__link">
+    <span class="md-ellipsis">
+      (1) FICTURE-compatible SGE
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-two-tab-delimited-feature-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      (2) Two Tab-delimited Feature Files
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#output-guidelines" class="md-nav__link">
+    <span class="md-ellipsis">
+      Output Guidelines
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parameters
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dependencies
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#code-snippet" class="md-nav__link">
+    <span class="md-ellipsis">
+      Code Snippet
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1382,36 +1364,18 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#1-per-chip-spatial-barcode-mape" class="md-nav__link">
+  <a href="#1-ficture-compatible-sge" class="md-nav__link">
     <span class="md-ellipsis">
-      (1) Per-Chip Spatial Barcode Mape
+      (1) FICTURE-compatible SGE
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-per-chip-manifest-file" class="md-nav__link">
+  <a href="#2-two-tab-delimited-feature-files" class="md-nav__link">
     <span class="md-ellipsis">
-      (2) Per-Chip Manifest File
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-an-sbcd-image" class="md-nav__link">
-    <span class="md-ellipsis">
-      (3) An "sbcd" Image
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#4-a-summary-for-duplicate-barcodes" class="md-nav__link">
-    <span class="md-ellipsis">
-      (4) A Summary for Duplicate Barcodes
+      (2) Two Tab-delimited Feature Files
     </span>
   </a>
   
@@ -1476,190 +1440,100 @@
   
 
 
-<h1 id="rule-sbcd2chip">Rule <code>sbcd2chip</code><a class="headerlink" href="#rule-sbcd2chip" title="Permanent link">&para;</a></h1>
+<h1 id="rule-sdgear_reformat">Rule <code>sdgeAR_reformat</code>:<a class="headerlink" href="#rule-sdgear_reformat" title="Permanent link">&para;</a></h1>
 <h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">&para;</a></h2>
-<p>The <code>sbcd2chip</code> rule is designed to create a spatial barcode map for a chip section of interest. It achieves this by merging the spatial maps of all tiles corresponding to the chip, guided by a spatial barcode layout file.</p>
+<p>The <code>sdgeAR_reformat</code> prepares the spatial digital gene expression matrix (SGE) in <a href="https://seqscope.github.io/ficture/">FICTURE</a>-compatible format. This rule also offers gene-filtering function, when preparing the <a href="https://seqscope.github.io/ficture/">FICTURE</a>-compatible SGE, depends on the user-defined parameters in the job configuration file.</p>
 <h2 id="input-files">Input Files<a class="headerlink" href="#input-files" title="Permanent link">&para;</a></h2>
 <ul>
-<li>
-<p><strong>Per-Tile Spatial Barcode Maps &amp; Flow Cell Manifest</strong>
-Required inputs are the spatial barcode maps for each tile associated with the chip of interest and the manifest file for the corresponding flow cell. Both inputs are generated by the <a href="../fastq2sbcd/"><code>fastq2sbcd</code></a> rule.</p>
-</li>
-<li>
-<p><strong>A Spatial Barcode Layout file</strong>
-It is optional to provide a specific spatial barcode layout file for the chip via the <a href="../../../getting_started/job_config/">job configuration</a> file. If absent, NovaScope will use the spatial barcode <a href="https://github.com/seqscope/NovaScope/tree/main/info/assets/layout_per_tile_basis">layout</a> provided by the NovaScope repository. </p>
-</li>
+<li><strong>Spatial Digital Gene Expression Matrix (SGE) and its Metadata File for Coordinates</strong>
+Required input files include a SGE file and its meta file for X Y coordinates. Those files are required to be stored in the <code>sgeAR</code> subfolder in the <code>analysis</code> directory. This could be generated by Rule <a href="../sdge2sdgeAR/"><code>sdge2sdgeAR</code></a> or manually prepared by the users.</li>
 </ul>
 <h2 id="output-files">Output Files<a class="headerlink" href="#output-files" title="Permanent link">&para;</a></h2>
-<p>The rule generates the following output in the specified directory path: 
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>&lt;output_directory&gt;/seq1st/&lt;flowcell_id&gt;/nbcds/&lt;seq1st_id&gt;
+<p>The rule generates the following output in the specified directory path:
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>&lt;output_directory&gt;/analysis/&lt;run_id&gt;/&lt;unit_id&gt;/preprocess
 </code></pre></div></td></tr></table></div></p>
-<h3 id="1-per-chip-spatial-barcode-mape">(1) Per-Chip Spatial Barcode Mape<a class="headerlink" href="#1-per-chip-spatial-barcode-mape" title="Permanent link">&para;</a></h3>
-<p><strong>Description</strong>: This is a compressed, tab-delimited file mapping barcodes to global spatial coordinates on the chip, with duplicate barcodes removed. Note that only one spatial barcode map is produced for a chip, both lane ID and tile ID are set to <code>1</code>.</p>
-<p><strong>File Naming Convention</strong>: <code>1_1.sbcds.sorted.tsv.gz</code></p>
-<p><strong>File Format</strong>: </p>
+<h3 id="1-ficture-compatible-sge">(1) FICTURE-compatible SGE<a class="headerlink" href="#1-ficture-compatible-sge" title="Permanent link">&para;</a></h3>
+<p><strong>Description</strong>: A SGE in the FICTURE format is generated, which contains all informations including the barcode information, features information, and count for each genomic feature. </p>
+<p><strong>File Naming Convention</strong>: 
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>&lt;unit_id&gt;.merged.matrix.tsv.gz
+</code></pre></div></td></tr></table></div></p>
+<p><strong>File Format</strong>:
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
-<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code>AAAAAAAAAAAAGCGACCGGGTAATATATGT 1   1   1413111 2277603 1
-AAAAAACATAAGAAAGATCCAAATGACGGTC 1   1   871865  383588  1
-AAAAAAGGTACCCGCAGTGCGGACAAACGAA 1   1   1214343 1498113 1
-</code></pre></div></td></tr></table></div>
-<ul>
-<li>Column 1: Spatial barcode sequence (HDMI, typically 32 base pairs).</li>
-<li>Column 2: Lane ID, which is defined as <code>1</code>.</li>
-<li>Column 3: Tile ID, which is defined as <code>1</code>.</li>
-<li>Column 4: X-coordinate within the chip (global X-coordinate).</li>
-<li>Column 5: Y-coordinate within the chip (global Y-coordinate).</li>
-<li>Column 6: Count of occurrences for each spatial barcode.</li>
-</ul>
-<h3 id="2-per-chip-manifest-file">(2) Per-Chip Manifest File<a class="headerlink" href="#2-per-chip-manifest-file" title="Permanent link">&para;</a></h3>
-<p><strong>Description</strong>:
-The manifest file offers summary statistics for the chip of interest. </p>
-<p><strong>File Naming Convention</strong>: <code>manifest.tsv</code> </p>
-<p><strong>File Format</strong>: 
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
-<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code>id   filepath                 barcodes  matches  mismatches  xmin  xmax     ymin  ymax
-1_1  1_1.sbcds.sorted.tsv.gz  5962994   5962994  0           0     1469211  0     2277916
+<span class="normal">3</span>
+<span class="normal">4</span></pre></div></td><td class="code"><div><pre><span></span><code>#lane  tile  X      Y        gene_id             gene    gn  gt  spl  unspl  ambig
+1      1     5982   1439022  ENSMUSG00000029368  Alb     1   1   1    0      0
+1      1     8173   6863206  ENSMUSG00000053907  Mat2a   1   1   0    0      0
+1      1     8729   6830792  ENSMUSG00000037071  Scd1    1   1   1    0      0
 </code></pre></div></td></tr></table></div></p>
 <ul>
-<li><code>id</code>: The <code>id</code> is composed of <code>&lt;lane_id&gt;_&lt;tile_id&gt;</code>. Given only one spatial barcode map is created for a chip, the ID is designed as <code>1_1</code>.</li>
-<li><code>filepath</code>: The file name is the corresponding spatial barcode map.</li>
-<li><code>barcodes</code>: The number of barcodes in the chip.</li>
-<li><code>matches</code>: The number of barcodes that match to the expected pattern.</li>
-<li><code>mismatches</code>: The number of barcodes that do not match to the expected pattern.</li>
-<li><code>xmin</code>: The minimum x-coordinate in nanometers across all barcodes in the chip (i.e., minimum global X-coordinate).</li>
-<li><code>xmax</code>: The maximum x-coordinate in nanometers across all barcodes in the chip (i.e., maximum global X-coordinate).</li>
-<li><code>ymin</code>: The minimum y-coordinate in nanometers across all barcodes in the chip (i.e., minimum global Y-coordinate).</li>
-<li><code>ymax</code>: The maximum y-coordinate in nanometers across all barcodes in the chip (i.e., maximum global Y-coordinate).</li>
+<li><code>#lane</code>: lane ID</li>
+<li><code>tile</code>: tile ID</li>
+<li><code>X</code>: X-coordinate</li>
+<li><code>Y</code>: Y-coordinate</li>
+<li><code>gene_id</code>: Gene Ensemble ID</li>
+<li><code>gene</code>: Gene symbol</li>
+<li><code>gn</code>: the count per gene per barcode for Gene</li>
+<li><code>gt</code>: the count per gene per barcode for GeneFull</li>
+<li><code>spl</code>: the count per gene per barcode for Spliced</li>
+<li><code>unspl</code>: the count per gene per barcode for Unspliced</li>
+<li><code>ambig</code>: the count per gene per barcode for Ambiguous</li>
 </ul>
-<h3 id="3-an-sbcd-image">(3) An "sbcd" Image<a class="headerlink" href="#3-an-sbcd-image" title="Permanent link">&para;</a></h3>
-<p><strong>Description</strong>:
-An image to show the distribution of the spatial coordinates of the barcodes, alongside the fiducial marks.</p>
-<p><strong>File Naming Convention</strong>: <code>1_1.sbcds.sorted.png</code> </p>
-<p><strong>File Visualization</strong>:</p>
-<figure>
-<img alt="sbcd_image" src="../../../images/sbcds.png" width="80%" />
-</figure>
-<h3 id="4-a-summary-for-duplicate-barcodes">(4) A Summary for Duplicate Barcodes<a class="headerlink" href="#4-a-summary-for-duplicate-barcodes" title="Permanent link">&para;</a></h3>
-<p><strong>Description</strong>: 
-Each duplicate barcode reports its count and the maximum distance between duplicates, provided it falls within the <code>dup_maxdist</code> threshold.</p>
-<p><strong>File Naming Convention</strong>: <code>dupstats.tsv.gz</code></p>
+<h3 id="2-two-tab-delimited-feature-files">(2) Two Tab-delimited Feature Files<a class="headerlink" href="#2-two-tab-delimited-feature-files" title="Permanent link">&para;</a></h3>
+<p><strong>Description</strong>: This include a feature file (<code>*.feature.tsv.gz</code>) that contains information for all features and another feature file (<code>*.feature.clean.tsv.gz</code>) that contains information for features aftering the gene-filtering.</p>
+<p><strong>File Naming Convention</strong>:
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code>&lt;unit_id&gt;.feature.tsv.gz 
+&lt;unit_id&gt;.feature.clean.tsv.gz
+</code></pre></div></td></tr></table></div></p>
+<p><strong>File Format</strong>:
+Those two feature files share the same format:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span></pre></div></td><td class="code"><div><pre><span></span><code>gene_id             gene     gn    gt   spl  unspl  ambig
+ENSMUSG00000100764  Gm29155  3     3    1    0      2
+ENSMUSG00000100635  Gm29157  0     0    0    0      0
+ENSMUSG00000100480  Gm29156  0     0    0    0      0
+</code></pre></div></td></tr></table></div>
+<ul>
+<li><code>gene_id</code>: Gene Ensemble ID</li>
+<li><code>gene</code>: Gene symbol</li>
+<li><code>gn</code>: the count per gene per barcode for Gene</li>
+<li><code>gt</code>: the count per gene per barcode for GeneFull</li>
+<li><code>spl</code>: the count per gene per barcode for Spliced</li>
+<li><code>unspl</code>: the count per gene per barcode for Unspliced</li>
+<li><code>ambig</code>: the count per gene per barcode for Ambiguous</li>
+</ul>
 <h2 id="output-guidelines">Output Guidelines<a class="headerlink" href="#output-guidelines" title="Permanent link">&para;</a></h2>
-<p>Recommended review steps:
-1. Examine <a href="#2-per-chip-manifest-file"><code>manifest.tsv</code></a> to ensure there are a sufficient number of matched barcodes, and all mismatched barcodes are removed.
-2. Inspect <a href="#3-an-sbcd-image"><code>1_1.sbcds.sorted.png</code></a> to verify that fiducial marks appear empty and align with other fiducial marks both horizontally and vertically.</p>
+<p>The output file could be used as the input for <a href="https://seqscope.github.io/ficture/">FICTURE</a>.</p>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
-<p>The following parameter in the <a href="../../../getting_started/job_config/">job configuration</a> file will be applied in this rule. </p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nt">upstream</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">sbcd2chip</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">gap_row</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0517</span>
-<span class="w">    </span><span class="nt">gap_col</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0048</span>
-<span class="w">    </span><span class="nt">dup_maxnum</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
-<span class="w">    </span><span class="nt">dup_maxdist</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
-<span class="w">  </span><span class="nt">visualization</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">drawxy</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">coord_per_pixel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span>
-<span class="w">      </span><span class="nt">intensity_per_obs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50</span>
-<span class="w">      </span><span class="nt">icol_x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
-<span class="w">      </span><span class="nt">icol_y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nt">downstream</span><span class="p">:</span><span class="w">               </span>
+<span class="w">  </span><span class="nt">gene_filter</span><span class="p">:</span><span class="w">            </span>
+<span class="w">   </span><span class="nt">keep_gene_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;protein_coding,lncRNA&quot;</span><span class="w">    </span><span class="c1"># genes to keep</span>
+<span class="w">   </span><span class="nt">rm_gene_regex</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;^Gm\\d+|^mt-|^MT-&quot;</span><span class="w">         </span><span class="c1"># genes to remove</span>
 </code></pre></div></td></tr></table></div>
 <ul>
 <li>
-<p><strong>The <code>sbcd2chip</code> Parameters</strong>
-    Those parameters are used to pass values to the <a href="https://seqscope.github.io/spatula/tools/combine_sbcds/"><code>combine_sbcds</code></a> function in <a href="https://seqscope.github.io/spatula/">spatula</a>. Below, for each parameter, the corresponding parameters in <a href="https://seqscope.github.io/spatula/">spatula</a>, description, and the default value in NovaScope are provided.</p>
-<table>
-<thead>
-<tr>
-<th>Parameter</th>
-<th><code>spatula</code> parameter</th>
-<th>Description</th>
-<th>Default Value</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>gap_row</code></td>
-<td><code>--rowgap</code></td>
-<td>Extra gap between rows, based on tile height, for spatial adjustment.</td>
-<td>0.0517</td>
-</tr>
-<tr>
-<td><code>gap_col</code></td>
-<td><code>--colgap</code></td>
-<td>Additional gap between columns, based on tile width, for spatial adjustment.</td>
-<td>0.0048</td>
-</tr>
-<tr>
-<td><code>dup_maxnum</code></td>
-<td><code>--max-dup</code></td>
-<td>Allowable duplicate count for each barcode, within <code>dup_maxdist</code>.</td>
-<td>1</td>
-</tr>
-<tr>
-<td><code>dup_maxdist</code></td>
-<td><code>--max-dup-dist-nm</code></td>
-<td>Max distance for duplicates, in nanometers.</td>
-<td>1000</td>
-</tr>
-</tbody>
-</table>
+<p><strong>The <code>keep_gene_type</code> Parameter</strong>
+Specifies the types of genes to retain during gene filtering. </p>
 </li>
 <li>
-<p><strong>The <code>visualization</code> Parameters</strong>
-    Those are parameters for the <a href="https://seqscope.github.io/spatula/tools/draw_xy/"><code>draw-xy</code></a> function in <a href="https://seqscope.github.io/spatula/">spatula</a>.</p>
-<table>
-<thead>
-<tr>
-<th>Parameter</th>
-<th><code>spatula</code> parameter</th>
-<th>Description</th>
-<th>Default Value</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>coord_per_pixel</code></td>
-<td><code>--coord-per-pixel</code></td>
-<td>Coordinates per pixel, as a divisor of input coordinate.</td>
-<td>1000</td>
-</tr>
-<tr>
-<td><code>intensity_per_obs</code></td>
-<td><code>--intensity-per-obs</code></td>
-<td>Intensity of points per pixel, max 255.</td>
-<td>50</td>
-</tr>
-<tr>
-<td><code>icol_x</code></td>
-<td><code>--icol-x</code></td>
-<td>(0-based) index of X coordinate in input TSV.</td>
-<td>3</td>
-</tr>
-<tr>
-<td><code>icol_y</code></td>
-<td><code>--icol-y</code></td>
-<td>(0-based) index of Y coordinate in input TSV.</td>
-<td>4</td>
-</tr>
-</tbody>
-</table>
+<p><strong>The <code>rm_gene_regex</code> Parameter</strong>
+Defines the types of genes to be excluded during gene filtering. </p>
 </li>
 </ul>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>It is important to note that both parameters also utilizes regular expressions for specifying which genes to remove.</p>
+</div>
 <h2 id="dependencies">Dependencies<a class="headerlink" href="#dependencies" title="Permanent link">&para;</a></h2>
-<p>Rule <code>sbcd2chip</code> is designed to process data that Rule <a href="../fastq2sbcd/"><code>fastq2sbcd</code></a> generates. Therefore, if the <a href="#input-files">input files</a> are not available, <code>sbcd2chip</code> depends on the successful execution of <a href="../fastq2sbcd/"><code>fastq2sbcd</code></a> to function correctly. An overview of the rule dependencies are provided in the <a href="../../../home/workflow_structure/">Workflow Structure</a>.</p>
+<p>Given <code>sdgeAR_reformat</code> requires input from Rule <code>sdge2sdgeAR</code>, Rule <code>sdgeAR_reformat</code> can only execute after <code>sdge2sdgeAR</code> and its prerequisite rules have successfully completed their operations. See an overview of the rule dependencies in the <a href="../../../home/workflow_structure/">Workflow Structure</a>.</p>
 <h2 id="code-snippet">Code Snippet<a class="headerlink" href="#code-snippet" title="Permanent link">&para;</a></h2>
-<p>The code for this rule is provided in <a href="https://github.com/seqscope/NovaScope/blob/main/rules/a02_sbcd2chip.smk">a02_sbcd2chip.smk</a></p>
+<p>The code for this rule is provided in <a href="https://github.com/seqscope/NovaScope/blob/main/rules/a07_sdgeAR_reformat.smk"><code>a07_sdgeAR_reformat.smk</code></a>.</p>
 
 
 

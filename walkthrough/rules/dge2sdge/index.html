@@ -936,6 +936,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
       
@@ -1163,6 +1169,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#4-a-metadata-file-for-x-y-coordinates" class="md-nav__link">
+    <span class="md-ellipsis">
+      (4) A Metadata File for X Y Coordinates
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1225,6 +1240,69 @@
   
   <span class="md-ellipsis">
     historef
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sdge2sdgeAR/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    sdge2sdgeAR
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sdgeAR_reformat/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    sdgeAR_reformat
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sdgeAR_segment/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    sdgeAR_segment
   </span>
   
 
@@ -1330,6 +1408,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#4-a-metadata-file-for-x-y-coordinates" class="md-nav__link">
+    <span class="md-ellipsis">
+      (4) A Metadata File for X Y Coordinates
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1391,7 +1478,7 @@
 
 <h1 id="rule-dge2sdge">Rule <code>dge2sdge</code>:<a class="headerlink" href="#rule-dge2sdge" title="Permanent link">&para;</a></h1>
 <h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">&para;</a></h2>
-<p>The <code>dge2sdge</code> generates a spatial digital gene expression (SGE) matrix using the digital gene expression matrix (DGE) from alignment and spatial maps.</p>
+<p>The <code>dge2sdge</code> generates a spatial digital gene expression matrix (SGE) using the digital gene expression matrix (DGE) from alignment and spatial maps.</p>
 <h2 id="input-files">Input Files<a class="headerlink" href="#input-files" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>Per-Chip Spatial Barcode Map and Manifest File</strong>
@@ -1403,24 +1490,20 @@ DGEs for each genomic feature, including Gene, GeneFull, splice junctions (SJ), 
 </ul>
 <h2 id="output-files">Output Files<a class="headerlink" href="#output-files" title="Permanent link">&para;</a></h2>
 <p>The rule generates the following output in the specified directory path:
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>&lt;output_directory&gt;/align/&lt;flowcell_id&gt;/&lt;chip_id&gt;/sge/&lt;species&gt;_&lt;seq2nd_version&gt;
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>&lt;output_directory&gt;/align/&lt;flowcell_id&gt;/&lt;chip_id&gt;/&lt;run_id&gt;/sge
 </code></pre></div></td></tr></table></div></p>
 <h3 id="1-spatial-digital-gene-expression-matrix-sge">(1) Spatial Digital Gene Expression Matrix (SGE)<a class="headerlink" href="#1-spatial-digital-gene-expression-matrix-sge" title="Permanent link">&para;</a></h3>
-<p><strong>Description</strong>: A spatial digital gene expression matrix (SGE) is generated, which contains all available genomic feature,</p>
-<p><strong>File Naming Convention</strong>: The SGE is composed of <code>barcodes.tsv.gz</code>, <code>features.tsv.gz</code>, and <code>matrix.mtx.gz</code>.</p>
+<p><strong>Description</strong>: A spatial digital gene expression matrix (SGE) in 10x Genomics format is generated, which contains all available genomic feature. </p>
+<p><strong>File Naming Convention</strong>: The SGE is composed of <code>barcodes.tsv.gz</code>, <code>features.tsv.gz</code>, and <code>matrix.mtx.gz</code>. </p>
 <p><strong>File Format</strong>:</p>
 <ul>
 <li>
 <p><code>barcodes.tsv.gz</code>:
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
-<span class="normal">3</span>
-<span class="normal">4</span>
-<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code>AAAAAAGGTACCCGCAGTGCGGACAAACGA  1   1   1   1   1214343 1498113 1,1,1,0,0
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code>AAAAAAGGTACCCGCAGTGCGGACAAACGA  1   1   1   1   1214343 1498113 1,1,1,0,0
 AAAACAGGAGATTCAGAATGCAAAAATGAA  2   2   1   1   1029766 1669474 0,1,0,1,0
 AAAACTTGTCGAGCTCAGTGACGCGGGCTT  3   3   1   1   1366819 1170486 2,2,1,0,1
-AAAAGCGGTACAGCGTACTCCTATAAGAGT  4   4   1   1   1302024 1519190 6,6,5,0,1
-AAAAGGAATAAATGACCTCACGGATAACGT  5   5   1   1   1099465 2041759 1,2,1,1,0
 </code></pre></div></td></tr></table></div></p>
 <ul>
 <li>Column 1: sorted spatial barcodes</li>
@@ -1437,13 +1520,9 @@ AAAAGGAATAAATGACCTCACGGATAACGT  5   5   1   1   1099465 2041759 1,2,1,1,0
 <p><code>features.tsv.gz</code>:
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
-<span class="normal">3</span>
-<span class="normal">4</span>
-<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code>ENSMUSG00000100764  Gm29155 1   2,2,1,0,1
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code>ENSMUSG00000100764  Gm29155 1   2,2,1,0,1
 ENSMUSG00000100635  Gm29157 2   0,0,0,0,0
 ENSMUSG00000100480  Gm29156 3   0,0,0,0,0
-ENSMUSG00000051285  Pcmtd1  4   164,38,35,3,0
-ENSMUSG00000097797  Gm26901 5   0,0,0,0,0
 </code></pre></div></td></tr></table></div></p>
 <ul>
 <li>Column 1: Gene Ensemble ID</li>
@@ -1459,16 +1538,12 @@ ENSMUSG00000097797  Gm26901 5   0,0,0,0,0
 <span class="normal">3</span>
 <span class="normal">4</span>
 <span class="normal">5</span>
-<span class="normal">6</span>
-<span class="normal">7</span>
-<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code>%%MatrixMarket matrix coordinate integer general
+<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span><code>%%MatrixMarket matrix coordinate integer general
 %
 33989 1197304 2488321
 5743 1 1 1 1 0 0
 6002 2 0 1 0 1 0
 7279 3 1 1 1 0 0
-7691 3 1 1 0 0 1
-2982 4 1 1 0 0 1
 </code></pre></div></td></tr></table></div></p>
 <ul>
 <li><code>Header</code>: Initial lines form the header, declaring the matrix's adherence to the <a href="https://math.nist.gov/MatrixMarket/formats.html">Market Matrix (MTX) format</a>, outlining its traits. This may include comments (lines beginning with <code>%</code>) for extra metadata, all marked by a “%”.</li>
@@ -1480,7 +1555,7 @@ ENSMUSG00000097797  Gm26901 5   0,0,0,0,0
 <h3 id="2-an-sge-image">(2) An "sge" image<a class="headerlink" href="#2-an-sge-image" title="Permanent link">&para;</a></h3>
 <p><strong>Description</strong>: The "sge" image illustrates the distribution of spatial barcodes aligned to the reference genome, with exon-aligned transcripts colored red, unspliced transcripts green, and mitochondrial transcripts blue.</p>
 <p><strong>File Naming Convention</strong>:
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>&lt;flowcell_id&gt;.&lt;chip_id&gt;.&lt;species&gt;_&lt;seq2nd_version&gt;.gene_full_mito.png
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>&lt;run_id&gt;.gene_full_mito.png
 </code></pre></div></td></tr></table></div></p>
 <p><strong>File Visualization</strong>:</p>
 <figure>
@@ -1489,18 +1564,36 @@ ENSMUSG00000097797  Gm26901 5   0,0,0,0,0
 <h3 id="3-a-comprehensive-view-of-sbcd-smatch-and-sge-images">(3) A Comprehensive View of "sbcd", "smatch", and "sge" Images<a class="headerlink" href="#3-a-comprehensive-view-of-sbcd-smatch-and-sge-images" title="Permanent link">&para;</a></h3>
 <p><strong>Description</strong>: A side-by-side presentation of three images: the "sbcd" image from <a href="../sbcd2chip/"><code>sbcd2chip</code></a>, the "smatch" image from <a href="../smatch/"><code>smatch</code></a>, and the "sge" image generated by the current rule.</p>
 <p><strong>File Naming Convention</strong>:
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>&lt;flowcell_id&gt;.&lt;chip_id&gt;.&lt;species&gt;_&lt;seq2nd_version&gt;.sge_match_sbcd.png
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>&lt;run_id&gt;.sge_match_sbcd.png
 </code></pre></div></td></tr></table></div></p>
 <p><strong>File Visualization</strong>:</p>
 <figure>
 <img alt="sge_match_sbcd_image" src="../../../images/sge_match_sbcd.png" width="80%" />
 </figure>
+<h3 id="4-a-metadata-file-for-x-y-coordinates">(4) A Metadata File for X Y Coordinates<a class="headerlink" href="#4-a-metadata-file-for-x-y-coordinates" title="Permanent link">&para;</a></h3>
+<p><strong>Description</strong>: This file contains the minimum and maximum X Y coordinates, which are essential for the reformatting features.</p>
+<p><strong>File Naming Convention</strong>:
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>barcodes.minmax.tsv
+</code></pre></div></td></tr></table></div></p>
+<p><strong>File Format</strong>:
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code>xmin  xmax      ymin  ymax
+0     12810899  0     6950609
+</code></pre></div></td></tr></table></div></p>
+<ul>
+<li><code>xmin</code>: The minimum x-coordinate in nanometers across all barcodes in the SGE.</li>
+<li><code>xmax</code>: The maximum x-coordinate in nanometers across all barcodes in the SGE.</li>
+<li><code>ymin</code>: The minimum y-coordinate in nanometers across all barcodes in the SGE.</li>
+<li><code>ymax</code>: The maximum y-coordinate in nanometers across all barcodes in the SGE.</li>
+</ul>
 <h2 id="output-guidelines">Output Guidelines<a class="headerlink" href="#output-guidelines" title="Permanent link">&para;</a></h2>
 <p>It is suggested to review the <a href="#2-an-sge-image">"sge" image</a> along with the <a href="#3-a-comprehensive-view-of-sbcd-smatch-and-sge-images">composite image</a> displaying "sbcd", "smatch", and "sge" images together, to confirm: 1) that the "sge" image's spatial distribution of aligned transcripts corresponds with the tissue area, and 2) there is coherence among the "smatch", and "sge" images.</p>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
-<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code>  dge2sdge:
-    layout: null
+<span class="normal">2</span>
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nt">upstream</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">dge2sdge</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">layout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
 </code></pre></div></td></tr></table></div>
 <ul>
 <li><strong>The <code>layout</code> Parameter</strong>

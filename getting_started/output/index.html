@@ -798,6 +798,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#match" class="md-nav__link">
+    <span class="md-ellipsis">
+      match
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#histology" class="md-nav__link">
     <span class="md-ellipsis">
       histology
@@ -810,6 +819,15 @@
   <a href="#align" class="md-nav__link">
     <span class="md-ellipsis">
       align
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      analysis
     </span>
   </a>
   
@@ -1031,6 +1049,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
       
@@ -1190,6 +1214,69 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../walkthrough/rules/sdge2sdgeAR/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    sdge2sdgeAR
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../walkthrough/rules/sdgeAR_reformat/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    sdgeAR_reformat
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../walkthrough/rules/sdgeAR_segment/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    sdgeAR_segment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1260,6 +1347,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#match" class="md-nav__link">
+    <span class="md-ellipsis">
+      match
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#histology" class="md-nav__link">
     <span class="md-ellipsis">
       histology
@@ -1272,6 +1368,15 @@
   <a href="#align" class="md-nav__link">
     <span class="md-ellipsis">
       align
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      analysis
     </span>
   </a>
   
@@ -1315,13 +1420,15 @@
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
-<span class="normal">4</span></pre></div></td><td class="code"><div><pre><span></span><code>├── align
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code>├── align
 ├── histology
+├── match
 ├── seq1st
 └── seq2nd
 </code></pre></div></td></tr></table></div>
 <h3 id="seq1st">seq1st<a class="headerlink" href="#seq1st" title="Permanent link">&para;</a></h3>
-<p>The seq1st directory is structured for organizing 1st sequencing FASTQ files and spatial barcode maps. It includes:</p>
+<p>The <code>seq1st</code> directory is structured for organizing 1st sequencing FASTQ files and spatial barcode maps. It includes:</p>
 <ul>
 <li>A <code>fastqs</code> subdirectory for all input 1st sequencing FASTQ files via symlink.</li>
 <li>Two subdirectories for spatial barcode maps:<ul>
@@ -1330,19 +1437,35 @@
 </ul>
 </li>
 </ul>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
-<span class="normal">2</span>
-<span class="normal">3</span>
-<span class="normal">4</span>
-<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code>└── seq1st
-    └── &lt;flowcell_ID&gt;
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span></pre></div></td><td class="code"><div><pre><span></span><code>└── seq1st
+    └── &lt;flowcell_id&gt;
         ├── fastqs
+        |   └── &lt;seq1st_id&gt;.fastq.gz
         ├── nbcds
+        |   └── &lt;chip_id&gt;
+        |       ├── 1_1.sbcds.sorted.tsv.gz
+        |       ├── 1_1.sbcds.sorted.png
+        |       ├── dupstats.tsv.gz
+        |       └── manifest.tsv
         └── sbcds
+           └── &lt;chip_id&gt;
+                └── ...    # spatial maps of individual tile, and a manifest file 
 </code></pre></div></td></tr></table></div>
 <h3 id="seq2nd">seq2nd<a class="headerlink" href="#seq2nd" title="Permanent link">&para;</a></h3>
-<p>The <code>seq2nd</code> directory is dedicated to managing all input 2nd sequencing FASTQ files via symlinks.
-The directory structure is as follows:</p>
+<p>The <code>seq2nd</code> directory is dedicated to managing all input 2nd sequencing FASTQ files via symlinks. Each pair will be organized in one folder named by the 2nd sequencing ID provided via the job configuration file.</p>
+<p>The following example demonstrates the directory structure using two pairs of input 2nd sequencing FASTQ files:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
@@ -1350,35 +1473,108 @@ The directory structure is as follows:</p>
 <span class="normal">5</span>
 <span class="normal">6</span>
 <span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code>└── seq2nd
-    ├── &lt;prefix1&gt;
-    |   ├── &lt;prefix1&gt;.R1.fastq.gz
-    |   └── &lt;prefix1&gt;.R2.fastq.gz
-    └── &lt;prefix2&gt;
-        ├── &lt;prefix2&gt;.R1.fastq.gz
-        └── &lt;prefix2&gt;.R2.fastq.gz
+    ├── &lt;seq2nd_id1&gt;
+    |   ├── &lt;seq2nd_id1&gt;.R1.fastq.gz
+    |   └── &lt;seq2nd_id1&gt;.R2.fastq.gz
+    └── &lt;seq2nd_id2&gt;
+        ├── &lt;seq2nd_id2&gt;.R1.fastq.gz
+        └── &lt;seq2nd_id2&gt;.R2.fastq.gz
 </code></pre></div></td></tr></table></div>
-<h3 id="histology">histology<a class="headerlink" href="#histology" title="Permanent link">&para;</a></h3>
-<p>The <code>histology</code> directory is designated for holding all input histology files.</p>
-<h3 id="align">align<a class="headerlink" href="#align" title="Permanent link">&para;</a></h3>
-<p>The <code>align</code> directory encompasses several subdirectories, including: 
-(1) <code>match</code>, which houses the outcomes of aligning second sequencing reads with spatial barcodes for the corresponding chip section; 
-(2) <code>bam</code>, where alignment outcomes such as the BAM file, summary metrics, and visualizations are stored; 
-(3) <code>sge</code>, containing a spatial gene expression matrix (SGE)  and its associated visualizations; 
-(4) <code>histology</code>, which stores histology images aligned with the spatial coordinates of the SGE.</p>
+<h3 id="match">match<a class="headerlink" href="#match" title="Permanent link">&para;</a></h3>
+<p>The <code>match</code> directory houses the outcomes of aligning second sequencing reads with spatial barcodes for the corresponding chip section.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
 <span class="normal">4</span>
 <span class="normal">5</span>
 <span class="normal">6</span>
-<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code>align
-└── &lt;flowcell_ID&gt;
-    └── &lt;section_chip_ID&gt;
-        ├── bam
-        ├── histology
-        ├── match
-        └── sge
+<span class="normal">7</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code>└── match
+    └── &lt;flowcell_id&gt;
+        └── &lt;chip_id&gt;
+            └── &lt;seq2nd_id1&gt;
+                ├── &lt;seq2nd_id1&gt;.R1.counts.tsv
+                ├── &lt;seq2nd_id1&gt;.R1.match.png
+                ├── &lt;seq2nd_id1&gt;.match.sorted.uniq.tsv.gz
+                └── &lt;seq2nd_id1&gt;.summary.tsv
 </code></pre></div></td></tr></table></div>
+<h3 id="histology">histology<a class="headerlink" href="#histology" title="Permanent link">&para;</a></h3>
+<p>The <code>histology</code> directory is designated for holding both the input histology file and the histology images aligned with the spatial coordinates of the SGE.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code>└── histology
+    └── &lt;flowcell_id&gt;
+        └── &lt;chip_id&gt;
+            ├── raw
+            |   └── ...     # a raw histology file
+            └── aligned
+                └── ...     # aligned histology files
+</code></pre></div></td></tr></table></div>
+<h3 id="align">align<a class="headerlink" href="#align" title="Permanent link">&para;</a></h3>
+<p>The <code>align</code> directory encompasses several subdirectories, including: </p>
+<ul>
+<li><code>bam</code> for alignment outcomes such as the BAM file, summary metrics, and visualizations;</li>
+<li><code>sge</code> for a spatial gene expression matrix (SGE) and visualizations; </li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code>└── align
+    └── &lt;flowcell_id&gt;
+        └── &lt;chip_id&gt;
+           └── &lt;run_id&gt;
+                ├── bam
+                |   └── ...     
+               └── sge
+                    └── ...     
+</code></pre></div></td></tr></table></div>
+<h3 id="analysis">analysis<a class="headerlink" href="#analysis" title="Permanent link">&para;</a></h3>
+<p>The <code>analysis</code> directory includes three subdirectory mainly for the reformatting SGE:</p>
+<ul>
+<li><code>sgeAR</code> for the SGE before reformatting, where the "AR" stands for analysis-ready,</li>
+<li><code>preprocess</code> for the SGE in the FICTURE format,</li>
+<li><code>segment</code> for the hexagon-based SGE in the 10x genomics format.</li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span>
+<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><code>└── analysis
+    └── &lt;run_id&gt;
+        └── &lt;unit_id&gt;
+            ├── preprocess
+            |   └── ...  
+            ├── segment
+            |   └── ...  
+            └── sgeAR
+                └── ...  
+</code></pre></div></td></tr></table></div>
+<details class="note">
+<summary>The <code>sgeAR</code> Subfolder and Manual Preprocess</summary>
+<p>The <code>sgeAR</code> subfolder is specifically designed to host input SGEs that require reformatting. This subfolder is particularly useful when users wish to manually preprocess SGEs, such as applying boundary filtering, before they undergo reformatting.</p>
+<p><strong>To manually preprocess an SGE:</strong></p>
+<ul>
+<li><strong>Preprocess the SGE:</strong> Users must manually preprocess the SGE according to their specific requirements.</li>
+<li><strong>Name the dataset:</strong> After preprocessing, the dataset should be named and referred to as <code>unit_id</code>.</li>
+<li><strong>Save the preprocessed SGE:</strong> Place the manually preprocessed SGE in the <code>sgeAR</code> subfolder.</li>
+<li><strong>Preprare a coordinate meta file</strong> Prepare a <code>barcodes.minmax.tsv</code> with the minimum and maximum of X and Y coordinates in the <code>sgeAR</code> subfolder.</li>
+<li><strong>Update the job configuration file:</strong> Provide the <code>unit_id</code> in the <a href="../job_config/">job configuration file</a> to ensure it is recognized in subsequent processing steps.</li>
+</ul>
+<p><strong>Automatic Handling:</strong>
+If reformatting features are requested without manually preparing the SGE in the <code>sgeAR</code> as outlined, NovaScope will automatically generate a <code>unit_id</code>. It will then link the original SGE from the <code>sge</code> subdirectory to the <code>sgeAR</code>, facilitating seamless processing.</p>
+</details>
 <h2 id="downstream-analysis">Downstream Analysis<a class="headerlink" href="#downstream-analysis" title="Permanent link">&para;</a></h2>
 <p>The aligned sequenced reads can be directly used for tasks that require read-level information, such as allele-specific expression or somatic variant analysis. The SGE can also be analyzed with many software tools, such as Latent Dirichlet Allocation (LDA) and Seurat. </p>
 <p>An exemplary downstream analysis is provided at <a href="https://github.com/seqscope/NovaScope-exemplary-downstream-analysis">NovaScope-exemplary-downstream-analysis</a>.</p>

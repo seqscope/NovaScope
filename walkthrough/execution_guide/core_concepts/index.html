@@ -1003,6 +1003,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
       
@@ -1165,6 +1171,69 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rules/sdge2sdgeAR/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    sdge2sdgeAR
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rules/sdgeAR_reformat/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    sdgeAR_reformat
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rules/sdgeAR_segment/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    sdgeAR_segment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1254,12 +1323,12 @@
 <h1 id="core-concepts">Core Concepts<a class="headerlink" href="#core-concepts" title="Permanent link">&para;</a></h1>
 <p>Before the execution flow by <code>request</code>, below outlines essential concepts for working with <a href="https://seqscope.github.io/NovaScope/">NovaScope</a>.</p>
 <h2 id="rule-dependencies">Rule Dependencies<a class="headerlink" href="#rule-dependencies" title="Permanent link">&para;</a></h2>
-<p>The rule dependencies are determined based on the input and output files specified in the rules. For example, if Rule <code>sbcd2chip</code> requires the output of Rule <code>fastq2sbcd</code> as input, the Rule <code>fastq2sbcd</code> serves as a prerequisite rule to Rule <code>sbcd2chip</code>. </p>
+<p>The rule dependencies are determined based on the <strong>input and output files</strong> specified in the rules. For example, if Rule <code>sbcd2chip</code> requires the output of Rule <code>fastq2sbcd</code> as input, the Rule <code>fastq2sbcd</code> serves as a prerequisite rule to Rule <code>sbcd2chip</code>. </p>
 <h2 id="execution-dynamics">Execution Dynamics<a class="headerlink" href="#execution-dynamics" title="Permanent link">&para;</a></h2>
 <p>The execution of rules within <a href="https://seqscope.github.io/NovaScope/">NovaScope</a> is governed by several key factors, outlined as follows:</p>
 <ul>
 <li>
-<p><strong>Specified Final Output Files</strong>: The execution of rules is directly influenced by the final output files requested by the user, as defined by the <code>Request</code> field in the <a href="../getting_started/job_config.md">job configuration</a> file. For instance, if the output of a rule (referred to as <code>Rule X</code>) is indicated as the final output file, then <code>Rule X</code> will be executed.</p>
+<p><strong>Specified Final Output Files</strong>: The execution of rules is directly influenced by the final output files requested by the user, as defined by the <code>Request</code> field in the <a href="../../../getting_started/job_config/">job configuration</a> file. For instance, if the output of a rule (referred to as <code>Rule X</code>) is indicated as the final output file, then <code>Rule X</code> will be executed.</p>
 </li>
 <li>
 <p><strong>Rule Dependencies and Availability of Intermediate Files</strong>: <a href="https://seqscope.github.io/NovaScope/">NovaScope</a> initiates a systematic evaluation, starting with <code>Rule X</code>, to ascertain the presence of its required input files. If any inputs are missing, <a href="https://seqscope.github.io/NovaScope/">NovaScope</a> iteratively identifies and executes the necessary precursor rules to generate these missing inputs, thus ensuring <code>Rule X</code> has everything it needs to proceed.</p>

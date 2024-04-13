@@ -793,9 +793,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#preprocess" class="md-nav__link">
+  <a href="#upstream-downstream" class="md-nav__link">
     <span class="md-ellipsis">
-      preprocess
+      Upstream &amp; Downstream
     </span>
   </a>
   
@@ -1055,6 +1055,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
       
@@ -1214,6 +1220,69 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../walkthrough/rules/sdge2sdgeAR/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    sdge2sdgeAR
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../walkthrough/rules/sdgeAR_reformat/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    sdgeAR_reformat
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../walkthrough/rules/sdgeAR_segment/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    sdgeAR_segment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1321,9 +1390,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#preprocess" class="md-nav__link">
+  <a href="#upstream-downstream" class="md-nav__link">
     <span class="md-ellipsis">
-      preprocess
+      Upstream &amp; Downstream
     </span>
   </a>
   
@@ -1359,14 +1428,17 @@
 
 <h1 id="configuring-a-novascope-run">Configuring a NovaScope Run<a class="headerlink" href="#configuring-a-novascope-run" title="Permanent link">&para;</a></h1>
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
-<p>Once you have <a href="../../installation/requirement/">installed NovaScope</a> and <a href="../access_data/">downloaded the input data</a>, the next step is to configure a <a href="https://seqscope.github.io/NovaScope/">NovaScope</a> run. This mainly involves preparing the input configuration files (in YAML) for the run.</p>
+<p>Once you have <a href="../../installation/requirement/">installed NovaScope</a> and <a href="../access_data/">downloaded the input data</a>, the next step is to configure a <a href="https://seqscope.github.io/NovaScope/">NovaScope</a> run. This mainly involves preparing the input job configuration file (in YAML, <code>config_job.yaml</code>) for the run.</p>
 <h2 id="preparing-input-config-files">Preparing Input Config Files<a class="headerlink" href="#preparing-input-config-files" title="Permanent link">&para;</a></h2>
-<p>The pipeline requires to have <code>config_job.yaml</code> file in the working directory (indicated by <code>-d</code> or <code>--directory</code>) to specify all input files, output files, and parameters. </p>
-<p>For user's convenience, we provide separate example <code>config_job.yaml</code> files for the <a href="https://github.com/seqscope/NovaScope/blob/main/testrun/minmal_test_run/config_job.yaml">Minimal Test Run Dataset</a>, <a href="https://github.com/seqscope/NovaScope/blob/main/testrun/shallow_liver_section/config_job.yaml">Shallow Liver Section Dataset</a>, and <a href="https://github.com/seqscope/NovaScope/blob/main/testrun/deep_liver_section/config_job.yaml">Deep Liver Section Dataset</a> test runs.  </p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>The pipeline requires to have <code>config_job.yaml</code> file in the working directory, which will be indicated by <code>-d</code> or <code>--directory</code> when executing NovaScope, to specify all input files, output files, and parameters. </p>
+</div>
+<p>For user's convenience, we provide separate example <code>config_job.yaml</code> files for the <a href="https://github.com/seqscope/NovaScope/blob/main/testrun/minmal_test_run/config_job.yaml">Minimal Test Run Dataset</a>, <a href="https://github.com/seqscope/NovaScope/blob/main/testrun/shallow_liver_section/config_job.yaml">Shallow Liver Section Dataset</a>, and <a href="https://github.com/seqscope/NovaScope/blob/main/testrun/deep_liver_section/config_job.yaml">Deep Liver Section Dataset</a> test runs.</p>
 <p>The details of each item specified in the <code>config_job.yaml</code> is described below:</p>
 <h3 id="a-template-of-the-config-file">A Template of the Config File<a class="headerlink" href="#a-template-of-the-config-file" title="Permanent link">&para;</a></h3>
-<p>Below is a template of the <code>config_job.yaml</code> file. 
-Mandatory fields are marked as "REQUIRED FIELD".</p>
+<p>Below is a template of the <code>config_job.yaml</code> file. </p>
+<p>Mandatory fields are marked as "REQUIRED FIELD".</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -1450,48 +1522,63 @@ Mandatory fields are marked as "REQUIRED FIELD".</p>
 <span class="normal">81</span>
 <span class="normal">82</span>
 <span class="normal">83</span>
-<span class="normal">84</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1">## Section to Specify Input Datta</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span>
+<span class="normal">90</span>
+<span class="normal">91</span>
+<span class="normal">92</span>
+<span class="normal">93</span>
+<span class="normal">94</span>
+<span class="normal">95</span>
+<span class="normal">96</span>
+<span class="normal">97</span>
+<span class="normal">98</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1">## Section to Specify Input Datta</span>
 <span class="nt">input</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">flowcell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;flowcell_id&gt;</span><span class="w">                       </span><span class="c1">## REQUIRED FIELD (e.g. N3-HG5MC)</span>
-<span class="w">  </span><span class="nt">chip</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;section_chip_id&gt;</span><span class="w">                       </span><span class="c1">## REQUIRED FIELD (e.g. B08C)</span>
+<span class="w">  </span><span class="nt">chip</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;chip_id&gt;</span><span class="w">                               </span><span class="c1">## REQUIRED FIELD (e.g. B08C)</span>
 <span class="w">  </span><span class="nt">species</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;species_info&gt;</span><span class="w">                       </span><span class="c1">## REQUIRED FIELD (e.g. &quot;mouse&quot;)</span>
-<span class="w">  </span><span class="nt">lane</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;lane_id&gt;</span><span class="w">                               </span><span class="c1">## Optional. Auto-assigned based on section_chip_id&#39;s last letter if absent (A-&gt;1, B-&gt;2, C-&gt;3, D-&gt;4).</span>
+<span class="w">  </span><span class="nt">lane</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;lane_id&gt;</span><span class="w">                               </span><span class="c1">## Optional. Auto-assigned based on chip_id&#39;s last letter if absent (A-&gt;1, B-&gt;2, C-&gt;3, D-&gt;4).</span>
 <span class="w">  </span><span class="nt">seq1st</span><span class="p">:</span><span class="w">                                       </span><span class="c1">## 1st-seq information</span>
-<span class="w">    </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;seq1st_id&gt;</span><span class="w">                         </span><span class="c1">## Optional. Defaults to &quot;L{lane}&quot; if absent.</span>
+<span class="w">    </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;seq1st_id&gt;</span><span class="w">                             </span><span class="c1">## Optional. Defaults to &quot;L{lane}&quot; if absent.</span>
 <span class="w">    </span><span class="nt">fastq</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;path_to_seq1st_fastq_file&gt;</span><span class="w">          </span><span class="c1">## REQUIRED FIELD</span>
-<span class="w">    </span><span class="nt">layout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;path_to_sbcd_layout&gt;</span><span class="w">               </span><span class="c1">## Optional. Default based on section_chip_id</span>
-<span class="w">  </span><span class="nt">seq2nd</span><span class="p">:</span><span class="w">                                       </span><span class="c1">## 2nd-seq information</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;seq2st_pair1_id&gt;</span><span class="w">                 </span><span class="c1">## REQUIRED FIELD - for first pair of FASTQ files</span>
-<span class="w">      </span><span class="nt">fastq_R1</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;path_to_seq2nd_pair1_fastq_Read1_file&gt;</span><span class="w"> </span><span class="c1">## REQUIRED FIELD - Read 1 FASTQ file</span>
+<span class="w">    </span><span class="nt">layout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;path_to_sbcd_layout&gt;</span><span class="w">               </span><span class="c1">## Optional. Default based on chip_id</span>
+<span class="w">  </span><span class="nt">seq2nd</span><span class="p">:</span><span class="w">                                       </span><span class="c1">## 2nd-seq information. See the &quot;Detailed Description of Individual Fields&quot; below.</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;seq2nd_pair1_id&gt;</span><span class="w">                     </span><span class="c1">## Optional - for the first pair of FASTQs. Must be UNIQUE across all 2nd-seq FASTQ pairs, if provided.</span>
+<span class="w">      </span><span class="nt">fastq_R1</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;path_to_seq2nd_pair1_fastq_Read1_file&gt;</span><span class="w"> </span><span class="c1">## REQUIRED FIELD - path to Read 1 FASTQ file,</span>
 <span class="w">      </span><span class="nt">fastq_R2</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;path_to_seq2nd_pair1_fastq_Read2_file&gt;</span><span class="w"> </span><span class="c1">## REQUIRED FIELD - Read 2 FASTQ file</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;seq2st_pair2_id&gt;</span><span class="w">                 </span><span class="c1">## Optional - if there are &gt;1 pair of FASTQs</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;seq2nd_pair2_id&gt;</span><span class="w">                     </span><span class="c1">## Optional - if there are &gt;1 pair of FASTQs</span>
 <span class="w">      </span><span class="nt">fastq_R1</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;path_to_seq2nd_pair2_fastq_Read1_file&gt;</span>
 <span class="w">      </span><span class="nt">fastq_R2</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;path_to_seq2nd_pair2_fastq_Read2_file&gt;</span>
 <span class="w">    </span><span class="c1"># ... (if there are more 2nd-seq FASTQ files)</span>
-<span class="w">  </span><span class="nt">label</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;seq2nd_version&gt;</span><span class="w">                       </span><span class="c1">## Optional. A version label (e.g. v1)</span>
-<span class="w">  </span><span class="nt">histology</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;path_to_the_input_histology_file&gt;</span><span class="w"> </span><span class="c1">## Optional, only if histology alignment is needed.</span>
+<span class="w">  </span><span class="nt">run_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;run_id&gt;</span><span class="w">                              </span><span class="c1">## Optional. See the &quot;Detailed Description of Individual Fields&quot; below.</span>
+<span class="w">  </span><span class="nt">unit_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;unit_id&gt;</span><span class="w">                            </span><span class="c1">## Optional. See the &quot;Detailed Description of Individual Fields&quot; below.</span>
+<span class="w">  </span><span class="nt">histology</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;path_to_the_input_histology_file&gt;</span><span class="w"> </span><span class="c1">## Optional. Only if histology alignment is needed.</span>
 
 <span class="c1">## Output</span>
 <span class="nt">output</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;output_directory&gt;</span><span class="w">                      </span><span class="c1">## REQUIRED FIELD (e.g. /path/to/output/directory)</span>
-<span class="nt">request</span><span class="p">:</span><span class="w">                                        </span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;required_output1&gt;</span><span class="w">                          </span><span class="c1">## REQUIRED FIELD (e.g. sge-per-chip)</span>
+<span class="nt">request</span><span class="p">:</span><span class="w">                                        </span><span class="c1">## See the &quot;Detailed Description of Individual Fields&quot; below.</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;required_output1&gt;</span><span class="w">                          </span><span class="c1">## REQUIRED FIELD (e.g. sge-per-run)</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;required_output2&gt;</span><span class="w">                          </span><span class="c1">## Optionally, you can request multiple outputs</span>
 <span class="w">  </span><span class="c1"># ...</span>
 
 <span class="c1">## Environment</span>
-<span class="nt">env_yml</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;path_to_config_env.yaml_file&gt;</span><span class="w">         </span><span class="c1">## If absent, the pipeline will check if a &quot;config_env.yaml&quot; file exists in the `info` subdirectory in the Novascope repository.</span>
+<span class="nt">env_yml</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;path_to_config_env.yaml_file&gt;</span><span class="w">         </span><span class="c1">## If absent, NovaScope use the &quot;config_env.yaml&quot; file in the `info` subdirectory in the Novascope repository.</span>
 
 <span class="c1">## ================================================</span>
 <span class="c1">##</span>
 <span class="c1">##  Additional Fields:</span>
 <span class="c1">## </span>
-<span class="c1">##    The &quot;preprocess&quot; and &quot;histology&quot; parameters are included below, along side the default values.</span>
-<span class="c1">##    You only need to revise and enable the following parameters if you wish to utilize values different than the default.</span>
+<span class="c1">##    The &quot;upstream&quot;, &quot;histology&quot;, and &quot;downstream&quot; parameters are included below, along side the default values.</span>
+<span class="c1">##    Revise and enable the following parameters ONLY IF you wish to utilize values different than the default.</span>
 <span class="c1">##</span>
 <span class="c1">## ================================================</span>
 
 <span class="c1">### UNCOMMENT RELEVANT LINES TO ENABLE THE ADDITIONAL PARAMETERS</span>
-<span class="c1">#preprocess:</span>
+<span class="c1">#upstream:</span>
 <span class="c1">#  fastq2sbcd:</span>
 <span class="c1">#    format: DraI32          ## Example data uses DraI31, but DraI32 is a typical format.</span>
 <span class="c1">#</span>
@@ -1531,46 +1618,90 @@ Mandatory fields are marked as "REQUIRED FIELD".</p>
 <span class="c1">#      icol_x: 3</span>
 <span class="c1">#      icol_y: 4</span>
 <span class="c1">#</span>
-<span class="c1">#histology:                  ## specify the parameters for histology alignment using historef</span>
-<span class="c1">#    resolution: 10</span>
-<span class="c1">#    figtype: &quot;hne&quot;          ## Options: &quot;hne&quot;, &quot;dapi&quot;, and &quot;fl&quot;.</span>
+<span class="c1">#histology:                 ## specify the parameters for histology alignment using historef</span>
+<span class="c1">#  resolution: 10</span>
+<span class="c1">#  figtype: &quot;hne&quot;           ## Options: &quot;hne&quot;, &quot;dapi&quot;, and &quot;fl&quot;.</span>
+<span class="c1">#</span>
+<span class="c1">#downstream:                 </span>
+<span class="c1">#  gene_filter:             ## Specify the criteria for gene filtering in a manner compatible with regular expressions, which will be applied when creating the FICTURE-compatible SGE and hexagonal SGE.</span>
+<span class="c1">#   keep_gene_type: &quot;protein_coding,lncRNA&quot;    # genes to keep</span>
+<span class="c1">#   rm_gene_regex: &quot;^Gm\\d+|^mt-|^MT-&quot;         # genes to remove</span>
+<span class="c1">#  segment:                 ## specify the parameters for grouping the pixels into hexagons</span>
+<span class="c1">#    precision: 2           ## specify the number of digits to store spatial location (in um, 0 for integer)</span>
+<span class="c1">#    min_pixel_per_unit: 10 ## specify a minimum UMI count of output hexagons</span>
+<span class="c1">#    mu_scale: 1000         ## Specify coordinate to um translate for hexagon. By default, we consider the spatial digital gene expression matrix (SGE) is in nano meter.</span>
+<span class="c1">#    char:                  ## specify the characteristics for the hexagons</span>
+<span class="c1">#      - solofeature: gn    ## specify the genomic feature to create hexagon</span>
+<span class="c1">#        trainwidth: 24     ## specify the size for a hexagonal grid</span>
+<span class="c1">#        segmentmove: 1     ## Specify if the SGE is based on overlapping hexagons or non-overlapping hexagon. The default value 1 will create non-overlapping hexagons.</span>
 </code></pre></div></td></tr></table></div>
 <h3 id="detailed-description-of-individual-fields">Detailed Description of Individual Fields<a class="headerlink" href="#detailed-description-of-individual-fields" title="Permanent link">&para;</a></h3>
 <h4 id="input">Input<a class="headerlink" href="#input" title="Permanent link">&para;</a></h4>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>NovaScope supports using relative paths in the job configuration file, which should be relative to the working directory. If a relative path is found, NovaScope automatically obtains its real path and uses it in the process.</p>
+</div>
 <ul>
 <li>
 <p><strong><code>seq1st</code></strong>:</p>
 <ul>
-<li><em><code>prefix</code></em>: The <code>prefix</code> will be used to organize the 1st-seq FASTQ files. Make sure the <code>prefix</code> parameter in the corresponding flowcell is unique.  </li>
-<li><em><code>layout</code></em>: A file to provide the layout of tiles in a chip with the following format. If absent,<a href="https://seqscope.github.io/NovaScope/">NovaScope</a> will automatically look for the spatial barcode (sbcd) layout within the NovaScope repository at <a href="https://github.com/seqscope/NovaScope/tree/main/info/assets/layout_per_tile_basis">info/assets/layout_per_tile_basis</a>, using the section chip ID for reference.
-  <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<li>
+<p><em><code>id</code></em>: The <code>id</code> will be used to organize the 1st-seq FASTQ files. Make sure the <code>id</code> parameter for 1st-seq in the corresponding flowcell is unique.  </p>
+</li>
+<li>
+<p><em><code>layout</code></em>: A spatial barcode (sbcd) layout file to provide the layout of tiles in a chip with the following format. If absent, <a href="https://seqscope.github.io/NovaScope/">NovaScope</a> will automatically look for the sbcd layout within the NovaScope repository at <a href="https://github.com/seqscope/NovaScope/tree/main/info/assets/layout_per_tile_basis">info/assets/layout_per_tile_basis</a>, using the section chip ID for reference.
+    <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="l l-Scalar l-Scalar-Plain">lane  tile  row  col  rowshift  colshift</span>
 <span class="l l-Scalar l-Scalar-Plain">3     2556  1    1    0         0</span>
 <span class="l l-Scalar l-Scalar-Plain">3     2456  2    1    0         0.1715</span>
-</code></pre></div></td></tr></table></div><ul>
-<li>lane: Lane IDs</li>
-<li>tile: Tile IDs </li>
-<li>row &amp; col: The layout position</li>
-<li>rowshift &amp; colshift: The gap information</li>
+</code></pre></div></td></tr></table></div></p>
+<ul>
+<li><code>lane</code>: Lane IDs;</li>
+<li><code>tile</code>: Tile IDs;</li>
+<li><code>row</code> &amp; <code>col</code>: The layout position;</li>
+<li><code>rowshift</code> &amp; <code>colshift</code>: The gap information</li>
 </ul>
 </li>
 </ul>
 </li>
 <li>
-<p><strong><code>seq2nd</code></strong>: Every FASTQ pair associated with the input section chip should be supplied in <code>seq2nd</code>.  The <code>prefix</code> should be unique among all 2nd-seq FASTQ pairs, not just within this flowcell.</p>
+<p><strong><code>seq2nd</code></strong>: This parameter requires all FASTQ pairs associated with the input section chip to be provided under <code>seq2nd</code>. </p>
+<details class="note">
+<summary>How to generate <code>seq2nd_pair_id</code>?</summary>
+<p>If an ID is not specified, NovaScope will automatically generate one using the format <code>&lt;flowcell_id&gt;.&lt;chip_id&gt;.&lt;randomer&gt;</code>, where <code>randomer</code> is the last 5 digits of the md5 hash of the real path of the read 1 FASTQ file from the 2nd-seq.</p>
+</details>
+</li>
+<li>
+<p><strong><code>run_id</code></strong>: Only needed if alignment is required to generate the requested output. It is used as an identifier for alignment and Spatial Digital Gene Expression matrices (SGEs) to differentiate between input 2nd-seq FASTQ files. This is particularly useful when generating SGEs using the same 1st-seq files but different 2nd-seq files. If not provided, NovaScope will generate it based on the flowcell ID, chip ID, and all input 2nd-seq read 1 FASTQ files.</p>
+<details class="note">
+<summary>How to generate <code>run_id</code>?</summary>
+<p>NovaScope automatically generates <code>run_id</code> in the format <code>&lt;flowcell_id&gt;-&lt;chip_id&gt;-&lt;species&gt;-&lt;randomer&gt;</code>. The <code>randomer</code> is created by sorting the real paths of all read 1 FASTQ files, concatenating these paths into a single long string, and then computing the md5 hash of this string. The last 5 digits of this hash are used as the <code>randomer</code>.</p>
+</details>
+</li>
+<li>
+<p><strong><code>unit_id</code></strong>: Only needed if reformat feature is required to generate the requested output. It acts as an identifier for SGEs that are prepared for reformatting. This identifier is especially useful when users wish to manually modify SGE outside of NovaScope and then proceed to reformat both the original and modified SGEs. The <code>unit_id</code> ensures clear distinction between the original and modified datasets.</p>
+<details class="note">
+<summary>How to generate <code>unit_id</code></summary>
+<p>If <code>unit_id</code> is not specified and reformatting is requested, it will default to <code>&lt;run_id&gt;-default</code>, indicating that no manual preprocessing has occurred. </p>
+<p>Users who prefer to reformat manually modified SGEs should define their own <code>unit_id</code>. We recommend incorporating <code>run_id</code> into the <code>unit_id</code> to maintain a clear trace of the dataset lineage.</p>
+</details>
 </li>
 </ul>
 <h4 id="output">Output<a class="headerlink" href="#output" title="Permanent link">&para;</a></h4>
 <p>The output directory will be used to organize the input files and store output files. Please see the structure directory <a href="../output/">here</a>.</p>
 <h4 id="requests">Requests<a class="headerlink" href="#requests" title="Permanent link">&para;</a></h4>
-<p>The pipeline interprets the requested output files via <code>request</code> and determines the execution flow. The <code>request</code> parameter should indicate the <strong>final output</strong> required, and all intermediary files contributing to the final output will be automatically generated (i.e., the dependencies between rules). For detailed insights into the excution flow, please consult the <a href="../../walkthrough/execution_guide/rule_execution/">execution flow by request</a> alongside the <a href="https://seqscope.github.io/NovaScope/#an-overview-of-the-workflow-structure">rulegraph</a>. </p>
-<p>Below are the options with their output files and links to detailed output information.</p>
+<p>The pipeline interprets the requested output files via <code>request</code> and determines the execution flow.</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>The <code>request</code> parameter should indicate the <strong>final output</strong> required, and all intermediary files contributing to the final output will be automatically generated (i.e., the dependencies between rules). </p>
+</div>
+<p>Below are the options with their final output files and links to detailed output information. For more insights into the excution flow, please consult the <a href="../../walkthrough/execution_guide/rule_execution/">execution flow by request</a> alongside the <a href="https://seqscope.github.io/NovaScope/#an-overview-of-the-workflow-structure">rulegraph</a>. </p>
 <table>
 <thead>
 <tr>
 <th>Option</th>
-<th>Main Output Files</th>
+<th>Main/Final Output Files</th>
 <th>Details</th>
 </tr>
 </thead>
@@ -1591,77 +1722,80 @@ Mandatory fields are marked as "REQUIRED FIELD".</p>
 <td><a href="../../walkthrough/rules/smatch/#output-files">smatch</a></td>
 </tr>
 <tr>
-<td><code>align-per-chip</code></td>
+<td><code>align-per-run</code></td>
 <td>Binary Alignment Map (BAM) file, Digital gene expression matrix (DGE) for genomic features</td>
 <td><a href="../../walkthrough/rules/align/">align</a></td>
 </tr>
 <tr>
-<td><code>sge-per-chip</code></td>
-<td>Spatial digital gene expression matrix (SGE), Spatial distribution images for all transcripts and specific genes of interest.</td>
+<td><code>sge-per-run</code></td>
+<td>Spatial digital gene expression matrix (SGE), Spatial distribution images for transcripts</td>
 <td><a href="../../walkthrough/rules/dge2sdge/">dge2sdge</a></td>
 </tr>
 <tr>
-<td><code>hist-per-chip</code></td>
+<td><code>hist-per-run</code></td>
 <td>Geotiff file for coordinate transformation between SGE and histology image, A Resized TIFF file</td>
 <td><a href="../../walkthrough/rules/historef/">historef</a></td>
 </tr>
+<tr>
+<td><code>transcript-per-unit</code></td>
+<td>SGE in in the FICTURE-compatible format</td>
+<td><a href="../../walkthrough/rules/sdgeAR_reformat/">sdgeAR_reformat</a></td>
+</tr>
+<tr>
+<td><code>segment-per-unit</code></td>
+<td>Hexagon-based SGE in the 10x genomics format</td>
+<td><a href="../../walkthrough/rules/sdgeAR_segment/">sdgeAR_segment</a></td>
+</tr>
 </tbody>
 </table>
-<h4 id="preprocess">preprocess<a class="headerlink" href="#preprocess" title="Permanent link">&para;</a></h4>
-<p>More details for the parameters in <code>preprocess</code> field are provided in the <a href="../../walkthrough/intro/">NovaScope Walkthrough</a>.</p>
+<h4 id="upstream-downstream">Upstream &amp; Downstream<a class="headerlink" href="#upstream-downstream" title="Permanent link">&para;</a></h4>
+<p>Parameter details for the <code>upstream</code> and <code>downstream</code> fields are outlined in the <a href="../../walkthrough/intro/">NovaScope Walkthrough</a>, under the specific rule pages to which they apply.</p>
 <ul>
 <li><strong><code>align</code></strong><ul>
-<li><em><code>resource</code></em>:  The <code>resource</code> parameters are only applicable for HPC users. <ul>
-<li><code>assign_type</code>: two available options are <code>"stdin"</code> (recommended) and <code>"filesize"</code>. The <code>stdin</code>, short for standard input, requires the user manually define resource to be used for alignment. The <code>"filesize"</code> will automatically allocate resource based on the total size of the input 2nd-seq FASTQ files and the available computing resources. Please find details and an example for each option below.</li>
-<li><code>"stdin"</code>: this field is required if <code>assign_type</code> is defined as <code>stdin</code>. Revise <code>partition</code>, <code>threads</code>, and <code>memory</code> in the following example to fit your case.
-    <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nt">preprocess</span><span class="p">:</span>
-<span class="c1">#  ...</span>
-<span class="w">  </span><span class="nt">align</span><span class="p">:</span>
-<span class="w">  </span><span class="c1">#    ...</span>
-<span class="w">    </span><span class="nt">resource</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">assign_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">stdin</span>
-<span class="w">      </span><span class="nt">stdin</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">partition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">standard</span>
-<span class="w">        </span><span class="nt">threads</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
-<span class="w">        </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">70000m</span>
-</code></pre></div></td></tr></table></div></li>
-<li><code>filesize</code>: If using <code>assign_type</code> is defined as <code>filesize</code>, provide details about the computing capabilities of all available nodes, including <code>partition</code>, the available number of CPUs(<code>max_n_cpus</code>), and the memory allocated per CPU (<code>mem_per_cpu</code>). The current resource allocation strategy operates on the following basis: 1) For input 2nd-seq FASTQ files with a combined size under 200GB, allocate 70GB of memory for alignment processes; 2) When the total file size ranges from 200GB to 400GB, memory allocation increases to 140GB; 3) For file sizes exceeding 400GB, 330GB of memory is allocated specifically for the alignment.
-    <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nt">preprocess</span><span class="p">:</span>
-<span class="c1">#  ...</span>
-<span class="w">   </span><span class="nt">align</span><span class="p">:</span>
-<span class="c1">#   ...</span>
-<span class="w">    </span><span class="nt">resource</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">assign_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">filesize</span>
-<span class="w">      </span><span class="nt">filesize</span><span class="p">:</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">partition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">standard</span>
-<span class="w">          </span><span class="nt">max_n_cpus</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span>
-<span class="w">          </span><span class="nt">mem_per_cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">7g</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">partition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">largemem</span>
-<span class="w">          </span><span class="nt">max_n_cpus</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
-<span class="w">          </span><span class="nt">mem_per_cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">25g</span>
-</code></pre></div></td></tr></table></div></li>
+<li>
+<p><em><code>resource</code></em>: Only applicable for HPC users.</p>
+<ul>
+<li><code>assign_type</code>: two available options for how NovaScope allocates resources for alignment. The options include <code>"stdin"</code> (recommended) and <code>"filesize"</code>. Details for each option are provided in the blocks below. </li>
 </ul>
+<details class="note">
+<summary>Option <code>stdin</code></summary>
+<p><strong>Advantages:</strong>
+- Directly allocates resources as specified in the <code>stdin</code> field, bypassing calculations for precision in resource management.
+- Enables customization of resources for different datasets in the job configuration file, allowing for optimization of costs based on file size.</p>
+<p><strong>Disadvantages:</strong>
+- Requires users to specify resources for each job unless default settings (partition name, threads, memory) fit the computing environment. An example is provided in the <a href="#a-template-of-the-config-file">template</a>.</p>
+</details>
+<details class="note">
+<summary>Option <code>filesize</code></summary>
+<p><strong>Advantages:</strong>
+- Automatically allocates resources based on the total size of input 2nd-seq FASTQ files and specified computing resources in the <a href="../../installation/env_setup/#optional-computing-capabilities">environment configuration file</a>.
+- Once computing resources are specified in the environment file, they automatically apply to all jobs, simplifying the setup.</p>
+<p><strong>Disadvantages:</strong>
+- Requires computing time to calculate the total size of input files, potentially delaying the start of data processing.</p>
+<p>The resource allocation strategy is as follows:</p>
+<table>
+<thead>
+<tr>
+<th>Total File Size (GB)</th>
+<th>Memory Allocated for Alignment (GB)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Under 200</td>
+<td>70</td>
+</tr>
+<tr>
+<td>200 to 400</td>
+<td>140</td>
+</tr>
+<tr>
+<td>Over 400</td>
+<td>330</td>
+</tr>
+</tbody>
+</table>
+</details>
 </li>
 </ul>
 </li>
