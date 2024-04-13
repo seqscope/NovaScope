@@ -1,4 +1,4 @@
-This page provides an overview of the rule execution flow tailored to different **`request`** specified in the [job configuration](../getting_started/job_config.md) file of [NovaScope](https://seqscope.github.io/NovaScope/). 
+This page provides an overview of the rule execution flow tailored to different **`request`** specified in the [job configuration](../../getting_started/job_config.md) file of [NovaScope](https://seqscope.github.io/NovaScope/). 
 
 Each `request` option triggers a specific set of rules. Thus, below provides a rulegraph for each `request` option to outline the triggered rules and their interdependencies, detailing distinct processing paths.
 
@@ -43,7 +43,7 @@ The `"align-per-run"` option request a [Binary Alignment Map (BAM)](http://127.0
 
 ### Request `"sge-per-run"`
 * **Description**:
-The `"sge-per-run"` option inquires: 1) a spatial digital gene expression matrix (SGE) encompassing all genomic features with two plots visualizing the distribution of the aligned spatial barcodes; 2) visualization for genes of interest provided in the [job configuration](../getting_started/job_config.md) file. It requests the execution of Rule [`dge2sdge`](../rules/dge2sdge.md) and `gene_visual`, alongside the prerequisite rules: [`align`](../rules/align.md), [`smatch`](../rules/smatch.md), [`sbcd2chip`](../rules/sbcd2chip.md), and [`fastq2sbcd`](../rules/fastq2sbcd.md).
+The `"sge-per-run"` option inquires: 1) a spatial digital gene expression matrix (SGE) encompassing all genomic features with two plots visualizing the distribution of the aligned spatial barcodes; 2) visualization for genes of interest provided in the [job configuration](../../getting_started/job_config.md) file. It requests the execution of Rule [`dge2sdge`](../rules/dge2sdge.md) and `gene_visual`, alongside the prerequisite rules: [`align`](../rules/align.md), [`smatch`](../rules/smatch.md), [`sbcd2chip`](../rules/sbcd2chip.md), and [`fastq2sbcd`](../rules/fastq2sbcd.md).
 
 * **Rule Graph**:
 <figure markdown="span">

@@ -9,7 +9,7 @@ The rule dependencies are determined based on the **input and output files** spe
 
 The execution of rules within [NovaScope](https://seqscope.github.io/NovaScope/) is governed by several key factors, outlined as follows:
 
-- **Specified Final Output Files**: The execution of rules is directly influenced by the final output files requested by the user, as defined by the `Request` field in the [job configuration](../getting_started/job_config.md) file. For instance, if the output of a rule (referred to as `Rule X`) is indicated as the final output file, then `Rule X` will be executed.
+- **Specified Final Output Files**: The execution of rules is directly influenced by the final output files requested by the user, as defined by the `Request` field in the [job configuration](../../getting_started/job_config.md) file. For instance, if the output of a rule (referred to as `Rule X`) is indicated as the final output file, then `Rule X` will be executed.
 
 - **Rule Dependencies and Availability of Intermediate Files**: [NovaScope](https://seqscope.github.io/NovaScope/) initiates a systematic evaluation, starting with `Rule X`, to ascertain the presence of its required input files. If any inputs are missing, [NovaScope](https://seqscope.github.io/NovaScope/) iteratively identifies and executes the necessary precursor rules to generate these missing inputs, thus ensuring `Rule X` has everything it needs to proceed.
 

@@ -50,7 +50,7 @@ envmodules:
 
 ## Reference Genome Index
 
-Please list every reference database used for alignment here. The reference data can be obtained via the [cellranger download](https://www.10xgenomics.com/support/software/cell-ranger/downloads) page. Example instructions to build STAR index from the reference file is described in the [Requirements](requirements.md) section.
+Please list every reference database used for alignment here. The reference data can be obtained via the [cellranger download](https://www.10xgenomics.com/support/software/cell-ranger/downloads) page. Example instructions to build STAR index from the reference file is described in the [Requirements](./requirement.md) section.
 
 !!! tip
     Please ensure the reference genome indices correspond to the species of your input data. 
@@ -79,10 +79,10 @@ pyenv: "/path/to/python/virtual/env"
 
 NovaScope provides two methods for specifying resources for the alignment process:
 
-* **Option A** allows users to define resources manually in the job configuration file ([`config_job.yaml`](../getting_started/job_config.md/#a-template-of-the-config-file)).
-* **Option B** allows NovaScope to automatically allocate resources based on the size of the input files and the available computational resources defined in this environment configuration file. **ONLY** when using Option B must users specify the computing resources available. 
+* **Option `stdin`** allows users to define resources manually in the [job configuration file](../getting_started/job_config.md/#a-template-of-the-config-file).
+* **Option `filesize`** allows NovaScope to automatically allocate resources based on the size of the input files and the available computational resources defined in this environment configuration file. **ONLY** when using Option `filesize` must users specify the computing resources available. 
 
-For more information on activating Option A or B and the resource allocation strategy for Option B, visit the [Job Configuration](../getting_started/job_config.md/#upstream) page.
+For more information on activating Option `stdin` or `filesize` and the resource allocation strategy for Option `filesize`, visit the [Job Configuration](../getting_started/job_config.md/#upstream) page.
 
 An example of how to configure these settings.
 

@@ -138,7 +138,9 @@ git clone https://github.com/seqscope/NovaScope.git
 
 The reference genome for the species of interest must be downloaded and indexed for alignment. [STARsolo](https://github.com/alexdobin/STAR) accepts the reference genomes prepared by [cellranger](https://www.10xgenomics.com/support/software/cell-ranger), therefore, one of the simplest way is to download the reference genome from the [cellranger download](https://www.10xgenomics.com/support/software/cell-ranger/downloads) page.
 
-Given STAR index packaged by the [cellranger download](https://www.10xgenomics.com/support/software/cell-ranger/downloads) is outdated and will not be compatible with the latest version of STARsolo, we recommend indexing it using the latest version of STARsolo. For human and mouse, we provided examples below to prepare the reference genome. For other species, please follow the instructions provided by [cellranger](https://www.10xgenomics.com/support/software/cell-ranger/downloads) or [STARsolo](https://github.com/alexdobin/STAR) to prepare the reference genome. Please note that this indexing process will take A LOT OF TIME, typically a few to several hours.
+Given STAR index packaged by the [cellranger download](https://www.10xgenomics.com/support/software/cell-ranger/downloads) is outdated and will not be compatible with the latest version of STARsolo, we recommend indexing it using the latest version of STARsolo. For human and mouse, we provided examples below to prepare the reference genome. For other species, please follow the instructions provided by [cellranger](https://www.10xgenomics.com/support/software/cell-ranger/downloads) or [STARsolo](https://github.com/alexdobin/STAR) to prepare the reference genome. 
+
+Please note that this indexing process will take A LOT OF TIME, typically a few to several hours.
 
 ???+ Mouse
 	The recommended reference genome for mouse is GRCm39. 

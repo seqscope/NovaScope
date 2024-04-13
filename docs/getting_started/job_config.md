@@ -146,12 +146,12 @@ env_yml: <path_to_config_env.yaml_file>         ## If absent, NovaScope use the 
     ??? note "How to generate `seq2nd_pair_id`?"
         If an ID is not specified, NovaScope will automatically generate one using the format `<flowcell_id>.<chip_id>.<randomer>`, where `randomer` is the last 5 digits of the md5 hash of the real path of the read 1 FASTQ file from the 2nd-seq.
 
-* **`run_id`**: Only needed if alignment is required to generate the requested output. Used as an identifier for alignment and Spatial Digital Gene Expression matrices (SGEs) to differentiate between input 2nd-seq FASTQ files. This is particularly useful when generating SGEs using the same 1st-seq files but different 2nd-seq files. If not provided, NovaScope will generate it based on the flowcell ID, chip ID, and all input 2nd-seq read 1 FASTQ files.
+* **`run_id`**: Only needed if alignment is required to generate the requested output. It is used as an identifier for alignment and Spatial Digital Gene Expression matrices (SGEs) to differentiate between input 2nd-seq FASTQ files. This is particularly useful when generating SGEs using the same 1st-seq files but different 2nd-seq files. If not provided, NovaScope will generate it based on the flowcell ID, chip ID, and all input 2nd-seq read 1 FASTQ files.
 
     ??? note "How to generate `run_id`?"
         NovaScope automatically generates `run_id` in the format `<flowcell_id>-<chip_id>-<species>-<randomer>`. The `randomer` is created by sorting the real paths of all read 1 FASTQ files, concatenating these paths into a single long string, and then computing the md5 hash of this string. The last 5 digits of this hash are used as the `randomer`.
 
-* **`unit_id`**: Only needed if reformat feature is required to generate the requested output. Acts as an identifier for Spatial Gene Expression (SGE) datasets that are prepared for reformatting. This identifier is especially useful when users wish to manually modify SGE outside of NovaScope and then proceed to reformat both the original and modified SGEs. The `unit_id` ensures clear distinction between the original and modified datasets.
+* **`unit_id`**: Only needed if reformat feature is required to generate the requested output. It acts as an identifier for SGEs that are prepared for reformatting. This identifier is especially useful when users wish to manually modify SGE outside of NovaScope and then proceed to reformat both the original and modified SGEs. The `unit_id` ensures clear distinction between the original and modified datasets.
 
     ??? note "How to generate `unit_id`"
         If `unit_id` is not specified and reformatting is requested, it will default to `<run_id>-default`, indicating that no manual preprocessing has occurred. 
@@ -190,13 +190,21 @@ Parameter details for the `upstream` and `downstream` fields are outlined in the
     * *`resource`*: Only applicable for HPC users.
         * `assign_type`: two available options for how NovaScope allocates resources for alignment. The options include `"stdin"` (recommended) and `"filesize"`. Details for each option are provided in the blocks below. 
 
-        ??? info "`stdin` Option"
-            This option allows direct allocation of resources specified in the `stdin` field, bypassing any calculations. It enables users to customize resources for different datasets in their job configuration file, optimizing costs based on file size. Users must define specific resources for each job, unless the default settings for partition name, threads, and memory are suitable for their computing environment. 
-            
-            An example of how to define the `stdin` field is provided in the above [template](#a-template-of-the-config-file).
+        ??? note "Option `stdin`"
+            **Advantages:**
+            - Directly allocates resources as specified in the `stdin` field, bypassing calculations for precision in resource management.
+            - Enables customization of resources for different datasets in the job configuration file, allowing for optimization of costs based on file size.
 
-        ??? info "`filesize` Option"
-            This option enables NovaScope to automatically allocate resources based on the total size of input 2nd-seq FASTQ files and available computing resources. When under this option, must users specify the computing resources available in the [environment configuration file](../installation/env_setup.md#optional-computing-capabilities). Please note this may require computing time to calculate the total size of input files.
+            **Disadvantages:**
+            - Requires users to specify resources for each job unless default settings (partition name, threads, memory) fit the computing environment. An example is provided in the [template](#a-template-of-the-config-file).
+
+        ??? note "Option `filesize`"
+            **Advantages:**
+            - Automatically allocates resources based on the total size of input 2nd-seq FASTQ files and specified computing resources in the [environment configuration file](../installation/env_setup.md#optional-computing-capabilities).
+            - Once computing resources are specified in the environment file, they automatically apply to all jobs, simplifying the setup.
+
+            **Disadvantages:**
+            - Requires computing time to calculate the total size of input files, potentially delaying the start of data processing.
 
             The resource allocation strategy is as follows:
 
