@@ -146,12 +146,12 @@ env_yml: <path_to_config_env.yaml_file>         ## If absent, NovaScope use the 
     ??? note "How to generate `seq2nd_pair_id`?"
         If an ID is not specified, NovaScope will automatically generate one using the format `<flowcell_id>.<chip_id>.<randomer>`, where `randomer` is the last 5 digits of the md5 hash of the real path of the read 1 FASTQ file from the 2nd-seq.
 
-* **`run_id`**: Used as an identifier for Spatial Digital Gene Expression matrices (SGEs) to differentiate between input 2nd-seq FASTQ files. This is particularly useful when generating SGEs using the same 1st-seq files but different 2nd-seq files. If not provided, NovaScope will generate it based on the flowcell ID, chip ID, and all input 2nd-seq read 1 FASTQ files.
+* **`run_id`**: Only needed if alignment is required to generate the requested output. Used as an identifier for alignment and Spatial Digital Gene Expression matrices (SGEs) to differentiate between input 2nd-seq FASTQ files. This is particularly useful when generating SGEs using the same 1st-seq files but different 2nd-seq files. If not provided, NovaScope will generate it based on the flowcell ID, chip ID, and all input 2nd-seq read 1 FASTQ files.
 
     ??? note "How to generate `run_id`?"
         NovaScope automatically generates `run_id` in the format `<flowcell_id>-<chip_id>-<species>-<randomer>`. The `randomer` is created by sorting the real paths of all read 1 FASTQ files, concatenating these paths into a single long string, and then computing the md5 hash of this string. The last 5 digits of this hash are used as the `randomer`.
 
-* **`unit_id`**: Acts as an identifier for Spatial Gene Expression (SGE) datasets that are prepared for reformatting. This identifier is especially useful when users wish to manually modify SGE outside of NovaScope and then proceed to reformat both the original and modified SGEs. The `unit_id` ensures clear distinction between the original and modified datasets.
+* **`unit_id`**: Only needed if reformat feature is required to generate the requested output. Acts as an identifier for Spatial Gene Expression (SGE) datasets that are prepared for reformatting. This identifier is especially useful when users wish to manually modify SGE outside of NovaScope and then proceed to reformat both the original and modified SGEs. The `unit_id` ensures clear distinction between the original and modified datasets.
 
     ??? note "How to generate `unit_id`"
         If `unit_id` is not specified and reformatting is requested, it will default to `<run_id>-default`, indicating that no manual preprocessing has occurred. 

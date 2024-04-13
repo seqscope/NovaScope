@@ -18,16 +18,18 @@ input:
       ## IMPORTANT: REPLACE THE FOLLOWING VARIABLES BEFORE USE
       fastq_R1: "/path/to/input/dir/9748-YK-3_CGAGGCTG_S3_R1_001.fastq.gz"
       fastq_R2: "/path/to/input/dir/9748-YK-3_CGAGGCTG_S3_R2_001.fastq.gz"
-  label: v1
   ## IMPORTANT: REPLACE THE FOLLOWING VARIABLE BEFORE USE
   histology: "/path/to/input/dir/histology.tif"
 
 ## IMPORTANT: REPLACE THE FOLLOWING VARIABLE BEFORE USE
 output: "/path/to/output/dir"
 
+## IMPORTANT: CHOOSE OPTIONS BEFORE USE
 request:
   - sge-per-run
   - hist-per-run
+  - transcript-per-unit
+  - segment-per-unit
 
 ## IMPORTANT: REPLACE/MODIFY THE FOLLOWING VARIABLE BEFORE USE
 ## It is important to configure the environment file for your specific environment.

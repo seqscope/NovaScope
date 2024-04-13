@@ -25,8 +25,11 @@ input:
 ## IMPORTANT: REPLACE THE FOLLOWING VARIABLE BEFORE USE
 output: "/path/to/output/dir/"
 
+## IMPORTANT: CHOOSE OPTIONS BEFORE USE
 request:
   - sge-per-run
+  - transcript-per-unit
+  - segment-per-unit
 
 ## IMPORTANT: REPLACE/MODIFY THE FOLLOWING VARIABLE BEFORE USE
 ## It is important to configure the environment file for your specific environment.

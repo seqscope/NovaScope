@@ -81,7 +81,7 @@ def read_config_for_unitid(config, job_dir, run_id):
     unit_id  = run_id + "-" + unit_ann
 
     logging.info(f" - Unit ID: {unit_id}")
-    logging.info(f"     Boundary: {boundary}")
+    logging.info(f" - Boundary: {boundary}")
     return unit_id, unit_ann, boundary
 
 def add_or_expand_column(df, col_name, cols, default_values):
@@ -115,12 +115,24 @@ def add_default_for_char(df_char, run_id, unit_id, cols=["solofeature", "trainwi
 def read_config_for_segment(config, run_id, unit_id, log_option=False):
     # segment_char_info
     segment_char_info= config.get("downstream", {}).get("reformat",{}).get("segment",{}).get("char", None)
-    if segment_char_info is None:
-        df_segment_char = read_config_for_keychar(config, run_id, unit_id)
-        df_segment_char = df_segment_char[["solofeature", "trainwidth", "segmentmove"]].drop_duplicates()
-    else:
+    key_char_info = config.get("downstream", {}).get("key_char", None)
+    if segment_char_info is not None:
         df_segment_char = pd.DataFrame(segment_char_info)
         df_segment_char = add_default_for_char(df_segment_char, run_id, unit_id)
+    else:
+        if key_char_info is not None:
+            df_segment_char = read_config_for_keychar(key_char_info, run_id, unit_id)
+            df_segment_char = df_segment_char[["solofeature", "trainwidth", "segmentmove"]].drop_duplicates()
+        else:
+            df_segment_char = pd.DataFrame({
+                "solofeature": ["gn"],
+                "trainwidth": [24],
+                "segmentmove": [1],
+                "run_id": [run_id],
+                "unit_id": [unit_id]
+            }
+            )
+    
     # mu_scale
     mu_scale = config.get("downstream", {}).get("reformat",{}).get("mu_scale", None)
     if mu_scale is None:
@@ -130,8 +142,8 @@ def read_config_for_segment(config, run_id, unit_id, log_option=False):
         logging.info(f"     mu scale: {mu_scale}")
     return df_segment_char, mu_scale
 
-def read_config_for_keychar(config, run_id, unit_id, log_option=False):
-    key_char_info = config.get("downstream", {}).get("key_char", None)
+def read_config_for_keychar(key_char_info, run_id, unit_id, log_option=False):
+    
     if key_char_info is None:
         df_key_char = pd.DataFrame({
             "solofeature": ["gn", "gn"],
