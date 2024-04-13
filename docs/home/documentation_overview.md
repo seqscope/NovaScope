@@ -21,5 +21,6 @@ The current documentation of [NovaScope](../index.md) include the following sect
 * [Output](../getting_started/output.md): Explains the output directory structure and how to utilize the generated data.
 
 [**NovaScope Walkthrough**](../walkthrough/intro.md):
+
 * [A Rule Execution Guide](../walkthrough/execution_guide/core_concepts.md): Essential concepts and rule execution flows by `request`.
 * [Specific Rule Instructions](../walkthrough/rules/fastq2sbcd.md): Detailed instructions for all rules.

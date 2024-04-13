@@ -3,7 +3,7 @@
 Before the execution flow by `request`, below outlines essential concepts for working with [NovaScope](https://seqscope.github.io/NovaScope/).
 
 ## Rule Dependencies
-The rule dependencies are determined based on the input and output files specified in the rules. For example, if Rule `sbcd2chip` requires the output of Rule `fastq2sbcd` as input, the Rule `fastq2sbcd` serves as a prerequisite rule to Rule `sbcd2chip`. 
+The rule dependencies are determined based on the **input and output files** specified in the rules. For example, if Rule `sbcd2chip` requires the output of Rule `fastq2sbcd` as input, the Rule `fastq2sbcd` serves as a prerequisite rule to Rule `sbcd2chip`. 
 
 ## Execution Dynamics
 

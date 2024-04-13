@@ -71,8 +71,8 @@ For accuracy purposes, it's recommended to examine the [`manifest.tsv`](#2-flow-
 ## Parameters
 The following parameter in the [job configuration](../../getting_started/job_config.md) file will be applied in this rule. 
 
-```
-preprocess:
+```yaml
+upstream:
   fastq2sbcd:
     format: DraI32 
 ```

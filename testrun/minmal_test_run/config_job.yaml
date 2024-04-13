@@ -11,29 +11,31 @@ input:
   species: "mouse"
   lane: 3
   seq1st:
-    prefix: L3_filt
+    id: L3_filt
     ## IMPORTANT: REPLACE THE FOLLOWING VARIABLE BEFORE USE
     fastq: "/path/to/input/dir/seq1st/fastqs/9203-AP.L3.2456_2556.R1_001.fastq.gz"
     ## IMPORTANT: REPLACE THE FOLLOWING VARIABLE BEFORE USE
     layout: "/path/to/input/dir/seq1st/layout/B08Csub.layout.tsv"
   seq2nd:
-    - prefix: B08Cv1.filt
+    - id: B08Cv1.filt
       ## IMPORTANT: REPLACE THE FOLLOWING VARIABLES BEFORE USE
       fastq_R1: "/path/to/input/dir/seq2nd/fastqs/B08Cv1.filt/B08Cv1.filt.R1.fastq.gz"
       fastq_R2: "/path/to/input/dir/seq2nd/fastqs/B08Cv1.filt/B08Cv1.filt.R2.fastq.gz"
-  label: "v1"
 
 ## IMPORTANT: REPLACE THE FOLLOWING VARIABLE BEFORE USE
 output: "/path/to/output/dir/"
 
+## IMPORTANT: CHOOSE OPTIONS BEFORE USE
 request:
-  - sge-per-chip
+  - sge-per-run
+  - transcript-per-unit
+  - segment-per-unit
 
 ## IMPORTANT: REPLACE/MODIFY THE FOLLOWING VARIABLE BEFORE USE
 ## It is important to configure the environment file for your specific environment.
 env_yml: /path/to/config_env.yaml
 
-preprocess:
+upstream:
   fastq2sbcd:
     format: DraI31
   smatch:

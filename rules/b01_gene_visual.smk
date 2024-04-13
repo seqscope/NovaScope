@@ -1,16 +1,16 @@
 rule b01_gene_visual:
     input:
-        sdge_bcd      = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "sge", "{species_with_seq2v}", "barcodes.tsv.gz"),
-        sdge_ftr      = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "sge", "{species_with_seq2v}", "features.tsv.gz"),
-        sdge_mtx      = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "sge", "{species_with_seq2v}", "matrix.mtx.gz"),
+        sdge_bcd      = os.path.join(main_dirs["align"],  "{flowcell}", "{chip}", "{run_id}", "sge", "barcodes.tsv.gz"),
+        sdge_ftr      = os.path.join(main_dirs["align"],  "{flowcell}", "{chip}", "{run_id}", "sge", "features.tsv.gz"),
+        sdge_mtx      = os.path.join(main_dirs["align"],  "{flowcell}", "{chip}", "{run_id}", "sge", "matrix.mtx.gz"),
     output:
-        gof_rgb_tar   = os.path.join(main_dirs["align"],  "{flowcell}", "{section}", "sge", "{species_with_seq2v}", "{flowcell}"+"."+"{section}"+"."+"{species_with_seq2v}"+".gene_visual.tar.gz"),
+        gof_rgb_tar   = os.path.join(main_dirs["align"],  "{flowcell}", "{chip}", "{run_id}", "sge", "{run_id}"+".gene_visual.tar.gz"),
     params:
-        rgb_layout        = check_path(config.get("preprocess", {}).get("dge2sdge", {}).get('layout', None), job_dir, strict_mode=False),
-        visual_gof        = config.get("preprocess", {}).get("gene_visual", None), # by default it will be the top five genes
-        visual_max_scale  = config.get("preprocess", {}).get("visualization", {}).get("rgb",{}).get("max_scale", 50),
-        visual_res        = config.get("preprocess", {}).get("visualization", {}).get("rgb",{}).get("resolution", 1000),
-        visual_gene_scale = config.get("preprocess", {}).get("visualization", {}).get("rgb",{}).get("gene_scale", 20),
+        rgb_layout        = check_path(config.get("upstream", {}).get("dge2sdge", {}).get('layout', None), job_dir, strict_mode=False),
+        visual_gof        = config.get("upstream", {}).get("gene_visual", None), # by default it will be the top five genes
+        visual_max_scale  = config.get("upstream", {}).get("visualization", {}).get("rgb",{}).get("max_scale", 50),
+        visual_res        = config.get("upstream", {}).get("visualization", {}).get("rgb",{}).get("resolution", 1000),
+        visual_gene_scale = config.get("upstream", {}).get("visualization", {}).get("rgb",{}).get("gene_scale", 20),
         # module
         module_cmd        = get_envmodules_for_rule(["python", "imagemagick"], module_config)
     resources: 
@@ -30,7 +30,7 @@ rule b01_gene_visual:
             assert os.path.exists(rgb_layout), f"The provided RGB layout file does not exist: {rgb_layout}"
             print(f"Using the provided RGB layout file: {rgb_layout}.")
         else: 
-            rgb_layout = os.path.join(smk_dir, "info", "assets", "layout_per_section_basis", "layout.1x1.tsv")
+            rgb_layout = os.path.join(smk_dir, "info", "assets", "layout_per_chip_basis", "layout.1x1.tsv")
             assert os.path.exists(rgb_layout), f"The default RGB layout file does not exist: {rgb_layout}."
             print(f"Using the default RGB layout file: {rgb_layout}.")
         

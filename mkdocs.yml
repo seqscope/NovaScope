@@ -40,6 +40,9 @@ theme:
   font:
     text: 'Roboto'
     code: 'Roboto Mono'
+#  icon:
+#    admonition:
+#      <type>: <icon>
 
 # Navigation structure
 nav:
@@ -69,9 +72,16 @@ nav:
         - align: walkthrough/rules/align.md
         - dge2sdge: walkthrough/rules/dge2sdge.md
         - historef: walkthrough/rules/historef.md
+        - sdge2sdgeAR: walkthrough/rules/sdge2sdgeAR.md
+        - sdgeAR_reformat: walkthrough/rules/sdgeAR_reformat.md
+        - sdgeAR_segment: walkthrough/rules/sdgeAR_segment.md
 # Markdown Extensions
 markdown_extensions:
+  - abbr
+  - footnotes
   - admonition
+  - pymdownx.details
+  - pymdownx.superfences
 #  - codehilite:
 #      guess_lang: false 
   - toc:

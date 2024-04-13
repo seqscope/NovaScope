@@ -1,11 +1,10 @@
-# mark
 #=============================================
 #
-# 1. Import functions and env
+# import functions and env
 #
 #==============================================
 
-# Import modules
+# import modules
 import os, sys, gzip, argparse, subprocess, random, yaml, snakemake, re, logging
 import pandas as pd
 from collections import defaultdict
@@ -22,23 +21,25 @@ job_dir = os.getcwd()
 local_scripts   = os.path.join(smk_dir,"scripts")
 sys.path.append(local_scripts)
 from bricks import setup_logging, end_logging, configure_pandas_display, load_configs
-from bricks import check_input, check_path, create_dict, create_symlink, create_dirs_and_get_paths
+from bricks import check_input, check_path, create_dict, create_symlink, create_dirs_and_get_paths, get_last5_from_md5
 from bricks import list_outputfn_by_request
-from rule_general import get_skip_sbcd, assign_resource_for_align, get_envmodules_for_rule #setup_rgb_layout
+from rule_general import assign_resource_for_align, get_envmodules_for_rule
+from rule_general import get_skip_sbcd, link_sdge_to_sdgeAR, find_major_axis
+from pipe_utils_upstream import read_config_for_runid, read_config_for_unitid, read_config_for_segment, read_config_for_hist, read_config_for_seq1, read_config_for_seq2
 
-# Set up display and log
+# set up display and log
 configure_pandas_display()
 
-setup_logging(job_dir,smk_name+"-preprocess")
+setup_logging(job_dir, smk_name+"-preprocess")
 
 logging.info(f"1. Reading input:")
 logging.info(f" - Current job path: {job_dir}")
 
-# Config
+# config: job
 logging.info(f" - Loading config file:")
 config = load_configs(job_dir, [("config_job.yaml", True)])
 
-# Env config 
+# config: env
 env_configfile = check_path(config.get("env_yml", os.path.join(smk_dir, "info", "config_env.yaml")),job_dir, strict_mode=True, flag="The environment config file")
 env_config = load_configs(None, [(env_configfile, True)])
 
@@ -47,7 +48,8 @@ logging.info(f" - envmodules: ")
 logging.info(f"     {module_config}")
 
 # - ref  
-sp2alignref=env_config.get("ref", None).get("align", None)
+sp2alignref = env_config.get("ref", {}).get("align", None)
+sp2geneinfo = env_config.get("ref", {}).get("geneinfo", None)
 
 # - python env (py3.10 and py3.9)
 pyenv  = env_config.get("pyenv", None)
@@ -58,141 +60,127 @@ python = os.path.join(pyenv, "bin", "python")
 assert os.path.exists(python), f"Python does not exist in your python environment: {python}"
 
 # - tools
-spatula   = env_config.get("tools", {}).get("spatula", "spatula")
-samtools  = env_config.get("tools", {}).get("samtools", "samtools")
-star      = env_config.get("tools", {}).get("star", "STAR")
+spatula  = env_config.get("tools", {}).get("spatula",   "spatula")
+samtools = env_config.get("tools", {}).get("samtools",  "samtools")
+star     = env_config.get("tools", {}).get("star",      "STAR")
+ficture  = env_config.get("tools", {}).get("ficture",   "ficture")
 
 #==============================================
 #
-# 2. basic config
+# basic config
 #
 #==============================================
+
 logging.info(f"\n")
-logging.info(f"2. Processing Config files.")
+logging.info(f"2. Processing config files.")
 
-# Output
+# output
 main_root = config["output"]
 assert main_root is not None, "Provide a valid output directory."
-main_dirs = create_dirs_and_get_paths(main_root, ["seq1st", "seq2nd", "align", "histology"])
+main_dirs = create_dirs_and_get_paths(main_root, ["seq1st", "seq2nd", "match", "align", "histology", "analysis"])
 logging.info(f" - Output root: {main_root}")
 
-# Flowcell
+# flowcell
 flowcell = config["input"]["flowcell"]
 assert flowcell is not None, "Provide a valid Flowcell."
 logging.info(f" - Flowcell: {flowcell}")
 
-# Section
-section = config["input"]["chip"]
-assert section is not None, "Provide a valid Section Chip."
-logging.info(f" - Section Chip: {section}")
+# chip
+chip = config["input"]["chip"]
+assert chip is not None, "Provide a valid Section Chip."
+logging.info(f" - Section Chip: {chip}")
 
-# Species
-species = check_input(config["input"]["species"], {"human","human_mouse","mouse","rat","worm"}, "specie", lower=False)
+# species
+species = check_input(config["input"]["species"], {"human", "human_mouse", "mouse", "rat", "worm"}, "species", lower=False)
 logging.info(f" - Species: {species}")
 
-# Request
-request=check_input(config.get("request",["sge-per-chip"]),{"sbcd-per-flowcell", "sbcd-per-chip", "smatch-per-chip", "align-per-chip", "sge-per-chip","hist-per-chip"}, "request", lower=False)
-logging.info(f" - Request: {request}")
-
-# Label: if not provided, use species as label, else use {species}_{label}
-label = config["input"].get("label", None)
-label = f"{species}_{label}" if label is not None else species
-logging.info(f" - Label: {label}")
-
-# Seq1 
-logging.info(f" - Seq1")
-
-df_seq1 = pd.DataFrame({
-    'flowcell': [flowcell],
-    'section': [section],
-    'seq1_prefix': [config.get('input', {}).get('seq1st', {}).get('prefix', pd.NA)],
-    'seq1_fq_raw': [config.get('input', {}).get('seq1st', {}).get('fastq', pd.NA)],
-})
-
-if pd.isna(df_seq1["seq1_prefix"]).any():
-    df_seq1["lane"] = config.get('input', {}).get('lane', {"A": "1", "B": "2", "C": "3", "D": "4"}.get(section[-1], pd.NA))
-    if pd.isna(df_seq1["lane"]).any():
-        raise ValueError("There are sections missing lane.")
-    df_seq1["seq1_prefix"] = df_seq1["seq1_prefix"].fillna("L" + df_seq1["lane"].astype(str)) # Prefix, imputed by lane
-
-df_seq1['seq1_fq_raw'] = df_seq1['seq1_fq_raw'].apply(lambda x: check_path(x, job_dir)) # Check path for each fastq file and update the path when it is a relative path. 
-
-sc2seq1 = create_dict(df_seq1, key_col="section", val_cols="seq1_prefix", dict_type="val", val_type="str")
-
-logging.info("     Seq1 input summary table:\n%s", df_seq1)
-
-# Seq2
-logging.info(f" - Seq2")
-df_seq2 = pd.DataFrame({
-    'flowcell': flowcell,
-    'section': section,
-    'seq2_prefix': [seq2.get('prefix') for seq2 in config.get('input', {}).get('seq2nd', [])],
-    'seq2_fqr1_raw': [check_path(seq2.get('fastq_R1'), job_dir) for seq2 in config.get('input', {}).get('seq2nd', [])],
-    'seq2_fqr2_raw': [check_path(seq2.get('fastq_R2'), job_dir) for seq2 in config.get('input', {}).get('seq2nd', [])],
-    "species_with_seq2v": label
-})
-
-sc2seq2 = create_dict(df_seq2, key_col="section", val_cols="seq2_prefix",  dict_type="set", val_type="str")
-
-logging.info("     Seq2 input summary table:\n%s", df_seq2)
-
-# STD fq files  (TO-DO: do this only when the std file is needed)
-if any(task in request for task in ["sbcd-per-chip", "smatch-per-chip", "align-per-chip", "sge-per-chip"]):
-    logging.info(f" - Standardzing fastq file names.")
-
-    logging.info("     Creating symlinks to standardize the file names for seq1.")
-    df_seq1["seq1_fq_std"] = df_seq1.apply(lambda row: os.path.join(main_dirs["seq1st"], row["flowcell"], "fastqs", row["seq1_prefix"]+".fastq.gz"), axis=1)
-    for _, row in df_seq1.iterrows():
-        os.makedirs(os.path.dirname(row["seq1_fq_std"]), exist_ok=True)
-        create_symlink(row["seq1_fq_raw"], row["seq1_fq_std"],silent=True)
-
-    logging.info("     Creating symlinks to standardize the file names for seq2.")
-    df_seq2["seq2_fqr1_std"]=df_seq2.apply(lambda row: os.path.join(main_dirs["seq2nd"],row["seq2_prefix"], row["seq2_prefix"]+".R1.fastq.gz"), axis=1)
-    df_seq2["seq2_fqr2_std"]=df_seq2.apply(lambda row: os.path.join(main_dirs["seq2nd"],row["seq2_prefix"], row["seq2_prefix"]+".R2.fastq.gz"), axis=1)
-    for _, row in df_seq2.iterrows():
-        os.makedirs(os.path.dirname(row["seq2_fqr1_std"]), exist_ok=True)
-        create_symlink(row["seq2_fqr1_raw"], row["seq2_fqr1_std"],silent=True)
-        create_symlink(row["seq2_fqr2_raw"], row["seq2_fqr2_std"],silent=True)
-
-
-# Histology
-# std dir
-hist_std_dir = os.path.join(main_dirs["histology"], flowcell, section, species)
-
-# std fn, e.g. 10XN3-B09A-human-hne.tif
-hist_res = config.get("histology",{}).get("resolution","10")
-flowcell_abbr = config.get("input",{}).get("flowcell").split("-")[0]
-hist_type = check_input(config.get("histology",{}).get("figtype","hne"), ["hne","dapi","fl"], "Histology figure type")
-hist_std_fn = f"{hist_res}X{flowcell_abbr}-{section}-{species}-{hist_type}.tif"
-hist_fit_fn = f"{hist_res}X{flowcell_abbr}-{section}-{species}-{hist_type}-fit.tif"
-
-if "hist-per-chip" in request:
-    logging.info(f" - Histology file: Loading")
-    os.makedirs(hist_std_dir, exist_ok=True)    
-
-    hist_std_tif = os.path.join(hist_std_dir, hist_std_fn)
-    hist_raw_tif = check_path(config.get("input",{}).get('histology', None), job_dir, strict_mode=False) # Update the path when it is a relative path, and return None if it is not provided.
-
-    if hist_raw_tif is not None: # If histology file is provided, create a symlink to the standard folder.
-        logging.info(f"     Histology file: {os.path.realpath(hist_raw_tif)}")
-        create_symlink(hist_raw_tif, hist_std_tif, handle_existing_output="replace", silent=True)
-    elif os.path.exists(hist_std_tif): # When not provided, check if the standard file exists.
-        logging.info(f"     Histology file: {os.path.realpath(hist_std_tif)}")
-    else:
-        raise ValueError(f"Please provide a valid histology file.")
-else:
-    hist_std_tif=None
-    logging.info(f" - Histology file: Skipping.")
+# request
+request=check_input(config.get("request",["sge-per-run"]),
+                    {   "sbcd-per-flowcell", 
+                        "sbcd-per-chip", "smatch-per-chip", 
+                        "align-per-run", "sge-per-run", "hist-per-run", 
+                        "transcript-per-unit", "segment-per-unit"
+                    },
+                     "request", lower=False)
+logging.info(f" - Request(s): {request}")
 
 #==============================================
 #
-# 3. A dummy rule to collect results
-#
-# - Please note that The order of results affects the order of execution.
+# Process input
 #
 #==============================================
 logging.info(f"\n")
-logging.info(f"3. Required output filenames.")
+logging.info(f"3. Processing input by requests.")
+
+output_filename_conditions = []
+
+# per-unit or per-run:
+if any(task in request for task in ["align-per-run", "sge-per-run", "hist-per-run", "segment-per-unit", "transcript-per-unit"]):
+    run_id, rid2seq2 = read_config_for_runid(config, job_dir)
+
+if any(task in request for task in["segment-per-unit","transcript-per-unit" ]):
+    # unit ID: to distinguish the default sge and the sge with manual boundary filtering.
+    unit_id, unit_ann, boundary = read_config_for_unitid(config, job_dir, run_id)
+
+    # segment info (multiple pairs)
+    df_segment_char, mu_scale = read_config_for_segment(config, run_id, unit_id)
+else:
+    df_segment_char = pd.DataFrame({
+        'run_id': pd.Series(dtype='object'),
+        'unit_id': pd.Series(dtype='object'),
+        'solofeature': pd.Series(dtype='object'),
+        'trainwidth': pd.Series(dtype='int64'),  
+        'segmentmove': pd.Series(dtype='int64'), 
+    })
+
+if "hist-per-run" in request:
+    hist_std_prefix = read_config_for_hist(config, job_dir, main_dirs["histology"])
+else:
+    hist_std_prefix = None
+
+# per-chip:
+# - smatch-per-chip, sbcd-per-chip (and above)
+if any(task in request for task in ["smatch-per-chip", "sbcd-per-chip", "align-per-run", "sge-per-run", "hist-per-run", "segment-per-unit", "transcript-per-unit"]):
+    # seq2 info (multiple pairs)
+    df_seq2 = read_config_for_seq2(config, job_dir, log_option=True)
+else:
+    df_seq2 = pd.DataFrame({
+        'flowcell': pd.Series(dtype='object'),
+        'chip': pd.Series(dtype='object'),
+        'seq2_id': pd.Series(dtype='object'),
+    })
+
+# - all requests will need seq1 info
+seq1_id, seq1_fq_raw, sc2seq1 = read_config_for_seq1(config, job_dir)
+
+# STD fq files  (TO-DO: do this only when the std file is needed)
+logging.info(f" - Standardzing fastq file names.")
+
+logging.info("     Creating symlinks to standardize the file names for seq1.")
+seq1_fq_std=os.path.join(main_dirs["seq1st"], flowcell, "fastqs", seq1_id+".fastq.gz")
+os.makedirs(os.path.dirname(seq1_fq_std), exist_ok=True)
+create_symlink(seq1_fq_raw, seq1_fq_std, silent=True)
+
+logging.info("     Creating symlinks to standardize the file names for seq2.")
+df_seq2["seq2_fqr1_std"]=df_seq2.apply(lambda row: os.path.join(main_dirs["seq2nd"],row["seq2_id"], row["seq2_id"]+".R1.fastq.gz"), axis=1)
+df_seq2["seq2_fqr2_std"]=df_seq2.apply(lambda row: os.path.join(main_dirs["seq2nd"],row["seq2_id"], row["seq2_id"]+".R2.fastq.gz"), axis=1)
+for _, row in df_seq2.iterrows():
+    os.makedirs(os.path.dirname(row["seq2_fqr1_std"]), exist_ok=True)
+    create_symlink(row["seq2_fqr1_raw"], row["seq2_fqr1_std"],silent=True)
+    create_symlink(row["seq2_fqr2_raw"], row["seq2_fqr2_std"],silent=True)
+
+#==============================================
+#
+# Rule all
+#
+# - If all variable in the zip_args is a list of one element, it's ok to use the list directly. Otherwise, use a dataframe will be safer to avoid wrong combination.
+#   Currently, only the df_seq2 and df_segment_char are in the dataframe format.
+# - Please note that The order of results affects the order of execution.
+#
+#==============================================
+
+logging.info(f"\n")
+logging.info(f"4. Required output filenames.")
 
 output_filename_conditions = [
     # sbcd-per-flowcell
@@ -200,11 +188,11 @@ output_filename_conditions = [
         'flag': 'sbcd-per-flowcell',
         'root': main_dirs["seq1st"],
         'subfolders_patterns': [
-                                (["{flowcell}", "sbcds", "{seq1_prefix}", "manifest.tsv"], None),
+                                (["{flowcell}", "sbcds", "{seq1_id}", "manifest.tsv"], None),
         ],
         'zip_args': {
-            'flowcell':         df_seq1["flowcell"].values,
-            'seq1_prefix':      df_seq1["seq1_prefix"].values,
+            'flowcell':     [flowcell],
+            'seq1_id':      [seq1_id],
         },
     },
     # sbcd-per-chip
@@ -212,84 +200,117 @@ output_filename_conditions = [
         'flag': 'sbcd-per-chip',
         'root': main_dirs["seq1st"],
         'subfolders_patterns': [
-                                (["{flowcell}", "nbcds", "{section}", "1_1.sbcds.sorted.tsv.gz"], None),
-                                (["{flowcell}", "nbcds", "{section}", "manifest.tsv"], None),
-                                (["{flowcell}", "nbcds", "{section}", "1_1.sbcds.sorted.png"], None),
+                                (["{flowcell}", "nbcds", "{chip}", "1_1.sbcds.sorted.tsv.gz"], None),
+                                (["{flowcell}", "nbcds", "{chip}", "manifest.tsv"], None),
+                                (["{flowcell}", "nbcds", "{chip}", "1_1.sbcds.sorted.png"], None),
         ],
         'zip_args': {
-            'flowcell':         df_seq1["flowcell"].values,
-            'section':          df_seq1["section"].values,
+            'flowcell':      [flowcell],
+            'chip':          [chip],
         },
     },
     # smatch-per-chip
     {
         'flag': 'smatch-per-chip',
-        'root': main_dirs["align"],
+        'root': main_dirs["match"],
         'subfolders_patterns': [
-                                (["{flowcell}", "{section}", "match", "{seq2_prefix}"+".R1.match.sorted.uniq.tsv.gz"], None),
-                                (["{flowcell}", "{section}", "match", "{seq2_prefix}"+".R1.summary.tsv"], None),
-                                (["{flowcell}", "{section}", "match", "{seq2_prefix}"+".R1.counts.tsv"], None),
-                                (["{flowcell}", "{section}", "match", "{seq2_prefix}"+".R1.match.png"], None),
+                                (["{flowcell}", "{chip}", "{seq2_id}", "{seq2_id}"+".R1.match.sorted.uniq.tsv.gz"], None),
+                                (["{flowcell}", "{chip}", "{seq2_id}", "{seq2_id}"+".R1.summary.tsv"], None),
+                                (["{flowcell}", "{chip}", "{seq2_id}", "{seq2_id}"+".R1.counts.tsv"], None),
+                                (["{flowcell}", "{chip}", "{seq2_id}", "{seq2_id}"+".R1.match.png"], None),
         ],
         'zip_args': {
-            'flowcell':          df_seq2["flowcell"].values,
-            'section':           df_seq2["section"].values,
-            'seq2_prefix':       df_seq2["seq2_prefix"].values,  
+            'flowcell':      df_seq2["flowcell"].values,
+            'chip':          df_seq2["chip"].values,
+            'seq2_id':       df_seq2["seq2_id"].values,  
         },
     },
-   # align-per-chip
+    # align-per-run
     {
-        'flag': 'align-per-chip',
+        'flag': 'align-per-run',
         'root': main_dirs["align"],
         'subfolders_patterns': [
-                                (["{flowcell}", "{section}", "bam",  "{species_with_seq2v}", "sttoolsSolo.out", "GeneFull", "raw", "barcodes.tsv.gz"], None),
-                                (["{flowcell}", "{section}", "bam",  "{species_with_seq2v}", "sttoolsSolo.out", "GeneFull", "raw", "features.tsv.gz"], None),
-                                (["{flowcell}", "{section}", "bam",  "{species_with_seq2v}", "sttoolsSolo.out", "GeneFull", "raw", "matrix.mtx.gz"], None),
-                                (["{flowcell}", "{section}", "bam",  "{species_with_seq2v}", "sttoolsSolo.out", "Gene",     "raw", "matrix.mtx.gz"], None),
-                                (["{flowcell}", "{section}", "bam",  "{species_with_seq2v}", "sttoolsSolo.out", "Velocyto", "raw", "spliced.mtx.gz"], None),
-                                (["{flowcell}", "{section}", "bam",  "{species_with_seq2v}", "sttoolsSolo.out", "Velocyto", "raw", "unspliced.mtx.gz"], None),
-                                (["{flowcell}", "{section}", "bam",  "{species_with_seq2v}", "sttoolsSolo.out", "Velocyto", "raw", "ambiguous.mtx.gz"], None),
+                                (["{flowcell}", "{chip}", "{run_id}", "bam", "sttoolsSolo.out", "GeneFull", "raw", "barcodes.tsv.gz"], None),
+                                (["{flowcell}", "{chip}", "{run_id}", "bam", "sttoolsSolo.out", "GeneFull", "raw", "features.tsv.gz"], None),
+                                (["{flowcell}", "{chip}", "{run_id}", "bam", "sttoolsSolo.out", "GeneFull", "raw", "matrix.mtx.gz"], None),
+                                (["{flowcell}", "{chip}", "{run_id}", "bam", "sttoolsSolo.out", "Gene",     "raw", "matrix.mtx.gz"], None),
+                                (["{flowcell}", "{chip}", "{run_id}", "bam", "sttoolsSolo.out", "Velocyto", "raw", "spliced.mtx.gz"], None),
+                                (["{flowcell}", "{chip}", "{run_id}", "bam", "sttoolsSolo.out", "Velocyto", "raw", "unspliced.mtx.gz"], None),
+                                (["{flowcell}", "{chip}", "{run_id}", "bam", "sttoolsSolo.out", "Velocyto", "raw", "ambiguous.mtx.gz"], None),
         ],
         'zip_args': {
-            'flowcell':           df_seq2["flowcell"].values,
-            'section':            df_seq2["section"].values,
-            'species_with_seq2v': df_seq2["species_with_seq2v"].values,  
+            'flowcell':  [flowcell],
+            'chip':      [chip],
+            'run_id':    [run_id],  
         },
     },
-    # sge-per-chip
+    # sge-per-run
     {
-        'flag': 'sge-per-chip',
+        'flag': 'sge-per-run',
         'root': main_dirs["align"],
         'subfolders_patterns': [
-                                (["{flowcell}", "{section}", "sge",   "{species_with_seq2v}", "barcodes.tsv.gz"], None),
-                                (["{flowcell}", "{section}", "sge",   "{species_with_seq2v}", "features.tsv.gz"], None),
-                                (["{flowcell}", "{section}", "sge",   "{species_with_seq2v}", "matrix.mtx.gz"], None),
-                                (["{flowcell}", "{section}", "sge",   "{species_with_seq2v}", "{flowcell}"+"."+"{section}"+"."+"{species_with_seq2v}"+".gene_full_mito.png"], None),
-                                (["{flowcell}", "{section}", "sge",   "{species_with_seq2v}", "{flowcell}"+"."+"{section}"+"."+"{species_with_seq2v}"+".sge_match_sbcd.png"], None),
-                                (["{flowcell}", "{section}", "sge",   "{species_with_seq2v}", "{flowcell}"+"."+"{section}"+"."+"{species_with_seq2v}"+".gene_visual.tar.gz"], None),
+                                (["{flowcell}", "{chip}", "{run_id}", "sge", "barcodes.tsv.gz"], None),
+                                (["{flowcell}", "{chip}", "{run_id}", "sge", "features.tsv.gz"], None),
+                                (["{flowcell}", "{chip}", "{run_id}", "sge", "matrix.mtx.gz"], None),
+                                (["{flowcell}", "{chip}", "{run_id}", "sge", "{run_id}.gene_full_mito.png"], None),
+                                (["{flowcell}", "{chip}", "{run_id}", "sge", "{run_id}.sge_match_sbcd.png"], None),
+                                (["{flowcell}", "{chip}", "{run_id}", "sge", "{run_id}.gene_visual.tar.gz"], None),
+                                (["{flowcell}", "{chip}", "{run_id}", "sge", "barcodes.minmax.tsv"], None),
         ],
         'zip_args': {
-            'flowcell':          df_seq2["flowcell"].values,
-            'section':           df_seq2["section"].values,
-            'species_with_seq2v': df_seq2["species_with_seq2v"].values,  
+            'flowcell':  [flowcell],
+            'chip':      [chip],
+            'run_id':    [run_id],  
         },
     },
-    # hist-per-chip
+    # hist-per-run
     {
-        'flag': 'hist-per-chip',
-        'root': main_dirs["align"],
+        'flag': 'hist-per-run',
+        'root': main_dirs["histology"],
         'subfolders_patterns': [
-                                (["{flowcell}", "{section}", "histology", "{species_with_seq2v}", hist_std_fn], None),
-                                (["{flowcell}", "{section}", "histology", "{species_with_seq2v}", hist_fit_fn], None),
+                                (["{flowcell}", "{chip}", "aligned", "{run_id}", "{hist_std_prefix}.tif"], None),
+                                (["{flowcell}", "{chip}", "aligned", "{run_id}", "{hist_std_prefix}-fit.tif"], None),
         ],
         'zip_args': {
-            'flowcell':           df_seq2["flowcell"].values,
-            'section':            df_seq2["section"].values,
-            'species_with_seq2v': df_seq2["species_with_seq2v"].values,  
-            'hist_std_tif':       [hist_std_fn],
-            'hist_fit_tif':       [hist_fit_fn],
+            'flowcell':         [flowcell],
+            'chip':             [chip],
+            'run_id':           [run_id],  
+            'hist_std_prefix':  [hist_std_prefix],
         },
-    }
+    },
+    # segment-per-unit
+    {
+            'flag': 'segment-per-unit',
+            'root': main_dirs["analysis"],
+            'subfolders_patterns': [
+                
+                                    ([ "{run_id}", "{unit_id}", "segment", "{sf}.d_{tw}.raw_{seg_nmove}", "barcodes.tsv.gz"], None),
+                                    ([ "{run_id}", "{unit_id}", "segment", "{sf}.d_{tw}.raw_{seg_nmove}", "features.tsv.gz"], None),
+                                    ([ "{run_id}", "{unit_id}", "segment", "{sf}.d_{tw}.raw_{seg_nmove}", "matrix.mtx.gz"  ], None),                     
+            ],
+            'zip_args': {
+                'run_id':       df_segment_char["run_id"].values,  
+                'unit_id':      df_segment_char["unit_id"].values,
+                'sf':           df_segment_char["solofeature"].values,
+                'tw':           df_segment_char["trainwidth"].values,
+                'seg_nmove':    df_segment_char['segmentmove'].values,
+            },
+    },
+    # transcript-per-unit
+    {
+            'flag': 'transcript-per-unit',
+            'root': main_dirs["analysis"],
+            'subfolders_patterns': [
+                
+                                    ([ "{run_id}", "{unit_id}", "preprocess", "{unit_id}.merged.matrix.tsv.gz"  ], None),
+                                    ([ "{run_id}", "{unit_id}", "preprocess", "{unit_id}.feature.clean.tsv.gz"], None),
+                                    ([ "{run_id}", "{unit_id}", "preprocess", "{unit_id}.feature.tsv.gz"      ], None),                     
+            ],
+            'zip_args': {
+                'run_id':       df_segment_char["run_id"].values,  
+                'unit_id':      df_segment_char["unit_id"].values,
+            },
+    },
 ]
 
 requested_files=list_outputfn_by_request(output_filename_conditions, request, debug=True)
@@ -302,7 +323,7 @@ end_logging()
 
 #==============================================
 #
-# 4. include all rules here
+#  Specific rules
 #
 #==============================================
 
@@ -311,9 +332,15 @@ include: "rules/a02_sbcd2chip.smk"
 include: "rules/a03_smatch.smk"
 include: "rules/a04_align.smk"
 include: "rules/a05_dge2sdge.smk"
-
 include: "rules/b01_gene_visual.smk"
 
-if "hist-per-chip" in request:
+if "hist-per-run" in request:
     include: "rules/b02_historef.smk"
 
+if "segment-per-unit" in request or "transcript-per-unit" in request:
+    include: "rules/a06_sdge2sdgeAR.smk"
+    include: "rules/a07_sdgeAR_reformat.smk"
+
+if "segment-per-unit" in request:
+    include: "rules/a08_sdgeAR_segment.smk"
+    #include: "rules/a08_sdgeAR_QC.smk"

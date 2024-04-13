@@ -15,7 +15,7 @@ Matched Spatial barcode files for all pairs of 2nd-seq FASTQ files, which are pr
 ## Output Files
 The rule generates the following output in the specified directory path:
 ```
-<output_directory>/align/<flowcell_id>/<chip_id>/bam/<species>_<seq2nd_version>
+<output_directory>/align/<flowcell_id>/<chip_id>/<run_id>/bam
 ```
 
 ### (1) A Binary Alignment Map (BAM) File
@@ -120,8 +120,8 @@ It is suggested to review the summary metrics to confirm the total read count, t
 
 The following parameter in the [job configuration](../../getting_started/job_config.md) file will be applied in this rule.
 
-```
-preprocess:
+```yaml
+upstream:
   smatch:                   
     skip_sbcd: 1            
     match_len: 27           
@@ -172,7 +172,7 @@ preprocess:
 
 * **The `resource` Parameter**
 
-     The `resource` parameters, specific to HPC users, determine the partitions, CPU count, and memory allocation for the alignment process. Details for the `resource` parameters in `align` are provided in the [`preprocess` parameters](../../getting_started/job_config.md/#preprocess) in [Job Configuration](../../getting_started/job_config.md).
+     The `resource` parameters, specific to HPC users, determine the partitions, CPU count, and memory allocation for the alignment process. Details for the `resource` parameters in `align` are provided in the [`upstream` parameters](../../getting_started/job_config.md/#upstream) in [Job Configuration](../../getting_started/job_config.md).
 
 ## Dependencies
 Rule `align` requires the matched spatial barcode files from Rule [`smatch`](./smatch.md) generates. Hence, if the [input files](#input-files) are not available, `align` relies on the successful completion of [`smatch`](./smatch.md) for proper operation. See an overview of the rule dependencies in the [Workflow Structure](../../home/workflow_structure.md).
