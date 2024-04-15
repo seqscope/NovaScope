@@ -65,8 +65,10 @@ def read_config_for_runid(config, job_dir, df_seq2=None):
         flowcell = config["input"]["flowcell"]
         chip = config["input"]["chip"]
         species = config["input"]["species"]
-        seq2_fqr1_concatenated = ''.join(sorted(df_seq2['seq2_fqr1_raw'].apply(lambda x: ' '.join(sorted(x.split()))).sum().split()))
-        run_id = f"{flowcell}-{chip}-{species}-" + get_last5_from_md5(seq2_fqr1_concatenated)
+        #seq2_fqr1_concatenated = ''.join(sorted(df_seq2['seq2_fqr1_raw'].apply(lambda x: ' '.join(sorted(x.split()))).sum().split()))
+        seq2_id_concatenated = ''.join(sorted(df_seq2['seq2_id'].apply(lambda x: ' '.join(sorted(x.split()))).sum().split()))
+        #run_id = f"{flowcell}-{chip}-{species}-" + get_last5_from_md5(seq2_fqr1_concatenated)
+        run_id = f"{flowcell}-{chip}-{species}-" + get_last5_from_md5(seq2_id_concatenated)
         run_id = run_id.lower().replace("_", "-")
     
     df_seq2["run_id"] = run_id
