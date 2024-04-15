@@ -73,7 +73,7 @@ env_yml: <path_to_config_env.yaml_file>         ## If absent, NovaScope use the 
 #    dup_maxdist: 1
 #
 #  smatch:                   ## specify the parameters for smatch
-#    skip_sbcd: 1            ## If absent, default skip_sbcd follows the fastq2sbcd format: 1 for DraI31 and 0 for DraI32.
+#    skip_sbcd: 0            ## If absent, default skip_sbcd follows the fastq2sbcd format: 1 for DraI31 and 0 for DraI32.
 #    match_len: 27           ## Length of spatial barcode considered to be a perfect match.
 #
 #  align:                    ## specify the parameters for align (STARsolo)

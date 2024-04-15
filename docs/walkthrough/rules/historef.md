@@ -28,7 +28,7 @@ The referenced histology file, which is in [GeoTIFF](https://en.wikipedia.org/wi
 ```
 
  * The `histology_resolution` and `histology_figtype` are derived from the `resolution` and `figtype` fields within the `histology` section of the [job configuration](../../getting_started/job_config.md) file.
- * The `flowcell_abbreviation` is derived by splitting the `flowcell_id`, which is sourced from the `flowcell` field in `input` section of the [job configuration](./path-to-job-configuration) file, by "-" and taking the first part.
+ * The `flowcell_abbreviation` is derived by splitting the `flowcell_id`, which is sourced from the `flowcell` field in `input` section of the [job configuration](../../getting_started/job_config.md) file, by "-" and taking the first part.
 
 **File Visualization**:
 <figure markdown="span">
@@ -51,7 +51,7 @@ An TIFF file shares the identical dimensions with both the ["smatch" image](./sm
 ```
 
  * The `histology_resolution` and `histology_figtype` are derived from the `resolution` and `figtype` fields within the `histology` section of the [job configuration](../../getting_started/job_config.md) file.
- * The `flowcell_abbreviation` is derived by splitting the `flowcell_id`, which is sourced from the `flowcell` field in `input` section of the [job configuration](./path-to-job-configuration) file, by "-" and taking the first part.
+ * The `flowcell_abbreviation` is derived by splitting the `flowcell_id`, which is sourced from the `flowcell` field in `input` section of the [job configuration](../../getting_started/job_config.md) file, by "-" and taking the first part.
 
 **File Visualization**:
 <figure markdown="span">

@@ -39,4 +39,4 @@ upstream:
   fastq2sbcd:
     format: DraI31
   smatch:
-    skip_sbcd: 0
+    skip_sbcd: 0        # This input file has been manually modified, so skip_sbcd must be set to 0 even though the format is DraI31. This applies only to this specific dataset.
