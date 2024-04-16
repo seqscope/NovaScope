@@ -54,7 +54,7 @@ snakemake --latency-wait $wait_time -s ${smk_dir}/NovaScope.smk -d $job_dir --co
 See the following examples to see how to execute the pipeline locally:
 
 * [Minimal Test Run](https://github.com/seqscope/NovaScope/blob/main/testrun/minimal_test_run/submit_local.sh)
-* [Shallow Liver Section](https://github.com/seqscope/NovaScope/blob/main/testrun/shallo_liver_section/submit_local.sh)
+* [Shallow Liver Section](https://github.com/seqscope/NovaScope/blob/main/testrun/shallow_liver_section/submit_local.sh)
 * [Deep Liver Section](https://github.com/seqscope/NovaScope/blob/main/testrun/deep_liver_section/submit_local.sh)
 
 

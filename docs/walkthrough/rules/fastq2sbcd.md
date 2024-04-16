@@ -34,7 +34,7 @@ AAAAAGACGAGTAAAAGTGACTGTTAATTAC	3	2456	29794	1799	1
 - Column 3: Tile ID.
 - Column 4: X-coordinate within the tile (local X-coordinate).
 - Column 5: Y-coordinate within the tile (local Y-coordinate).
-- Column 6: Count of occurrences for each spatial barcode.
+- Column 6: Number of mismatching bases from expected pattern
 
 ### (2) Flow Cell Manifest
 **Description**:
