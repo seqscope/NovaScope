@@ -173,11 +173,11 @@ def read_config_for_hist(config, job_dir, main_dir_histology):
     chip = config["input"]["chip"]
     species = config["input"]["species"]
     
-    hist_res = config.get("histology",{}).get("resolution","10")
+    hist_magn = config.get("histology",{}).get("magnification","10X")
     flowcell_abbr = config.get("input",{}).get("flowcell").split("-")[0]
     hist_type = check_input(config.get("histology",{}).get("figtype","hne"), ["hne","dapi","fl"], "Histology figure type")
     
-    hist_std_prefix = f"{hist_res}X{flowcell_abbr}-{chip}-{species}-{hist_type}"
+    hist_std_prefix = f"{hist_magn}{flowcell_abbr}-{chip}-{species}-{hist_type}"
 
     # input path
     hist_raw_inputpath = check_path(config.get("input",{}).get('histology', None), job_dir, strict_mode=False) 

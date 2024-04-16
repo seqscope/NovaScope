@@ -103,7 +103,7 @@ env_yml: <path_to_config_env.yaml_file>         ## If absent, NovaScope use the 
 #      icol_y: 4
 #
 #histology:                 ## specify the parameters for histology alignment using historef
-#  resolution: 10
+#  magnification: 10X       ## specify the magnification of the input histology file
 #  figtype: "hne"           ## Options: "hne", "dapi", and "fl".
 #
 #downstream:                 
