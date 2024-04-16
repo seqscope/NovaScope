@@ -11,53 +11,55 @@
 
 input:
   flowcell: N3-HG5MC
-  section: B08C
+  chip: B08C
   species: "mouse"
   seq1st:
-    prefix: null
+    id: null
     ## IMPORTANT: REPLACE THE FOLLOWING VARIABLE BEFORE USE
     fastq: "/path/to/input/dir/9203-AP.L3.B08C.R1_001.fastq.gz"
   seq2nd: 
     ## IMPORTANT: REPLACE ALL OF THE FOLLOWING VARIABLES BEFORE USE
-    - prefix: N3_B08C_v1
+    - id: N3_B08C_v1
       fastq_R1: "/path/to/input/dir/9748-YK-3_CGAGGCTG_S3_R1_001.fastq.gz"
       fastq_R2: "/path/to/input/dir/9748-YK-3_CGAGGCTG_S3_R2_001.fastq.gz"
-    - prefix: N3_B08C_v2a
+    - id: N3_B08C_v2a
       fastq_R1: "/path/to/input/dir/seq2nd/fastqs/B08Cv2a/B08Cv2a.R1.fastq.gz"
       fastq_R1: "/path/to/input/dir/seq2nd/fastqs/B08Cv2a/B08Cv2a.R2.fastq.gz"
-    - prefix: N3_B08C_v2b
+    - id: N3_B08C_v2b
       fastq_R1: "/path/to/input/dir/seq2nd/fastqs/B08Cv2b/B08Cv2b.R1.fastq.gz"
       fastq_R1: "/path/to/input/dir/seq2nd/fastqs/B08Cv2b/B08Cv2b.R2.fastq.gz"
-    - prefix: N3_B08C_v2bu
+    - id: N3_B08C_v2bu
       fastq_R1: "/path/to/input/dir/seq2nd/fastqs/B08Cv2bu/B08Cv2bu.R1.fastq.gz"
       fastq_R1: "/path/to/input/dir/seq2nd/fastqs/B08Cv2bu/B08Cv2bu.R2.fastq.gz"
-    - prefix: N3_B08C_v2c
+    - id: N3_B08C_v2c
       fastq_R1: "/path/to/input/dir/seq2nd/fastqs/B08Cv2c/B08Cv2c.R1.fastq.gz"
       fastq_R1: "/path/to/input/dir/seq2nd/fastqs/B08Cv2c/B08Cv2c.R2.fastq.gz"
-    - prefix: N3_B08C_v2cu
+    - id: N3_B08C_v2cu
       fastq_R1: "/path/to/input/dir/seq2nd/fastqs/B08Cv2cu/B08Cv2cu.R1.fastq.gz"
       fastq_R1: "/path/to/input/dir/seq2nd/fastqs/B08Cv2cu/B08Cv2cu.R2.fastq.gz"
-    - prefix: N3_B08C_v3a
+    - id: N3_B08C_v3a
       fastq_R1: "/path/to/input/dir/seq2nd/fastqs/B08Cv3a/B08Cv3a.R1.fastq.gz"
       fastq_R1: "/path/to/input/dir/seq2nd/fastqs/B08Cv3a/B08Cv3a.R2.fastq.gz"
-    - prefix: N3_B08C_v3b
+    - id: N3_B08C_v3b
       fastq_R1: "/path/to/input/dir/seq2nd/fastqs/B08Cv3b/B08Cv3b.R1.fastq.gz"
       fastq_R1: "/path/to/input/dir/seq2nd/fastqs/B08Cv3b/B08Cv3b.R2.fastq.gz"
-  label: v123
   ## IMPORTANT: REPLACE THE FOLLOWING VARIABLE BEFORE USE
   histology: "/path/to/input/dir/histology.tif"
 
 ## IMPORTANT: REPLACE THE FOLLOWING VARIABLE BEFORE USE
 output: "/path/to/output/dir"
 
+## IMPORTANT: CHOOSE OPTIONS BEFORE USE
 request:
-  - sge-per-section
-  - hist-per-section
+  - sge-per-run
+  - hist-per-run
+  - transcript-per-unit
+  - segment-per-unit
 
 ## IMPORTANT: REPLACE/MODIFY THE FOLLOWING VARIABLE BEFORE USE
 ## It is important to configure the environment file for your specific environment.
 env_yml: /path/to/config_env.yaml
 
-preprocess:
+upstream:
   fastq2sbcd:
     format: DraI31

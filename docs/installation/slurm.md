@@ -1,8 +1,10 @@
 # Snakemake with Slurm
 
-It is recommended to integrate SLURM scheduler with Snakemake, which can automate the process of submitting your jobs.
+!!! tip
+    We recommended to integrate SLURM scheduler with Snakemake, which can automate the process of submitting your jobs.
 
-Please be aware that Snakemake introduced significant updates for cluster configuration starting from **version 8**. Thus, we advise checking to verify your Snakemake version using `snakemake --version`. 
+!!! info
+    Please be aware that Snakemake introduced significant updates for cluster configuration starting from **version 8**. Thus, we advise checking to verify your Snakemake version using `snakemake --version`. 
 
 In NovaScope, we utilized a cluster configuration profile to define the details of the cluster and resources given its consistency and time-saving benefits. More details are provided below. Those files were crafted with inspiration from the [smk-simple-slurm](https://github.com/jdblischak/smk-simple-slurm) repository.
 
@@ -55,7 +57,7 @@ conda-frontend: conda                    # specify Conda as the package manager 
 
 ## A Cluster Configuration file for Snakemake v8.6.0
 
-Please first install the Snakemake executor plugin "cluster-generic":
+Please first install the Snakemake executor plugin "`cluster-generic`":
 
 ```bash
 pip install snakemake-executor-plugin-cluster-generic

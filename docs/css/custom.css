@@ -1,3 +1,12 @@
 .highlight .comment {
     color: green; /* Style comments specifically */
 }
+table {
+    table-layout: fixed;
+    width: 100%;
+}
+table td, table th {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

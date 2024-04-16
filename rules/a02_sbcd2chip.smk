@@ -1,24 +1,24 @@
 rule a02_sbcd2chip:
     input:
-        sbcd_mnfst       = lambda wildcards: os.path.join(main_dirs["seq1st"], wildcards.flowcell, "sbcds", sc2seq1[wildcards.section], "manifest.tsv"),
+        sbcd_mnfst       = lambda wildcards: os.path.join(main_dirs["seq1st"], wildcards.flowcell, "sbcds", sc2seq1[wildcards.chip], "manifest.tsv"),
     output:
-        nbcd_tsv         = os.path.join(main_dirs["seq1st"], "{flowcell}", "nbcds", "{section}", "1_1.sbcds.sorted.tsv.gz"),
-        nbcd_mnfst       = os.path.join(main_dirs["seq1st"], "{flowcell}", "nbcds", "{section}", "manifest.tsv"),
-        nbcd_png         = os.path.join(main_dirs["seq1st"], "{flowcell}", "nbcds", "{section}", "1_1.sbcds.sorted.png"),
+        nbcd_tsv         = os.path.join(main_dirs["seq1st"], "{flowcell}", "nbcds", "{chip}", "1_1.sbcds.sorted.tsv.gz"),
+        nbcd_mnfst       = os.path.join(main_dirs["seq1st"], "{flowcell}", "nbcds", "{chip}", "manifest.tsv"),
+        nbcd_png         = os.path.join(main_dirs["seq1st"], "{flowcell}", "nbcds", "{chip}", "1_1.sbcds.sorted.png"),
     params:
-        # sbcd layout: tile2section
+        # sbcd layout: tile2chip
         sbcd_layout      = check_path(config.get('input', {}).get('seq1st', {}).get('layout', None), job_dir, strict_mode=False),
-        sbcd_layout_def  = lambda wildcards: os.path.join(smk_dir, "info", "assets", "layout_per_tile_basis", wildcards.section+".layout.tsv"),
+        sbcd_layout_def  = lambda wildcards: os.path.join(smk_dir, "info", "assets", "layout_per_tile_basis", wildcards.chip+".layout.tsv"),
         # combine 
-        gap_row             = config.get("preprocess", {}).get("sbcd2chip", {}).get('gap_row', 0.0517),
-        gap_col             = config.get("preprocess", {}).get("sbcd2chip", {}).get('gap_col', 0.0048),
-        dup_maxnum          = config.get("preprocess", {}).get("sbcd2chip", {}).get('dup_maxnum', 1),
-        dup_maxdist         = config.get("preprocess", {}).get("sbcd2chip", {}).get('dup_maxdist', 1),
+        gap_row             = config.get("upstream", {}).get("sbcd2chip", {}).get('gap_row', 0.0517),
+        gap_col             = config.get("upstream", {}).get("sbcd2chip", {}).get('gap_col', 0.0048),
+        dup_maxnum          = config.get("upstream", {}).get("sbcd2chip", {}).get('dup_maxnum', 1),
+        dup_maxdist         = config.get("upstream", {}).get("sbcd2chip", {}).get('dup_maxdist', 1),
         # visualization
-        visual_coord_per_pixel    = config.get("preprocess", {}).get("visualization", {}).get("drawxy",{}).get("coord_per_pixel", 1000),
-        visual_intensity_per_obs  = config.get("preprocess", {}).get("visualization", {}).get("drawxy",{}).get("intensity_per_obs", 50),
-        visual_icol_x             = config.get("preprocess", {}).get("visualization", {}).get("drawxy",{}).get("icol_x", 3),
-        visual_icol_y             = config.get("preprocess", {}).get("visualization", {}).get("drawxy",{}).get("icol_y", 4),
+        visual_coord_per_pixel    = config.get("upstream", {}).get("visualization", {}).get("drawxy",{}).get("coord_per_pixel", 1000),
+        visual_intensity_per_obs  = config.get("upstream", {}).get("visualization", {}).get("drawxy",{}).get("intensity_per_obs", 50),
+        visual_icol_x             = config.get("upstream", {}).get("visualization", {}).get("drawxy",{}).get("icol_x", 3),
+        visual_icol_y             = config.get("upstream", {}).get("visualization", {}).get("drawxy",{}).get("icol_y", 4),
         # module
         module_cmd        = get_envmodules_for_rule(["python", "imagemagick"], module_config)
     resources:
@@ -34,7 +34,7 @@ rule a02_sbcd2chip:
             print(f"Using the provided sbcd lay out file: {params.sbcd_layout}.")
             sbcd_layout = params.sbcd_layout
         else:
-            assert os.path.exists(params.sbcd_layout_def), f"The default sbcd layout file does not exist: {params.sbcd_layout_def}. Check your section chip ID."
+            assert os.path.exists(params.sbcd_layout_def), f"The default sbcd layout file does not exist: {params.sbcd_layout_def}. Check your section chip ID or provide on in the config_job.yaml file"
             print(f"Using the default sbcd lay out file: {params.sbcd_layout_def}.")
             sbcd_layout = params.sbcd_layout_def    
             
@@ -45,7 +45,7 @@ rule a02_sbcd2chip:
         source {pyenv}/bin/activate
 
         # s1
-        echo -e "Combinding sbcds from tile to section.\\n"
+        echo -e "Combinding sbcds from tile to chip.\\n"
         command time -v  {spatula} combine-sbcds \
             --layout {sbcd_layout} \
             --manifest {input.sbcd_mnfst} \

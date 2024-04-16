@@ -1,23 +1,23 @@
 rule a03_smatch:
     input:
-        seq2_fqr1        = os.path.join(main_dirs["seq2nd"], "{seq2_prefix}", "{seq2_prefix}" + ".R1.fastq.gz"),
-        seq2_fqr2        = os.path.join(main_dirs["seq2nd"], "{seq2_prefix}", "{seq2_prefix}" + ".R2.fastq.gz"),
-        nbcd_tsv         = os.path.join(main_dirs["seq1st"], "{flowcell}", "nbcds", "{section}", "1_1.sbcds.sorted.tsv.gz"),
-        nbcd_png         = os.path.join(main_dirs["seq1st"], "{flowcell}", "nbcds", "{section}", "1_1.sbcds.sorted.png"),
+        seq2_fqr1       = os.path.join(main_dirs["seq2nd"], "{seq2_id}", "{seq2_id}"+".R1.fastq.gz"),
+        seq2_fqr2       = os.path.join(main_dirs["seq2nd"], "{seq2_id}", "{seq2_id}"+".R2.fastq.gz"),
+        nbcd_tsv        = os.path.join(main_dirs["seq1st"], "{flowcell}", "nbcds", "{chip}", "1_1.sbcds.sorted.tsv.gz"),
+        nbcd_png        = os.path.join(main_dirs["seq1st"], "{flowcell}", "nbcds", "{chip}", "1_1.sbcds.sorted.png"),
     output:
-        smatch_tsv      = os.path.join(main_dirs["align"], "{flowcell}", "{section}", "match", "{seq2_prefix}"+".R1.match.sorted.uniq.tsv.gz"),
-        smatch_summary  = os.path.join(main_dirs["align"], "{flowcell}", "{section}", "match", "{seq2_prefix}"+".R1.summary.tsv"),
-        smatch_count    = os.path.join(main_dirs["align"], "{flowcell}", "{section}", "match", "{seq2_prefix}"+".R1.counts.tsv"),
-        smatch_png      = os.path.join(main_dirs["align"], "{flowcell}", "{section}", "match", "{seq2_prefix}"+".R1.match.png"),
+        smatch_tsv      = os.path.join(main_dirs["match"], "{flowcell}", "{chip}", "{seq2_id}", "{seq2_id}"+".R1.match.sorted.uniq.tsv.gz"),
+        smatch_summary  = os.path.join(main_dirs["match"], "{flowcell}", "{chip}", "{seq2_id}", "{seq2_id}"+".R1.summary.tsv"),
+        smatch_count    = os.path.join(main_dirs["match"], "{flowcell}", "{chip}", "{seq2_id}", "{seq2_id}"+".R1.counts.tsv"),
+        smatch_png      = os.path.join(main_dirs["match"], "{flowcell}", "{chip}", "{seq2_id}", "{seq2_id}"+".R1.match.png"),
     params:
         # smatch
         skip_sbcd       = get_skip_sbcd(config), 
-        match_len       = config.get("preprocess", {}).get("smatch", {}).get('match_len', 27), 
+        match_len       = config.get("upstream", {}).get("smatch", {}).get('match_len', 27), 
         # visualization
-        visual_coord_per_pixel    = config.get("preprocess", {}).get("visualization", {}).get("drawxy",{}).get("coord_per_pixel", 1000),
-        visual_intensity_per_obs  = config.get("preprocess", {}).get("visualization", {}).get("drawxy",{}).get("intensity_per_obs", 50),
-        visual_icol_x             = config.get("preprocess", {}).get("visualization", {}).get("drawxy",{}).get("icol_x", 3),
-        visual_icol_y             = config.get("preprocess", {}).get("visualization", {}).get("drawxy",{}).get("col_y", 4),
+        visual_coord_per_pixel    = config.get("upstream", {}).get("visualization", {}).get("drawxy",{}).get("coord_per_pixel", 1000),
+        visual_intensity_per_obs  = config.get("upstream", {}).get("visualization", {}).get("drawxy",{}).get("intensity_per_obs", 50),
+        visual_icol_x             = config.get("upstream", {}).get("visualization", {}).get("drawxy",{}).get("icol_x", 3),
+        visual_icol_y             = config.get("upstream", {}).get("visualization", {}).get("drawxy",{}).get("col_y", 4),
         # module
         module_cmd        = get_envmodules_for_rule(["python", "imagemagick"], module_config)
     resources:
