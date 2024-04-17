@@ -37,7 +37,8 @@ logging.info(f" - Current job path: {job_dir}")
 
 # config: job
 logging.info(f" - Loading config file:")
-config = load_configs(job_dir, [("config_job.yaml", True)])
+#config = load_configs(job_dir, [("config_job.yaml", True)])
+configfile: "config_job.yaml"
 
 # config: env
 env_configfile = check_path(config.get("env_yml", os.path.join(smk_dir, "info", "config_env.yaml")),job_dir, strict_mode=True, flag="The environment config file")
