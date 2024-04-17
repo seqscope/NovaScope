@@ -33,4 +33,4 @@ rule a06_sdge2sdgeAR:
                                 unit_id=params.unit_id
             )
         else:
-            raise ValueError("Currently, we does not support boundary filtering.")       
+            raise ValueError("Currently, NovaScope does not support any filtering. If needed, the user can manually filter the data.")       

@@ -23,12 +23,14 @@ sys.path.append(local_scripts)
 from bricks import setup_logging, end_logging, configure_pandas_display, load_configs
 from bricks import check_input, check_path, create_dict, create_symlink, create_dirs_and_get_paths, get_last5_from_md5
 from bricks import list_outputfn_by_request
-from rule_general import assign_resource_for_align, get_envmodules_for_rule
-from rule_general import get_skip_sbcd, link_sdge_to_sdgeAR, find_major_axis
-from pipe_utils_upstream import read_config_for_runid, read_config_for_unitid, read_config_for_segment, read_config_for_hist, read_config_for_seq1, read_config_for_seq2
+from rule_general_novascope import assign_resource_for_align, get_envmodules_for_rule
+from rule_general_novascope import get_skip_sbcd, link_sdge_to_sdgeAR, find_major_axis
+from pipe_utils_novascope import read_config_for_runid, read_config_for_unitid, read_config_for_segment, read_config_for_hist, read_config_for_seq1, read_config_for_seq2
+from pipe_condout_novascope import output_fn_sbcdperfc, output_fn_sbcdperchip, output_fn_smatchperchip, output_fn_alignperrun, output_fn_sgeperrun, output_fn_histperrun, output_fn_segmperunit, output_fn_transperunit
 
-# set up display and log
+# set up 
 configure_pandas_display()
+configfile: "config_job.yaml"
 
 setup_logging(job_dir, smk_name+"-preprocess")
 
@@ -38,7 +40,7 @@ logging.info(f" - Current job path: {job_dir}")
 # config: job
 logging.info(f" - Loading config file:")
 #config = load_configs(job_dir, [("config_job.yaml", True)])
-configfile: "config_job.yaml"
+logging.info(f"     {job_dir}/config_job.yaml")
 
 # config: env
 env_configfile = check_path(config.get("env_yml", os.path.join(smk_dir, "info", "config_env.yaml")),job_dir, strict_mode=True, flag="The environment config file")
@@ -183,135 +185,16 @@ for _, row in df_seq2.iterrows():
 logging.info(f"\n")
 logging.info(f"4. Required output filenames.")
 
+# output files are generated based on the requests and extra conditions
 output_filename_conditions = [
-    # sbcd-per-flowcell
-    {
-        'flag': 'sbcd-per-flowcell',
-        'root': main_dirs["seq1st"],
-        'subfolders_patterns': [
-                                (["{flowcell}", "sbcds", "{seq1_id}", "manifest.tsv"], None),
-        ],
-        'zip_args': {
-            'flowcell':     [flowcell],
-            'seq1_id':      [seq1_id],
-        },
-    },
-    # sbcd-per-chip
-    {
-        'flag': 'sbcd-per-chip',
-        'root': main_dirs["seq1st"],
-        'subfolders_patterns': [
-                                (["{flowcell}", "nbcds", "{chip}", "1_1.sbcds.sorted.tsv.gz"], None),
-                                (["{flowcell}", "nbcds", "{chip}", "manifest.tsv"], None),
-                                (["{flowcell}", "nbcds", "{chip}", "1_1.sbcds.sorted.png"], None),
-        ],
-        'zip_args': {
-            'flowcell':      [flowcell],
-            'chip':          [chip],
-        },
-    },
-    # smatch-per-chip
-    {
-        'flag': 'smatch-per-chip',
-        'root': main_dirs["match"],
-        'subfolders_patterns': [
-                                (["{flowcell}", "{chip}", "{seq2_id}", "{seq2_id}"+".R1.match.sorted.uniq.tsv.gz"], None),
-                                (["{flowcell}", "{chip}", "{seq2_id}", "{seq2_id}"+".R1.summary.tsv"], None),
-                                (["{flowcell}", "{chip}", "{seq2_id}", "{seq2_id}"+".R1.counts.tsv"], None),
-                                (["{flowcell}", "{chip}", "{seq2_id}", "{seq2_id}"+".R1.match.png"], None),
-        ],
-        'zip_args': {
-            'flowcell':      df_seq2["flowcell"].values,
-            'chip':          df_seq2["chip"].values,
-            'seq2_id':       df_seq2["seq2_id"].values,  
-        },
-    },
-    # align-per-run
-    {
-        'flag': 'align-per-run',
-        'root': main_dirs["align"],
-        'subfolders_patterns': [
-                                (["{flowcell}", "{chip}", "{run_id}", "bam", "sttoolsSolo.out", "GeneFull", "raw", "barcodes.tsv.gz"], None),
-                                (["{flowcell}", "{chip}", "{run_id}", "bam", "sttoolsSolo.out", "GeneFull", "raw", "features.tsv.gz"], None),
-                                (["{flowcell}", "{chip}", "{run_id}", "bam", "sttoolsSolo.out", "GeneFull", "raw", "matrix.mtx.gz"], None),
-                                (["{flowcell}", "{chip}", "{run_id}", "bam", "sttoolsSolo.out", "Gene",     "raw", "matrix.mtx.gz"], None),
-                                (["{flowcell}", "{chip}", "{run_id}", "bam", "sttoolsSolo.out", "Velocyto", "raw", "spliced.mtx.gz"], None),
-                                (["{flowcell}", "{chip}", "{run_id}", "bam", "sttoolsSolo.out", "Velocyto", "raw", "unspliced.mtx.gz"], None),
-                                (["{flowcell}", "{chip}", "{run_id}", "bam", "sttoolsSolo.out", "Velocyto", "raw", "ambiguous.mtx.gz"], None),
-        ],
-        'zip_args': {
-            'flowcell':  [flowcell],
-            'chip':      [chip],
-            'run_id':    [run_id],  
-        },
-    },
-    # sge-per-run
-    {
-        'flag': 'sge-per-run',
-        'root': main_dirs["align"],
-        'subfolders_patterns': [
-                                (["{flowcell}", "{chip}", "{run_id}", "sge", "barcodes.tsv.gz"], None),
-                                (["{flowcell}", "{chip}", "{run_id}", "sge", "features.tsv.gz"], None),
-                                (["{flowcell}", "{chip}", "{run_id}", "sge", "matrix.mtx.gz"], None),
-                                (["{flowcell}", "{chip}", "{run_id}", "sge", "{run_id}.gene_full_mito.png"], None),
-                                (["{flowcell}", "{chip}", "{run_id}", "sge", "{run_id}.sge_match_sbcd.png"], None),
-                                (["{flowcell}", "{chip}", "{run_id}", "sge", "{run_id}.gene_visual.tar.gz"], None),
-                                (["{flowcell}", "{chip}", "{run_id}", "sge", "barcodes.minmax.tsv"], None),
-        ],
-        'zip_args': {
-            'flowcell':  [flowcell],
-            'chip':      [chip],
-            'run_id':    [run_id],  
-        },
-    },
-    # hist-per-run
-    {
-        'flag': 'hist-per-run',
-        'root': main_dirs["histology"],
-        'subfolders_patterns': [
-                                (["{flowcell}", "{chip}", "aligned", "{run_id}", "{hist_std_prefix}.tif"], None),
-                                (["{flowcell}", "{chip}", "aligned", "{run_id}", "{hist_std_prefix}-fit.tif"], None),
-        ],
-        'zip_args': {
-            'flowcell':         [flowcell],
-            'chip':             [chip],
-            'run_id':           [run_id],  
-            'hist_std_prefix':  [hist_std_prefix],
-        },
-    },
-    # segment-per-unit
-    {
-            'flag': 'segment-per-unit',
-            'root': main_dirs["analysis"],
-            'subfolders_patterns': [
-                
-                                    ([ "{run_id}", "{unit_id}", "segment", "{sf}.d_{tw}.raw_{seg_nmove}", "barcodes.tsv.gz"], None),
-                                    ([ "{run_id}", "{unit_id}", "segment", "{sf}.d_{tw}.raw_{seg_nmove}", "features.tsv.gz"], None),
-                                    ([ "{run_id}", "{unit_id}", "segment", "{sf}.d_{tw}.raw_{seg_nmove}", "matrix.mtx.gz"  ], None),                     
-            ],
-            'zip_args': {
-                'run_id':       df_segment_char["run_id"].values,  
-                'unit_id':      df_segment_char["unit_id"].values,
-                'sf':           df_segment_char["solofeature"].values,
-                'tw':           df_segment_char["trainwidth"].values,
-                'seg_nmove':    df_segment_char['segmentmove'].values,
-            },
-    },
-    # transcript-per-unit
-    {
-            'flag': 'transcript-per-unit',
-            'root': main_dirs["analysis"],
-            'subfolders_patterns': [
-                
-                                    ([ "{run_id}", "{unit_id}", "preprocess", "{unit_id}.merged.matrix.tsv.gz"  ], None),
-                                    ([ "{run_id}", "{unit_id}", "preprocess", "{unit_id}.feature.clean.tsv.gz"], None),
-                                    ([ "{run_id}", "{unit_id}", "preprocess", "{unit_id}.feature.tsv.gz"      ], None),                     
-            ],
-            'zip_args': {
-                'run_id':       df_segment_char["run_id"].values,  
-                'unit_id':      df_segment_char["unit_id"].values,
-            },
-    },
+    output_fn_sbcdperfc(main_dirs, flowcell, seq1_id),
+    output_fn_sbcdperchip(main_dirs, flowcell, chip),
+    output_fn_smatchperchip(main_dirs, df_seq2),
+    output_fn_alignperrun(main_dirs, flowcell, chip, run_id),
+    output_fn_sgeperrun(main_dirs, flowcell, chip, run_id),
+    output_fn_histperrun(main_dirs, flowcell, chip, run_id, hist_std_prefix),
+    output_fn_segmperunit(main_dirs, df_segment_char),
+    output_fn_transperunit(main_dirs, df_segment_char),
 ]
 
 requested_files=list_outputfn_by_request(output_filename_conditions, request, debug=True)
