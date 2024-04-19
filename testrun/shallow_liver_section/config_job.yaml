@@ -19,7 +19,10 @@ input:
       fastq_R1: "/path/to/input/dir/9748-YK-3_CGAGGCTG_S3_R1_001.fastq.gz"
       fastq_R2: "/path/to/input/dir/9748-YK-3_CGAGGCTG_S3_R2_001.fastq.gz"
   ## IMPORTANT: REPLACE THE FOLLOWING VARIABLE BEFORE USE
-  histology: "/path/to/input/dir/histology.tif"
+  histology: 
+    - path: "/path/to/input/dir/histology.tif"
+      magnification: 10X
+      figtype: "hne"
 
 ## IMPORTANT: REPLACE THE FOLLOWING VARIABLE BEFORE USE
 output: "/path/to/output/dir"

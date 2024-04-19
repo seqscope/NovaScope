@@ -44,7 +44,10 @@ input:
       fastq_R1: "/path/to/input/dir/seq2nd/fastqs/B08Cv3b/B08Cv3b.R1.fastq.gz"
       fastq_R1: "/path/to/input/dir/seq2nd/fastqs/B08Cv3b/B08Cv3b.R2.fastq.gz"
   ## IMPORTANT: REPLACE THE FOLLOWING VARIABLE BEFORE USE
-  histology: "/path/to/input/dir/histology.tif"
+  histology: 
+    - path: "/path/to/input/dir/histology.tif"
+      magnification: 10X
+      figtype: "hne"
 
 ## IMPORTANT: REPLACE THE FOLLOWING VARIABLE BEFORE USE
 output: "/path/to/output/dir"
