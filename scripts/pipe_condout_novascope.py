@@ -92,7 +92,7 @@ def output_fn_sgeperrun(main_dirs, flowcell, chip, run_id):
     }
     return out_fn
 
-def output_fn_histperrun(main_dirs, flowcell, chip, run_id, hist_std_prefix):
+def output_fn_histperrun(main_dirs, df_hist):
     out_fn = {
         'flag': 'hist-per-run',
         'root': main_dirs["histology"],
@@ -101,10 +101,10 @@ def output_fn_histperrun(main_dirs, flowcell, chip, run_id, hist_std_prefix):
                                 (["{flowcell}", "{chip}", "aligned", "{run_id}", "{hist_std_prefix}-fit.tif"], None),
         ],
         'zip_args': {
-            'flowcell':         [flowcell],
-            'chip':             [chip],
-            'run_id':           [run_id],  
-            'hist_std_prefix':  [hist_std_prefix],
+            'flowcell':         df_hist["flowcell"].values,
+            'chip':             df_hist["chip"].values,
+            'run_id':           df_hist["run_id"].values,  
+            'hist_std_prefix':  df_hist["hist_std_prefix"].values, 
         },
     }
     return out_fn
@@ -115,7 +115,6 @@ def output_fn_segmperunit(main_dirs, df_segment_char):
             'flag': 'segment-per-unit',
             'root': main_dirs["analysis"],
             'subfolders_patterns': [
-                
                                     ([ "{run_id}", "{unit_id}", "segment", "{sf}.d_{tw}.raw_{seg_nmove}", "barcodes.tsv.gz"], None),
                                     ([ "{run_id}", "{unit_id}", "segment", "{sf}.d_{tw}.raw_{seg_nmove}", "features.tsv.gz"], None),
                                     ([ "{run_id}", "{unit_id}", "segment", "{sf}.d_{tw}.raw_{seg_nmove}", "matrix.mtx.gz"  ], None),                     
@@ -135,7 +134,6 @@ def output_fn_transperunit(main_dirs, df_segment_char):
             'flag': 'transcript-per-unit',
             'root': main_dirs["analysis"],
             'subfolders_patterns': [
-                
                                     ([ "{run_id}", "{unit_id}", "preprocess", "{unit_id}.merged.matrix.tsv.gz"  ], None),
                                     ([ "{run_id}", "{unit_id}", "preprocess", "{unit_id}.feature.clean.tsv.gz"], None),
                                     ([ "{run_id}", "{unit_id}", "preprocess", "{unit_id}.feature.tsv.gz"      ], None),                     

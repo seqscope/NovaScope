@@ -1,64 +1,104 @@
 import pandas as pd
 import logging, os, sys
 
-local_scripts = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(local_scripts)
+novascope_scripts = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(novascope_scripts)
 from bricks import check_input, check_path, create_dict, get_last5_from_md5, create_symlink, log_dataframe
+from bricks import load_configs
 
+def read_config_for_ini(config,job_dir,smk_dir):
+    logging.info(f"1. Reading input:")
+    logging.info(f" - Current job path: {job_dir}")
 
-def read_config_for_seq1(config, job_dir):
+    # config: job
+    logging.info(f" - Loading config file:")
+    #config = load_configs(job_dir, [("config_job.yaml", True)])
+    logging.info(f"     {job_dir}/config_job.yaml")
+
+    # config: env
+    env_configfile = check_path(config.get("env_yml", os.path.join(smk_dir, "info", "config_env.yaml")), job_dir, strict_mode=True, flag="The environment config file")
+    env_config = load_configs(None, [(env_configfile, True)])
+
+    # - envmodules
+    module_config = env_config.get("envmodules", None)
+    logging.info(f" - envmodules: ")
+    logging.info(f"     {module_config}")
+
+    # - ref  
+    sp2alignref = env_config.get("ref", {}).get("align", None)
+    sp2geneinfo = env_config.get("ref", {}).get("geneinfo", None)
+
+    # - python env
+    pyenv  = env_config.get("pyenv", None)
+    assert pyenv is not None, "Please provide a valid python environment."
+    assert os.path.exists(pyenv), f"Python environment does not exist: {pyenv}"
+
+    python = os.path.join(pyenv, "bin", "python")
+    assert os.path.exists(python), f"Python does not exist in your python environment: {python}"
+
+    return env_config, module_config, sp2alignref, sp2geneinfo, python, pyenv
+
+def read_config_for_seq1(config, job_dir, main_dirs):
     logging.info(f" - Seq1 info")
-
+    arch_seq1   = config.get('upstream', {}).get('stdfastq', {}).get('seq1st', True)
     # temp
+    flowcell= config["input"]["flowcell"]
     chip = config["input"]["chip"]
-    
     # seq1_id
     seq1_id = config.get('input', {}).get('seq1st', {}).get('id', None)
-
     if seq1_id is None:
         lane = config.get('input', {}).get('lane', {"A": "1", "B": "2", "C": "3", "D": "4"}.get(chip[-1], None))
         if lane is None:
             raise ValueError("Please provide a valid lane.")
         seq1_id = f"L{lane}"
-
     # seq1_fq_raw
-    seq1_fq_raw = check_path(config.get('input', {}).get('seq1st', {}).get('fastq', None),job_dir, strict_mode=True)
-
-    # sc2seq1
-    sc2seq1 = {chip:seq1_id}
-
+    seq1_fq_raw = check_path(config.get('input', {}).get('seq1st', {}).get('fastq', None),job_dir, strict_mode=arch_seq1)
     logging.info(f"     Seq1 ID: {seq1_id}")
     logging.info(f"     Seq1 Fastq: {seq1_fq_raw}")
+    # organize the fastq files
+    if arch_seq1:
+        logging.info("     Organize the input FASTQ files and standardize the file names.")
+        seq1_fq_std=os.path.join(main_dirs["seq1st"], flowcell, "fastqs", seq1_id+".fastq.gz")
+        os.makedirs(os.path.dirname(seq1_fq_std), exist_ok=True)
+        create_symlink(seq1_fq_raw, seq1_fq_std, silent=True)
+    # sc2seq1
+    sc2seq1 = {chip:seq1_id}
     return seq1_id, seq1_fq_raw, sc2seq1
 
-def read_config_for_seq2(config, job_dir, log_option=False):
-    df_seq2 = pd.DataFrame(config.get('input', {}).get('seq2nd', []))
-
+def read_config_for_seq2(config, job_dir, main_dirs, log_option=True):
+    logging.info(f" - Seq2nd info:")
+    arch_seq2   = config.get('upstream', {}).get('stdfastq', {}).get('seq2nd', True)
     # temp
     flowcell= config["input"]["flowcell"]
     chip = config["input"]["chip"]
-
     #df
+    df_seq2 = pd.DataFrame(config.get('input', {}).get('seq2nd', []))
     df_seq2['flowcell'] = flowcell
     df_seq2['chip'] = chip
-    df_seq2['seq2_id'] = df_seq2.apply(lambda x: x.get('id') or f"{flowcell}.{chip}.{get_last5_from_md5(check_path(x.get('fastq_R1'), job_dir))}", axis=1)
-    df_seq2['seq2_fqr1_raw'] = df_seq2['fastq_R1'].apply(lambda x: check_path(x, job_dir))
-    df_seq2['seq2_fqr2_raw'] = df_seq2['fastq_R2'].apply(lambda x: check_path(x, job_dir))
-
+    df_seq2['seq2_id'] = df_seq2.apply(lambda x: x.get('id') or f"{flowcell}.{chip}.{get_last5_from_md5(check_path(x.get('fastq_R1'), job_dir, strict_mode=arch_seq2))}", axis=1)
+    df_seq2['seq2_fqr1_raw'] = df_seq2['fastq_R1'].apply(lambda x: check_path(x, job_dir, strict_mode=arch_seq2))
+    df_seq2['seq2_fqr2_raw'] = df_seq2['fastq_R2'].apply(lambda x: check_path(x, job_dir, strict_mode=arch_seq2))
+    df_seq2["seq2_fqr1_std"] = df_seq2.apply(lambda row: os.path.join(main_dirs["seq2nd"],row["seq2_id"], row["seq2_id"]+".R1.fastq.gz"), axis=1)
+    df_seq2["seq2_fqr2_std"] = df_seq2.apply(lambda row: os.path.join(main_dirs["seq2nd"],row["seq2_id"], row["seq2_id"]+".R2.fastq.gz"), axis=1)
     if log_option:
-        logging.info(f" - Seq2nd info:")
         for _,row in df_seq2.iterrows():
-            logging.info(f"     Seq2nd pair id: {row['seq2_id']}")
+            logging.info(f"   - Seq2nd pair id: {row['seq2_id']}")
             logging.info(f"                 R1: {row['seq2_fqr1_raw']}")
             logging.info(f"                 R2: {row['seq2_fqr2_raw']}")
-
+    # organize the fastq files
+    if arch_seq2:
+        logging.info("     Organize the input FASTQ files and standardize the file names.")
+        for _, row in df_seq2.iterrows():
+            os.makedirs(os.path.dirname(row["seq2_fqr1_std"]), exist_ok=True)
+            create_symlink(row["seq2_fqr1_raw"], row["seq2_fqr1_std"],silent=True)
+            create_symlink(row["seq2_fqr2_raw"], row["seq2_fqr2_std"],silent=True)
     return df_seq2
 
-def read_config_for_runid(config, job_dir, df_seq2=None):
+def read_config_for_runid(config, job_dir, main_dirs, df_seq2=None):
     run_id = config.get("input", {}).get("run_id", None)
 
     if df_seq2 is None:
-        df_seq2 = read_config_for_seq2(config, job_dir)
+        df_seq2 = read_config_for_seq2(config, job_dir, main_dirs, log_option=False)
     
     if run_id is None:
         # get run_id from seq2nd info
@@ -134,7 +174,6 @@ def read_config_for_segment(config, run_id, unit_id, log_option=False):
                 "unit_id": [unit_id]
             }
             )
-    
     # mu_scale
     mu_scale = config.get("downstream", {}).get("reformat",{}).get("mu_scale", None)
     if mu_scale is None:
@@ -164,36 +203,42 @@ def read_config_for_keychar(key_char_info, run_id, unit_id, log_option=False):
         logging.info(f" ")
         log_dataframe(df_key_char, log_message=" - Downstream key character info:")
 
+#================================================================================================
 
-def read_config_for_hist(config, job_dir, main_dir_histology):
+# Histology
+
+def read_config_for_hist(config, job_dir, main_dirs):
+    # read in with sanity check
     logging.info(f" - Histology file: Loading")
+    hist_info = config.get("input",{}).get("histology", None)
+    if hist_info is None:
+        raise ValueError("Please provide a valid histology file when requesting 'hist-per-run' or 'cart-per-hist'...")
+    df_hist = pd.DataFrame(hist_info)
+    if df_hist["path"].isnull().any():
+        raise ValueError("Please provide a valid histology file when requesting 'hist-per-run' or 'cart-per-hist'...")
+    # add prefix
+    df_hist["flowcell"]=config["input"]["flowcell"]
+    df_hist["flowcell_abbr"]=df_hist["flowcell"].apply(lambda x: x.split("-")[0])
+    df_hist["chip"]=config["input"]["chip"]
+    df_hist["species"]=config["input"]["species"]
+    df_hist["magnification"]=df_hist["magnification"].fillna("10X")
+    df_hist["figtype"]=df_hist["figtype"].fillna("hne")
+    df_hist["hist_std_prefix"]=df_hist["magnification"]+df_hist["flowcell_abbr"]+"-"+df_hist["chip"]+"-"+df_hist["species"]+"-"+df_hist["figtype"]
+    # add paths and archive the files
+    df_hist["hist_raw_inputpath"] = df_hist["path"].apply(lambda x: check_path(x, job_dir, strict_mode=True))   # hist_raw_inputpath is the real path
+    df_hist["hist_raw_stddir"] = df_hist.apply(lambda x: os.path.join(main_dirs["histology"], x["flowcell"], x["chip"], "raw"), axis=1)
+    df_hist["hist_raw_stddir"].apply(lambda x: os.makedirs(x, exist_ok=True))
+    df_hist["hist_raw_stdpath"] = df_hist.apply(lambda x: os.path.join(x["hist_raw_stddir"], x["hist_std_prefix"]+".tif"), axis=1)
+    # for each row if real path of row['hist_raw_inputpath'] is not equal to row['hist_raw_stdpath'], create symlink
+    df_hist.apply(lambda row: create_symlink(row['hist_raw_inputpath'], row['hist_raw_stdpath'], silent=True) if row['hist_raw_inputpath'] != row['hist_raw_stdpath'] else None, axis=1)
+    for _,row in df_hist.iterrows():
+        logging.info(f"    - histology path: {row['path']}")
+        logging.info(f"            realpath: {row['hist_raw_inputpath']}")
+        logging.info(f"       magnification: {row['magnification']}")
+        logging.info(f"         figure type: {row['figtype']}")
+    df_hist = df_hist[["flowcell", "chip", "hist_std_prefix"]]
+    return df_hist
 
-    # std prefix according to historef
-    flowcell = config["input"]["flowcell"]
-    chip = config["input"]["chip"]
-    species = config["input"]["species"]
-    
-    hist_magn = config.get("histology",{}).get("magnification","10X")
-    flowcell_abbr = config.get("input",{}).get("flowcell").split("-")[0]
-    hist_type = check_input(config.get("histology",{}).get("figtype","hne"), ["hne","dapi","fl"], "Histology figure type")
-    
-    hist_std_prefix = f"{hist_magn}{flowcell_abbr}-{chip}-{species}-{hist_type}"
 
-    # input path
-    hist_raw_inputpath = check_path(config.get("input",{}).get('histology', None), job_dir, strict_mode=False) 
 
-    # standard path
-    hist_raw_stddir = os.path.join(main_dir_histology, flowcell, chip, "raw")
-    os.makedirs(hist_raw_stddir, exist_ok=True)
-    hist_raw_stdpath   = os.path.join(hist_raw_stddir, hist_std_prefix+".tif")
-
-    # examine the input and archive the file when needed
-    if hist_raw_inputpath is not None: # If histology file is provided, create a symlink to the standard folder.
-        logging.info(f"     Histology file: {os.path.realpath(hist_raw_inputpath)}")
-        create_symlink(hist_raw_inputpath, hist_raw_stdpath, handle_existing_output="replace", silent=True)
-    elif os.path.exists(hist_raw_stdpath): # When not provided, check if the standard file exists.
-        logging.info(f"     Histology file: {os.path.realpath(hist_raw_stdpath)}")
-    else:
-        raise ValueError(f"Please provide a valid histology file. None is found in {hist_raw_stdpath}")
-
-    return hist_std_prefix
+   
