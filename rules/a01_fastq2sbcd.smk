@@ -18,7 +18,7 @@ rule a01_fastq2sbcd:
         {params.module_cmd}
         source {pyenv}/bin/activate
                 
-        command time -v {python} {local_scripts}/rule_a1.build-spatial-barcode-dict.py \
+        command time -v {python} {novascope_scripts}/rule_a1.build-spatial-barcode-dict.py \
             --spatula {spatula} \
             --fq {input.seq1_fq} \
             --format {params.sbcd_format} \

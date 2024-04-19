@@ -1,7 +1,7 @@
 # Rule `historef`
 
 ## Purpose
-The goal of `historef` rule is to match the histology image with the spatial coordinates of the spatial digital gene expression matrix (SGE). This is achieved by aligning fiducial markers observable in both the histology image and the [composite image](./align.md#3-a-comprehensive-view-of-sbcd-smatch-and-sge-images) of "sbcd", "smatch", and "sge" images.
+The goal of `historef` rule is to match the histology image with the spatial coordinates of the spatial digital gene expression matrix (SGE). This is achieved by aligning fiducial markers observable in both the histology image and the [composite image](./align.md#3-a-comprehensive-view-of-sbcd-smatch-and-sge-images) of "sbcd", "smatch", and "sge" images. The current pipeline allows multiple input histology files.
 
 ## Input Files
 
@@ -24,10 +24,10 @@ The referenced histology file, which is in [GeoTIFF](https://en.wikipedia.org/wi
 **File Naming Convention**:
 
 ```
-<histology_resolution>X<flowcell_abbreviation>-<chip_id>-<species>-<histology_figtype>.tif"
+<magnification><flowcell_abbreviation>-<chip_id>-<species>-<figtype>.tif"
 ```
 
- * The `histology_resolution` and `histology_figtype` are derived from the `resolution` and `figtype` fields within the `histology` section of the [job configuration](../../getting_started/job_config.md) file.
+ * The `magnification` and `figtype` are derived from the `magnification` and `figtype` fields within the `histology` in the `input` section of the [job configuration](../../getting_started/job_config.md) file.
  * The `flowcell_abbreviation` is derived by splitting the `flowcell_id`, which is sourced from the `flowcell` field in `input` section of the [job configuration](../../getting_started/job_config.md) file, by "-" and taking the first part.
 
 **File Visualization**:
@@ -42,15 +42,15 @@ For an in-depth examination, access the full-size referenced histology file with
 
 ### (2) A Re-sized Referenced Histology File
 **Description**:
-An TIFF file shares the identical dimensions with both the ["smatch" image](./smatch.md#2-a-smatch-image) and the ["sge" image](./dge2sdge.md#2-an-sge-image), acilitating the comparison of consistency between the histology file and these images.
+A TIFF file shares the identical dimensions with both the ["smatch" image](./smatch.md#2-a-smatch-image) and the ["sge" image](./dge2sdge.md#2-an-sge-image), acilitating the comparison of consistency between the histology file and these images.
 
 **File Naming Convention**:
 
 ```
-<histology_resolution>X<flowcell_abbreviation>-<chip_id>-<species>-<histology_figtype>-fit.tif"
+<magnification><flowcell_abbreviation>-<chip_id>-<species>-<figtype>-fit.tif"
 ```
 
- * The `histology_resolution` and `histology_figtype` are derived from the `resolution` and `figtype` fields within the `histology` section of the [job configuration](../../getting_started/job_config.md) file.
+ * The `magnification` and `figtype` are derived from the `magnification` and `figtype` fields within the `histology` section of the [job configuration](../../getting_started/job_config.md) file.
  * The `flowcell_abbreviation` is derived by splitting the `flowcell_id`, which is sourced from the `flowcell` field in `input` section of the [job configuration](../../getting_started/job_config.md) file, by "-" and taking the first part.
 
 **File Visualization**:
@@ -69,15 +69,15 @@ The following parameter in the [job configuration](../../getting_started/job_con
 
 ```yaml
 histology:
-    resolution: 10
-    figtype: "hne"
+    min_buffer_size: 1000   
+    max_buffer_size: 2000
+    step_buffer_size: 100
+    raster_channel: 1      
 ```
 
 * **The `histology` Parameters**
-    The `resolution` and `figtype` indicates the resolution and type of the input histology file. The [`historef`](https://github.com/seqscope/historef) currently support the following types:
-    * `"hne"`: [Hematoxylin and Eosin (H&E) stained](https://en.wikipedia.org/wiki/H%26E_stain) histology images;
-    * `"dapi"`: [DAPI or 4',6-diamidino-2-phenylindole stained](https://en.wikipedia.org/wiki/DAPI) histology images;
-    * `"fl"`: Fluorescence stained histology images.
+    * `min_buffer_size`, `max_buffer_size` and `step_buffer_size` will create a list of buffer size help historef to do the alignment. For example, the default `min_buffer_size`, `max_buffer_size` and `step_buffer_size` are 1000, 2000, and 100, respectively, and this will return a buffer size list of 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000.
+    * `raster_channel` specifies which channel from the ["sge" image](./dge2sdge.md#2-an-sge-image) will used for historef alignment
 
 ## Dependencies
 Rule `historef` commences only after Rule [`dge2sdge`](./dge2sdge.md) has successfully executed. An overview of the rule dependencies are provided in the [Workflow Structure](../../home/workflow_structure.md).

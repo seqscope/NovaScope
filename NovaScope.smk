@@ -18,49 +18,24 @@ smk_dir = os.path.dirname(workflow.snakefile)
 #smk_dir="/nfs/turbo/sph-hmkang/index/data/weiqiuc/NovaScope"
 job_dir = os.getcwd()
 
-local_scripts   = os.path.join(smk_dir,"scripts")
-sys.path.append(local_scripts)
+novascope_scripts   = os.path.join(smk_dir,"scripts")
+sys.path.append(novascope_scripts)
 from bricks import setup_logging, end_logging, configure_pandas_display, load_configs
 from bricks import check_input, check_path, create_dict, create_symlink, create_dirs_and_get_paths, get_last5_from_md5
 from bricks import list_outputfn_by_request
 from rule_general_novascope import assign_resource_for_align, get_envmodules_for_rule
 from rule_general_novascope import get_skip_sbcd, link_sdge_to_sdgeAR, find_major_axis
-from pipe_utils_novascope import read_config_for_runid, read_config_for_unitid, read_config_for_segment, read_config_for_hist, read_config_for_seq1, read_config_for_seq2
+from pipe_utils_novascope import read_config_for_ini, read_config_for_runid, read_config_for_unitid, read_config_for_segment, read_config_for_hist, read_config_for_seq1, read_config_for_seq2
 from pipe_condout_novascope import output_fn_sbcdperfc, output_fn_sbcdperchip, output_fn_smatchperchip, output_fn_alignperrun, output_fn_sgeperrun, output_fn_histperrun, output_fn_segmperunit, output_fn_transperunit
 
 # set up 
 configure_pandas_display()
 configfile: "config_job.yaml"
 
-setup_logging(job_dir, smk_name+"-preprocess")
+setup_logging(job_dir, smk_name+"_read-in")
 
-logging.info(f"1. Reading input:")
-logging.info(f" - Current job path: {job_dir}")
-
-# config: job
-logging.info(f" - Loading config file:")
-#config = load_configs(job_dir, [("config_job.yaml", True)])
-logging.info(f"     {job_dir}/config_job.yaml")
-
-# config: env
-env_configfile = check_path(config.get("env_yml", os.path.join(smk_dir, "info", "config_env.yaml")),job_dir, strict_mode=True, flag="The environment config file")
-env_config = load_configs(None, [(env_configfile, True)])
-
-module_config = env_config.get("envmodules", None)
-logging.info(f" - envmodules: ")
-logging.info(f"     {module_config}")
-
-# - ref  
-sp2alignref = env_config.get("ref", {}).get("align", None)
-sp2geneinfo = env_config.get("ref", {}).get("geneinfo", None)
-
-# - python env (py3.10 and py3.9)
-pyenv  = env_config.get("pyenv", None)
-assert pyenv is not None, "Please provide a valid python environment."
-assert os.path.exists(pyenv), f"Python environment does not exist: {pyenv}"
-
-python = os.path.join(pyenv, "bin", "python")
-assert os.path.exists(python), f"Python does not exist in your python environment: {python}"
+# - env
+env_config, module_config, sp2alignref, sp2geneinfo, python, pyenv = read_config_for_ini(config,job_dir,smk_dir)
 
 # - tools
 spatula  = env_config.get("tools", {}).get("spatula",   "spatula")
@@ -119,7 +94,9 @@ output_filename_conditions = []
 
 # per-unit or per-run:
 if any(task in request for task in ["align-per-run", "sge-per-run", "hist-per-run", "segment-per-unit", "transcript-per-unit"]):
-    run_id, rid2seq2 = read_config_for_runid(config, job_dir)
+    run_id, rid2seq2 = read_config_for_runid(config, job_dir, main_dirs)
+else:
+    run_id = None
 
 if any(task in request for task in["segment-per-unit","transcript-per-unit" ]):
     # unit ID: to distinguish the default sge and the sge with manual boundary filtering.
@@ -128,6 +105,7 @@ if any(task in request for task in["segment-per-unit","transcript-per-unit" ]):
     # segment info (multiple pairs)
     df_segment_char, mu_scale = read_config_for_segment(config, run_id, unit_id)
 else:
+    unit_id = None
     df_segment_char = pd.DataFrame({
         'run_id': pd.Series(dtype='object'),
         'unit_id': pd.Series(dtype='object'),
@@ -137,40 +115,26 @@ else:
     })
 
 if "hist-per-run" in request:
-    hist_std_prefix = read_config_for_hist(config, job_dir, main_dirs["histology"])
+    df_hist = read_config_for_hist(config, job_dir, main_dirs)
+    df_hist["run_id"] = run_id
 else:
-    hist_std_prefix = None
+    logging.info(f" - Histology file: Skipping")
+    df_hist = pd.DataFrame({
+        'flowcell': pd.Series(dtype='object'),
+        'chip': pd.Series(dtype='object'),
+        'run_id': pd.Series(dtype='object'),
+        'hist_std_prefix': pd.Series(dtype='object'),
+    })
 
 # per-chip:
 # - smatch-per-chip, sbcd-per-chip (and above)
-if any(task in request for task in ["smatch-per-chip", "sbcd-per-chip", "align-per-run", "sge-per-run", "hist-per-run", "segment-per-unit", "transcript-per-unit"]):
-    # seq2 info (multiple pairs)
-    df_seq2 = read_config_for_seq2(config, job_dir, log_option=True)
-else:
-    df_seq2 = pd.DataFrame({
-        'flowcell': pd.Series(dtype='object'),
-        'chip': pd.Series(dtype='object'),
-        'seq2_id': pd.Series(dtype='object'),
-    })
+df_seq2 = read_config_for_seq2(config, job_dir, main_dirs, log_option=True)
 
+# per-flowcell:
 # - all requests will need seq1 info
-seq1_id, seq1_fq_raw, sc2seq1 = read_config_for_seq1(config, job_dir)
+seq1_id, seq1_fq_raw, sc2seq1 = read_config_for_seq1(config, job_dir, main_dirs)
 
-# STD fq files  (TO-DO: do this only when the std file is needed)
-logging.info(f" - Standardzing fastq file names.")
-
-logging.info("     Creating symlinks to standardize the file names for seq1.")
-seq1_fq_std=os.path.join(main_dirs["seq1st"], flowcell, "fastqs", seq1_id+".fastq.gz")
-os.makedirs(os.path.dirname(seq1_fq_std), exist_ok=True)
-create_symlink(seq1_fq_raw, seq1_fq_std, silent=True)
-
-logging.info("     Creating symlinks to standardize the file names for seq2.")
-df_seq2["seq2_fqr1_std"]=df_seq2.apply(lambda row: os.path.join(main_dirs["seq2nd"],row["seq2_id"], row["seq2_id"]+".R1.fastq.gz"), axis=1)
-df_seq2["seq2_fqr2_std"]=df_seq2.apply(lambda row: os.path.join(main_dirs["seq2nd"],row["seq2_id"], row["seq2_id"]+".R2.fastq.gz"), axis=1)
-for _, row in df_seq2.iterrows():
-    os.makedirs(os.path.dirname(row["seq2_fqr1_std"]), exist_ok=True)
-    create_symlink(row["seq2_fqr1_raw"], row["seq2_fqr1_std"],silent=True)
-    create_symlink(row["seq2_fqr2_raw"], row["seq2_fqr2_std"],silent=True)
+# -----
 
 #==============================================
 #
@@ -192,7 +156,7 @@ output_filename_conditions = [
     output_fn_smatchperchip(main_dirs, df_seq2),
     output_fn_alignperrun(main_dirs, flowcell, chip, run_id),
     output_fn_sgeperrun(main_dirs, flowcell, chip, run_id),
-    output_fn_histperrun(main_dirs, flowcell, chip, run_id, hist_std_prefix),
+    output_fn_histperrun(main_dirs, df_hist),
     output_fn_segmperunit(main_dirs, df_segment_char),
     output_fn_transperunit(main_dirs, df_segment_char),
 ]

@@ -25,23 +25,33 @@ input:
   flowcell: <flowcell_id>                       ## REQUIRED FIELD (e.g. N3-HG5MC)
   chip: <chip_id>                               ## REQUIRED FIELD (e.g. B08C)
   species: <species_info>                       ## REQUIRED FIELD (e.g. "mouse")
-  lane: <lane_id>                               ## Optional. Auto-assigned based on chip_id's last letter if absent (A->1, B->2, C->3, D->4).
+  lane: <lane_id>                               ## Optional. Defaults to auto-assignment from the last character of chip_id (A->1, B->2, C->3, D->4) if absent.
   seq1st:                                       ## 1st-seq information
     id: <seq1st_id>                             ## Optional. Defaults to "L{lane}" if absent.
     fastq: <path_to_seq1st_fastq_file>          ## REQUIRED FIELD
     layout: <path_to_sbcd_layout>               ## Optional. Default based on chip_id
   seq2nd:                                       ## 2nd-seq information. See the "Detailed Description of Individual Fields" below.
-    - id: <seq2nd_pair1_id>                     ## Optional - for the first pair of FASTQs. Must be UNIQUE across all 2nd-seq FASTQ pairs, if provided.
+    ## specify the first pair of FASTQs.
+    - id: <seq2nd_pair1_id>                     ## Optional. If provided, must be unique among all 2nd-seq pairs. Defaults to automatic assignment based on fastq_R1 if absent (see details below).
       fastq_R1: <path_to_seq2nd_pair1_fastq_Read1_file> ## REQUIRED FIELD - path to Read 1 FASTQ file,
-      fastq_R2: <path_to_seq2nd_pair1_fastq_Read2_file> ## REQUIRED FIELD - Read 2 FASTQ file
-    - id: <seq2nd_pair2_id>                     ## Optional - if there are >1 pair of FASTQs
+      fastq_R2: <path_to_seq2nd_pair1_fastq_Read2_file> ## REQUIRED FIELD - path to Read 2 FASTQ file
+    ## if there is a second pair of FASTQs ...
+    - id: <seq2nd_pair2_id>                     
       fastq_R1: <path_to_seq2nd_pair2_fastq_Read1_file>
       fastq_R2: <path_to_seq2nd_pair2_fastq_Read2_file>
-    # ... (if there are more 2nd-seq FASTQ files)
+    ## ... (if there are more 2nd-seq FASTQ files)
   run_id: <run_id>                              ## Optional. See the "Detailed Description of Individual Fields" below.
   unit_id: <unit_id>                            ## Optional. See the "Detailed Description of Individual Fields" below.
-  histology: <path_to_the_input_histology_file> ## Optional. Only if histology alignment is needed.
-
+  histology:                                    ## Histology information. Only required if histology alignment is needed. See the "Detailed Description of Individual Fields" below.
+    ## specify the first input histology file
+    - path: <path_to_1st_histology_file>        ## REQUIRED FIELD - path to the input histology file
+      magnification: <magnification>            ## Optional - specify the magnification of the input histology file, default is "10X"
+      figtype: <type>                           ## Optional - specify the type of the histology file. Options: "hne", "dapi", and "fl". 
+    ## if there is a second input histology file ...
+    - path: <path_to_2nd_histology_file>       
+      magnification: <magnification>                         
+      figtype: <type>   
+    ## ...                           
 ## Output
 output: <output_directory>                      ## REQUIRED FIELD (e.g. /path/to/output/directory)
 request:                                        ## See the "Detailed Description of Individual Fields" below.
@@ -102,9 +112,11 @@ env_yml: <path_to_config_env.yaml_file>         ## If absent, NovaScope use the 
 #      icol_x: 3
 #      icol_y: 4
 #
-#histology:                 ## specify the parameters for histology alignment using historef
-#  magnification: 10X       ## specify the magnification of the input histology file
-#  figtype: "hne"           ## Options: "hne", "dapi", and "fl".
+#histology:                  ## specify the parameters for histology alignment using historef
+#    min_buffer_size: 1000   ## min_buffer_size, max_buffer_size and step_buffer_size will create a list of buffer size help historef to do the alignment
+#    max_buffer_size: 2000
+#    step_buffer_size: 100
+#    raster_channel: 1       ## roaster channel used for historef alignment
 #
 #downstream:                 
 #  gene_filter:             ## Specify the criteria for gene filtering in a manner compatible with regular expressions, which will be applied when creating the FICTURE-compatible SGE and hexagonal SGE.
@@ -158,6 +170,11 @@ env_yml: <path_to_config_env.yaml_file>         ## If absent, NovaScope use the 
         
         Users who prefer to reformat manually modified SGEs should define their own `unit_id`. We recommend incorporating `run_id` into the `unit_id` to maintain a clear trace of the dataset lineage.
 
+* **`histology`**: NovaScope allows multiple input histology files for alignment. However, it is important to note that the magnification and type of each histology file serve as identifiers. Ensure that no two input histology files share the same magnification and type. Currently, [historef](https://github.com/seqscope/historef) supports the following types:
+    * `"hne"`: [Hematoxylin and Eosin (H&E) stained](https://en.wikipedia.org/wiki/H%26E_stain) histology images;
+    * `"dapi"`: [DAPI or 4',6-diamidino-2-phenylindole stained](https://en.wikipedia.org/wiki/DAPI) histology images;
+    * `"fl"`: Fluorescence stained histology images.
+
 #### Output
 The output directory will be used to organize the input files and store output files. Please see the structure directory [here](output.md).
 
@@ -177,7 +194,7 @@ Below are the options with their final output files and links to detailed output
 | `smatch-per-chip`   | File with matched spatial barcodes, Image of matched barcode spatial distribution                              | [smatch](../walkthrough/rules/smatch.md#output-files)               |
 | `align-per-run`     | Binary Alignment Map (BAM) file, Digital gene expression matrix (DGE) for genomic features                     | [align](../walkthrough/rules/align.md)                              |
 | `sge-per-run`       | Spatial digital gene expression matrix (SGE), Spatial distribution images for transcripts                      | [dge2sdge](../walkthrough/rules/dge2sdge.md)                        |
-| `hist-per-run`      | Geotiff file for coordinate transformation between SGE and histology image, A Resized TIFF file                | [historef](../walkthrough/rules/historef.md)                        |
+| `hist-per-run`      | Geotiff files for coordinate transformation between SGE and histology image, and a resized one                 | [historef](../walkthrough/rules/historef.md)                        |
 | `transcript-per-unit`  | SGE in in the FICTURE-compatible format                                                                     | [sdgeAR_reformat](../walkthrough/rules/sdgeAR_reformat.md)                        |
 | `segment-per-unit`     | Hexagon-based SGE in the 10x genomics format                                                                | [sdgeAR_segment](../walkthrough/rules/sdgeAR_segment.md)                        |
 
