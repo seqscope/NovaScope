@@ -1442,7 +1442,7 @@
 
 <h1 id="rule-historef">Rule <code>historef</code><a class="headerlink" href="#rule-historef" title="Permanent link">&para;</a></h1>
 <h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">&para;</a></h2>
-<p>The goal of <code>historef</code> rule is to match the histology image with the spatial coordinates of the spatial digital gene expression matrix (SGE). This is achieved by aligning fiducial markers observable in both the histology image and the <a href="../align/#3-a-comprehensive-view-of-sbcd-smatch-and-sge-images">composite image</a> of "sbcd", "smatch", and "sge" images.</p>
+<p>The goal of <code>historef</code> rule is to match the histology image with the spatial coordinates of the spatial digital gene expression matrix (SGE). This is achieved by aligning fiducial markers observable in both the histology image and the <a href="../align/#3-a-comprehensive-view-of-sbcd-smatch-and-sge-images">composite image</a> of "sbcd", "smatch", and "sge" images. The current pipeline allows multiple input histology files.</p>
 <h2 id="input-files">Input Files<a class="headerlink" href="#input-files" title="Permanent link">&para;</a></h2>
 <ul>
 <li>
@@ -1462,10 +1462,10 @@ The <a href="../align/#3-a-comprehensive-view-of-sbcd-smatch-and-sge-images">com
 <p><strong>Description</strong>:
 The referenced histology file, which is in <a href="https://en.wikipedia.org/wiki/GeoTIFF">GeoTIFF</a>format, allows the coordinate transformation between the SGE matrix and the input histology image.</p>
 <p><strong>File Naming Convention</strong>:</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>&lt;histology_resolution&gt;X&lt;flowcell_abbreviation&gt;-&lt;chip_id&gt;-&lt;species&gt;-&lt;histology_figtype&gt;.tif&quot;
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>&lt;magnification&gt;&lt;flowcell_abbreviation&gt;-&lt;chip_id&gt;-&lt;species&gt;-&lt;figtype&gt;.tif&quot;
 </code></pre></div></td></tr></table></div>
 <ul>
-<li>The <code>histology_resolution</code> and <code>histology_figtype</code> are derived from the <code>resolution</code> and <code>figtype</code> fields within the <code>histology</code> section of the <a href="../../../getting_started/job_config/">job configuration</a> file.</li>
+<li>The <code>magnification</code> and <code>figtype</code> are derived from the <code>magnification</code> and <code>figtype</code> fields within the <code>histology</code> in the <code>input</code> section of the <a href="../../../getting_started/job_config/">job configuration</a> file.</li>
 <li>The <code>flowcell_abbreviation</code> is derived by splitting the <code>flowcell_id</code>, which is sourced from the <code>flowcell</code> field in <code>input</code> section of the <a href="../../../getting_started/job_config/">job configuration</a> file, by "-" and taking the first part.</li>
 </ul>
 <p><strong>File Visualization</strong>:</p>
@@ -1476,12 +1476,12 @@ The referenced histology file, which is in <a href="https://en.wikipedia.org/wik
 <p>For an in-depth examination, access the full-size referenced histology file within the <a href="https://doi.org/10.5281/zenodo.10841778"><code>B08Cshallow_20240319_SGE_withHE.tar.gz</code></a> tarball.</p>
 <h3 id="2-a-re-sized-referenced-histology-file">(2) A Re-sized Referenced Histology File<a class="headerlink" href="#2-a-re-sized-referenced-histology-file" title="Permanent link">&para;</a></h3>
 <p><strong>Description</strong>:
-An TIFF file shares the identical dimensions with both the <a href="../smatch/#2-a-smatch-image">"smatch" image</a> and the <a href="../dge2sdge/#2-an-sge-image">"sge" image</a>, acilitating the comparison of consistency between the histology file and these images.</p>
+A TIFF file shares the identical dimensions with both the <a href="../smatch/#2-a-smatch-image">"smatch" image</a> and the <a href="../dge2sdge/#2-an-sge-image">"sge" image</a>, acilitating the comparison of consistency between the histology file and these images.</p>
 <p><strong>File Naming Convention</strong>:</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>&lt;histology_resolution&gt;X&lt;flowcell_abbreviation&gt;-&lt;chip_id&gt;-&lt;species&gt;-&lt;histology_figtype&gt;-fit.tif&quot;
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>&lt;magnification&gt;&lt;flowcell_abbreviation&gt;-&lt;chip_id&gt;-&lt;species&gt;-&lt;figtype&gt;-fit.tif&quot;
 </code></pre></div></td></tr></table></div>
 <ul>
-<li>The <code>histology_resolution</code> and <code>histology_figtype</code> are derived from the <code>resolution</code> and <code>figtype</code> fields within the <code>histology</code> section of the <a href="../../../getting_started/job_config/">job configuration</a> file.</li>
+<li>The <code>magnification</code> and <code>figtype</code> are derived from the <code>magnification</code> and <code>figtype</code> fields within the <code>histology</code> section of the <a href="../../../getting_started/job_config/">job configuration</a> file.</li>
 <li>The <code>flowcell_abbreviation</code> is derived by splitting the <code>flowcell_id</code>, which is sourced from the <code>flowcell</code> field in <code>input</code> section of the <a href="../../../getting_started/job_config/">job configuration</a> file, by "-" and taking the first part.</li>
 </ul>
 <p><strong>File Visualization</strong>:</p>
@@ -1495,16 +1495,18 @@ An TIFF file shares the identical dimensions with both the <a href="../smatch/#2
 <p>The following parameter in the <a href="../../../getting_started/job_config/">job configuration</a> file will be applied in this rule.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
-<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nt">histology</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">resolution</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
-<span class="w">    </span><span class="nt">figtype</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;hne&quot;</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nt">histology</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">min_buffer_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span><span class="w">   </span>
+<span class="w">    </span><span class="nt">max_buffer_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2000</span>
+<span class="w">    </span><span class="nt">step_buffer_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
+<span class="w">    </span><span class="nt">raster_channel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w">      </span>
 </code></pre></div></td></tr></table></div>
 <ul>
-<li><strong>The <code>histology</code> Parameters</strong>
-    The <code>resolution</code> and <code>figtype</code> indicates the resolution and type of the input histology file. The <a href="https://github.com/seqscope/historef"><code>historef</code></a> currently support the following types:<ul>
-<li><code>"hne"</code>: <a href="https://en.wikipedia.org/wiki/H%26E_stain">Hematoxylin and Eosin (H&amp;E) stained</a> histology images;</li>
-<li><code>"dapi"</code>: <a href="https://en.wikipedia.org/wiki/DAPI">DAPI or 4',6-diamidino-2-phenylindole stained</a> histology images;</li>
-<li><code>"fl"</code>: Fluorescence stained histology images.</li>
+<li><strong>The <code>histology</code> Parameters</strong><ul>
+<li><code>min_buffer_size</code>, <code>max_buffer_size</code> and <code>step_buffer_size</code> will create a list of buffer size help historef to do the alignment. For example, the default <code>min_buffer_size</code>, <code>max_buffer_size</code> and <code>step_buffer_size</code> are 1000, 2000, and 100, respectively, and this will return a buffer size list of 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000.</li>
+<li><code>raster_channel</code> specifies which channel from the <a href="../dge2sdge/#2-an-sge-image">"sge" image</a> will used for historef alignment</li>
 </ul>
 </li>
 </ul>
