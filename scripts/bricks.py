@@ -177,6 +177,16 @@ def check_path(file_path, work_dir, strict_mode=True, flag="The path"):
     else:
         return None
 
+def check_request(input_request, valid_options):
+    valid_requests = [task for task in valid_options if task in input_request]
+    invalid_requests = [task for task in input_request if task not in valid_options]
+    if not valid_requests:
+        raise ValueError(f"Please provide a valid request: {input_request}")
+    if invalid_requests:
+        logging.warning("!! Attention: Invalid requests (see below) have been identified in the request field. These will be omitted from the processing pipeline.")
+        logging.warning(f"             List of Invalid Requests: {invalid_requests}")
+    return valid_requests
+
 #================================================================================================
 
 # create dict func:

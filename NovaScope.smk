@@ -21,13 +21,12 @@ job_dir = os.getcwd()
 novascope_scripts   = os.path.join(smk_dir,"scripts")
 sys.path.append(novascope_scripts)
 from bricks import setup_logging, end_logging, configure_pandas_display, load_configs
-from bricks import check_input, check_path, create_dict, create_symlink, create_dirs_and_get_paths, get_last5_from_md5
+from bricks import check_input, check_path, check_request, create_dict, create_symlink, create_dirs_and_get_paths
 from bricks import list_outputfn_by_request
-from rule_general_novascope import assign_resource_for_align, get_envmodules_for_rule
-from rule_general_novascope import get_skip_sbcd, link_sdge_to_sdgeAR, find_major_axis
 from pipe_utils_novascope import read_config_for_ini, read_config_for_runid, read_config_for_unitid, read_config_for_segment, read_config_for_hist, read_config_for_seq1, read_config_for_seq2
 from pipe_condout_novascope import output_fn_sbcdperfc, output_fn_sbcdperchip, output_fn_smatchperchip, output_fn_alignperrun, output_fn_sgeperrun, output_fn_histperrun, output_fn_segmperunit, output_fn_transperunit
-
+from rule_general_novascope import assign_resource_for_align, get_envmodules_for_rule
+from rule_general_novascope import get_skip_sbcd, link_sdge_to_sdgeAR, find_major_axis
 # set up 
 configure_pandas_display()
 configfile: "config_job.yaml"
@@ -75,19 +74,10 @@ logging.info(f" - Species: {species}")
 
 # request
 #request=check_input(config.get("request",["sge-per-run"]),{   "sbcd-per-flowcell", "sbcd-per-chip", "smatch-per-chip", "align-per-run", "sge-per-run", "hist-per-run", "transcript-per-unit", "segment-per-unit"},"request", lower=False)
-request = config.get("request", ["sge-per-run"])
-requests_options = ["sbcd-per-flowcell", "sbcd-per-chip", "smatch-per-chip", "align-per-run", "sge-per-run", "hist-per-run", "transcript-per-unit", "segment-per-unit"]
-valid_requests = [task for task in requests_options if task in request]
-invalid_requests = [task for task in request if task not in requests_options]
-
-# if valid_requests is empty, raise error
-if not valid_requests:
-    raise ValueError(f"Please provide a valid request: {request}")
+request = check_request(input_request=config.get("request", ["sge-per-run"]), 
+                        valid_options=["sbcd-per-flowcell", "sbcd-per-chip", "smatch-per-chip", "align-per-run", "sge-per-run", "hist-per-run", "transcript-per-unit", "segment-per-unit"])
 logging.info(f" - Request(s): ")
-logging.info(f"     {valid_requests}")
-if invalid_requests:
-    logging.info(f"     ATTENTION: Invalid Request(s): {invalid_requests}")
-
+logging.info(f"     {request}")
 
 #==============================================
 #
@@ -138,10 +128,8 @@ else:
 df_seq2 = read_config_for_seq2(config, job_dir, main_dirs, log_option=True)
 
 # per-flowcell:
-# - all requests will need seq1 info
+# - all requests
 seq1_id, seq1_fq_raw, sc2seq1 = read_config_for_seq1(config, job_dir, main_dirs)
-
-# -----
 
 #==============================================
 #
