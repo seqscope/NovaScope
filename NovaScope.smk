@@ -69,18 +69,25 @@ assert chip is not None, "Provide a valid Section Chip."
 logging.info(f" - Section Chip: {chip}")
 
 # species
-species = check_input(config["input"]["species"], {"human", "human_mouse", "mouse", "rat", "worm"}, "species", lower=False)
+#species = check_input(config["input"]["species"], {"human", "human_mouse", "mouse", "rat", "worm"}, "species", lower=False)
+species = config["input"]["species"]
 logging.info(f" - Species: {species}")
 
 # request
-request=check_input(config.get("request",["sge-per-run"]),
-                    {   "sbcd-per-flowcell", 
-                        "sbcd-per-chip", "smatch-per-chip", 
-                        "align-per-run", "sge-per-run", "hist-per-run", 
-                        "transcript-per-unit", "segment-per-unit"
-                    },
-                     "request", lower=False)
-logging.info(f" - Request(s): {request}")
+#request=check_input(config.get("request",["sge-per-run"]),{   "sbcd-per-flowcell", "sbcd-per-chip", "smatch-per-chip", "align-per-run", "sge-per-run", "hist-per-run", "transcript-per-unit", "segment-per-unit"},"request", lower=False)
+request = config.get("request", ["sge-per-run"])
+requests_options = ["sbcd-per-flowcell", "sbcd-per-chip", "smatch-per-chip", "align-per-run", "sge-per-run", "hist-per-run", "transcript-per-unit", "segment-per-unit"]
+valid_requests = [task for task in requests_options if task in request]
+invalid_requests = [task for task in request if task not in requests_options]
+
+# if valid_requests is empty, raise error
+if not valid_requests:
+    raise ValueError(f"Please provide a valid request: {request}")
+logging.info(f" - Request(s): ")
+logging.info(f"     {valid_requests}")
+if invalid_requests:
+    logging.info(f"     ATTENTION: Invalid Request(s): {invalid_requests}")
+
 
 #==============================================
 #
@@ -178,9 +185,11 @@ end_logging()
 include: "rules/a01_fastq2sbcd.smk"
 include: "rules/a02_sbcd2chip.smk"
 include: "rules/a03_smatch.smk"
-include: "rules/a04_align.smk"
-include: "rules/a05_dge2sdge.smk"
-include: "rules/b01_gene_visual.smk"
+
+if any(task in request for task in ["align-per-run", "sge-per-run", "hist-per-run", "segment-per-unit", "transcript-per-unit"]):
+    include: "rules/a04_align.smk"
+    include: "rules/a05_dge2sdge.smk"
+    include: "rules/b01_gene_visual.smk"
 
 if "hist-per-run" in request:
     include: "rules/b02_historef.smk"

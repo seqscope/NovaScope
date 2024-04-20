@@ -16,7 +16,14 @@ def read_config_for_ini(config,job_dir,smk_dir):
     logging.info(f"     {job_dir}/config_job.yaml")
 
     # config: env
-    env_configfile = check_path(config.get("env_yml", os.path.join(smk_dir, "info", "config_env.yaml")), job_dir, strict_mode=True, flag="The environment config file")
+    env_input = config.get("env_yml", os.path.join(smk_dir, "info", "config_env.yaml"))
+    if isinstance(env_input, dict):
+        env_input_val = env_input[os.path.basename(smk_dir).lower()]
+    elif isinstance(env_input, str):
+        env_input_val = env_input
+    else:
+        raise ValueError("Please provide a valid env config file.")
+    env_configfile = check_path(env_input_val, job_dir, strict_mode=True, flag="The environment config file")
     env_config = load_configs(None, [(env_configfile, True)])
 
     # - envmodules

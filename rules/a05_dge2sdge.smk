@@ -34,7 +34,7 @@ rule a05_dge2sdge:
 
         # Generate smatch_csvjoin.
         smatch_tsv_warg_match  = " --match ".join(expand(input.smatch_tsv))
-        smatch_tsv_warg_smatch = " --smatch ".join(expand(input.smatch_tsv))
+        smatch_tsv_warg_smatch = " --nmatch ".join(expand(input.smatch_tsv))
         
         # Check the layout for rgb-gene-image.
         if params.rgb_layout is not None:
@@ -52,7 +52,7 @@ rule a05_dge2sdge:
         df_minmax=df_mnfst[["xmin", "xmax", "ymin", "ymax"]]
         df_minmax.to_csv(output.sdge_xyrange, sep="\t", index=False)
         shell(
-        """
+        r"""
         set -euo pipefail
         {params.module_cmd}
 
@@ -79,7 +79,7 @@ rule a05_dge2sdge:
             --out {output.sdge_3in1_png} 
 
         echo -e "Creating rgb image...\\n"
-        command time -v {python} {local_scripts}/rgb-gene-image.py \
+        command time -v {python} {novascope_scripts}/rgb-gene-image.py \
             --layout {rgb_layout} \
             --sdge {sdge_dir} \
             --out {output.sdge_rgb_png} \

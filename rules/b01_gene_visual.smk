@@ -53,7 +53,7 @@ rule b01_gene_visual:
         echo -e "Creating RGB images for each gene of interest...\\n"
         for gene in {visual_gof}; do 
             echo -e " - $gene \\n"
-            command time -v {python} {local_scripts}/rgb-gene-image.py \
+            command time -v {python} {novascope_scripts}/rgb-gene-image.py \
                 --layout {rgb_layout} \
                 --sdge {sdge_dir} \
                 --out {visual_dir}/rgb.${{gene}}.png \
