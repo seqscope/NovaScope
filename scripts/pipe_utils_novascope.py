@@ -163,7 +163,7 @@ def add_default_for_char(df_char, run_id, unit_id, cols=["solofeature", "trainwi
 
 def read_config_for_segment(config, run_id, unit_id, log_option=False):
     # segment_char_info
-    segment_char_info= config.get("downstream", {}).get("reformat",{}).get("segment",{}).get("char", None)
+    segment_char_info= config.get("downstream", {}).get("segment",{}).get("char", None)
     key_char_info = config.get("downstream", {}).get("key_char", None)
     if segment_char_info is not None:
         df_segment_char = pd.DataFrame(segment_char_info)
@@ -182,7 +182,7 @@ def read_config_for_segment(config, run_id, unit_id, log_option=False):
             }
             )
     # mu_scale
-    mu_scale = config.get("downstream", {}).get("reformat",{}).get("mu_scale", None)
+    mu_scale = config.get("downstream", {}).get("mu_scale", None)
     if mu_scale is None:
         mu_scale = config.get("downstream", {}).get("mu_scale", 1000)
     if log_option:
