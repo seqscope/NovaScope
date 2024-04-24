@@ -87,8 +87,6 @@ logging.info(f"     {request}")
 logging.info(f"\n")
 logging.info(f"3. Processing input by requests.")
 
-output_filename_conditions = []
-
 # per-unit or per-run:
 if any(task in request for task in ["align-per-run", "sge-per-run", "hist-per-run", "segment-per-unit", "transcript-per-unit"]):
     run_id, rid2seq2 = read_config_for_runid(config, job_dir, main_dirs)
@@ -144,13 +142,21 @@ seq1_id, seq1_fq_raw, sc2seq1 = read_config_for_seq1(config, job_dir, main_dirs)
 logging.info(f"\n")
 logging.info(f"4. Required output filenames.")
 
+df_run=pd.DataFrame({
+    'flowcell': [flowcell],
+    'chip': [chip],
+    'seq1_id': [seq1_id],
+    'run_id': [run_id],
+    'unit_id': [unit_id],
+})
+
 # output files are generated based on the requests and extra conditions
 output_filename_conditions = [
-    output_fn_sbcdperfc(main_dirs, flowcell, seq1_id),
-    output_fn_sbcdperchip(main_dirs, flowcell, chip),
+    output_fn_sbcdperfc(main_dirs, df_run),
+    output_fn_sbcdperchip(main_dirs, df_run),
     output_fn_smatchperchip(main_dirs, df_seq2),
-    output_fn_alignperrun(main_dirs, flowcell, chip, run_id),
-    output_fn_sgeperrun(main_dirs, flowcell, chip, run_id),
+    output_fn_alignperrun(main_dirs, df_run),
+    output_fn_sgeperrun(main_dirs, df_run),
     output_fn_histperrun(main_dirs, df_hist),
     output_fn_segmperunit(main_dirs, df_segment_char),
     output_fn_transperunit(main_dirs, df_segment_char),

@@ -1,7 +1,7 @@
 # Generate output file name by request
 # for upstream pipeline (NovaScope)
 
-def output_fn_sbcdperfc(main_dirs, flowcell, seq1_id):
+def output_fn_sbcdperfc(main_dirs, df_run):
     outfn= {
         'flag': 'sbcd-per-flowcell',
         'root': main_dirs["seq1st"],
@@ -9,13 +9,13 @@ def output_fn_sbcdperfc(main_dirs, flowcell, seq1_id):
                                 (["{flowcell}", "sbcds", "{seq1_id}", "manifest.tsv"], None),
         ],
         'zip_args': {
-            'flowcell':     [flowcell],
-            'seq1_id':      [seq1_id],
+            'flowcell':    df_run["flowcell"].values,
+            'seq1_id':     df_run["seq1_id"].values,
         },
     }
     return outfn
 
-def output_fn_sbcdperchip(main_dirs, flowcell, chip):
+def output_fn_sbcdperchip(main_dirs, df_run):
     outfn = {
         'flag': 'sbcd-per-chip',
         'root': main_dirs["seq1st"],
@@ -25,8 +25,8 @@ def output_fn_sbcdperchip(main_dirs, flowcell, chip):
                                 (["{flowcell}", "nbcds", "{chip}", "1_1.sbcds.sorted.png"], None),
         ],
         'zip_args': {
-            'flowcell':     [flowcell],
-            'chip':         [chip],
+            'flowcell':     df_run["flowcell"].values,
+            'chip':         df_run["chip"].values,
         },
     }
     return outfn
@@ -49,7 +49,7 @@ def output_fn_smatchperchip(main_dirs, df_seq2):
     }
     return outfn
 
-def output_fn_alignperrun(main_dirs, flowcell, chip, run_id):
+def output_fn_alignperrun(main_dirs, df_run):
     outfn = {
         'flag': 'align-per-run',
         'root': main_dirs["align"],
@@ -63,15 +63,15 @@ def output_fn_alignperrun(main_dirs, flowcell, chip, run_id):
                                 (["{flowcell}", "{chip}", "{run_id}", "bam", "sttoolsSolo.out", "Velocyto", "raw", "ambiguous.mtx.gz"], None),
         ],
         'zip_args': {
-            'flowcell':  [flowcell],
-            'chip':      [chip],
-            'run_id':    [run_id],  
+            'flowcell':     df_run["flowcell"].values,
+            'chip':         df_run["chip"].values,
+            'run_id':       df_run["run_id"].values,
         },
     }
     return outfn
 
 
-def output_fn_sgeperrun(main_dirs, flowcell, chip, run_id):
+def output_fn_sgeperrun(main_dirs, df_run):
     out_fn ={
         'flag': 'sge-per-run',
         'root': main_dirs["align"],
@@ -85,9 +85,9 @@ def output_fn_sgeperrun(main_dirs, flowcell, chip, run_id):
                                 (["{flowcell}", "{chip}", "{run_id}", "sge", "barcodes.minmax.tsv"], None),
         ],
         'zip_args': {
-            'flowcell':  [flowcell],
-            'chip':      [chip],
-            'run_id':    [run_id],  
+            'flowcell':     df_run["flowcell"].values,
+            'chip':         df_run["chip"].values,
+            'run_id':       df_run["run_id"].values,
         },
     }
     return out_fn
