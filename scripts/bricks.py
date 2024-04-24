@@ -320,9 +320,14 @@ def create_symlinks_by_list(input_path, output_path, items, input_id=None, outpu
 
 #  expand function to list the file names
 
-def expand(path_pattern, product_args):
-    return [path_pattern.format(**dict(zip(product_args.keys(), values)))
-            for values in itertools.product(*product_args.values())]
+# 20240424: this one will expand all combinations of the product_args
+#def expand(path_pattern, product_args):
+#    return [path_pattern.format(**dict(zip(product_args.keys(), values)))
+#            for values in itertools.product(*product_args.values())]
+def expand(path_pattern, zip_args):
+    # Using zip to ensure values from each key are combined by their indices
+    return [path_pattern.format(**dict(zip(zip_args.keys(), values)))
+            for values in zip(*zip_args.values())]
 
 def expand_output_to_filenames(root, subfolders_patterns, product_args, required_output_flag, require_output, debug=False):
     expanded_lists = []
