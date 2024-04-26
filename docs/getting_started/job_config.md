@@ -100,17 +100,20 @@ env_yml: <path_to_config_env.yaml_file>         ## If absent, NovaScope use the 
 #        threads: 10
 #        memory: 70000m
 #
-#  dge2sdge:                 ## specify the parameters for dge2sdge
-#    layout: null            ## If absent, the layout file in the info/assets/layout_per_section_basis/layout.1x1.tsv will be used for RGB plots.
-#
-#  gene_visual: null         ## If you have a specific set of genes to visualize, specify the path to a file containing a list of gene names (one per line) here. By default, the top five genes with the highest expression are visualized.
-#
 #  visualization:            ## specify the parameters for visualization
-#    drawxy:
+#    drawxy:                 ## specify the parameters for visualization for sbcd and smatch images
 #      coord_per_pixel: 1000
 #      intensity_per_obs: 50
 #      icol_x: 3
 #      icol_y: 4
+#    drawsge:                ## specify the parameters for visualization for sge images
+#      genes:                ## specify what genes to be colored in the sge images
+#        - red: nonMT        
+#          green: Unspliced
+#          blue: MT
+#      coord_per_pixel: 1000
+#      auto_adjust: true
+#      adjust_quantile: 0.99
 #
 #histology:                  ## specify the parameters for histology alignment using historef
 #    min_buffer_size: 1000   ## min_buffer_size, max_buffer_size and step_buffer_size will create a list of buffer size help historef to do the alignment

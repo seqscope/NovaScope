@@ -11,6 +11,7 @@ from collections import defaultdict
 from snakemake.io import glob_wildcards, Wildcards
 import datetime
 import logging.handlers
+import itertools
 
 # snakemake dir and job dir
 smk_name="NovaScope"
@@ -22,8 +23,8 @@ novascope_scripts   = os.path.join(smk_dir,"scripts")
 sys.path.append(novascope_scripts)
 from bricks import setup_logging, end_logging, configure_pandas_display, load_configs
 from bricks import check_input, check_path, check_request, create_dict, create_symlink, create_dirs_and_get_paths
-from bricks import list_outputfn_by_request
-from pipe_utils_novascope import read_config_for_ini, read_config_for_runid, read_config_for_unitid, read_config_for_segment, read_config_for_hist, read_config_for_seq1, read_config_for_seq2
+from bricks import list_outputfn_by_request, create_symlinks_by_list
+from pipe_utils_novascope import read_config_for_ini, read_config_for_runid, read_config_for_unitid, read_config_for_segment, read_config_for_hist, read_config_for_seq1, read_config_for_seq2, read_config_for_sgevisual
 from pipe_condout_novascope import output_fn_sbcdperfc, output_fn_sbcdperchip, output_fn_smatchperchip, output_fn_alignperrun, output_fn_sgeperrun, output_fn_histperrun, output_fn_segmperunit, output_fn_transperunit
 from rule_general_novascope import assign_resource_for_align, get_envmodules_for_rule
 from rule_general_novascope import get_skip_sbcd, link_sdge_to_sdgeAR, find_major_axis
@@ -34,7 +35,7 @@ configfile: "config_job.yaml"
 setup_logging(job_dir, smk_name+"_read-in")
 
 # - env
-env_config, module_config, sp2alignref, sp2geneinfo, python, pyenv = read_config_for_ini(config,job_dir,smk_dir)
+env_config, module_config, sp2alignref, sp2geneinfo, python, pyenv = read_config_for_ini(config, job_dir, smk_dir)
 
 # - tools
 spatula  = env_config.get("tools", {}).get("spatula",   "spatula")
@@ -96,7 +97,6 @@ else:
 if any(task in request for task in["segment-per-unit","transcript-per-unit" ]):
     # unit ID: to distinguish the default sge and the sge with manual boundary filtering.
     unit_id, unit_ann, boundary = read_config_for_unitid(config, job_dir, run_id)
-
     # segment info (multiple pairs)
     df_segment_char, mu_scale = read_config_for_segment(config, run_id, unit_id)
 else:
@@ -129,6 +129,29 @@ df_seq2 = read_config_for_seq2(config, job_dir, main_dirs, log_option=True)
 # - all requests
 seq1_id, seq1_fq_raw, sc2seq1 = read_config_for_seq1(config, job_dir, main_dirs)
 
+# run pd
+df_run = pd.DataFrame({
+    'flowcell': [flowcell],
+    'chip': [chip],
+    'seq1_id': [seq1_id],
+    'run_id': [run_id],
+    'unit_id': [unit_id],
+})
+#----------------------------------------------
+# sge visual
+if "sge-per-run" in request:
+    sgevisual_id2params, rid2sgevisual_id = read_config_for_sgevisual(config, env_config, smk_dir, run_id)
+    # expand df_sge for sge-per-run
+    df_sge = pd.DataFrame( [{**row, 'sgevisual_id': sgevisual_id} for _, row in df_run.iterrows() for sgevisual_id in sgevisual_id2params.keys()])
+else:
+    logging.info(f" - SGE visual: Skipping")
+    df_sge = pd.DataFrame({
+        'flowcell': pd.Series(dtype='object'),
+        'chip': pd.Series(dtype='object'),
+        'run_id': pd.Series(dtype='object'),
+        'unit_id': pd.Series(dtype='object'),
+        'sgevisual_id': pd.Series(dtype='object'),
+    })
 #==============================================
 #
 # Rule all
@@ -142,21 +165,13 @@ seq1_id, seq1_fq_raw, sc2seq1 = read_config_for_seq1(config, job_dir, main_dirs)
 logging.info(f"\n")
 logging.info(f"4. Required output filenames.")
 
-df_run=pd.DataFrame({
-    'flowcell': [flowcell],
-    'chip': [chip],
-    'seq1_id': [seq1_id],
-    'run_id': [run_id],
-    'unit_id': [unit_id],
-})
-
 # output files are generated based on the requests and extra conditions
 output_filename_conditions = [
     output_fn_sbcdperfc(main_dirs, df_run),
     output_fn_sbcdperchip(main_dirs, df_run),
     output_fn_smatchperchip(main_dirs, df_seq2),
     output_fn_alignperrun(main_dirs, df_run),
-    output_fn_sgeperrun(main_dirs, df_run),
+    output_fn_sgeperrun(main_dirs, df_sge),
     output_fn_histperrun(main_dirs, df_hist),
     output_fn_segmperunit(main_dirs, df_segment_char),
     output_fn_transperunit(main_dirs, df_segment_char),
@@ -183,7 +198,7 @@ include: "rules/a03_smatch.smk"
 if any(task in request for task in ["align-per-run", "sge-per-run", "hist-per-run", "segment-per-unit", "transcript-per-unit"]):
     include: "rules/a04_align.smk"
     include: "rules/a05_dge2sdge.smk"
-    include: "rules/b01_gene_visual.smk"
+    include: "rules/b01_sdge_visual.smk"
 
 if "hist-per-run" in request:
     include: "rules/b02_historef.smk"
@@ -194,4 +209,3 @@ if "segment-per-unit" in request or "transcript-per-unit" in request:
 
 if "segment-per-unit" in request:
     include: "rules/a08_sdgeAR_segment.smk"
-    #include: "rules/a08_sdgeAR_QC.smk"
