@@ -302,7 +302,7 @@ def read_config_for_hist(config, job_dir, main_dirs):
         logging.info(f"            realpath: {row['hist_raw_inputpath']}")
         logging.info(f"       magnification: {row['magnification']}")
         logging.info(f"         figure type: {row['figtype']}")
-    df_hist = df_hist[["flowcell", "chip", "hist_std_prefix"]]
+    df_hist = df_hist[["flowcell", "chip", "hist_std_prefix", "figtype", "magnification"]]
     return df_hist
 
 

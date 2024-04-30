@@ -6,6 +6,9 @@ rule b01_sdge_visual:
         sdge_mtx        = os.path.join(main_dirs["align"],  "{flowcell}", "{chip}", "{run_id}", "sge", "matrix.mtx.gz"),
     output:
         sdge_png        = os.path.join(main_dirs["align"],  "{flowcell}", "{chip}", "{run_id}", "sge", "{run_id}.sge_visual", "{sgevisual_id}.png"),
+    resources: 
+        mem           = "13000MB", 
+        time          = "5:00:00"  
     params:
         sgevisual_id    = "{sgevisual_id}",
         # module
