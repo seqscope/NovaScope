@@ -106,11 +106,12 @@ env_yml: <path_to_config_env.yaml_file>         ## If absent, NovaScope use the 
 #      intensity_per_obs: 50
 #      icol_x: 3
 #      icol_y: 4
-#    drawsge:                ## specify the parameters for visualization for sge images
-#      genes:                ## specify what genes to be colored in the sge images
-#        - red: nonMT        
+#    drawsge:                ## specify the parameters for sdge visualization 
+#      genes:                ## specify sets of genes to be colored
+#        - red: nonMT        ## the first set of genes
 #          green: Unspliced
 #          blue: MT
+#      # - ...               ## if more 1 set of genes are required
 #      coord_per_pixel: 1000
 #      auto_adjust: true
 #      adjust_quantile: 0.99
@@ -196,7 +197,7 @@ Below are the options with their final output files and links to detailed output
 | `sbcd-per-chip`     | Spatial barcode map for a section chip, Image of spatial barcode distribution                                  | [sbcd2chip](../walkthrough/rules/sbcd2chip.md#output-files)         |
 | `smatch-per-chip`   | File with matched spatial barcodes, Image of matched barcode spatial distribution                              | [smatch](../walkthrough/rules/smatch.md#output-files)               |
 | `align-per-run`     | Binary Alignment Map (BAM) file, Digital gene expression matrix (DGE) for genomic features                     | [align](../walkthrough/rules/align.md)                              |
-| `sge-per-run`       | Spatial digital gene expression matrix (SGE), Spatial distribution images for transcripts                      | [dge2sdge](../walkthrough/rules/dge2sdge.md)                        |
+| `sge-per-run`       | Spatial digital gene expression matrix (SGE), Spatial distribution images for transcripts                      | [dge2sdge](../walkthrough/rules/dge2sdge.md) and [sdge_visual](../walkthrough/rules/sdge_visual.md)                       |
 | `hist-per-run`      | Geotiff files for coordinate transformation between SGE and histology image, and a resized one                 | [historef](../walkthrough/rules/historef.md)                        |
 | `transcript-per-unit`  | SGE in in the FICTURE-compatible format                                                                     | [sdgeAR_reformat](../walkthrough/rules/sdgeAR_reformat.md)                        |
 | `segment-per-unit`     | Hexagon-based SGE in the 10x genomics format                                                                | [sdgeAR_segment](../walkthrough/rules/sdgeAR_segment.md)                        |
