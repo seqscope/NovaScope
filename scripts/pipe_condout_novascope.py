@@ -71,7 +71,7 @@ def output_fn_alignperrun(main_dirs, df_run):
     return outfn
 
 
-def output_fn_sgeperrun(main_dirs, df_run):
+def output_fn_sgeperrun(main_dirs, df_sge):
     out_fn ={
         'flag': 'sge-per-run',
         'root': main_dirs["align"],
@@ -79,15 +79,15 @@ def output_fn_sgeperrun(main_dirs, df_run):
                                 (["{flowcell}", "{chip}", "{run_id}", "sge", "barcodes.tsv.gz"], None),
                                 (["{flowcell}", "{chip}", "{run_id}", "sge", "features.tsv.gz"], None),
                                 (["{flowcell}", "{chip}", "{run_id}", "sge", "matrix.mtx.gz"], None),
-                                (["{flowcell}", "{chip}", "{run_id}", "sge", "{run_id}.gene_full_mito.png"], None),
                                 (["{flowcell}", "{chip}", "{run_id}", "sge", "{run_id}.sge_match_sbcd.png"], None),
-                                (["{flowcell}", "{chip}", "{run_id}", "sge", "{run_id}.gene_visual.tar.gz"], None),
+                                (["{flowcell}", "{chip}", "{run_id}", "sge", "{run_id}.sge_visual", "{sgevisual_id}.png"], None),
                                 (["{flowcell}", "{chip}", "{run_id}", "sge", "barcodes.minmax.tsv"], None),
         ],
         'zip_args': {
-            'flowcell':     df_run["flowcell"].values,
-            'chip':         df_run["chip"].values,
-            'run_id':       df_run["run_id"].values,
+            'flowcell':     df_sge["flowcell"].values,
+            'chip':         df_sge["chip"].values,
+            'run_id':       df_sge["run_id"].values,
+            'sgevisual_id': df_sge["sgevisual_id"].values,
         },
     }
     return out_fn

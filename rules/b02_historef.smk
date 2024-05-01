@@ -11,6 +11,10 @@ rule b02_historef:
         hist_buffer_step    = config.get("histology",{}).get("buffer_step", 100),
         hist_raster_channel = config.get("histology",{}).get("raster_channel", 1),
         module_cmd          = get_envmodules_for_rule(["python", "gcc", "gdal"], module_config)
+    threads: 3
+    resources:
+        time = "5:00:00",
+        mem  = "20000m",
     run:
         if params.hist_buffer_end is None:
             params.hist_buffer_end = params.hist_buffer_start + 1000
@@ -25,12 +29,7 @@ rule b02_historef:
         echo "Params:"
         echo " - Buffer size: {params.hist_buffer_start} to {params.hist_buffer_end} with step {params.hist_buffer_step}..."
         echo " - Raster channel: {params.hist_raster_channel}"
-        # aligned histology
-        command time -v {python} -m historef.referencer \
-            --nge  {input.sdge_3in1_png}\
-            --hne  {input.hist_raw} \
-            --aligned {output.hist_aligned}
-      
+        
         # 1) align histology
         # use a loop to find the right buffer size
         echo "Start aligning the input histology file ..."
@@ -40,7 +39,7 @@ rule b02_historef:
         for buffer in "${{buffer_sizes[@]}}"; do
             echo " - Buffer size: $buffer"            
             # Run your Python module with the current buffer size
-            if command time -v {python} -m historef.referencer --nge {input.sdge_3in1_png} --hne {input.hist_raw} --aligned {output.hist_aligned} --buffer $buffer --nge_raster_channel 1 ; then
+            if command time -v {python} -m historef.referencer --nge {input.sdge_3in1_png} --hne {input.hist_raw} --aligned {output.hist_aligned} --buffer $buffer --nge_raster_channel {params.hist_raster_channel} ; then
                 echo "      - Success with buffer size: $buffer ..."
                 success=true
                 break

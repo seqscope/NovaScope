@@ -1,5 +1,6 @@
 import pandas as pd
 import logging, os, sys
+from collections import defaultdict
 
 novascope_scripts = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(novascope_scripts)
@@ -78,7 +79,7 @@ def read_config_for_seq2(config, job_dir, main_dirs, log_option=True):
     # temp
     flowcell= config["input"]["flowcell"]
     chip = config["input"]["chip"]
-    #df
+    # df
     df_seq2 = pd.DataFrame(config.get('input', {}).get('seq2nd', []))
     df_seq2['flowcell'] = flowcell
     df_seq2['chip'] = chip
@@ -210,6 +211,64 @@ def read_config_for_keychar(key_char_info, run_id, unit_id, log_option=False):
         logging.info(f" ")
         log_dataframe(df_key_char, log_message=" - Downstream key character info:")
 
+def transform_data(df, refgl_dir):
+    genelist_options={
+        "defined": ["nonMT", "MT", "ribosomal", "nuclear"],
+        "all": ["Gene", "GeneFull", "Spliced", "Unspliced", "Velocyto"]
+    }
+    color_code={
+            "red":  "#010000",
+            "green": "#000100",
+            "blue": "#000001"
+    }
+    # Melt dataframe and calculate paths and indices in one go
+    df = df.reset_index().melt(id_vars="index", var_name="color", value_name="value")
+    df['color_code'] = df['color'].map(color_code)
+    df['is_defined'] = df['value'].isin(genelist_options['defined'])
+    df['refgl']      = df.apply(lambda x: os.path.join(refgl_dir, f"{x['value']}.genes.tsv") if x['is_defined'] else os.path.join(refgl_dir, f"all.genes.tsv"), axis=1)
+    df['idx']        = df.apply(lambda x: 1 if x['is_defined'] else genelist_options['all'].index(x['value']) + 1, axis=1)
+    df['params']     = df.apply(lambda x: f"--color-list \"{x['color_code']}:{x['refgl']}:{x['idx']}\"", axis=1)
+    # Create the final parameters string
+    return df.pivot(index='index', columns='color', values='params').apply(lambda x: ' '.join(x.dropna()), axis=1)
+
+def convert_sgevisual_list2df(config, refgl_dir):
+    # Read the config file for sge visual parameters
+    sge_visual_defparams = {'red': ["nonMT"], 'green': ["Unspliced"], 'blue': ["MT"]}
+    sge_visual_params = config.get("upstream",{}).get("visualization",{}).get("drawsge",{}).get("genes", sge_visual_defparams)
+    df_sge_visual = pd.DataFrame(sge_visual_params).drop_duplicates()
+    # Transform the DataFrame
+    df_sge_visual['params'] = transform_data(df_sge_visual, refgl_dir)
+    df_sge_visual['sgevisual_id'] = df_sge_visual.apply(lambda x: f"{x['red']}_{x['green']}_{x['blue']}", axis=1)
+    return df_sge_visual[['sgevisual_id', 'params']]
+
+
+def read_config_for_sgevisual(config, env_config, smk_dir, run_id):
+    logging.info(f" - SGE visual: ")
+    # reference gene list directory
+    sp2refgl_dir= {
+    "mouse": os.path.join(smk_dir, "info", "genelists", "mm39"),
+    "human": os.path.join(smk_dir, "info", "genelists", "hg38")
+    } 
+    species = config["input"]["species"]
+    refgl_dir = env_config.get("ref",{}).get("genelists",{}).get(species, sp2refgl_dir.get(species, None))
+    assert refgl_dir is not None, f"Provide a valid gene list directory for species {species}."
+
+    # input pd with sgevisual_id and params
+    df_sge_visual = convert_sgevisual_list2df(config, refgl_dir)
+    sgevisual_id2params = df_sge_visual.set_index("sgevisual_id")["params"].to_dict()
+
+    # create a dict from unit_id from run_id to df_sge_visual["sgevisual_id"] one key to a list and remove duplicates
+    rid2sgevisual_id = defaultdict(list)
+    rid2sgevisual_id[run_id] = list(df_sge_visual["sgevisual_id"].unique())
+
+    # log info
+    logging.info(f"     - Reference gene list directory: {refgl_dir}")
+    logging.info(f"     - Available sgevisual_id:")
+    logging.info(f"         - {', '.join(df_sge_visual['sgevisual_id'].tolist())}")
+
+    # return
+    return sgevisual_id2params, rid2sgevisual_id
+
 #================================================================================================
 
 # Histology
@@ -243,7 +302,7 @@ def read_config_for_hist(config, job_dir, main_dirs):
         logging.info(f"            realpath: {row['hist_raw_inputpath']}")
         logging.info(f"       magnification: {row['magnification']}")
         logging.info(f"         figure type: {row['figtype']}")
-    df_hist = df_hist[["flowcell", "chip", "hist_std_prefix"]]
+    df_hist = df_hist[["flowcell", "chip", "hist_std_prefix", "figtype", "magnification"]]
     return df_hist
 
 

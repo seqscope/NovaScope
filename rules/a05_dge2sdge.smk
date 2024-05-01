@@ -17,13 +17,9 @@ rule a05_dge2sdge:
         sdge_bcd      = os.path.join(main_dirs["align"],  "{flowcell}", "{chip}", "{run_id}", "sge", "barcodes.tsv.gz"),
         sdge_ftr      = os.path.join(main_dirs["align"],  "{flowcell}", "{chip}", "{run_id}", "sge", "features.tsv.gz"),
         sdge_mtx      = os.path.join(main_dirs["align"],  "{flowcell}", "{chip}", "{run_id}", "sge", "matrix.mtx.gz"),
-        sdge_rgb_png  = os.path.join(main_dirs["align"],  "{flowcell}", "{chip}", "{run_id}", "sge", "{run_id}.gene_full_mito.png"),
-        sdge_3in1_png = os.path.join(main_dirs["align"],  "{flowcell}", "{chip}", "{run_id}", "sge", "{run_id}.sge_match_sbcd.png"),
         sdge_xyrange  = os.path.join(main_dirs["align"],  "{flowcell}", "{chip}", "{run_id}", "sge", "barcodes.minmax.tsv"),
+        sdge_3in1_png = os.path.join(main_dirs["align"],  "{flowcell}", "{chip}", "{run_id}", "sge", "{run_id}.sge_match_sbcd.png"),
     params:
-        rgb_layout       = check_path(config.get("upstream", {}).get("dge2sdge", {}).get("layout", None), job_dir, strict_mode=False),
-        visual_max_scale = config.get("upstream", {}).get("visualization", {}).get("rgb",{}).get("max_scale", 50),
-        visual_res       = config.get("upstream", {}).get("visualization", {}).get("rgb",{}).get("resolution", 1000),
         # module
         module_cmd       = get_envmodules_for_rule(["python", "imagemagick"], module_config)
     resources: 
@@ -35,17 +31,7 @@ rule a05_dge2sdge:
         # Generate smatch_csvjoin.
         smatch_tsv_warg_match  = " --match ".join(expand(input.smatch_tsv))
         smatch_tsv_warg_smatch = " --nmatch ".join(expand(input.smatch_tsv))
-        
-        # Check the layout for rgb-gene-image.
-        if params.rgb_layout is not None:
-            rgb_layout = params.rgb_layout
-            assert os.path.exists(params.rgb_layout), f"The provided RGB layout file does not exist: {params.rgb_layout}"
-            print(f"Using the provided RGB layout file: {params.rgb_layout}.")
-        else: 
-            rgb_layout = os.path.join(smk_dir, "info", "assets", "layout_per_chip_basis", "layout.1x1.tsv")
-            assert os.path.exists(rgb_layout), f"The default RGB layout file does not exist: {rgb_layout}."
-            print(f"Using the default RGB layout file: {rgb_layout}.")
-
+    
         # Create minmax files.
         print("Creating minmax files...")
         df_mnfst=pd.read_csv(input.nbcd_mnfst, sep="\t")
@@ -77,18 +63,6 @@ rule a05_dge2sdge:
             --nmatch {smatch_tsv_warg_smatch} \
             --ngebcd {output.sdge_bcd} \
             --out {output.sdge_3in1_png} 
-
-        echo -e "Creating rgb image...\\n"
-        command time -v {python} {novascope_scripts}/rgb-gene-image.py \
-            --layout {rgb_layout} \
-            --sdge {sdge_dir} \
-            --out {output.sdge_rgb_png} \
-            -r _all:1:2 \
-            -g _all:1:3 \
-            -b _all:1:4 \
-            --max-scale {params.visual_max_scale} \
-            --res {params.visual_res} \
-            --transpose
         """
         )
         
