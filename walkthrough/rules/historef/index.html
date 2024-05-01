@@ -11,7 +11,7 @@
         <link rel="canonical" href="https://seqscope.github.io/NovaScope/walkthrough/rules/historef/">
       
       
-        <link rel="prev" href="../dge2sdge/">
+        <link rel="prev" href="../sdge_visual/">
       
       
         <link rel="next" href="../sdge2sdgeAR/">
@@ -942,6 +942,8 @@
       
         
       
+        
+      
     
     
       
@@ -1074,6 +1076,27 @@
   
   <span class="md-ellipsis">
     dge2sdge
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sdge_visual/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    sdge_visual
   </span>
   
 
@@ -1476,7 +1499,7 @@ The referenced histology file, which is in <a href="https://en.wikipedia.org/wik
 <p>For an in-depth examination, access the full-size referenced histology file within the <a href="https://doi.org/10.5281/zenodo.10841778"><code>B08Cshallow_20240319_SGE_withHE.tar.gz</code></a> tarball.</p>
 <h3 id="2-a-re-sized-referenced-histology-file">(2) A Re-sized Referenced Histology File<a class="headerlink" href="#2-a-re-sized-referenced-histology-file" title="Permanent link">&para;</a></h3>
 <p><strong>Description</strong>:
-A TIFF file shares the identical dimensions with both the <a href="../smatch/#2-a-smatch-image">"smatch" image</a> and the <a href="../dge2sdge/#2-an-sge-image">"sge" image</a>, acilitating the comparison of consistency between the histology file and these images.</p>
+A TIFF file shares the identical dimensions with both the <a href="../smatch/#2-a-smatch-image">"smatch" image</a> and the <a href="../sdge_visual/#output-files">"sge" image</a>, acilitating the comparison of consistency between the histology file and these images.</p>
 <p><strong>File Naming Convention</strong>:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>&lt;magnification&gt;&lt;flowcell_abbreviation&gt;-&lt;chip_id&gt;-&lt;species&gt;-&lt;figtype&gt;-fit.tif&quot;
 </code></pre></div></td></tr></table></div>
@@ -1490,7 +1513,7 @@ A TIFF file shares the identical dimensions with both the <a href="../smatch/#2-
 </figure>
 <p>The full-size TIFF is provided in the <a href="https://doi.org/10.5281/zenodo.10841778"><code>B08Cshallow_20240319_SGE_withHE.tar.gz</code></a>.</p>
 <h2 id="output-guidelines">Output Guidelines<a class="headerlink" href="#output-guidelines" title="Permanent link">&para;</a></h2>
-<p>To verify the accuracy of the alignment, it is recommended to compare the <a href="#2-a-re-sized-referenced-histology-file">re-sized referenced histology file</a> against the <a href="../smatch/#2-a-smatch-image">"smatch" image</a> and the <a href="../dge2sdge/#2-an-sge-image">"sge" image</a>, ensuring a precise match with the histology images. A clear visibility of fiducial marks in both images indicates an accurate match with submicrometer resolution upon overlay. If the fiducial marks are insufficiently visible or aligned incorrectly, manual adjustment of the histology images is required.</p>
+<p>To verify the accuracy of the alignment, it is recommended to compare the <a href="#2-a-re-sized-referenced-histology-file">re-sized referenced histology file</a> against the <a href="../smatch/#2-a-smatch-image">"smatch" image</a> and the <a href="../sdge_visual/#output-files">"sge" image</a>, ensuring a precise match with the histology images. A clear visibility of fiducial marks in both images indicates an accurate match with submicrometer resolution upon overlay. If the fiducial marks are insufficiently visible or aligned incorrectly, manual adjustment of the histology images is required.</p>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <p>The following parameter in the <a href="../../../getting_started/job_config/">job configuration</a> file will be applied in this rule.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
@@ -1506,7 +1529,7 @@ A TIFF file shares the identical dimensions with both the <a href="../smatch/#2-
 <ul>
 <li><strong>The <code>histology</code> Parameters</strong><ul>
 <li><code>min_buffer_size</code>, <code>max_buffer_size</code> and <code>step_buffer_size</code> will create a list of buffer size help historef to do the alignment. For example, the default <code>min_buffer_size</code>, <code>max_buffer_size</code> and <code>step_buffer_size</code> are 1000, 2000, and 100, respectively, and this will return a buffer size list of 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000.</li>
-<li><code>raster_channel</code> specifies which channel from the <a href="../dge2sdge/#2-an-sge-image">"sge" image</a> will used for historef alignment</li>
+<li><code>raster_channel</code> specifies which channel from the <a href="../sdge_visual/#output-files">"sge" image</a> will used for historef alignment</li>
 </ul>
 </li>
 </ul>

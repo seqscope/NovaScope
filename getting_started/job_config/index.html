@@ -1061,6 +1061,8 @@
       
         
       
+        
+      
     
     
       
@@ -1190,6 +1192,27 @@
   
   <span class="md-ellipsis">
     dge2sdge
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../walkthrough/rules/sdge_visual/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    sdge_visual
   </span>
   
 
@@ -1548,7 +1571,11 @@
 <span class="normal">107</span>
 <span class="normal">108</span>
 <span class="normal">109</span>
-<span class="normal">110</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1">## Section to Specify Input Datta</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1">## Section to Specify Input Datta</span>
 <span class="nt">input</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">flowcell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;flowcell_id&gt;</span><span class="w">                       </span><span class="c1">## REQUIRED FIELD (e.g. N3-HG5MC)</span>
 <span class="w">  </span><span class="nt">chip</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;chip_id&gt;</span><span class="w">                               </span><span class="c1">## REQUIRED FIELD (e.g. B08C)</span>
@@ -1628,17 +1655,21 @@
 <span class="c1">#        threads: 10</span>
 <span class="c1">#        memory: 70000m</span>
 <span class="c1">#</span>
-<span class="c1">#  dge2sdge:                 ## specify the parameters for dge2sdge</span>
-<span class="c1">#    layout: null            ## If absent, the layout file in the info/assets/layout_per_section_basis/layout.1x1.tsv will be used for RGB plots.</span>
-<span class="c1">#</span>
-<span class="c1">#  gene_visual: null         ## If you have a specific set of genes to visualize, specify the path to a file containing a list of gene names (one per line) here. By default, the top five genes with the highest expression are visualized.</span>
-<span class="c1">#</span>
 <span class="c1">#  visualization:            ## specify the parameters for visualization</span>
-<span class="c1">#    drawxy:</span>
+<span class="c1">#    drawxy:                 ## specify the parameters for visualization for sbcd and smatch images</span>
 <span class="c1">#      coord_per_pixel: 1000</span>
 <span class="c1">#      intensity_per_obs: 50</span>
 <span class="c1">#      icol_x: 3</span>
 <span class="c1">#      icol_y: 4</span>
+<span class="c1">#    drawsge:                ## specify the parameters for sdge visualization </span>
+<span class="c1">#      genes:                ## specify sets of genes to be colored</span>
+<span class="c1">#        - red: nonMT        ## the first set of genes</span>
+<span class="c1">#          green: Unspliced</span>
+<span class="c1">#          blue: MT</span>
+<span class="c1">#      # - ...               ## if more 1 set of genes are required</span>
+<span class="c1">#      coord_per_pixel: 1000</span>
+<span class="c1">#      auto_adjust: true</span>
+<span class="c1">#      adjust_quantile: 0.99</span>
 <span class="c1">#</span>
 <span class="c1">#histology:                  ## specify the parameters for histology alignment using historef</span>
 <span class="c1">#    min_buffer_size: 1000   ## min_buffer_size, max_buffer_size and step_buffer_size will create a list of buffer size help historef to do the alignment</span>
@@ -1761,7 +1792,7 @@
 <tr>
 <td><code>sge-per-run</code></td>
 <td>Spatial digital gene expression matrix (SGE), Spatial distribution images for transcripts</td>
-<td><a href="../../walkthrough/rules/dge2sdge/">dge2sdge</a></td>
+<td><a href="../../walkthrough/rules/dge2sdge/">dge2sdge</a> and <a href="../../walkthrough/rules/sdge_visual/">sdge_visual</a></td>
 </tr>
 <tr>
 <td><code>hist-per-run</code></td>

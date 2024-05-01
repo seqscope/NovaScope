@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="https://seqscope.github.io/NovaScope/walkthrough/rules/sdge2sdgeAR/">
+        <link rel="canonical" href="https://seqscope.github.io/NovaScope/walkthrough/rules/sdge_visual/">
       
       
-        <link rel="prev" href="../historef/">
+        <link rel="prev" href="../dge2sdge/">
       
       
-        <link rel="next" href="../sdgeAR_reformat/">
+        <link rel="next" href="../historef/">
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
@@ -22,7 +22,7 @@
     
     
       
-        <title>sdge2sdgeAR - NovaScope</title>
+        <title>sdge_visual - NovaScope</title>
       
     
     
@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#rule-sdge2sdgear" class="md-skip">
+        <a href="#rule-sdge_visual" class="md-skip">
           Skip to content
         </a>
       
@@ -110,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              sdge2sdgeAR
+              sdge_visual
             
           </span>
         </div>
@@ -1089,48 +1089,6 @@
                 
   
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../sdge_visual/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    sdge_visual
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../historef/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    historef
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
     
   
   
@@ -1147,7 +1105,7 @@
           
   
   <span class="md-ellipsis">
-    sdge2sdgeAR
+    sdge_visual
   </span>
   
 
@@ -1158,7 +1116,7 @@
         
   
   <span class="md-ellipsis">
-    sdge2sdgeAR
+    sdge_visual
   </span>
   
 
@@ -1216,6 +1174,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parameters
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#dependencies" class="md-nav__link">
     <span class="md-ellipsis">
       Dependencies
@@ -1237,6 +1204,48 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../historef/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    historef
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sdge2sdgeAR/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    sdge2sdgeAR
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -1362,6 +1371,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parameters
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#dependencies" class="md-nav__link">
     <span class="md-ellipsis">
       Dependencies
@@ -1397,26 +1415,70 @@
   
 
 
-<h1 id="rule-sdge2sdgear">Rule <code>sdge2sdgeAR</code>:<a class="headerlink" href="#rule-sdge2sdgear" title="Permanent link">&para;</a></h1>
+<h1 id="rule-sdge_visual">Rule <code>sdge_visual</code><a class="headerlink" href="#rule-sdge_visual" title="Permanent link">&para;</a></h1>
 <h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">&para;</a></h2>
-<p>The <code>dge2sdgeAR</code> rule is designed to facilitate the utilization of the spatial digital gene expression matrix(SGE) in NovaScope's reformatting features. The main function of Rule <code>dge2sdgeAR</code> is creating a link from the original SGE located at <code>&lt;output_directory&gt;/align/&lt;flowcell_id&gt;/&lt;chip_id&gt;/&lt;run_id&gt;/sge</code> to the directory <code>&lt;output_directory&gt;/analysis/&lt;run_id&gt;/&lt;unit_id&gt;/sgeAR</code>. </p>
-<p>The use of the <code>sgeAR</code> subfolder instead of the direct <code>sge</code> directory allows for any necessary manual preprocessing of the SGE before reformatting. For more details, see <a href="../../../getting_started/output/#analysis">The <code>sgeAR</code> Subfolder and Manual Preprocess</a>.</p>
+<p>Rule <code>sdge_visual</code> is designed to display the spatial expression of specific gene categories in colors red, green, and blue via <a href="https://seqscope.github.io/spatula/"><code>spatula</code></a>. NovaScope enables the visualization of &gt;=1 gene sets. The gene categories for visualization can be defined in the <a href="../../../getting_started/job_config/"><code>config_job.yaml</code></a> file (refer to <a href="#parameters">Parameters</a>).</p>
 <h2 id="input-files">Input Files<a class="headerlink" href="#input-files" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Spatial Digital Gene Expression Matrix (SGE) and relevant files</strong>
-Required input files include a SGE, its related visualizations, and the meta file for X Y coordinates, which are created by Rule <a href="../dge2sdge/"><code>dge2sdge</code></a>.</li>
+<li><strong>Spatial Digital Gene Expression Matrix (SGE) and Associated Files</strong>
+The necessary inputs include a spatial digital gene expression matrix (SGE), generated by Rule <a href="../dge2sdge/"><code>dge2sdge</code></a>.</li>
 </ul>
 <h2 id="output-files">Output Files<a class="headerlink" href="#output-files" title="Permanent link">&para;</a></h2>
 <p>The rule generates the following output in the specified directory path:
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>&lt;output_directory&gt;/analysis/&lt;run_id&gt;/&lt;unit_id&gt;/sgeAR
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>&lt;output_directory&gt;/align/&lt;flowcell_id&gt;/&lt;chip_id&gt;/&lt;run_id&gt;/sge/&lt;run_id&gt;.sge_visual
 </code></pre></div></td></tr></table></div></p>
-<p>These output files are identical to those produced by the <a href="../dge2sdge/"><code>dge2sdge</code></a> rule, as <code>dge2sdgeAR</code> does not modify the files but merely relocates them for easier access and further processing.</p>
+<p><strong>Description</strong>: A PNG file is created for each set of genes specified. By default, the spatial expression of non-mitochondrial genes, unspliced genes, and mitochondrial genes are depicted in red, green, and blue, respectively.</p>
+<p><strong>File Naming Convention</strong>:
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>&lt;run_id&gt;.&lt;gene_type_in_red&gt;_&lt;gene_type_in_green&gt;_&lt;gene_type_in_blue&gt;.png
+</code></pre></div></td></tr></table></div></p>
+<p>The default visualization of non-mitochondrial gene, unspliced genes, and mitochondrial genes will be named as <code>nonMT_Unspliced_MT.png</code>.</p>
+<p><strong>File Visualization</strong>:</p>
+<figure>
+<img alt="sge_image" src="../../../images/nonMT_Unspliced_MT_rescaled.png" width="80%" />
+</figure>
 <h2 id="output-guidelines">Output Guidelines<a class="headerlink" href="#output-guidelines" title="Permanent link">&para;</a></h2>
-<p>No action is required.</p>
+<p>It is recommended to review the spatial distribution of specified gene sets corresponds with the tissue area.</p>
+<h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span></pre></div></td><td class="code"><div><pre><span></span><code>upstream:
+  visualization:            ## specify the parameters for visualization
+    drawsge:                ## specify the parameters for sdge visualization 
+      genes:                ## specify what sets of genes to be colored
+        - red: nonMT        ## the first set of genes
+          green: Unspliced
+          blue: MT
+    #   - ...               ## if more set of genes are required
+      coord_per_pixel: 1000
+      auto_adjust: true
+      adjust_quantile: 0.99
+</code></pre></div></td></tr></table></div>
+<ul>
+<li>
+<p><strong>The <code>genes</code> Parameter in <code>drawsge</code></strong>
+NovaScope includes a selection of predefined gene lists with the following options: all (all genes); nonMT (non-mitochondrial genes); ribosomal (ribosomal genes); MT (mitochondrial genes); and nuclear (nuclear genes). To visualize additional specific gene groups, users can create gene list files (<code>&lt;prefix&gt;.genes.tsv</code>) in the directory specified in their <a href="../../../installation/env_setup/"><code>config_env.yaml</code></a>. Additionally, it is possible to visualize individual genes or groups of genes using specific names or regular expressions with <a href="https://seqscope.github.io/spatula/"><code>spatula</code></a> directly.</p>
+</li>
+<li>
+<p><strong>Other <code>drawsge</code> Parameters</strong></p>
+<ul>
+<li><code>coord_per_pixel</code> specifies how many coordinates should be merged into one pixel. The default setting is 1000.0.</li>
+<li><code>auto_adjust</code> controls whether to automatically adjust the color intensity based on the maximum count. It is set to True by default.</li>
+<li><code>adjust_quantile</code> defines the quantile among non-zero pixels to use for auto-adjustment. The default value is 0.99.</li>
+</ul>
+</li>
+</ul>
 <h2 id="dependencies">Dependencies<a class="headerlink" href="#dependencies" title="Permanent link">&para;</a></h2>
-<p>Given the input from Rule <code>dge2sdge</code> serve as the input for <code>sdge2sdgeAR</code>, Rule <code>sdge2sdgeAR</code> can only execute if the input SGE is available or the dependent rules have successfully completed their operations. See an overview of the rule dependencies in the <a href="../../../home/workflow_structure/">Workflow Structure</a>.</p>
+<p>Given the input from Rule <code>dge2sdge</code> serve as the input for <code>sdge_visual</code>, Rule <code>sdge_visual</code> can only execute if the input SGE is available or the dependent rules have successfully completed their operations. See an overview of the rule dependencies in the <a href="../../../home/workflow_structure/">Workflow Structure</a>.</p>
 <h2 id="code-snippet">Code Snippet<a class="headerlink" href="#code-snippet" title="Permanent link">&para;</a></h2>
-<p>The code for this rule is provided in <a href="https://github.com/seqscope/NovaScope/blob/main/rules/a06_sdge2sdgeAR.smk"><code>a06_sdge2sdgeAR.smk</code></a>.</p>
+<p>The code for this rule is provided in <a href="https://github.com/seqscope/NovaScope/blob/main/rules/b01_sdge_visual.smk"><code>a06_sdge2sdgeAR.smk</code></a>.</p>
 
 
 
