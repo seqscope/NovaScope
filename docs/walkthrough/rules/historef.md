@@ -42,7 +42,7 @@ For an in-depth examination, access the full-size referenced histology file with
 
 ### (2) A Re-sized Referenced Histology File
 **Description**:
-A TIFF file shares the identical dimensions with both the ["smatch" image](./smatch.md#2-a-smatch-image) and the ["sge" image](./dge2sdge.md#2-an-sge-image), acilitating the comparison of consistency between the histology file and these images.
+A TIFF file shares the identical dimensions with both the ["smatch" image](./smatch.md#2-a-smatch-image) and the ["sge" image](./sdge_visual.md#output-files), acilitating the comparison of consistency between the histology file and these images.
 
 **File Naming Convention**:
 
@@ -61,7 +61,7 @@ A TIFF file shares the identical dimensions with both the ["smatch" image](./sma
 The full-size TIFF is provided in the [`B08Cshallow_20240319_SGE_withHE.tar.gz`](https://doi.org/10.5281/zenodo.10841778).
 
 ## Output Guidelines
-To verify the accuracy of the alignment, it is recommended to compare the [re-sized referenced histology file](#2-a-re-sized-referenced-histology-file) against the ["smatch" image](./smatch.md#2-a-smatch-image) and the ["sge" image](./dge2sdge.md#2-an-sge-image), ensuring a precise match with the histology images. A clear visibility of fiducial marks in both images indicates an accurate match with submicrometer resolution upon overlay. If the fiducial marks are insufficiently visible or aligned incorrectly, manual adjustment of the histology images is required.
+To verify the accuracy of the alignment, it is recommended to compare the [re-sized referenced histology file](#2-a-re-sized-referenced-histology-file) against the ["smatch" image](./smatch.md#2-a-smatch-image) and the ["sge" image](./sdge_visual.md#output-files), ensuring a precise match with the histology images. A clear visibility of fiducial marks in both images indicates an accurate match with submicrometer resolution upon overlay. If the fiducial marks are insufficiently visible or aligned incorrectly, manual adjustment of the histology images is required.
 
 ## Parameters
 
@@ -77,7 +77,7 @@ histology:
 
 * **The `histology` Parameters**
     * `min_buffer_size`, `max_buffer_size` and `step_buffer_size` will create a list of buffer size help historef to do the alignment. For example, the default `min_buffer_size`, `max_buffer_size` and `step_buffer_size` are 1000, 2000, and 100, respectively, and this will return a buffer size list of 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000.
-    * `raster_channel` specifies which channel from the ["sge" image](./dge2sdge.md#2-an-sge-image) will used for historef alignment
+    * `raster_channel` specifies which channel from the ["sge" image](./sdge_visual.md#output-files) will used for historef alignment
 
 ## Dependencies
 Rule `historef` commences only after Rule [`dge2sdge`](./dge2sdge.md) has successfully executed. An overview of the rule dependencies are provided in the [Workflow Structure](../../home/workflow_structure.md).
