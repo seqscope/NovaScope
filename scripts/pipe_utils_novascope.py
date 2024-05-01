@@ -79,7 +79,7 @@ def read_config_for_seq2(config, job_dir, main_dirs, log_option=True):
     # temp
     flowcell= config["input"]["flowcell"]
     chip = config["input"]["chip"]
-    #df
+    # df
     df_seq2 = pd.DataFrame(config.get('input', {}).get('seq2nd', []))
     df_seq2['flowcell'] = flowcell
     df_seq2['chip'] = chip

@@ -118,8 +118,8 @@ else:
         'flowcell': pd.Series(dtype='object'),
         'chip': pd.Series(dtype='object'),
         'hist_std_prefix': pd.Series(dtype='object'),
-        "figtype": pd.Series(dtype='object'),
-        "magnification": pd.Series(dtype='object')
+        'figtype': pd.Series(dtype='object'),
+        'magnification': pd.Series(dtype='object'),
         'run_id': pd.Series(dtype='object'),
     })
 
