@@ -132,7 +132,7 @@ env_yml: <path_to_config_env.yaml_file>         ## If absent, NovaScope use the 
 #    mu_scale: 1000         ## Specify coordinate to um translate for hexagon. By default, we consider the spatial digital gene expression matrix (SGE) is in nano meter.
 #    char:                  ## specify the characteristics for the hexagons
 #      - solofeature: gn    ## specify the genomic feature to create hexagon
-#        trainwidth: 24     ## specify the size for a hexagonal grid
+#        hexagonwidth: 24     ## specify the size for a hexagonal grid
 #        segmentmove: 1     ## Specify if the SGE is based on overlapping hexagons or non-overlapping hexagon. The default value 1 will create non-overlapping hexagons.
 
 ```

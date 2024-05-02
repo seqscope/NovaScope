@@ -106,7 +106,7 @@ else:
         'run_id': pd.Series(dtype='object'),
         'unit_id': pd.Series(dtype='object'),
         'solofeature': pd.Series(dtype='object'),
-        'trainwidth': pd.Series(dtype='int64'),  
+        'hexagonwidth': pd.Series(dtype='int64'),  
         'segmentmove': pd.Series(dtype='int64'), 
     })
 
@@ -132,6 +132,11 @@ df_seq2 = read_config_for_seq2(config, job_dir, main_dirs, log_option=True)
 # - all requests
 seq1_id, seq1_fq_raw, sc2seq1 = read_config_for_seq1(config, job_dir, main_dirs)
 
+#==============================================
+#
+# pd input
+#
+#==============================================
 # run pd
 df_run = pd.DataFrame({
     'flowcell': [flowcell],
@@ -140,7 +145,7 @@ df_run = pd.DataFrame({
     'run_id': [run_id],
     'unit_id': [unit_id],
 })
-#----------------------------------------------
+
 # sge visual
 if "sge-per-run" in request:
     sgevisual_id2params, rid2sgevisual_id = read_config_for_sgevisual(config, env_config, smk_dir, run_id)

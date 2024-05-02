@@ -115,16 +115,16 @@ def output_fn_segmperunit(main_dirs, df_segment_char):
             'flag': 'segment-per-unit',
             'root': main_dirs["analysis"],
             'subfolders_patterns': [
-                                    ([ "{run_id}", "{unit_id}", "segment", "{sf}.d_{tw}.raw_{seg_nmove}", "barcodes.tsv.gz"], None),
-                                    ([ "{run_id}", "{unit_id}", "segment", "{sf}.d_{tw}.raw_{seg_nmove}", "features.tsv.gz"], None),
-                                    ([ "{run_id}", "{unit_id}", "segment", "{sf}.d_{tw}.raw_{seg_nmove}", "matrix.mtx.gz"  ], None),                     
+                                    ([ "{run_id}", "{unit_id}", "segment", "{solofeature}.d_{hexagonwidth}.raw_{segmentmove}", "barcodes.tsv.gz"], None),
+                                    ([ "{run_id}", "{unit_id}", "segment", "{solofeature}.d_{hexagonwidth}.raw_{segmentmove}", "features.tsv.gz"], None),
+                                    ([ "{run_id}", "{unit_id}", "segment", "{solofeature}.d_{hexagonwidth}.raw_{segmentmove}", "matrix.mtx.gz"  ], None),                     
             ],
             'zip_args': {
                 'run_id':       df_segment_char["run_id"].values,  
                 'unit_id':      df_segment_char["unit_id"].values,
-                'sf':           df_segment_char["solofeature"].values,
-                'tw':           df_segment_char["trainwidth"].values,
-                'seg_nmove':    df_segment_char['segmentmove'].values,
+                'solofeature':  df_segment_char["solofeature"].values,
+                'hexagonwidth': df_segment_char["hexagonwidth"].values,
+                'segmentmove':  df_segment_char['segmentmove'].values,
             },
     }
     return out_fn

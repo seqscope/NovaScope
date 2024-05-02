@@ -154,6 +154,7 @@ def add_default_for_char(df_char, run_id, unit_id, cols=["solofeature", "trainwi
 
     df_char = add_or_expand_column(df_char, 'solofeature', cols, "gn")
     df_char = add_or_expand_column(df_char, 'trainwidth', cols, 24)
+    df_char = add_or_expand_column(df_char, 'hexagonwidth', cols, 24)
     df_char = add_or_expand_column(df_char, 'segmentmove', cols, 1)
     df_char = add_or_expand_column(df_char, 'nfactor', cols, [6, 12])
     df_char = add_or_expand_column(df_char, 'trainnepoch', cols, 3)
@@ -166,22 +167,23 @@ def read_config_for_segment(config, run_id, unit_id, log_option=False):
     # segment_char_info
     segment_char_info= config.get("downstream", {}).get("segment",{}).get("char", None)
     key_char_info = config.get("downstream", {}).get("key_char", None)
+
     if segment_char_info is not None:
         df_segment_char = pd.DataFrame(segment_char_info)
-        df_segment_char = add_default_for_char(df_segment_char, run_id, unit_id)
-    else:
-        if key_char_info is not None:
-            df_segment_char = read_config_for_keychar(key_char_info, run_id, unit_id)
-            df_segment_char = df_segment_char[["solofeature", "trainwidth", "segmentmove"]].drop_duplicates()
-        else:
-            df_segment_char = pd.DataFrame({
-                "solofeature": ["gn"],
-                "trainwidth": [24],
-                "segmentmove": [1],
-                "run_id": [run_id],
-                "unit_id": [unit_id]
-            }
-            )
+        df_segment_char = add_default_for_char(df_segment_char, run_id, unit_id, cols=["solofeature", "hexagonwidth", "segmentmove"])
+    elif key_char_info is not None:
+        df_segment_char = read_config_for_keychar(key_char_info, run_id, unit_id)
+        df_segment_char = df_segment_char[["solofeature", "trainwidth", "segmentmove"]].drop_duplicates()
+        df_segment_char.rename(columns={"trainwidth": "hexagonwidth"}, inplace=True)
+    elif segment_char_info is None and key_char_info is None:
+        df_segment_char = pd.DataFrame({
+            "solofeature": ["gn"],
+            "hexagonwidth": [24],
+            "segmentmove": [1],
+            "run_id": [run_id],
+            "unit_id": [unit_id]
+        })
+    
     # mu_scale
     mu_scale = config.get("downstream", {}).get("mu_scale", None)
     if mu_scale is None:
@@ -189,10 +191,10 @@ def read_config_for_segment(config, run_id, unit_id, log_option=False):
     if log_option:
         log_dataframe(df_segment_char, log_message=" - Downstream segment character info: ")
         logging.info(f"     mu scale: {mu_scale}")
+    
     return df_segment_char, mu_scale
 
 def read_config_for_keychar(key_char_info, run_id, unit_id, log_option=False):
-    
     if key_char_info is None:
         df_key_char = pd.DataFrame({
             "solofeature": ["gn", "gn"],

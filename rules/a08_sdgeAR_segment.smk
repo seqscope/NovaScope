@@ -4,14 +4,14 @@ rule a08_sdgeAR_segment:
         sdgeAR_transcript    = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.merged.matrix.tsv.gz"),
         sdgeAR_ftr_tab       = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.feature.tsv.gz"),
     output:
-        sdgeAR_seg_raw_bcd   = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{sf}.d_{tw}.raw_{seg_nmove}", "barcodes.tsv.gz"),
-        sdgeAR_seg_raw_ftr   = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{sf}.d_{tw}.raw_{seg_nmove}", "features.tsv.gz"),
-        sdgeAR_seg_raw_mtx   = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{sf}.d_{tw}.raw_{seg_nmove}", "matrix.mtx.gz"),
+        sdgeAR_seg_raw_bcd   = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solofeature}.d_{hexagonwidth}.raw_{segmentmove}", "barcodes.tsv.gz"),
+        sdgeAR_seg_raw_ftr   = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solofeature}.d_{hexagonwidth}.raw_{segmentmove}", "features.tsv.gz"),
+        sdgeAR_seg_raw_mtx   = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solofeature}.d_{hexagonwidth}.raw_{segmentmove}", "matrix.mtx.gz"),
     params:
-        solofeature         = "{sf}",
-        train_width         = "{tw}",
+        solofeature         = "{solofeature}",
+        hexagon_width       = "{hexagonwidth}",
+        n_move              = "{segmentmove}",
         precision           = config.get("downstream", {}).get('segment', {}).get('precision', 2), 
-        n_move              = "{seg_nmove}",
         min_pixel_per_unit  = config.get("downstream", {}).get('segment', {}).get('min_pixel_per_unit', 10), 
         # module
         module_cmd        = get_envmodules_for_rule(["python", "samtools"], module_config),
@@ -35,7 +35,7 @@ rule a08_sdgeAR_segment:
             --major_axis {major_axis} \
             --key {params.solofeature} \
             --precision {params.precision} \
-            --hex_width {params.train_width} \
+            --hex_width {params.hexagon_width} \
             --n_move {params.n_move} \
             --min_ct_per_unit {params.min_pixel_per_unit} \
             --transfer_gene_prefix
