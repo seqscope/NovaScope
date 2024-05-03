@@ -87,7 +87,7 @@ Specifies the types of genes to retain during gene filtering.
 Defines the types of genes to be excluded during gene filtering. 
 
 !!! info
-    It is important to note that both parameters also utilizes regular expressions for specifying which genes to remove.
+    It is important to note that both parameters utilizes regular expressions.
 
 ## Dependencies
 Given `sdgeAR_reformat` requires input from Rule `sdge2sdgeAR`, Rule `sdgeAR_reformat` can only execute after `sdge2sdgeAR` and its prerequisite rules have successfully completed their operations. See an overview of the rule dependencies in the [Workflow Structure](../../home/workflow_structure.md).

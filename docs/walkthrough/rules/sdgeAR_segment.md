@@ -66,27 +66,26 @@ The output file can serve as input for tools that require SGE in the 10x genome 
 ## Parameters
 ```yaml
 downstream:
+  mu_scale: 1000        
   segment:                 
     precision: 2
     min_pixel_per_unit: 10
-    mu_scale: 1000        
     char:                
       - solofeature: gn    
         hexagonwidth: 24     
         segmentmove: 1     
 ```
 
-* **The `precision` Parameter**
-Specifies the number of digits to store spatial location (in um, 0 for integer)
-
-* **The `min_pixel_per_unit` Parameter**
-A minimum UMI count of output hexagons
-
 * **The `mu_scale` Parameter**
 Specify coordinate to um translate for hexagon. By default, we consider the spatial digital gene expression matrix (SGE) is in nano meter.
 
-* **The `char` Parameter**
-Specify the characteristics for the hexagons, including the genomic feature to create hexagon (`solo feature`), the size for a hexagonal grid (`hexagonwidth`), and whether the SGE is based on overlapping hexagons or non-overlapping hexagon (`segmentmove`). When `segmentmove` is 1, non-overlapping hexagon-based SGE will be created.
+* **The `segment` Field**
+  * **The `precision` Parameter**
+  Specifies the number of digits to store spatial location (in um, 0 for integer)
+  * **The `min_pixel_per_unit` Parameter**
+  A minimum UMI count of output hexagons
+  * **The `char` Parameter**
+  Specify the characteristics for the hexagons, including the genomic feature to create hexagon (`solo feature`), the size for a hexagonal grid (`hexagonwidth`), and whether the SGE is based on overlapping hexagons or non-overlapping hexagon (`segmentmove`). When `segmentmove` is 1, non-overlapping hexagon-based SGE will be created.
 
 ## Dependencies
 Rule `sdgeAR_segment` requires input from Rules `sdgeAR_reformat` and `sdge2sdgeAR`. Thus, Rule `sdgeAR_segment` can only execute after `sdgeAR_reformat` and `sdge2sdgeAR` and their prerequisite rules when applicable have successfully completed their operations. See an overview of the rule dependencies in the [Workflow Structure](../../home/workflow_structure.md).

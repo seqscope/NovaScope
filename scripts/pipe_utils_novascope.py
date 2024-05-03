@@ -33,8 +33,8 @@ def read_config_for_ini(config,job_dir,smk_dir):
     logging.info(f"     {module_config}")
 
     # - ref  
-    sp2alignref = env_config.get("ref", {}).get("align", None)
-    sp2geneinfo = env_config.get("ref", {}).get("geneinfo", None)
+    #sp2alignref = env_config.get("ref", {}).get("align", None)
+    #sp2geneinfo = env_config.get("ref", {}).get("geneinfo", None)
 
     # - python env
     pyenv  = env_config.get("pyenv", None)
@@ -44,7 +44,7 @@ def read_config_for_ini(config,job_dir,smk_dir):
     python = os.path.join(pyenv, "bin", "python")
     assert os.path.exists(python), f"Python does not exist in your python environment: {python}"
 
-    return env_config, module_config, sp2alignref, sp2geneinfo, python, pyenv
+    return env_config, module_config, python, pyenv
 
 def read_config_for_seq1(config, job_dir, main_dirs):
     logging.info(f" - Seq1 info")
@@ -126,94 +126,30 @@ def read_config_for_runid(config, job_dir, main_dirs, df_seq2=None):
     return run_id, rid2seq2
 
 def read_config_for_unitid(config, job_dir, run_id):
-    boundary = check_path(config.get("input", {}).get("boundary", None), job_dir, strict_mode=False)
-    unit_ann = "default" if boundary is None else "bdfilter"
-    unit_id  = run_id + "-" + unit_ann
+    unit_id = config.get("input", {}).get("unit_id", None)
+    boundary = config.get("input", {}).get("boundary", None)
+    if unit_id is None:
+        if boundary is None:
+            unit_ann = "default"
+        else:
+            boundary = check_path(boundary, job_dir, strict_mode=True)
+            unit_ann=get_last5_from_md5(boundary)
+        unit_id = run_id + "-" + unit_ann
+    else:
+        unit_ann = unit_id.replace(f"{run_id}-", "")
+        if unit_ann == "default":
+            assert boundary is None, "When unit_id is annotated with 'default', boundary should not be provided or applied."
+        else:
+            boundary = check_path(boundary, job_dir, strict_mode=True)
 
     logging.info(f" - Unit ID: {unit_id}")
     logging.info(f" - Boundary: {boundary}")
     return unit_id, unit_ann, boundary
+#================================================================================================
+# upstream
+#  - sgevisual
 
-def add_or_expand_column(df, col_name, cols, default_values):
-    if col_name not in df.columns and col_name in cols:
-        if isinstance(default_values, list) and len(default_values) > 1:
-            temp_dfs = []
-            for value in default_values:
-                temp_df = df.copy()
-                temp_df[col_name] = value
-                temp_dfs.append(temp_df)
-            df = pd.concat(temp_dfs).sort_index(kind='merge').reset_index(drop=True)
-        else:
-            single_value = default_values if not isinstance(default_values, list) else default_values[0]
-            df[col_name] = single_value
-    return df
-
-def add_default_for_char(df_char, run_id, unit_id, cols=["solofeature", "trainwidth", "segmentmove"]):
-    df_char["run_id"] = run_id
-    df_char["unit_id"] = unit_id
-
-    df_char = add_or_expand_column(df_char, 'solofeature', cols, "gn")
-    df_char = add_or_expand_column(df_char, 'trainwidth', cols, 24)
-    df_char = add_or_expand_column(df_char, 'hexagonwidth', cols, 24)
-    df_char = add_or_expand_column(df_char, 'segmentmove', cols, 1)
-    df_char = add_or_expand_column(df_char, 'nfactor', cols, [6, 12])
-    df_char = add_or_expand_column(df_char, 'trainnepoch', cols, 3)
-    df_char = add_or_expand_column(df_char, 'fitwidth', cols, 24)
-    df_char = add_or_expand_column(df_char, 'anchor', cols, 4)
-
-    return df_char
-
-def read_config_for_segment(config, run_id, unit_id, log_option=False):
-    # segment_char_info
-    segment_char_info= config.get("downstream", {}).get("segment",{}).get("char", None)
-    key_char_info = config.get("downstream", {}).get("key_char", None)
-
-    if segment_char_info is not None:
-        df_segment_char = pd.DataFrame(segment_char_info)
-        df_segment_char = add_default_for_char(df_segment_char, run_id, unit_id, cols=["solofeature", "hexagonwidth", "segmentmove"])
-    elif key_char_info is not None:
-        df_segment_char = read_config_for_keychar(key_char_info, run_id, unit_id)
-        df_segment_char = df_segment_char[["solofeature", "trainwidth", "segmentmove"]].drop_duplicates()
-        df_segment_char.rename(columns={"trainwidth": "hexagonwidth"}, inplace=True)
-    elif segment_char_info is None and key_char_info is None:
-        df_segment_char = pd.DataFrame({
-            "solofeature": ["gn"],
-            "hexagonwidth": [24],
-            "segmentmove": [1],
-            "run_id": [run_id],
-            "unit_id": [unit_id]
-        })
-    
-    # mu_scale
-    mu_scale = config.get("downstream", {}).get("mu_scale", None)
-    if mu_scale is None:
-        mu_scale = config.get("downstream", {}).get("mu_scale", 1000)
-    if log_option:
-        log_dataframe(df_segment_char, log_message=" - Downstream segment character info: ")
-        logging.info(f"     mu scale: {mu_scale}")
-    
-    return df_segment_char, mu_scale
-
-def read_config_for_keychar(key_char_info, run_id, unit_id, log_option=False):
-    if key_char_info is None:
-        df_key_char = pd.DataFrame({
-            "solofeature": ["gn", "gn"],
-            "trainwidth": [24, 24],
-            "segmentmove": [1, 1],
-            "nfactor": [6, 12],
-            "trainnepoch": [3, 3],
-            "fitwidth": [24, 24],
-            "anchor": [4, 4]
-        }
-        )
-    else:
-        df_key_char = pd.DataFrame(key_char_info)
-        df_key_char = add_default_for_char(df_key_char, run_id, unit_id, cols=["solofeature", "trainwidth", "segmentmove", "nfactor", "trainnepoch", "fitwidth", "anchor"])
-    if log_option:
-        logging.info(f" ")
-        log_dataframe(df_key_char, log_message=" - Downstream key character info:")
-
-def transform_data(df, refgl_dir):
+def transform_sge_visual(df, refgl_dir):
     genelist_options={
         "defined": ["nonMT", "MT", "ribosomal", "nuclear"],
         "all": ["Gene", "GeneFull", "Spliced", "Unspliced", "Velocyto"]
@@ -239,10 +175,9 @@ def convert_sgevisual_list2df(config, refgl_dir):
     sge_visual_params = config.get("upstream",{}).get("visualization",{}).get("drawsge",{}).get("genes", sge_visual_defparams)
     df_sge_visual = pd.DataFrame(sge_visual_params).drop_duplicates()
     # Transform the DataFrame
-    df_sge_visual['params'] = transform_data(df_sge_visual, refgl_dir)
+    df_sge_visual['params'] = transform_sge_visual(df_sge_visual, refgl_dir)
     df_sge_visual['sgevisual_id'] = df_sge_visual.apply(lambda x: f"{x['red']}_{x['green']}_{x['blue']}", axis=1)
     return df_sge_visual[['sgevisual_id', 'params']]
-
 
 def read_config_for_sgevisual(config, env_config, smk_dir, run_id):
     logging.info(f" - SGE visual: ")
@@ -270,6 +205,61 @@ def read_config_for_sgevisual(config, env_config, smk_dir, run_id):
 
     # return
     return sgevisual_id2params, rid2sgevisual_id
+#================================================================================================
+
+# downstream
+
+def add_or_expand_column(df, col_name, default_value):
+    if col_name not in df.columns:
+        if isinstance(default_value, list) and len(default_value) > 1:
+            temp_dfs = []
+            for value in default_value:
+                temp_df = df.copy()
+                temp_df[col_name] = value
+                temp_dfs.append(temp_df)
+            df = pd.concat(temp_dfs).sort_index(kind='merge').reset_index(drop=True)
+        else:
+            single_value = default_value if not isinstance(default_value, list) else default_value[0]
+            df[col_name] = single_value
+    return df
+
+def add_default_for_char(df_char, run_id, unit_id, col_w_defval):
+    df_char["run_id"] = run_id
+    df_char["unit_id"] = unit_id
+    for col_name, default_value in col_w_defval.items():
+        df_char = add_or_expand_column(df_char, col_name, default_value)
+    return df_char
+
+def read_config_for_segment(config, run_id, unit_id, log_option=False):
+    # segment_char_info
+    segment_char_info= config.get("downstream", {}).get("segment",{}).get("char", None)
+    if segment_char_info is not None:
+        df_segment_char = pd.DataFrame(segment_char_info)
+        segment_defvals={
+            "solofeature": "gn",
+            "hexagonwidth": 24,
+            "segmentmove": 1
+        }
+        df_segment_char = add_default_for_char(df_segment_char, run_id, unit_id, segment_defvals)
+    else:
+        df_segment_char = pd.DataFrame({
+            "run_id": [run_id],
+            "unit_id": [unit_id],
+            "solofeature": ["gn"],
+            "hexagonwidth": [24],
+            "segmentmove": [1],
+        })
+    
+    # mu_scale
+    mu_scale = config.get("downstream", {}).get("mu_scale", None)
+    if mu_scale is None:
+        mu_scale = config.get("downstream", {}).get("mu_scale", 1000)
+    if log_option:
+        log_dataframe(df_segment_char, log_message=" - Downstream segment character info: ")
+        logging.info(f"     mu scale: {mu_scale}")
+    
+    return df_segment_char, mu_scale
+
 
 #================================================================================================
 
@@ -285,12 +275,12 @@ def read_config_for_hist(config, job_dir, main_dirs):
     if df_hist["path"].isnull().any():
         raise ValueError("Please provide a valid histology file when requesting 'hist-per-run' or 'cart-per-hist'...")
     # add prefix
-    df_hist["flowcell"]=config["input"]["flowcell"]
-    df_hist["flowcell_abbr"]=df_hist["flowcell"].apply(lambda x: x.split("-")[0])
-    df_hist["chip"]=config["input"]["chip"]
-    df_hist["species"]=config["input"]["species"]
-    df_hist["magnification"]=df_hist["magnification"].fillna("10X")
-    df_hist["figtype"]=df_hist["figtype"].fillna("hne")
+    df_hist["flowcell"]      = config["input"]["flowcell"]
+    df_hist["flowcell_abbr"] = df_hist["flowcell"].apply(lambda x: x.split("-")[0])
+    df_hist["chip"]          = config["input"]["chip"]
+    df_hist["species"]       = config["input"]["species"]
+    df_hist["magnification"] = df_hist["magnification"].fillna("10X")
+    df_hist["figtype"]       = df_hist["figtype"].fillna("hne")
     df_hist["hist_std_prefix"]=df_hist["magnification"]+df_hist["flowcell_abbr"]+"-"+df_hist["chip"]+"-"+df_hist["species"]+"-"+df_hist["figtype"]
     # add paths and archive the files
     df_hist["hist_raw_inputpath"] = df_hist["path"].apply(lambda x: check_path(x, job_dir, strict_mode=True))   # hist_raw_inputpath is the real path

@@ -122,17 +122,17 @@ env_yml: <path_to_config_env.yaml_file>         ## If absent, NovaScope use the 
 #    step_buffer_size: 100
 #    raster_channel: 1       ## roaster channel used for historef alignment
 #
-#downstream:                 
+#downstream:
+#  mu_scale: 1000           ## Specify coordinate to um translate for hexagon. By default, we consider the spatial digital gene expression matrix (SGE) is in nano meter.
 #  gene_filter:             ## Specify the criteria for gene filtering in a manner compatible with regular expressions, which will be applied when creating the FICTURE-compatible SGE and hexagonal SGE.
 #   keep_gene_type: "protein_coding,lncRNA"    # genes to keep
 #   rm_gene_regex: "^Gm\\d+|^mt-|^MT-"         # genes to remove
 #  segment:                 ## specify the parameters for grouping the pixels into hexagons
 #    precision: 2           ## specify the number of digits to store spatial location (in um, 0 for integer)
 #    min_pixel_per_unit: 10 ## specify a minimum UMI count of output hexagons
-#    mu_scale: 1000         ## Specify coordinate to um translate for hexagon. By default, we consider the spatial digital gene expression matrix (SGE) is in nano meter.
 #    char:                  ## specify the characteristics for the hexagons
 #      - solofeature: gn    ## specify the genomic feature to create hexagon
-#        hexagonwidth: 24     ## specify the size for a hexagonal grid
+#        hexagonwidth: 24   ## specify the size for a hexagonal grid
 #        segmentmove: 1     ## Specify if the SGE is based on overlapping hexagons or non-overlapping hexagon. The default value 1 will create non-overlapping hexagons.
 
 ```

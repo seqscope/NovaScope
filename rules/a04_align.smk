@@ -24,7 +24,9 @@ rule a04_align:
         len_r2         = config.get("upstream", {}).get("align", {}).get('len_r2', 101),
         exist_action   = config.get("upstream", {}).get("align", {}).get('exist_action', "overwrite"),
         # ref
-        refidx         = sp2alignref[species],
+        #refidx         = sp2alignref[species],
+        sp2alignref     = env_config.get("ref", {}).get("align", None),
+        species         = species,
         # resource
         ram            = lambda wildcards: assign_resource_for_align(wildcards.run_id, config, env_config, rid2seq2, main_dirs)["ram"],
         # module
@@ -46,8 +48,9 @@ rule a04_align:
             exist_action =" --overwrite-existing "
         
         # refidx
-        assert params.refidx is not None, "The alignment reference file is not provided. Check your environment configuration file."
-        assert os.path.exists(params.refidx), f"The alignment reference file does not exist: {params.refidx}. Check your environment configuration file."
+        refidx = params.sp2alignref[params.species]
+        assert refidx is not None, "The alignment reference file is not provided. Check your environment configuration file."
+        assert os.path.exists(refidx), f"The alignment reference file does not exist: {refidx}. Check your environment configuration file."
         
         shell(
         r"""
@@ -60,7 +63,7 @@ rule a04_align:
             --fq2 {input.seq2_fqr2} \
             --whitelist-match {input.smatch_tsv} \
             --filter-match {input.smatch_tsv} \
-            --star-index {params.refidx} \
+            --star-index {refidx} \
             --star-bin {star} \
             --min-match-len  {params.min_match_len} \
             --min-match-frac {params.min_match_frac} \

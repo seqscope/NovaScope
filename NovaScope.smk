@@ -36,7 +36,7 @@ configfile: "config_job.yaml"
 setup_logging(job_dir, smk_name+"_read-in")
 
 # - env
-env_config, module_config, sp2alignref, sp2geneinfo, python, pyenv = read_config_for_ini(config, job_dir, smk_dir)
+env_config, module_config, python, pyenv = read_config_for_ini(config, job_dir, smk_dir)
 
 # - tools
 spatula  = env_config.get("tools", {}).get("spatula",   "spatula")
@@ -147,7 +147,7 @@ df_run = pd.DataFrame({
 })
 
 # sge visual
-if "sge-per-run" in request:
+if any(task in request for task in ["sge-per-run", "hist-per-run", "segment-per-unit", "transcript-per-unit"]):
     sgevisual_id2params, rid2sgevisual_id = read_config_for_sgevisual(config, env_config, smk_dir, run_id)
     # expand df_sge for sge-per-run
     df_sge = pd.DataFrame( [{**row, 'sgevisual_id': sgevisual_id} for _, row in df_run.iterrows() for sgevisual_id in sgevisual_id2params.keys()])
@@ -206,6 +206,8 @@ include: "rules/a03_smatch.smk"
 if any(task in request for task in ["align-per-run", "sge-per-run", "hist-per-run", "segment-per-unit", "transcript-per-unit"]):
     include: "rules/a04_align.smk"
     include: "rules/a05_dge2sdge.smk"
+
+if "sge-per-run" in request:
     include: "rules/b01_sdge_visual.smk"
 
 if "hist-per-run" in request:
