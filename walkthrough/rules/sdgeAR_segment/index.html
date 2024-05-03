@@ -1525,10 +1525,10 @@ ENSMUSG00000078672  Mup20   Gene Expression
 <span class="normal">7</span>
 <span class="normal">8</span>
 <span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nt">downstream</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">mu_scale</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span><span class="w">        </span>
 <span class="w">  </span><span class="nt">segment</span><span class="p">:</span><span class="w">                 </span>
 <span class="w">    </span><span class="nt">precision</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
 <span class="w">    </span><span class="nt">min_pixel_per_unit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
-<span class="w">    </span><span class="nt">mu_scale</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span><span class="w">        </span>
 <span class="w">    </span><span class="nt">char</span><span class="p">:</span><span class="w">                </span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">solofeature</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gn</span><span class="w">    </span>
 <span class="w">        </span><span class="nt">hexagonwidth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">24</span><span class="w">     </span>
@@ -1536,21 +1536,18 @@ ENSMUSG00000078672  Mup20   Gene Expression
 </code></pre></div></td></tr></table></div>
 <ul>
 <li>
-<p><strong>The <code>precision</code> Parameter</strong>
-Specifies the number of digits to store spatial location (in um, 0 for integer)</p>
-</li>
-<li>
-<p><strong>The <code>min_pixel_per_unit</code> Parameter</strong>
-A minimum UMI count of output hexagons</p>
-</li>
-<li>
 <p><strong>The <code>mu_scale</code> Parameter</strong>
 Specify coordinate to um translate for hexagon. By default, we consider the spatial digital gene expression matrix (SGE) is in nano meter.</p>
 </li>
 <li>
-<p><strong>The <code>char</code> Parameter</strong>
-Specify the characteristics for the hexagons, including the genomic feature to create hexagon (<code>solo feature</code>), the size for a hexagonal grid (<code>hexagonwidth</code>), and whether the SGE is based on overlapping hexagons or non-overlapping hexagon (<code>segmentmove</code>). When <code>segmentmove</code> is 1, non-overlapping hexagon-based SGE will be created.</p>
+<p><strong>The <code>segment</code> Field</strong></p>
 </li>
+<li><strong>The <code>precision</code> Parameter</strong>
+  Specifies the number of digits to store spatial location (in um, 0 for integer)</li>
+<li><strong>The <code>min_pixel_per_unit</code> Parameter</strong>
+  A minimum UMI count of output hexagons</li>
+<li><strong>The <code>char</code> Parameter</strong>
+  Specify the characteristics for the hexagons, including the genomic feature to create hexagon (<code>solo feature</code>), the size for a hexagonal grid (<code>hexagonwidth</code>), and whether the SGE is based on overlapping hexagons or non-overlapping hexagon (<code>segmentmove</code>). When <code>segmentmove</code> is 1, non-overlapping hexagon-based SGE will be created.</li>
 </ul>
 <h2 id="dependencies">Dependencies<a class="headerlink" href="#dependencies" title="Permanent link">&para;</a></h2>
 <p>Rule <code>sdgeAR_segment</code> requires input from Rules <code>sdgeAR_reformat</code> and <code>sdge2sdgeAR</code>. Thus, Rule <code>sdgeAR_segment</code> can only execute after <code>sdgeAR_reformat</code> and <code>sdge2sdgeAR</code> and their prerequisite rules when applicable have successfully completed their operations. See an overview of the rule dependencies in the <a href="../../../home/workflow_structure/">Workflow Structure</a>.</p>

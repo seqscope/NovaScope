@@ -1677,17 +1677,17 @@
 <span class="c1">#    step_buffer_size: 100</span>
 <span class="c1">#    raster_channel: 1       ## roaster channel used for historef alignment</span>
 <span class="c1">#</span>
-<span class="c1">#downstream:                 </span>
+<span class="c1">#downstream:</span>
+<span class="c1">#  mu_scale: 1000           ## Specify coordinate to um translate for hexagon. By default, we consider the spatial digital gene expression matrix (SGE) is in nano meter.</span>
 <span class="c1">#  gene_filter:             ## Specify the criteria for gene filtering in a manner compatible with regular expressions, which will be applied when creating the FICTURE-compatible SGE and hexagonal SGE.</span>
 <span class="c1">#   keep_gene_type: &quot;protein_coding,lncRNA&quot;    # genes to keep</span>
 <span class="c1">#   rm_gene_regex: &quot;^Gm\\d+|^mt-|^MT-&quot;         # genes to remove</span>
 <span class="c1">#  segment:                 ## specify the parameters for grouping the pixels into hexagons</span>
 <span class="c1">#    precision: 2           ## specify the number of digits to store spatial location (in um, 0 for integer)</span>
 <span class="c1">#    min_pixel_per_unit: 10 ## specify a minimum UMI count of output hexagons</span>
-<span class="c1">#    mu_scale: 1000         ## Specify coordinate to um translate for hexagon. By default, we consider the spatial digital gene expression matrix (SGE) is in nano meter.</span>
 <span class="c1">#    char:                  ## specify the characteristics for the hexagons</span>
 <span class="c1">#      - solofeature: gn    ## specify the genomic feature to create hexagon</span>
-<span class="c1">#        hexagonwidth: 24     ## specify the size for a hexagonal grid</span>
+<span class="c1">#        hexagonwidth: 24   ## specify the size for a hexagonal grid</span>
 <span class="c1">#        segmentmove: 1     ## Specify if the SGE is based on overlapping hexagons or non-overlapping hexagon. The default value 1 will create non-overlapping hexagons.</span>
 </code></pre></div></td></tr></table></div>
 <h3 id="detailed-description-of-individual-fields">Detailed Description of Individual Fields<a class="headerlink" href="#detailed-description-of-individual-fields" title="Permanent link">&para;</a></h3>

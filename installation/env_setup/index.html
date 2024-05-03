@@ -603,11 +603,44 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#reference" class="md-nav__link">
+  <a href="#reference-databases" class="md-nav__link">
     <span class="md-ellipsis">
-      Reference
+      Reference Databases
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Reference Databases">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-reference-genome-index-for-alignment" class="md-nav__link">
+    <span class="md-ellipsis">
+      (1) Reference Genome Index for Alignment
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-reference-gene-list-files-for-visualizing-spatial-expression-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      (2) Reference Gene List Files for Visualizing Spatial Expression Patterns
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-optionl-reference-gene-information-for-gene-filtering" class="md-nav__link">
+    <span class="md-ellipsis">
+      (3) (Optionl) Reference Gene Information for Gene Filtering
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1327,11 +1360,44 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#reference" class="md-nav__link">
+  <a href="#reference-databases" class="md-nav__link">
     <span class="md-ellipsis">
-      Reference
+      Reference Databases
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Reference Databases">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-reference-genome-index-for-alignment" class="md-nav__link">
+    <span class="md-ellipsis">
+      (1) Reference Genome Index for Alignment
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-reference-gene-list-files-for-visualizing-spatial-expression-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      (2) Reference Gene List Files for Visualizing Spatial Expression Patterns
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-optionl-reference-gene-information-for-gene-filtering" class="md-nav__link">
+    <span class="md-ellipsis">
+      (3) (Optionl) Reference Gene Information for Gene Filtering
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1426,32 +1492,46 @@
 <summary><code>samtools</code></summary>
 <p>Using <code>envmodules</code> to load <code>samtools</code> can be an alternative to specifying its path in <a href="#tools"><code>tools</code></a>. The given example is designed for instances where <code>samtools</code> is integrated into the <code>Bioinformatics</code> module system, which necessitates loading the <code>Bioinformatics</code> module prior to loading <code>samtools</code>. In this case, provide all modules that required to be loaded in the correct order, joint by <code>&amp;&amp;</code>.</p>
 </details>
-<h2 id="reference">Reference<a class="headerlink" href="#reference" title="Permanent link">&para;</a></h2>
-<p>Please list every reference database used for alignment and the reference gene list files for visualization here. </p>
-<p>The reference genome index for alignment can be obtained via the <a href="https://www.10xgenomics.com/support/software/cell-ranger/downloads">cellranger download</a> page. Example instructions to build STAR index from the reference file is described in the <a href="../requirement/">Requirements</a> section.</p>
-<p>Currently NovaScope provides reference gene list files for mouse (version: mm39) and human (version: hg38) in <a href="https://github.com/seqscope/NovaScope/tree/info/genelists">"info"</a> folder. When <code>genelists</code> is absent in the <code>config_env.yaml</code>, NovaScope will leverage the default files from the <a href="https://github.com/seqscope/NovaScope/tree/info/genelists">info</a> folder.</p>
+<h2 id="reference-databases">Reference Databases<a class="headerlink" href="#reference-databases" title="Permanent link">&para;</a></h2>
+<p>All reference database for the input species should be specified in the <code>ref</code> field. </p>
+<h3 id="1-reference-genome-index-for-alignment">(1) Reference Genome Index for Alignment<a class="headerlink" href="#1-reference-genome-index-for-alignment" title="Permanent link">&para;</a></h3>
+<p>Users should The reference genome index for alignment can be obtained via the <a href="https://www.10xgenomics.com/support/software/cell-ranger/downloads">cellranger download</a> page. Example instructions to build STAR index from the reference file is described in the <a href="../requirement/">Requirements</a> section.</p>
+<h3 id="2-reference-gene-list-files-for-visualizing-spatial-expression-patterns">(2) Reference Gene List Files for Visualizing Spatial Expression Patterns<a class="headerlink" href="#2-reference-gene-list-files-for-visualizing-spatial-expression-patterns" title="Permanent link">&para;</a></h3>
+<p>Those gene lists will be applied to visualize the spatial expression pattern of specific groups of genes in Rule <a href="../../walkthrough/rules/sdge_visual/">sdge_visual</a>. Currently NovaScope provides reference gene list files for mouse (version: mm39) and human (version: hg38) in <a href="https://github.com/seqscope/NovaScope/tree/info/genelists">"info"</a> folder. When <code>genelists</code> is absent in the <code>config_env.yaml</code>, NovaScope will leverage the default files from the <a href="https://github.com/seqscope/NovaScope/tree/info/genelists">info</a> folder. Users also have the option to create and use their own customized gene list files.</p>
+<h3 id="3-optionl-reference-gene-information-for-gene-filtering">(3) (Optionl) Reference Gene Information for Gene Filtering<a class="headerlink" href="#3-optionl-reference-gene-information-for-gene-filtering" title="Permanent link">&para;</a></h3>
+<p>This is only required if the users apply the NovaScope additional reformat features. Such gene information files, are provided by <a href="https://seqscope.github.io/ficture/">FICTURE</a> in <a href="https://github.com/seqscope/ficture/tree/stable/info">its info</a> folder, will be used to filter genes. Those files  Thus, if <code>geneinfo</code> in the <code>ref</code> field is missing while the path of <a href="https://seqscope.github.io/ficture/">FICTURE</a> is defined in <code>tools</code> field, NovaScope will automatically use the gene information files from <a href="https://seqscope.github.io/ficture/">FICTURE</a>. Users can also prepare their own customized gene information files for use in this process.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>Please ensure the reference files correspond to the species of your input data. </p>
 </div>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
-<span class="normal">2</span>
-<span class="normal">3</span>
-<span class="normal">4</span>
-<span class="normal">5</span>
-<span class="normal">6</span>
-<span class="normal">7</span>
-<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nt">ref</span><span class="p">:</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nt">ref</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">align</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">mouse</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/to/refdata-gex-GRCm39-2024-A/star_2.7_11b&quot;</span>
 <span class="w">    </span><span class="nt">human</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/to/refdata-gex-GRCh39-2024-A/star_2.7_11b&quot;</span>
-<span class="w">   </span><span class="c1">#...</span>
+<span class="w">    </span><span class="c1">#...</span>
 <span class="w">  </span><span class="nt">genelists</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">mouse</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/to/ref_gene_list_for_mouse&quot;</span>
 <span class="w">    </span><span class="nt">human</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/to/ref_gene_list_for_human&quot;</span>
+<span class="w">    </span><span class="c1">#...</span>
+<span class="w">  </span><span class="nt">geneinfo</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">mouse</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/to/ref_gene_info_for_mouse&quot;</span>
+<span class="w">    </span><span class="nt">humane</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/to/ref_gene_info_for_human&quot;</span>
+<span class="w">    </span><span class="c1">#...</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="python-environment">Python Environment<a class="headerlink" href="#python-environment" title="Permanent link">&para;</a></h2>
-<p>You also need to specify the path of Python virtual environment by modifying the following line.</p>
+<p>Specify the path of Python virtual environment by modifying the following line:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nt">pyenv</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/to/python/virtual/env&quot;</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="optional-computing-capabilities">(Optional) Computing Capabilities<a class="headerlink" href="#optional-computing-capabilities" title="Permanent link">&para;</a></h2>
