@@ -2,122 +2,122 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://seqscope.github.io/NovaScope/</loc>
-         <lastmod>2024-05-03</lastmod>
+         <lastmod>2024-05-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://seqscope.github.io/NovaScope/getting_started/access_data/</loc>
-         <lastmod>2024-05-03</lastmod>
+         <lastmod>2024-05-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://seqscope.github.io/NovaScope/getting_started/execute/</loc>
-         <lastmod>2024-05-03</lastmod>
+         <lastmod>2024-05-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://seqscope.github.io/NovaScope/getting_started/intro/</loc>
-         <lastmod>2024-05-03</lastmod>
+         <lastmod>2024-05-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://seqscope.github.io/NovaScope/getting_started/job_config/</loc>
-         <lastmod>2024-05-03</lastmod>
+         <lastmod>2024-05-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://seqscope.github.io/NovaScope/getting_started/output/</loc>
-         <lastmod>2024-05-03</lastmod>
+         <lastmod>2024-05-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://seqscope.github.io/NovaScope/home/documentation_overview/</loc>
-         <lastmod>2024-05-03</lastmod>
+         <lastmod>2024-05-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://seqscope.github.io/NovaScope/home/workflow_structure/</loc>
-         <lastmod>2024-05-03</lastmod>
+         <lastmod>2024-05-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://seqscope.github.io/NovaScope/installation/env_setup/</loc>
-         <lastmod>2024-05-03</lastmod>
+         <lastmod>2024-05-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://seqscope.github.io/NovaScope/installation/requirement/</loc>
-         <lastmod>2024-05-03</lastmod>
+         <lastmod>2024-05-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://seqscope.github.io/NovaScope/installation/slurm/</loc>
-         <lastmod>2024-05-03</lastmod>
+         <lastmod>2024-05-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://seqscope.github.io/NovaScope/walkthrough/intro/</loc>
-         <lastmod>2024-05-03</lastmod>
+         <lastmod>2024-05-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://seqscope.github.io/NovaScope/walkthrough/execution_guide/core_concepts/</loc>
-         <lastmod>2024-05-03</lastmod>
+         <lastmod>2024-05-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://seqscope.github.io/NovaScope/walkthrough/execution_guide/rule_execution/</loc>
-         <lastmod>2024-05-03</lastmod>
+         <lastmod>2024-05-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://seqscope.github.io/NovaScope/walkthrough/rules/align/</loc>
-         <lastmod>2024-05-03</lastmod>
+         <lastmod>2024-05-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://seqscope.github.io/NovaScope/walkthrough/rules/dge2sdge/</loc>
-         <lastmod>2024-05-03</lastmod>
+         <lastmod>2024-05-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://seqscope.github.io/NovaScope/walkthrough/rules/fastq2sbcd/</loc>
-         <lastmod>2024-05-03</lastmod>
+         <lastmod>2024-05-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://seqscope.github.io/NovaScope/walkthrough/rules/historef/</loc>
-         <lastmod>2024-05-03</lastmod>
+         <lastmod>2024-05-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://seqscope.github.io/NovaScope/walkthrough/rules/sbcd2chip/</loc>
-         <lastmod>2024-05-03</lastmod>
+         <lastmod>2024-05-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://seqscope.github.io/NovaScope/walkthrough/rules/sdge2sdgeAR/</loc>
-         <lastmod>2024-05-03</lastmod>
+         <lastmod>2024-05-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://seqscope.github.io/NovaScope/walkthrough/rules/sdgeAR_reformat/</loc>
-         <lastmod>2024-05-03</lastmod>
+         <lastmod>2024-05-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://seqscope.github.io/NovaScope/walkthrough/rules/sdgeAR_segment/</loc>
-         <lastmod>2024-05-03</lastmod>
+         <lastmod>2024-05-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://seqscope.github.io/NovaScope/walkthrough/rules/sdge_visual/</loc>
-         <lastmod>2024-05-03</lastmod>
+         <lastmod>2024-05-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://seqscope.github.io/NovaScope/walkthrough/rules/smatch/</loc>
-         <lastmod>2024-05-03</lastmod>
+         <lastmod>2024-05-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
