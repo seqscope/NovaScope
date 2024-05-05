@@ -50,17 +50,20 @@ envmodules:
 
 ## Reference Databases
 
-Please list every reference database for the input species here. 
+Specify all reference databases required for the input species in the `ref` field. 
 
 ### (1) Reference Genome Index for Alignment
+Use the `align` parameter to define the reference genome index for alignment using STAR. These reference genome indices can be downloaded from the [cellranger download](https://www.10xgenomics.com/support/software/cell-ranger/downloads) page. Users can also generate their own reference genome index; detailed instructions for building the STAR index from a reference file are provided in the [Requirements](./requirement.md) section.
 
-The reference genome index for alignment can be obtained via the [cellranger download](https://www.10xgenomics.com/support/software/cell-ranger/downloads) page. Example instructions to build STAR index from the reference file is described in the [Requirements](./requirement.md) section.
+### (2) Reference Gene List Directories for Visualizing Spatial Expression Patterns
+The `genelists` parameter identifies the directory containing gene lists specific to the species of the input data. These gene lists are used to visualize spatial expression patterns of particular gene groups within Rule [sdge_visual](../walkthrough/rules/sdge_visual.md). 
 
-### (2) Reference Gene List Files for Visualizing Spatial Expression Patterns
-Those gene lists will be applied to visualize the spatial expression pattern of specific groups of genes in Rule [sdge_visual](../../walkthrough/rules/sdge_visual.md). Currently NovaScope provides reference gene list files for mouse (version: mm39) and human (version: hg38) in ["info"](https://github.com/seqscope/NovaScope/tree/info/genelists) folder. When `genelists` is absent in the `config_env.yaml`, NovaScope will leverage the default files from the [info](https://github.com/seqscope/NovaScope/tree/info/genelists) folder. Users also have the option to create and use their own customized gene list files.
+The directory should contain gene list files, each corresponding to a specific type or group of genes, such as mitochondrial (MT)genes. These files should be named `<gene_group>.genes.tsv`, for example, `MT.genes.tsv`, and each file should list gene names, with one name per line.
+
+NovaScope provides precompiled gene lists for mouse (version: mm39) and human (version: hg38) available in the ["info"](https://github.com/seqscope/NovaScope/tree/info/genelists) folder. If the `genelists` parameter is not specified in the `config_env.yaml`, NovaScope defaults to using these files. Alternatively, users may provide their own custom gene list files.
 
 ### (3) (Optionl) Reference Gene Information for Gene Filtering
-This is only required if the users apply the NovaScope additional reformat features. Such gene information files will be used to filter genes. Those files are provided by [FICTURE](https://seqscope.github.io/ficture/) in [its info](https://github.com/seqscope/ficture/tree/stable/info) folder. Thus, if `geneinfo` in `ref` field is missing while the path of [FICTURE](https://seqscope.github.io/ficture/) is defined in `tools` field, NovaScope will automatically use the gene information files from [FICTURE](https://seqscope.github.io/ficture/). Users can also prepare their own customized gene information files for use in this process.
+This parameter is required only if additional reformatting features of NovaScope are utilized. The `geneinfo` parameter specifies the location of gene information files used for gene filtering. These files are available from [FICTURE](https://seqscope.github.io/ficture/) in [its info directory](https://github.com/seqscope/ficture/tree/stable/info). If the `geneinfo` field in the `ref` section is omitted, but the `tools` field specifies the path to [FICTURE](https://seqscope.github.io/ficture/), NovaScope will automatically use the gene information files from FICTURE. Users may also use their custom gene information files in this process.
 
 !!! tip
     Please ensure the reference files correspond to the species of your input data. 
@@ -72,19 +75,18 @@ ref:
     human: "/path/to/refdata-gex-GRCh39-2024-A/star_2.7_11b"
     #...
   genelists:
-    mouse: "/path/to/ref_gene_list_for_mouse"
-    human: "/path/to/ref_gene_list_for_human"
+    mouse: "/path/to/ref_gene_list_directory_for_mouse"             
+    human: "/path/to/ref_gene_list_directory_for_human"
     #...
   geneinfo:
-    mouse: "/path/to/ref_gene_info_for_mouse"
-    humane: "/path/to/ref_gene_info_for_human"
+    mouse: "/path/to/ref_gene_info_file_for_mouse"
+    human: "/path/to/ref_gene_info_file_for_human"
     #...
 ```
 
-
 ## Python Environment
 
-You also need to specify the path of Python virtual environment by modifying the following line.
+Specify the path of Python virtual environment by modifying the following line:
 
 ```yaml
 pyenv: "/path/to/python/virtual/env"
