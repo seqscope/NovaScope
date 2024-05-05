@@ -2,8 +2,8 @@ import os, sys, csv
 import pandas as pd
 from math import ceil
 
-local_scripts = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(local_scripts)
+novascope_scripts = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(novascope_scripts)
 from bricks import create_symlink,  create_symlinks_by_list
 
 #===============================================================================
@@ -14,7 +14,7 @@ from bricks import create_symlink,  create_symlinks_by_list
 # * Calculate resource for alignment by input file size
 # * Assign resource for align
 # * Get module (name+version) by key
-# * Link sdge to sdgeAR
+# * Find major axis
 
 # ===============================================================================
 #
@@ -59,7 +59,6 @@ def get_skip_sbcd(config):
         else:
             raise ValueError(f"Missing skip_sbcd and cannot infer from sbcd_format: {sbcd_format}")
     return skip_sbcd
-
 
 # ===============================================================================
 #
@@ -170,20 +169,6 @@ def get_envmodules_for_rule(required_modules, module_config):
     else:
         # For local execution or HPC without a modules system, return an empty list
         return ""
-
-# ===============================================================================
-
-# link sdge to sdgeAR 
-
-def link_sdge_to_sdgeAR(input_path, output_path, run_id, unit_id):
-    os.makedirs(output_path, exist_ok=True)
-    create_symlinks_by_list(input_path, output_path, 
-                            ["barcodes.tsv.gz", "matrix.mtx.gz", "features.tsv.gz", "barcodes.minmax.tsv"], 
-                            match_by_suffix=False)
-    create_symlinks_by_list(input_path, output_path, 
-                            ["gene_full_mito.png", "sge_match_sbcd.png"], 
-                            input_id=run_id, output_id=unit_id, 
-                            match_by_suffix=True)
 
 # ===============================================================================
 #

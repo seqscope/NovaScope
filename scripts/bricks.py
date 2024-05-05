@@ -47,7 +47,8 @@ def end_logging():
             handler.close()
             root_logger.removeHandler(handler)
 
-def log_dataframe(df, log_message="DataFrame Info:"): 
+
+def log_dataframe(df, log_message="DataFrame Info:", indentation=""): 
     ## purpose:format the log messages so that each column value occupies a fixed width
 
     # Calculate column widths
@@ -58,53 +59,20 @@ def log_dataframe(df, log_message="DataFrame Info:"):
 
     # Log the header
     logging.info(f"{log_message}")
-    logging.info(header)
-    logging.info("-" * len(header))  # Divider line
+    logging.info(indentation+header)
+    logging.info(indentation+"-" * len(header))  # Divider line
 
     # Iterate over DataFrame rows and log each, maintaining alignment
     for _, row in df.iterrows():
         row_str = ' | '.join([str(row[col]).ljust(col_widths[col]) for col in df.columns])
-        logging.info(row_str)
+        logging.info(indentation+row_str)
+
+def log_a_separator():
+    logging.info(" ")
+    logging.info("#================================================================================================")
+    logging.info(" ")
 
 #================================================================================================
-
-# load configs func:
-
-def load_configs(job_dir, config_files):
-    """
-    Parameters:
-    - job_dir (str): The directory where configuration files are located.
-    - config_files (list of tuples): Each tuple contains:
-        - The filename (str) of a configuration file.
-        - A boolean indicating whether the file is required (True) or optional (False).
-
-    Returns:
-    - dict: Combined configuration from all successfully loaded files.
-    """
-    config = {}
-    for filename, is_required in config_files:
-        if job_dir is not None:
-            file_path = os.path.join(job_dir, filename)
-        else:
-            file_path = filename
-        try:
-            with open(file_path) as config_file:
-                config.update(yaml.safe_load(config_file))
-            logging.info(f"     Loaded: {file_path}")
-        except FileNotFoundError:
-            if is_required:
-                logging.error(f"Required configuration file not found: {file_path}")
-                raise
-            else:
-                logging.info(f"     Skipping: {file_path}")
-        except Exception as e:
-            logging.error(f"Error loading configuration file {file_path}: {e}")
-            if is_required:
-                raise
-    return config
-
-#================================================================================================
-
 # check input func:
 # - check if the input value fits the valid options
 # - check if the input path is valid
@@ -178,13 +146,14 @@ def check_path(file_path, work_dir, strict_mode=True, flag="The path"):
         return None
 
 def check_request(input_request, valid_options):
+    logging.info(" - Request(s):")
     valid_requests = [task for task in valid_options if task in input_request]
     invalid_requests = [task for task in input_request if task not in valid_options]
     if not valid_requests:
         raise ValueError(f"Please provide a valid request: {input_request}")
     if invalid_requests:
-        logging.warning("!! Attention: Invalid requests (see below) have been identified in the request field. These will be omitted from the processing pipeline.")
-        logging.warning(f"             List of Invalid Requests: {invalid_requests}")
+        logging.warning(f"     - Invalid requests (see below) have been identified in the request field. These will be omitted from the processing pipeline.")
+        logging.warning(f"     - List of Invalid Requests: {invalid_requests}")
     return valid_requests
 
 #================================================================================================
@@ -227,12 +196,12 @@ def create_dict(df, key_col, val_cols, dict_type, val_type):
 
 # create symlink func:
 
-def log_info(message, silent):
+def log_info(message, silent=False):
     """Log a message unless silenced."""
     if not silent:
         logging.info(message)
 
-def check_missing_input(input_path, action_if_missing, output_path, silent):
+def check_missing_input(input_path, action_if_missing, silent):
     """Handle scenarios where the input path is missing."""
     if not os.path.exists(input_path):
         message = f"Missing input path: {input_path}."
@@ -245,7 +214,7 @@ def check_missing_input(input_path, action_if_missing, output_path, silent):
             raise ValueError("Invalid option for handle_missing_input.")
     return False
 
-def check_and_handle_existing_output(output_path, input_path, action_if_existing, silent):
+def check_and_handle_existing_output(input_path, output_path, action_if_existing, silent):
     """Handle scenarios where the output path already exists. action_if_existing valid options: replace, warn. (update: I deleted the skip option)"""
     # - link
     if os.path.islink(output_path):
@@ -283,10 +252,10 @@ def create_symlink(input_path, output_path, handle_missing_input="warn", handle_
     if os.path.islink(input_path):
         input_path = os.path.realpath(os.readlink(input_path))
     
-    if check_missing_input(input_path, handle_missing_input, output_path, silent):
+    if check_missing_input(input_path, handle_missing_input, silent):
         return  # Missing input is handled as specified; skip further actions
 
-    if check_and_handle_existing_output(output_path, input_path, handle_existing_output, silent):
+    if check_and_handle_existing_output(input_path, output_path, handle_existing_output, silent):
         return  # Existing output is handled as specified; skip creating the symlink
 
     try:
@@ -324,6 +293,7 @@ def create_symlinks_by_list(input_path, output_path, items, input_id=None, outpu
 #def expand(path_pattern, product_args):
 #    return [path_pattern.format(**dict(zip(product_args.keys(), values)))
 #            for values in itertools.product(*product_args.values())]
+
 def expand(path_pattern, zip_args):
     # Using zip to ensure values from each key are combined by their indices
     return [path_pattern.format(**dict(zip(zip_args.keys(), values)))
@@ -390,7 +360,6 @@ def configure_pandas_display():
     pd.set_option('display.max_rows', None)     # display all rows
     pd.set_option('display.width', None)        # auto-detect the display width for wrapping
     pd.set_option('display.max_colwidth', None) # display all content of each cell
-
 
 # Create dirs and get paths
 def create_dirs_and_get_paths(main_dir, sub_dirnames):

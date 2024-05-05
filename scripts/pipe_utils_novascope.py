@@ -1,20 +1,18 @@
 import pandas as pd
-import logging, os, sys
+import logging, os, sys, yaml
 from collections import defaultdict
 
 novascope_scripts = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(novascope_scripts)
 from bricks import check_input, check_path, create_dict, get_last5_from_md5, create_symlink, log_dataframe
-from bricks import load_configs
+from bricks import log_info
 
-def read_config_for_ini(config,job_dir,smk_dir):
-    logging.info(f"1. Reading input:")
-    logging.info(f" - Current job path: {job_dir}")
+def read_config_for_ini(config, job_dir, smk_dir, silent=False):
+    log_info(f"1. Reading input:", silent)
+    log_info(f" - Current job path: {job_dir}")
 
     # config: job
-    logging.info(f" - Loading config file:")
-    #config = load_configs(job_dir, [("config_job.yaml", True)])
-    logging.info(f"     {job_dir}/config_job.yaml")
+    log_info(f" - Job configuration file: {job_dir}/config_job.yaml", silent)
 
     # config: env
     env_input = config.get("env_yml", os.path.join(smk_dir, "info", "config_env.yaml"))
@@ -24,17 +22,14 @@ def read_config_for_ini(config,job_dir,smk_dir):
         env_input_val = env_input
     else:
         raise ValueError("Please provide a valid env config file.")
+
     env_configfile = check_path(env_input_val, job_dir, strict_mode=True, flag="The environment config file")
-    env_config = load_configs(None, [(env_configfile, True)])
+    env_config = yaml.safe_load(open(env_configfile))
+    log_info(f" - Environment configuration file: {env_configfile}", silent)
 
     # - envmodules
     module_config = env_config.get("envmodules", None)
-    logging.info(f" - envmodules: ")
-    logging.info(f"     {module_config}")
-
-    # - ref  
-    #sp2alignref = env_config.get("ref", {}).get("align", None)
-    #sp2geneinfo = env_config.get("ref", {}).get("geneinfo", None)
+    log_info(f" - Environment modules: {module_config}", silent)
 
     # - python env
     pyenv  = env_config.get("pyenv", None)
@@ -43,29 +38,30 @@ def read_config_for_ini(config,job_dir,smk_dir):
 
     python = os.path.join(pyenv, "bin", "python")
     assert os.path.exists(python), f"Python does not exist in your python environment: {python}"
+    log_info(f" - Python environment: {pyenv}", silent)
 
     return env_config, module_config, python, pyenv
 
-def read_config_for_seq1(config, job_dir, main_dirs):
-    logging.info(f" - Seq1 info")
-    arch_seq1   = config.get('upstream', {}).get('stdfastq', {}).get('seq1st', True)
+def read_config_for_seq1(config, job_dir, main_dirs, silent=False):
+    log_info(f" - Seq1st info:", silent)
+    arch_seq1 = config.get('upstream', {}).get('stdfastq', {}).get('seq1st', True)
     # temp
-    flowcell= config["input"]["flowcell"]
-    chip = config["input"]["chip"]
+    flowcell = config["input"]["flowcell"]
+    chip     = config["input"]["chip"]
     # seq1_id
     seq1_id = config.get('input', {}).get('seq1st', {}).get('id', None)
     if seq1_id is None:
         lane = config.get('input', {}).get('lane', {"A": "1", "B": "2", "C": "3", "D": "4"}.get(chip[-1], None))
         if lane is None:
-            raise ValueError("Please provide a valid lane.")
+            raise ValueError("Please provide a valid \"lane\" in the input field in job config file.")
         seq1_id = f"L{lane}"
     # seq1_fq_raw
     seq1_fq_raw = check_path(config.get('input', {}).get('seq1st', {}).get('fastq', None),job_dir, strict_mode=arch_seq1)
-    logging.info(f"     Seq1 ID: {seq1_id}")
-    logging.info(f"     Seq1 Fastq: {seq1_fq_raw}")
+    log_info(f"   - Seq1 ID: {seq1_id}" , silent)
+    log_info(f"   - Seq1 Fastq: {seq1_fq_raw}" , silent)
     # organize the fastq files
     if arch_seq1:
-        logging.info("     Organize the input FASTQ files and standardize the file names.")
+        log_info("   - Organizing the input FASTQ files and standardizing the file names...", silent)
         seq1_fq_std=os.path.join(main_dirs["seq1st"], flowcell, "fastqs", seq1_id+".fastq.gz")
         os.makedirs(os.path.dirname(seq1_fq_std), exist_ok=True)
         create_symlink(seq1_fq_raw, seq1_fq_std, silent=True)
@@ -73,8 +69,8 @@ def read_config_for_seq1(config, job_dir, main_dirs):
     sc2seq1 = {chip:seq1_id}
     return seq1_id, seq1_fq_raw, sc2seq1
 
-def read_config_for_seq2(config, job_dir, main_dirs, log_option=True):
-    logging.info(f" - Seq2nd info:")
+def read_config_for_seq2(config, job_dir, main_dirs, silent=False):
+    log_info(f" - Seq2nd info:", silent)
     arch_seq2   = config.get('upstream', {}).get('stdfastq', {}).get('seq2nd', True)
     # temp
     flowcell= config["input"]["flowcell"]
@@ -88,25 +84,24 @@ def read_config_for_seq2(config, job_dir, main_dirs, log_option=True):
     df_seq2['seq2_fqr2_raw'] = df_seq2['fastq_R2'].apply(lambda x: check_path(x, job_dir, strict_mode=arch_seq2))
     df_seq2["seq2_fqr1_std"] = df_seq2.apply(lambda row: os.path.join(main_dirs["seq2nd"],row["seq2_id"], row["seq2_id"]+".R1.fastq.gz"), axis=1)
     df_seq2["seq2_fqr2_std"] = df_seq2.apply(lambda row: os.path.join(main_dirs["seq2nd"],row["seq2_id"], row["seq2_id"]+".R2.fastq.gz"), axis=1)
-    if log_option:
-        for _,row in df_seq2.iterrows():
-            logging.info(f"   - Seq2nd pair id: {row['seq2_id']}")
-            logging.info(f"                 R1: {row['seq2_fqr1_raw']}")
-            logging.info(f"                 R2: {row['seq2_fqr2_raw']}")
+    for _,row in df_seq2.iterrows():
+        log_info(f"   - Seq2nd pair id: {row['seq2_id']}", silent)
+        log_info(f"                 R1: {row['seq2_fqr1_raw']}", silent)
+        log_info(f"                 R2: {row['seq2_fqr2_raw']}", silent)
     # organize the fastq files
     if arch_seq2:
-        logging.info("     Organize the input FASTQ files and standardize the file names.")
+        log_info("   - Organizing the input FASTQ files and standardizing the file names.", silent)
         for _, row in df_seq2.iterrows():
             os.makedirs(os.path.dirname(row["seq2_fqr1_std"]), exist_ok=True)
-            create_symlink(row["seq2_fqr1_raw"], row["seq2_fqr1_std"],silent=True)
-            create_symlink(row["seq2_fqr2_raw"], row["seq2_fqr2_std"],silent=True)
+            create_symlink(row["seq2_fqr1_raw"], row["seq2_fqr1_std"], silent=True)
+            create_symlink(row["seq2_fqr2_raw"], row["seq2_fqr2_std"], silent=True)
     return df_seq2
 
-def read_config_for_runid(config, job_dir, main_dirs, df_seq2=None):
+def read_config_for_runid(config, job_dir, main_dirs, df_seq2=None, silent=False):
     run_id = config.get("input", {}).get("run_id", None)
 
     if df_seq2 is None:
-        df_seq2 = read_config_for_seq2(config, job_dir, main_dirs, log_option=False)
+        df_seq2 = read_config_for_seq2(config, job_dir, main_dirs, silent=True)
     
     if run_id is None:
         # get run_id from seq2nd info
@@ -122,12 +117,12 @@ def read_config_for_runid(config, job_dir, main_dirs, df_seq2=None):
     df_seq2["run_id"] = run_id
     rid2seq2 = create_dict(df_seq2, key_col="run_id", val_cols="seq2_id",  dict_type="set", val_type="str")
 
-    logging.info(f" - Run id: {run_id}")
+    log_info(f" - Run id: {run_id}", silent)
     return run_id, rid2seq2
 
-def read_config_for_unitid(config, job_dir, run_id):
-    unit_id = config.get("input", {}).get("unit_id", None)
-    boundary = config.get("input", {}).get("boundary", None)
+def read_config_for_unitid(config_content, job_dir, run_id, silent=False):
+    unit_id = config_content.get("unit_id", None)
+    boundary = config_content.get("boundary", None)
     if unit_id is None:
         if boundary is None:
             unit_ann = "default"
@@ -141,10 +136,10 @@ def read_config_for_unitid(config, job_dir, run_id):
             assert boundary is None, "When unit_id is annotated with 'default', boundary should not be provided or applied."
         else:
             boundary = check_path(boundary, job_dir, strict_mode=True)
-
-    logging.info(f" - Unit ID: {unit_id}")
-    logging.info(f" - Boundary: {boundary}")
+    log_info(f" - Unit ID: {unit_id}", silent)
+    log_info(f" - Boundary: {boundary}", silent)
     return unit_id, unit_ann, boundary
+
 #================================================================================================
 # upstream
 #  - sgevisual
@@ -179,8 +174,8 @@ def convert_sgevisual_list2df(config, refgl_dir):
     df_sge_visual['sgevisual_id'] = df_sge_visual.apply(lambda x: f"{x['red']}_{x['green']}_{x['blue']}", axis=1)
     return df_sge_visual[['sgevisual_id', 'params']]
 
-def read_config_for_sgevisual(config, env_config, smk_dir, run_id):
-    logging.info(f" - SGE visual: ")
+def read_config_for_sgevisual(config, env_config, smk_dir, run_id, silent=False):
+    log_info(f" - SGE visualization: ", silent)
     # reference gene list directory
     sp2refgl_dir= {
     "mouse": os.path.join(smk_dir, "info", "genelists", "mm39"),
@@ -199,9 +194,8 @@ def read_config_for_sgevisual(config, env_config, smk_dir, run_id):
     rid2sgevisual_id[run_id] = list(df_sge_visual["sgevisual_id"].unique())
 
     # log info
-    logging.info(f"     - Reference gene list directory: {refgl_dir}")
-    logging.info(f"     - Available sgevisual_id:")
-    logging.info(f"         - {', '.join(df_sge_visual['sgevisual_id'].tolist())}")
+    log_info(f"   - Reference gene list directory: {refgl_dir}", silent)
+    log_info(f"   - SGE visualization(s): {', '.join(df_sge_visual['sgevisual_id'].tolist())}", silent)
 
     # return
     return sgevisual_id2params, rid2sgevisual_id
@@ -230,7 +224,7 @@ def add_default_for_char(df_char, run_id, unit_id, col_w_defval):
         df_char = add_or_expand_column(df_char, col_name, default_value)
     return df_char
 
-def read_config_for_segment(config, run_id, unit_id, log_option=False):
+def read_config_for_segment(config, run_id, unit_id, silent=False):
     # segment_char_info
     segment_char_info= config.get("downstream", {}).get("segment",{}).get("char", None)
     if segment_char_info is not None:
@@ -251,13 +245,12 @@ def read_config_for_segment(config, run_id, unit_id, log_option=False):
         })
     
     # mu_scale
-    mu_scale = config.get("downstream", {}).get("mu_scale", None)
-    if mu_scale is None:
-        mu_scale = config.get("downstream", {}).get("mu_scale", 1000)
-    if log_option:
-        log_dataframe(df_segment_char, log_message=" - Downstream segment character info: ")
-        logging.info(f"     mu scale: {mu_scale}")
-    
+    mu_scale = config.get("downstream", {}).get("mu_scale", 1000)
+    log_info(f" - Downstream: ", silent)
+    log_info(f"   - mu scale: {mu_scale}", silent)
+    if not silent:
+        log_dataframe(df_segment_char, log_message="   - segment parameters: ", indentation="     ")
+
     return df_segment_char, mu_scale
 
 
@@ -265,9 +258,9 @@ def read_config_for_segment(config, run_id, unit_id, log_option=False):
 
 # Histology
 
-def read_config_for_hist(config, job_dir, main_dirs):
+def read_config_for_hist(config, job_dir, main_dirs, silent=False):
     # read in with sanity check
-    logging.info(f" - Histology file: Loading")
+    log_info(f" - Histology file: Loading", silent)
     hist_info = config.get("input",{}).get("histology", None)
     if hist_info is None:
         raise ValueError("Please provide a valid histology file when requesting 'hist-per-run' or 'cart-per-hist'...")
@@ -290,10 +283,10 @@ def read_config_for_hist(config, job_dir, main_dirs):
     # for each row if real path of row['hist_raw_inputpath'] is not equal to row['hist_raw_stdpath'], create symlink
     df_hist.apply(lambda row: create_symlink(row['hist_raw_inputpath'], row['hist_raw_stdpath'], silent=True) if row['hist_raw_inputpath'] != row['hist_raw_stdpath'] else None, axis=1)
     for _,row in df_hist.iterrows():
-        logging.info(f"    - histology path: {row['path']}")
-        logging.info(f"            realpath: {row['hist_raw_inputpath']}")
-        logging.info(f"       magnification: {row['magnification']}")
-        logging.info(f"         figure type: {row['figtype']}")
+        log_info(f"    - histology path: {row['path']}", silent)
+        log_info(f"            realpath: {row['hist_raw_inputpath']}", silent)
+        log_info(f"       magnification: {row['magnification']}", silent)
+        log_info(f"         figure type: {row['figtype']}", silent)
     df_hist = df_hist[["flowcell", "chip", "hist_std_prefix", "figtype", "magnification"]]
     return df_hist
 
