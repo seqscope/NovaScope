@@ -115,16 +115,16 @@ def output_fn_segmperunit(main_dirs, df_segment_char):
             'flag': 'segment-per-unit',
             'root': main_dirs["analysis"],
             'subfolders_patterns': [
-                                    ([ "{run_id}", "{unit_id}", "segment", "{solofeature}.d_{hexagonwidth}.raw_{segmentmove}", "barcodes.tsv.gz"], None),
-                                    ([ "{run_id}", "{unit_id}", "segment", "{solofeature}.d_{hexagonwidth}.raw_{segmentmove}", "features.tsv.gz"], None),
-                                    ([ "{run_id}", "{unit_id}", "segment", "{solofeature}.d_{hexagonwidth}.raw_{segmentmove}", "matrix.mtx.gz"  ], None),                     
+                                    ([ "{run_id}", "{unit_id}", "segment", "{solo_feature}.d_{hexagon_width}.raw_{segment_move}", "barcodes.tsv.gz"], None),
+                                    ([ "{run_id}", "{unit_id}", "segment", "{solo_feature}.d_{hexagon_width}.raw_{segment_move}", "features.tsv.gz"], None),
+                                    ([ "{run_id}", "{unit_id}", "segment", "{solo_feature}.d_{hexagon_width}.raw_{segment_move}", "matrix.mtx.gz"  ], None),                     
             ],
             'zip_args': {
                 'run_id':       df_segment_char["run_id"].values,  
                 'unit_id':      df_segment_char["unit_id"].values,
-                'solofeature':  df_segment_char["solofeature"].values,
-                'hexagonwidth': df_segment_char["hexagonwidth"].values,
-                'segmentmove':  df_segment_char['segmentmove'].values,
+                'solo_feature':  df_segment_char["solo_feature"].values,
+                'hexagon_width': df_segment_char["hexagon_width"].values,
+                'segment_move':  df_segment_char['segment_move'].values,
             },
     }
     return out_fn
@@ -134,7 +134,7 @@ def output_fn_transperunit(main_dirs, df_segment_char):
             'flag': 'transcript-per-unit',
             'root': main_dirs["analysis"],
             'subfolders_patterns': [
-                                    ([ "{run_id}", "{unit_id}", "preprocess", "{unit_id}.merged.matrix.tsv.gz"  ], None),
+                                    ([ "{run_id}", "{unit_id}", "preprocess", "{unit_id}.transcripts.tsv.gz"  ], None),
                                     ([ "{run_id}", "{unit_id}", "preprocess", "{unit_id}.feature.clean.tsv.gz"], None),
                                     ([ "{run_id}", "{unit_id}", "preprocess", "{unit_id}.feature.tsv.gz"      ], None),                     
             ],

@@ -117,7 +117,7 @@ def read_config_for_runid(config, job_dir, main_dirs, df_seq2=None, silent=False
     df_seq2["run_id"] = run_id
     rid2seq2 = create_dict(df_seq2, key_col="run_id", val_cols="seq2_id",  dict_type="set", val_type="str")
 
-    log_info(f" - Run id: {run_id}", silent)
+    log_info(f" - Run ID: {run_id}", silent)
     return run_id, rid2seq2
 
 def read_config_for_unitid(config_content, job_dir, run_id, silent=False):
@@ -217,9 +217,9 @@ def add_or_expand_column(df, col_name, default_value):
             df[col_name] = single_value
     return df
 
-def add_default_for_char(df_char, run_id, unit_id, col_w_defval):
-    df_char["run_id"] = run_id
-    df_char["unit_id"] = unit_id
+def add_default_for_char(df_char, col_w_defval):
+    #df_char["run_id"] = run_id
+    #df_char["unit_id"] = unit_id
     for col_name, default_value in col_w_defval.items():
         df_char = add_or_expand_column(df_char, col_name, default_value)
     return df_char
@@ -230,18 +230,20 @@ def read_config_for_segment(config, run_id, unit_id, silent=False):
     if segment_char_info is not None:
         df_segment_char = pd.DataFrame(segment_char_info)
         segment_defvals={
-            "solofeature": "gn",
-            "hexagonwidth": 24,
-            "segmentmove": 1
+            "solo_feature": "gn",
+            "hexagon_width": 24,
+            "segment_move": 1
         }
-        df_segment_char = add_default_for_char(df_segment_char, run_id, unit_id, segment_defvals)
+        df_segment_char["run_id"] = run_id 
+        df_segment_char["unit_id"] = unit_id
+        df_segment_char = add_default_for_char(df_segment_char, segment_defvals)
     else:
         df_segment_char = pd.DataFrame({
             "run_id": [run_id],
             "unit_id": [unit_id],
-            "solofeature": ["gn"],
-            "hexagonwidth": [24],
-            "segmentmove": [1],
+            "solo_feature": ["gn"],
+            "hexagon_width": [24],
+            "segment_move": [1],
         })
     
     # mu_scale
