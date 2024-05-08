@@ -1,7 +1,7 @@
 # Generate output file name by request
 # for upstream pipeline (NovaScope)
 
-def output_fn_sbcdperfc(main_dirs, df_run):
+def outfn_sbcd_per_fc(main_dirs, df_run):
     outfn= {
         'flag': 'sbcd-per-flowcell',
         'root': main_dirs["seq1st"],
@@ -15,7 +15,7 @@ def output_fn_sbcdperfc(main_dirs, df_run):
     }
     return outfn
 
-def output_fn_sbcdperchip(main_dirs, df_run):
+def outfn_sbcd_per_chip(main_dirs, df_run):
     outfn = {
         'flag': 'sbcd-per-chip',
         'root': main_dirs["seq1st"],
@@ -31,7 +31,7 @@ def output_fn_sbcdperchip(main_dirs, df_run):
     }
     return outfn
 
-def output_fn_smatchperchip(main_dirs, df_seq2):
+def outfn_smatch_per_chip(main_dirs, df_seq2):
     outfn = {
         'flag': 'smatch-per-chip',
         'root': main_dirs["match"],
@@ -49,7 +49,7 @@ def output_fn_smatchperchip(main_dirs, df_seq2):
     }
     return outfn
 
-def output_fn_alignperrun(main_dirs, df_run):
+def outfn_align_per_run(main_dirs, df_run):
     outfn = {
         'flag': 'align-per-run',
         'root': main_dirs["align"],
@@ -71,7 +71,7 @@ def output_fn_alignperrun(main_dirs, df_run):
     return outfn
 
 
-def output_fn_sgeperrun(main_dirs, df_sge):
+def outfn_sge_per_run(main_dirs, df_sge):
     out_fn ={
         'flag': 'sge-per-run',
         'root': main_dirs["align"],
@@ -92,7 +92,7 @@ def output_fn_sgeperrun(main_dirs, df_sge):
     }
     return out_fn
 
-def output_fn_histperrun(main_dirs, df_hist):
+def outfn_hist_per_run(main_dirs, df_hist):
     out_fn = {
         'flag': 'hist-per-run',
         'root': main_dirs["histology"],
@@ -110,7 +110,7 @@ def output_fn_histperrun(main_dirs, df_hist):
     return out_fn
 
 
-def output_fn_segmperunit(main_dirs, df_segment_char):
+def outfn_segm_per_unit(main_dirs, df_segment_char):
     out_fn = {
             'flag': 'segment-per-unit',
             'root': main_dirs["analysis"],
@@ -129,7 +129,7 @@ def output_fn_segmperunit(main_dirs, df_segment_char):
     }
     return out_fn
 
-def output_fn_transperunit(main_dirs, df_segment_char):
+def outfn_trans_per_unit(main_dirs, df_segment_char):
     out_fn = {
             'flag': 'transcript-per-unit',
             'root': main_dirs["analysis"],

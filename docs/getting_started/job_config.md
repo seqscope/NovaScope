@@ -131,9 +131,9 @@ env_yml: <path_to_config_env.yaml_file>         ## If absent, NovaScope use the 
 #    precision: 2           ## specify the number of digits to store spatial location (in um, 0 for integer)
 #    min_pixel_per_unit: 10 ## specify a minimum UMI count of output hexagons
 #    char:                  ## specify the characteristics for the hexagons
-#      - solofeature: gn    ## specify the genomic feature to create hexagon
-#        hexagonwidth: 24   ## specify the size for a hexagonal grid
-#        segmentmove: 1     ## Specify if the SGE is based on overlapping hexagons or non-overlapping hexagon. The default value 1 will create non-overlapping hexagons.
+#      - solo_feature: gn    ## specify the genomic feature to create hexagon
+#        hexagon_width: 24   ## specify the size for a hexagonal grid
+#        segment_move: 1     ## Specify if the SGE is based on overlapping hexagons or non-overlapping hexagon. The default value 1 will create non-overlapping hexagons.
 
 ```
 

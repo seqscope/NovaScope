@@ -71,9 +71,9 @@ downstream:
     precision: 2
     min_pixel_per_unit: 10
     char:                
-      - solofeature: gn    
-        hexagonwidth: 24     
-        segmentmove: 1     
+      - solo_feature: gn    
+        hexagon_width: 24     
+        segment_move: 1     
 ```
 
 * **The `mu_scale` Parameter**
@@ -85,7 +85,7 @@ Specify coordinate to um translate for hexagon. By default, we consider the spat
   * **The `min_pixel_per_unit` Parameter**
   A minimum UMI count of output hexagons
   * **The `char` Parameter**
-  Specify the characteristics for the hexagons, including the genomic feature to create hexagon (`solo feature`), the size for a hexagonal grid (`hexagonwidth`), and whether the SGE is based on overlapping hexagons or non-overlapping hexagon (`segmentmove`). When `segmentmove` is 1, non-overlapping hexagon-based SGE will be created.
+  Specify the characteristics for the hexagons, including the genomic feature to create hexagon (`solo_feature`), the size for a hexagonal grid (`hexagon_width`), and whether the SGE is based on overlapping hexagons or non-overlapping hexagon (`segment_move`). When `segment_move` is 1, non-overlapping hexagon-based SGE will be created.
 
 ## Dependencies
 Rule `sdgeAR_segment` requires input from Rules `sdgeAR_reformat` and `sdge2sdgeAR`. Thus, Rule `sdgeAR_segment` can only execute after `sdgeAR_reformat` and `sdge2sdgeAR` and their prerequisite rules when applicable have successfully completed their operations. See an overview of the rule dependencies in the [Workflow Structure](../../home/workflow_structure.md).

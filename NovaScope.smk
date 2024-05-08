@@ -25,7 +25,7 @@ from bricks import setup_logging, end_logging, configure_pandas_display, log_a_s
 from bricks import check_input, check_path, check_request, create_dict, create_symlink, create_dirs_and_get_paths
 from bricks import list_outputfn_by_request, create_symlinks_by_list
 from pipe_utils_novascope import read_config_for_ini, read_config_for_runid, read_config_for_unitid, read_config_for_segment, read_config_for_hist, read_config_for_seq1, read_config_for_seq2, read_config_for_sgevisual
-from pipe_condout_novascope import output_fn_sbcdperfc, output_fn_sbcdperchip, output_fn_smatchperchip, output_fn_alignperrun, output_fn_sgeperrun, output_fn_histperrun, output_fn_segmperunit, output_fn_transperunit
+from pipe_condout_novascope import outfn_sbcd_per_fc, outfn_sbcd_per_chip, outfn_smatch_per_chip, outfn_align_per_run, outfn_sge_per_run, outfn_hist_per_run, outfn_segm_per_unit, outfn_trans_per_unit
 from rule_general_novascope import assign_resource_for_align, get_envmodules_for_rule, get_skip_sbcd, find_major_axis
 
 # set up 
@@ -97,7 +97,7 @@ df_seq2 = read_config_for_seq2(config, job_dir, main_dirs, silent=False)
 
 # per-unit or per-run:
 if any(task in request for task in ["align-per-run", "sge-per-run", "hist-per-run", "segment-per-unit", "transcript-per-unit"]):
-    run_id, rid2seq2 = read_config_for_runid(config, job_dir, main_dirs, silent=False)
+    run_id, rid2seq2 = read_config_for_runid(config, job_dir, main_dirs, df_seq2, silent=False)
 else:
     run_id = None
 
@@ -106,7 +106,6 @@ df_run = pd.DataFrame({
     'chip': [chip],
     'seq1_id': [seq1_id],
     'run_id': [run_id],
-    #'unit_id': [unit_id],
 })
 
 # sge visual
@@ -175,14 +174,14 @@ logging.info(f"4. Expected output filenames.")
 
 # output files are generated based on the requests and extra conditions
 output_filename_conditions = [
-    output_fn_sbcdperfc(main_dirs, df_run),
-    output_fn_sbcdperchip(main_dirs, df_run),
-    output_fn_smatchperchip(main_dirs, df_seq2),
-    output_fn_alignperrun(main_dirs, df_run),
-    output_fn_sgeperrun(main_dirs, df_sge),
-    output_fn_histperrun(main_dirs, df_hist),
-    output_fn_segmperunit(main_dirs, df_segment_char),
-    output_fn_transperunit(main_dirs, df_segment_char),
+    outfn_sbcd_per_fc(main_dirs, df_run),
+    outfn_sbcd_per_chip(main_dirs, df_run),
+    outfn_smatch_per_chip(main_dirs, df_seq2),
+    outfn_align_per_run(main_dirs, df_run),
+    outfn_sge_per_run(main_dirs, df_sge),
+    outfn_hist_per_run(main_dirs, df_hist),
+    outfn_segm_per_unit(main_dirs, df_segment_char),
+    outfn_trans_per_unit(main_dirs, df_segment_char),
 ]
 
 requested_files=list_outputfn_by_request(output_filename_conditions, request, debug=False)
