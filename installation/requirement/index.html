@@ -475,6 +475,8 @@
       
         
       
+        
+      
     
     
       
@@ -656,24 +658,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#optional-install-the-historef-package" class="md-nav__link">
-    <span class="md-ellipsis">
-      (Optional) Install the historef Package
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#optional-install-the-ficture-package" class="md-nav__link">
-    <span class="md-ellipsis">
-      (Optional) Install the FICTURE Package
-    </span>
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -716,6 +700,27 @@
   
   <span class="md-ellipsis">
     Slurm
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../requirement_for_plus/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Additional Installations
   </span>
   
 
@@ -911,6 +916,8 @@
       
         
       
+        
+      
     
     
       
@@ -1082,14 +1089,6 @@
       
         
       
-        
-      
-        
-      
-        
-      
-        
-      
     
     
       
@@ -1109,7 +1108,7 @@
             
   
   <span class="md-ellipsis">
-    Rules
+    Main Rules
   </span>
   
 
@@ -1119,7 +1118,7 @@
         <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4_3">
             <span class="md-nav__icon md-icon"></span>
-            Rules
+            Main Rules
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -1248,6 +1247,64 @@
   
 
               
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Plus Rules
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            Plus Rules
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
                 
@@ -1462,24 +1519,6 @@
   <a href="#preparing-reference-genomes" class="md-nav__link">
     <span class="md-ellipsis">
       Preparing Reference Genomes
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#optional-install-the-historef-package" class="md-nav__link">
-    <span class="md-ellipsis">
-      (Optional) Install the historef Package
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#optional-install-the-ficture-package" class="md-nav__link">
-    <span class="md-ellipsis">
-      (Optional) Install the FICTURE Package
     </span>
   </a>
   
@@ -1764,37 +1803,6 @@ gzip<span class="w"> </span>-d<span class="w"> </span>genes/genes.gtf.gz
 <span class="w">    </span>--sjdbGTFfile<span class="w"> </span>./genes/genes.gtf
 </code></pre></div></td></tr></table></div>
 </details>
-<h2 id="optional-install-the-historef-package">(Optional) Install the historef Package<a class="headerlink" href="#optional-install-the-historef-package" title="Permanent link">&para;</a></h2>
-<div class="admonition info">
-<p class="admonition-title">Info</p>
-<p>Only required if you want to align your histology images with the spatial gene expression data. </p>
-</div>
-<p>Below is an example instruction to install the <a href="https://github.com/seqscope/historef">historef</a> package in the same python environment you built in <a href="#configuring-python-virtual-environment">Configuring Python Virtual Environment</a>.</p>
-<p>To access the most recent version, please see <a href="https://github.com/seqscope/historef?tab=readme-ov-file">its GitHub repository</a>.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
-<span class="normal">2</span>
-<span class="normal">3</span>
-<span class="normal">4</span>
-<span class="normal">5</span>
-<span class="normal">6</span>
-<span class="normal">7</span>
-<span class="normal">8</span>
-<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1">### activate your python environment</span>
-<span class="c1">### Both the $pyenv_dir and $pyenv_name were defined in Configuring Python Virtual Environment.</span>
-<span class="nb">source</span><span class="w"> </span><span class="si">${</span><span class="nv">pyenv_dir</span><span class="si">}</span>/<span class="nv">$pyenv_name</span>/bin/activate
-
-<span class="c1">### download the historef package</span>
-wget<span class="w"> </span>-P<span class="w"> </span><span class="si">${</span><span class="nv">smk_dir</span><span class="si">}</span>/installation<span class="w"> </span>https://github.com/seqscope/historef/releases/download/v0.1.2/historef-0.1.2-py3-none-any.whl
-
-<span class="c1">## install the historef package</span>
-pip<span class="w"> </span>install<span class="w"> </span><span class="si">${</span><span class="nv">smk_dir</span><span class="si">}</span>/installation/historef-0.1.2-py3-none-any.whl
-</code></pre></div></td></tr></table></div>
-<h2 id="optional-install-the-ficture-package">(Optional) Install the FICTURE Package<a class="headerlink" href="#optional-install-the-ficture-package" title="Permanent link">&para;</a></h2>
-<div class="admonition info">
-<p class="admonition-title">Info</p>
-<p>Only required if you want to apply the NovaScope additional reformat features.</p>
-</div>
-<p>NovaScope additional reformat features including the transformation of the spatial digital gene expression matrix (SGE) into a format compatible with <a href="https://seqscope.github.io/ficture/">FICTURE</a>, and the pixel organization into user-defined hexagonal grids in the 10x genomics format. To utilize these features, users are advised to follow the <a href="https://seqscope.github.io/ficture/">FICTURE</a> installation guidelines provided in its <a href="https://seqscope.github.io/ficture/install/">tutorial</a>.</p>
 
 
 

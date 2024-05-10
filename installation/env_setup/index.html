@@ -475,6 +475,8 @@
       
         
       
+        
+      
     
     
       
@@ -631,9 +633,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#3-optionl-reference-gene-information-for-gene-filtering" class="md-nav__link">
+  <a href="#3-optional-reference-gene-information-for-gene-filtering" class="md-nav__link">
     <span class="md-ellipsis">
-      (3) (Optionl) Reference Gene Information for Gene Filtering
+      (3) (Optional) Reference Gene Information for Gene Filtering
     </span>
   </a>
   
@@ -683,6 +685,27 @@
   
   <span class="md-ellipsis">
     Slurm
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../requirement_for_plus/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Additional Installations
   </span>
   
 
@@ -878,6 +901,8 @@
       
         
       
+        
+      
     
     
       
@@ -1049,14 +1074,6 @@
       
         
       
-        
-      
-        
-      
-        
-      
-        
-      
     
     
       
@@ -1076,7 +1093,7 @@
             
   
   <span class="md-ellipsis">
-    Rules
+    Main Rules
   </span>
   
 
@@ -1086,7 +1103,7 @@
         <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4_3">
             <span class="md-nav__icon md-icon"></span>
-            Rules
+            Main Rules
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -1215,6 +1232,64 @@
   
 
               
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Plus Rules
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            Plus Rules
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
                 
@@ -1388,9 +1463,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#3-optionl-reference-gene-information-for-gene-filtering" class="md-nav__link">
+  <a href="#3-optional-reference-gene-information-for-gene-filtering" class="md-nav__link">
     <span class="md-ellipsis">
-      (3) (Optionl) Reference Gene Information for Gene Filtering
+      (3) (Optional) Reference Gene Information for Gene Filtering
     </span>
   </a>
   
@@ -1445,16 +1520,14 @@
 <p>To create your own <code>config_env.yaml</code> file for the environment setup, you may copy from <a href="https://github.com/seqscope/NovaScope/blob/main/info/config_env.yaml">our example available in our GitHub repository</a>. Remember to replace the placeholders with your specific input variables to customize it according to your needs.</p>
 </div>
 <h2 id="tools">Tools<a class="headerlink" href="#tools" title="Permanent link">&para;</a></h2>
-<p>The pipeline automatically detects and includes undefined tools in the system path, allowing for their use without manual configuration.</p>
+<p>The pipeline automatically detects and includes undefined tools in the system path, allowing for their use without manual configuration. </p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
-<span class="normal">4</span>
-<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nt">tools</span><span class="p">:</span>
+<span class="normal">4</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nt">tools</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">spatula</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/spatula/bin/spatula</span><span class="w">                     </span><span class="c1">## Default: &quot;spatula&quot;</span>
 <span class="w">  </span><span class="nt">samtools</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/samtools/samtools</span><span class="w">                      </span><span class="c1">## Default: &quot;samtools&quot;</span>
 <span class="w">  </span><span class="nt">star</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/STAR_2_7_11b/bin/Linux_x86_64_static/STAR</span><span class="w">  </span><span class="c1">## Default: &quot;STAR&quot;</span>
-<span class="w">  </span><span class="nt">ficture</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/ficture/repository</span><span class="w">                      </span><span class="c1">## (Optional) Default: &quot;ficture&quot;     </span>
 </code></pre></div></td></tr></table></div>
 <details class="note">
 <summary><code>samtools</code></summary>
@@ -1493,18 +1566,22 @@
 <p>Using <code>envmodules</code> to load <code>samtools</code> can be an alternative to specifying its path in <a href="#tools"><code>tools</code></a>. The given example is designed for instances where <code>samtools</code> is integrated into the <code>Bioinformatics</code> module system, which necessitates loading the <code>Bioinformatics</code> module prior to loading <code>samtools</code>. In this case, provide all modules that required to be loaded in the correct order, joint by <code>&amp;&amp;</code>.</p>
 </details>
 <h2 id="reference-databases">Reference Databases<a class="headerlink" href="#reference-databases" title="Permanent link">&para;</a></h2>
-<p>Specify all reference databases required for the input species in the <code>ref</code> field. </p>
+<p>Define all necessary reference databases for the input species in the <code>ref</code> field.</p>
 <h3 id="1-reference-genome-index-for-alignment">(1) Reference Genome Index for Alignment<a class="headerlink" href="#1-reference-genome-index-for-alignment" title="Permanent link">&para;</a></h3>
-<p>Use the <code>align</code> parameter to define the reference genome index for alignment using STAR. These reference genome indices can be downloaded from the <a href="https://www.10xgenomics.com/support/software/cell-ranger/downloads">cellranger download</a> page. Users can also generate their own reference genome index; detailed instructions for building the STAR index from a reference file are provided in the <a href="../requirement/">Requirements</a> section.</p>
+<p>Specify the reference genome index for alignment with the <code>align</code> parameter. Reference genome indices can be accessed via the <a href="https://www.10xgenomics.com/support/software/cell-ranger/downloads">cellranger download</a> page. Users can also generate their own reference genome index; detailed instructions for building the STAR index from a reference file are provided in the <a href="../requirement/">Requirements</a> section.</p>
 <h3 id="2-reference-gene-list-directories-for-visualizing-spatial-expression-patterns">(2) Reference Gene List Directories for Visualizing Spatial Expression Patterns<a class="headerlink" href="#2-reference-gene-list-directories-for-visualizing-spatial-expression-patterns" title="Permanent link">&para;</a></h3>
-<p>The <code>genelists</code> parameter identifies the directory containing gene lists specific to the species of the input data. These gene lists are used to visualize spatial expression patterns of particular gene groups within Rule <a href="../../walkthrough/rules/sdge_visual/">sdge_visual</a>. </p>
-<p>The directory should contain gene list files, each corresponding to a specific type or group of genes, such as mitochondrial (MT)genes. These files should be named <code>&lt;gene_group&gt;.genes.tsv</code>, for example, <code>MT.genes.tsv</code>, and each file should list gene names, with one name per line.</p>
-<p>NovaScope provides precompiled gene lists for mouse (version: mm39) and human (version: hg38) available in the <a href="https://github.com/seqscope/NovaScope/tree/info/genelists">"info"</a> folder. If the <code>genelists</code> parameter is not specified in the <code>config_env.yaml</code>, NovaScope defaults to using these files. Alternatively, users may provide their own custom gene list files.</p>
-<h3 id="3-optionl-reference-gene-information-for-gene-filtering">(3) (Optionl) Reference Gene Information for Gene Filtering<a class="headerlink" href="#3-optionl-reference-gene-information-for-gene-filtering" title="Permanent link">&para;</a></h3>
-<p>This parameter is required only if additional reformatting features of NovaScope are utilized. The <code>geneinfo</code> parameter specifies the location of gene information files used for gene filtering. These files are available from <a href="https://seqscope.github.io/ficture/">FICTURE</a> in <a href="https://github.com/seqscope/ficture/tree/stable/info">its info directory</a>. If the <code>geneinfo</code> field in the <code>ref</code> section is omitted, but the <code>tools</code> field specifies the path to <a href="https://seqscope.github.io/ficture/">FICTURE</a>, NovaScope will automatically use the gene information files from FICTURE. Users may also use their custom gene information files in this process.</p>
+<p>The <code>genelists</code> parameter should point to the directory containing species-specific gene lists, which are crucial for visualizing spatial expression patterns in Rule <a href="../../walkthrough/rules/sdge_visual/">sdge_visual</a>. This directory must include files named <code>&lt;gene_group&gt;.genes.tsv</code> (e.g., <code>MT.genes.tsv</code>), with each file listing gene names line-by-line.</p>
+<p>NovaScope provides precompiled gene lists for <a href="https://github.com/seqscope/NovaScope/tree/main/info/genelists/mm39">mouse (version: mm39)</a> and <a href="https://github.com/seqscope/NovaScope/tree/main/info/genelists/hg38">human (version: hg38)</a>. If the <code>genelists</code> parameter is not specified in the <code>config_env.yaml</code>, NovaScope defaults to using these files. Alternatively, users may provide their own custom gene list files.</p>
+<h3 id="3-optional-reference-gene-information-for-gene-filtering">(3) (Optional) Reference Gene Information for Gene Filtering<a class="headerlink" href="#3-optional-reference-gene-information-for-gene-filtering" title="Permanent link">&para;</a></h3>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Gene information files are necessary only if additional reformatting features of NovaScope are utilized. </p>
+</div>
+<p>The <code>geneinfo</code> parameter specifies the location for gene information files needed for gene filtering during reformatting. <a href="https://seqscope.github.io/ficture/">FICTURE</a> offers ready-to-use gene information files for <a href="https://github.com/seqscope/ficture/blob/stable/info/Mus_musculus.GRCm39.107.names.tsv.gz">mouse (version: mm39)</a> and <a href="https://github.com/seqscope/ficture/blob/stable/info/Homo_sapiens.GRCh38.107.names.tsv.gz">human (version: hg38)</a>. If the <code>geneinfo</code> field is not included in the <code>ref</code> section, NovaScope defaults to using these files from <a href="https://seqscope.github.io/ficture/">FICTURE</a>. </p>
+<p>Only under the following conditions, users need to prepare and specify a gene information file in the geneinfo: a. the input datasets are from species other than human or mouse; b. the version of the dataset is different from that of the precompiled files (human: hg38; mouse: mm39).</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>Please ensure the reference files correspond to the species of your input data. </p>
+<p>Ensure that the reference files match the species of your input data.</p>
 </div>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
@@ -1524,12 +1601,12 @@
 <span class="w">    </span><span class="nt">human</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/to/refdata-gex-GRCh39-2024-A/star_2.7_11b&quot;</span>
 <span class="w">    </span><span class="c1">#...</span>
 <span class="w">  </span><span class="nt">genelists</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">mouse</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/to/ref_gene_list_directory_for_mouse&quot;</span><span class="w">             </span>
+<span class="w">    </span><span class="nt">mouse</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/to/ref_gene_list_directory_for_mouse&quot;</span>
 <span class="w">    </span><span class="nt">human</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/to/ref_gene_list_directory_for_human&quot;</span>
 <span class="w">    </span><span class="c1">#...</span>
-<span class="w">  </span><span class="nt">geneinfo</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">mouse</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/to/ref_gene_info_file_for_mouse&quot;</span>
-<span class="w">    </span><span class="nt">human</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/to/ref_gene_info_file_for_human&quot;</span>
+<span class="w">  </span><span class="c1">#geneinfo:                                        ## (optional) no need to define the geneinfo if the users prefer to use the precompiled files from FICTURE</span>
+<span class="w">    </span><span class="c1">#mouse: &quot;/path/to/ref_gene_info_file_for_mouse&quot;</span>
+<span class="w">    </span><span class="c1">#human: &quot;/path/to/ref_gene_info_file_for_human&quot;</span>
 <span class="w">    </span><span class="c1">#...</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="python-environment">Python Environment<a class="headerlink" href="#python-environment" title="Permanent link">&para;</a></h2>

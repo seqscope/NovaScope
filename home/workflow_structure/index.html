@@ -75,6 +75,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#main-workflow" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -444,6 +449,17 @@
       
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Workflow Structure
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -453,6 +469,41 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#main-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      Main Workflow
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plus-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      Plus Workflow
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -474,6 +525,8 @@
   
     
     
+      
+        
       
         
       
@@ -568,6 +621,27 @@
   
   <span class="md-ellipsis">
     Slurm
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installation/requirement_for_plus/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Additional Installations
   </span>
   
 
@@ -763,6 +837,8 @@
       
         
       
+        
+      
     
     
       
@@ -934,14 +1010,6 @@
       
         
       
-        
-      
-        
-      
-        
-      
-        
-      
     
     
       
@@ -961,7 +1029,7 @@
             
   
   <span class="md-ellipsis">
-    Rules
+    Main Rules
   </span>
   
 
@@ -971,7 +1039,7 @@
         <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4_3">
             <span class="md-nav__icon md-icon"></span>
-            Rules
+            Main Rules
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -1101,6 +1169,64 @@
 
               
             
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Plus Rules
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            Plus Rules
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
               
                 
   
@@ -1218,6 +1344,32 @@
   
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#main-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      Main Workflow
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plus-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      Plus Workflow
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -1236,11 +1388,20 @@
 
   <h1>Workflow Structure</h1>
 
-<p>The workflow of <a href="../../">NovaScope</a> can be visualized in the following rule graph.</p>
+<p>The workflow of <a href="../../">NovaScope</a> can be visualized through the rule graphs provided below. </p>
+<p>For further details on the rules, their execution, and the workflow's structure, please refer to the <a href="../../walkthrough/intro/">NovaScope Walkthrough</a>.</p>
+<h2 id="main-workflow">Main Workflow<a class="headerlink" href="#main-workflow" title="Permanent link">&para;</a></h2>
+<p>The main workflow of NovaScope processes raw sequencing data (1st-seq and 2nd-seq), aligns reads to the reference genome, and generates spatial gene expression at submicron resolution. The rule graph illustrates the relationships between rules:</p>
 <figure>
-<img alt="rulegraph" src="../../images/rulegraph.png" width="70%" />
+<img alt="rulegraph" src="../../images/rulegraph_main.png" width="70%" />
 </figure>
-<p><strong>Figure 2: The overall flow and dependencies between rules:</strong> Each node in the graph represents a rule within your Snakemake workflow. Each arrow among nodes stands for the rule dependency among rules, with the direction that points from prerequisite rules to a dependent rule. The prerequisite rules must be executed before the dependent rule can start.</p>
+<p><strong>Figure 1: Main workflow rule graph.</strong> Each node represents a specific rule in the Snakemake workflow, and arrows indicate dependencies, pointing from prerequisite to dependent rules. Prerequisite rules must be completed before the dependent rule can commence.</p>
+<h2 id="plus-workflow">Plus Workflow<a class="headerlink" href="#plus-workflow" title="Permanent link">&para;</a></h2>
+<p>In addition to the main functions, NovaScope offers extended <a href="../../#functionality">histology alignment and data reformatting capabilities</a>. The plus workflow, detailing both main and additional rules and their interdependencies, is depicted below:</p>
+<figure>
+<img alt="rulegraph" src="../../images/rulegraph_plus.png" width="70%" />
+</figure>
+<p><strong>Figure 2: Plus workflow rule graph.</strong> Each node in this graph represents a rule, with arrows illustrating the flow from prerequisite rules to dependent rules.</p>
 
 
 
