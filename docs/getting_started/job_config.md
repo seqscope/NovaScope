@@ -189,16 +189,26 @@ The pipeline interprets the requested output files via `request` and determines 
 !!! info
     The `request` parameter should indicate the **final output** required, and all intermediary files contributing to the final output will be automatically generated (i.e., the dependencies between rules). 
 
+
+##### Main Options 
 Below are the options with their final output files and links to detailed output information. For more insights into the excution flow, please consult the [execution flow by request](../walkthrough/execution_guide/rule_execution.md) alongside the [rulegraph](https://seqscope.github.io/NovaScope/#an-overview-of-the-workflow-structure). 
 
-| Option              | Main/Final Output Files                                                                                              | Details                                              |
+
+| Option              | Final Output Files                                                                                             | Details                                              |
 |---------------------|----------------------------------------------------------------------------------------------------------------|-------------------------------------------------------|
 | `sbcd-per-flowcell` | Spatial barcode map (per-tile basis) and Manifest file for a flowcell                                          | [fastq2sbcd](../walkthrough/rules/fastq2sbcd.md#output-files)       |
 | `sbcd-per-chip`     | Spatial barcode map for a section chip, Image of spatial barcode distribution                                  | [sbcd2chip](../walkthrough/rules/sbcd2chip.md#output-files)         |
 | `smatch-per-chip`   | File with matched spatial barcodes, Image of matched barcode spatial distribution                              | [smatch](../walkthrough/rules/smatch.md#output-files)               |
-| `align-per-run`     | Binary Alignment Map (BAM) file, Digital gene expression matrix (DGE) for genomic features                     | [align](../walkthrough/rules/align.md)                              |
-| `sge-per-run`       | Spatial digital gene expression matrix (SGE), Spatial distribution images for transcripts                      | [dge2sdge](../walkthrough/rules/dge2sdge.md) and [sdge_visual](../walkthrough/rules/sdge_visual.md)                       |
-| `hist-per-run`      | Geotiff files for coordinate transformation between SGE and histology image, and a resized one                 | [historef](../walkthrough/rules/historef.md)                        |
+| `align-per-run`     | Binary Alignment Map file, Digital gene expression matrix for genomic features                                 | [align](../walkthrough/rules/align.md)                              |
+| `sge-per-run`       | SGE, Spatial distribution images for transcripts                                                               | [dge2sdge](../walkthrough/rules/dge2sdge.md) and [sdge_visual](../walkthrough/rules/sdge_visual.md)                       |
+
+
+##### Plus Options 
+The options below are only for executing the [additional functionalities](../index.md#functionality). To execute this, make sure you have installed the [additional requirement](../installation/requirement_for_plus.md) properly.
+
+| Option              | Final Output Files                                                                                             | Details                                              |
+|---------------------|----------------------------------------------------------------------------------------------------------------|-------------------------------------------------------|
+| `hist-per-run`      | Geotiff files for coordinate transformation between SGE and histology image                                    | [historef](../walkthrough/rules/historef.md)                        |
 | `transcript-per-unit`  | SGE in in the FICTURE-compatible format                                                                     | [sdgeAR_reformat](../walkthrough/rules/sdgeAR_reformat.md)                        |
 | `segment-per-unit`     | Hexagon-based SGE in the 10x genomics format                                                                | [sdgeAR_segment](../walkthrough/rules/sdgeAR_segment.md)                        |
 

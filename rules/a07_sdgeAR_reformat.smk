@@ -24,17 +24,13 @@ rule a07_sdgeAR_reformat:
         # Sanity Check: geneinfo
         if params.sp2geneinfo is not None:
             sp2geneinfo = params.sp2geneinfo
-        elif ficture is not None and os.path.exists(ficture):
+        else:
             ficture_info = os.path.join(ficture, "info")
             sp2geneinfo = {
                 "mouse": os.path.join(ficture_info, "Mus_musculus.GRCm39.107.names.tsv.gz"),
                 "human": os.path.join(ficture_info, "Homo_sapiens.GRCh38.107.names.tsv.gz")
             }
-            print(f"The pre-defined geneinfo files in FICTURE will be applied: {ficture_info}")
-        else:
-            raise ValueError(
-                'Error: The path to the gene information is missing. Please add the "geneinfo" information in the "ref" field of the environment configuration file.'
-            )
+            #print(f"The pre-defined geneinfo files in FICTURE will be applied: {ficture_info}")
         
         # geneinfo
         geneinfo = sp2geneinfo[params.species]

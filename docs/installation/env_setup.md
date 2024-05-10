@@ -9,14 +9,13 @@ Below is a brief description of all the items in the YAML file.
 
 ## Tools 
 
-The pipeline automatically detects and includes undefined tools in the system path, allowing for their use without manual configuration.
+The pipeline automatically detects and includes undefined tools in the system path, allowing for their use without manual configuration. 
 
 ```yaml
 tools:
   spatula: /path/to/spatula/bin/spatula                     ## Default: "spatula"
   samtools: /path/to/samtools/samtools	                    ## Default: "samtools"
   star: /path/to/STAR_2_7_11b/bin/Linux_x86_64_static/STAR  ## Default: "STAR"
-  ficture: /path/to/ficture/repository                      ## (Optional) Default: "ficture"	 
 ```
 ??? note "`samtools`"
     For users in High-Performance Computing (HPC) environments with `samtools` installed, it's feasible to use `envmodules` (see [Environment Modules](#environment-modules)) to load `samtools` rather than defining its path here.
@@ -50,23 +49,27 @@ envmodules:
 
 ## Reference Databases
 
-Specify all reference databases required for the input species in the `ref` field. 
+Define all necessary reference databases for the input species in the `ref` field.
 
 ### (1) Reference Genome Index for Alignment
-Use the `align` parameter to define the reference genome index for alignment using STAR. These reference genome indices can be downloaded from the [cellranger download](https://www.10xgenomics.com/support/software/cell-ranger/downloads) page. Users can also generate their own reference genome index; detailed instructions for building the STAR index from a reference file are provided in the [Requirements](./requirement.md) section.
+Specify the reference genome index for alignment with the `align` parameter. Reference genome indices can be accessed via the [cellranger download](https://www.10xgenomics.com/support/software/cell-ranger/downloads) page. Users can also generate their own reference genome index; detailed instructions for building the STAR index from a reference file are provided in the [Requirements](./requirement.md) section.
 
 ### (2) Reference Gene List Directories for Visualizing Spatial Expression Patterns
-The `genelists` parameter identifies the directory containing gene lists specific to the species of the input data. These gene lists are used to visualize spatial expression patterns of particular gene groups within Rule [sdge_visual](../walkthrough/rules/sdge_visual.md). 
+The `genelists` parameter should point to the directory containing species-specific gene lists, which are crucial for visualizing spatial expression patterns in Rule [sdge_visual](../walkthrough/rules/sdge_visual.md). This directory must include files named `<gene_group>.genes.tsv` (e.g., `MT.genes.tsv`), with each file listing gene names line-by-line.
 
-The directory should contain gene list files, each corresponding to a specific type or group of genes, such as mitochondrial (MT)genes. These files should be named `<gene_group>.genes.tsv`, for example, `MT.genes.tsv`, and each file should list gene names, with one name per line.
+NovaScope provides precompiled gene lists for [mouse (version: mm39)](https://github.com/seqscope/NovaScope/tree/main/info/genelists/mm39) and [human (version: hg38)](https://github.com/seqscope/NovaScope/tree/main/info/genelists/hg38). If the `genelists` parameter is not specified in the `config_env.yaml`, NovaScope defaults to using these files. Alternatively, users may provide their own custom gene list files.
 
-NovaScope provides precompiled gene lists for mouse (version: mm39) and human (version: hg38) available in the ["info"](https://github.com/seqscope/NovaScope/tree/info/genelists) folder. If the `genelists` parameter is not specified in the `config_env.yaml`, NovaScope defaults to using these files. Alternatively, users may provide their own custom gene list files.
+### (3) (Optional) Reference Gene Information for Gene Filtering
 
-### (3) (Optionl) Reference Gene Information for Gene Filtering
-This parameter is required only if additional reformatting features of NovaScope are utilized. The `geneinfo` parameter specifies the location of gene information files used for gene filtering. These files are available from [FICTURE](https://seqscope.github.io/ficture/) in [its info directory](https://github.com/seqscope/ficture/tree/stable/info). If the `geneinfo` field in the `ref` section is omitted, but the `tools` field specifies the path to [FICTURE](https://seqscope.github.io/ficture/), NovaScope will automatically use the gene information files from FICTURE. Users may also use their custom gene information files in this process.
+!!! info
+    Gene information files are necessary only if additional reformatting features of NovaScope are utilized. 
+
+The `geneinfo` parameter specifies the location for gene information files needed for gene filtering during reformatting. [FICTURE](https://seqscope.github.io/ficture/) offers ready-to-use gene information files for [mouse (version: mm39)](https://github.com/seqscope/ficture/blob/stable/info/Mus_musculus.GRCm39.107.names.tsv.gz) and [human (version: hg38)](https://github.com/seqscope/ficture/blob/stable/info/Homo_sapiens.GRCh38.107.names.tsv.gz). If the `geneinfo` field is not included in the `ref` section, NovaScope defaults to using these files from [FICTURE](https://seqscope.github.io/ficture/). 
+
+Only under the following conditions, users need to prepare and specify a gene information file in the geneinfo: a. the input datasets are from species other than human or mouse; b. the version of the dataset is different from that of the precompiled files (human: hg38; mouse: mm39).
 
 !!! tip
-    Please ensure the reference files correspond to the species of your input data. 
+    Ensure that the reference files match the species of your input data.
 
 ```yaml
 ref:
@@ -75,12 +78,12 @@ ref:
     human: "/path/to/refdata-gex-GRCh39-2024-A/star_2.7_11b"
     #...
   genelists:
-    mouse: "/path/to/ref_gene_list_directory_for_mouse"             
+    mouse: "/path/to/ref_gene_list_directory_for_mouse"
     human: "/path/to/ref_gene_list_directory_for_human"
     #...
-  geneinfo:
-    mouse: "/path/to/ref_gene_info_file_for_mouse"
-    human: "/path/to/ref_gene_info_file_for_human"
+  #geneinfo:                                        ## (optional) no need to define the geneinfo if the users prefer to use the precompiled files from FICTURE
+    #mouse: "/path/to/ref_gene_info_file_for_mouse"
+    #human: "/path/to/ref_gene_info_file_for_human"
     #...
 ```
 
@@ -95,7 +98,6 @@ pyenv: "/path/to/python/virtual/env"
 ## (Optional) Computing Capabilities
 
 !!! info
-
     Only applicable to HPC environments.
 
 NovaScope provides two methods for specifying resources for the alignment process:

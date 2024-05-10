@@ -42,7 +42,8 @@ env_config, module_config, python, pyenv = read_config_for_ini(config, job_dir, 
 spatula  = env_config.get("tools", {}).get("spatula",   "spatula")
 samtools = env_config.get("tools", {}).get("samtools",  "samtools")
 star     = env_config.get("tools", {}).get("star",      "STAR")
-ficture  = env_config.get("tools", {}).get("ficture",   "ficture")
+#ficture  = env_config.get("tools", {}).get("ficture",   "ficture")
+ficture  = os.path.join(smk_dir, "submodules", "ficture")
 
 #==============================================
 #
@@ -164,9 +165,10 @@ else:
 #
 # - If all variable in the zip_args is a list of one element, it's ok to use the list directly. Otherwise, use a dataframe will be safer to avoid wrong combination.
 #   Currently, only the df_seq2 and df_segment_char are in the dataframe format.
-# - Please note that The order of results affects the order of execution.
+# - Please note that the order of results affects the order of execution.
 #
 #==============================================
+
 log_a_separator()
 logging.info(f"4. Expected output filenames.")
 
@@ -184,7 +186,7 @@ output_filename_conditions = [
     outfn_trans_per_unit(main_dirs, df_segment_char),
 ]
 
-requested_files=list_outputfn_by_request(output_filename_conditions, request, debug=False)
+requested_files = list_outputfn_by_request(output_filename_conditions, request, debug=False)
 
 rule all:
     input:
