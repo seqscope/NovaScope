@@ -90,7 +90,8 @@ smk_dir=/path/to/the/novascope/directory                             # path to N
 job_dir=/path/to/the/job/directory                                   # The job directory should has the `config_job.yaml` file.
 
 ## slurm profile
-slurm_params="--profile /path/to/the/slurm/configuration/directory"  # The slurm configuration directory should have the slurm configuration file: `config.yaml`. For example, if your snakemake is version v7.29.0, use `--profile $smk_dir/info/slurm/v7.29.0`
+slurm_params="--profile /path/to/the/slurm/configuration/directory"  # The slurm configuration directory should have the slurm configuration file: `config.yaml`. 
+                                                                     # For example, if your snakemake is version v7.29.0, use `--profile $smk_dir/info/slurm/v7.29.0`
 
 ## execute the NovaScope pipeline
 snakemake $slurm_params -s ${smk_dir}/NovaScope.smk -d $job_dir 
@@ -121,7 +122,10 @@ This is similar to the local execution, but you need to specify the Slurm profil
 ## path
 smk_dir=/path/to/the/novascope/directory                             # path to NovaScope repository
 job_dir=/path/to/the/job/directory                                   # The job directory should has the `config_job.yaml` file.
-slurm_params="--profile /path/to/the/slurm/configuration/directory"  # The slurm directory should have the configuration file: `config.yaml`.
+
+## slurm profile
+slurm_params="--profile /path/to/the/slurm/configuration/directory"  # The slurm configuration directory should have the slurm configuration file: `config.yaml`. 
+                                                                     # For example, if your snakemake is version v7.29.0, use `--profile $smk_dir/info/slurm/v7.29.0`
 
 ## execute the NovaScope pipeline
 snakemake $slurm_params -s ${smk_dir}/NovaScope.smk -d $job_dir

@@ -54,6 +54,7 @@ nav:
       - Installing NovaScope: installation/requirement.md
       - Environment Setup: installation/env_setup.md
       - Slurm: installation/slurm.md
+      - Additional Installations: installation/requirement_for_plus.md
   - Getting Started:
       - Introduction: getting_started/intro.md
       - Accessing Input Data: getting_started/access_data.md 
@@ -65,13 +66,14 @@ nav:
       - Rule Execution Guide: 
         - Core Concepts: walkthrough/execution_guide/core_concepts.md
         - Execution Flow by Request: walkthrough/execution_guide/rule_execution.md
-      - Rules:
+      - Main Rules:
         - fastq2sbcd: walkthrough/rules/fastq2sbcd.md 
         - sbcd2chip : walkthrough/rules/sbcd2chip.md
         - smatch : walkthrough/rules/smatch.md
         - align: walkthrough/rules/align.md
         - dge2sdge: walkthrough/rules/dge2sdge.md
         - sdge_visual: walkthrough/rules/sdge_visual.md
+      - Plus Rules:
         - historef: walkthrough/rules/historef.md
         - sdge2sdgeAR: walkthrough/rules/sdge2sdgeAR.md
         - sdgeAR_reformat: walkthrough/rules/sdgeAR_reformat.md

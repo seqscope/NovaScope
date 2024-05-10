@@ -11,6 +11,7 @@ The current documentation of [NovaScope](../index.md) include the following sect
 * [Installing NovaScope](../installation/requirement.md): Details of installing required softwares and acquiring reference database.
 * [Environment Setup](../installation/env_setup.md): Outlines how to prepare a configuration file for computing environment.
 * [Slurm](../installation/slurm.md): (Optional) Guidance on setting up a configuration for the SLURM job scheduler.
+* [Additional Installation](../installation/requirement_for_plus.md): (Optional) Instruction of installing the tools for NovaScope additional functionalities.
 
 [**Getting Started**](../getting_started/intro.md):
 
