@@ -10,7 +10,7 @@ In NovaScope, we utilized a cluster configuration profile to define the details 
 
 ## A Cluster Configuration file for Snakemake v7.29.0
 
-Create a `config.yaml` with the following settings. Please substitute the placeholders below, marked with `<>`, to suit your specific case. Please see our example file at [slurm/v7.29.0/config.yaml](https://github.com/seqscope/NovaScope/blob/main/slurm/v7.29.0/config.yaml). 
+Create a `config.yaml` with the following settings. Please substitute the placeholders below, marked with `<>`, to suit your specific case. Please see our example file at [slurm/v7.29.0/config.yaml](https://github.com/seqscope/NovaScope/blob/main/info/slurm/v7.29.0/config.yaml). 
 
 ```yaml
 ## Cluster Configuration
@@ -63,7 +63,7 @@ Please first install the Snakemake executor plugin "`cluster-generic`":
 pip install snakemake-executor-plugin-cluster-generic
 ```
 
-Then, create the cluster configuration file with below. Please substitute the placeholders below, marked with `<>`, to suit your specific case. Please see our example file at [slurm/v8.6.0/config.yaml](https://github.com/seqscope/NovaScope/blob/main/slurm/v8.6.0/config.yaml). 
+Then, create the cluster configuration file with below. Please substitute the placeholders below, marked with `<>`, to suit your specific case. Please see our example file at [slurm/v8.6.0/config.yaml](https://github.com/seqscope/NovaScope/blob/main/info/slurm/v8.6.0/config.yaml). 
 
 ```yaml
 ## Cluster Configuration

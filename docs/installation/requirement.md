@@ -221,4 +221,23 @@ pip install ${smk_dir}/installation/historef-0.1.2-py3-none-any.whl
 !!! info 
 	Only required if you want to apply the NovaScope additional reformat features.
 
-NovaScope additional reformat features including the transformation of the spatial digital gene expression matrix (SGE) into a format compatible with [FICTURE](https://seqscope.github.io/ficture/), and the pixel organization into user-defined hexagonal grids in the 10x genomics format. To utilize these features, users are advised to follow the [FICTURE](https://seqscope.github.io/ficture/) installation guidelines provided in its [tutorial](https://seqscope.github.io/ficture/install/).
+NovaScope additional reformat features including the transformation of the spatial digital gene expression matrix (SGE) into a format compatible with [FICTURE](https://seqscope.github.io/ficture/), and the pixel organization into user-defined hexagonal grids in the 10x genomics format. To utilize these reformatting features, you must install the [**stable** branch of FICTURE](https://github.com/seqscope/ficture/tree/stable), which NovaScope has already included as a submodule. However, it is essential to install the dependencies of FICTURE into the Python virtual environment you previously created [here](#python-environment).
+
+Clone the stable branch of FICTURE:
+```bash
+git clone -b stable https://github.com/seqscope/ficture
+```
+
+```bash
+## set the path to the python virtual environment directory
+pyenv_dir=/path/to/python/virtual/environment/directory  ## provide the path of venv
+pyenv_name=novascope_venv							     ## provide the name of the environment you created before
+
+smk_dir=/path/to/the/novascope/directory
+
+## activate the python environment (every time you want to use the environment)
+source ${pyenv_dir}/${pyenv_name}/bin/activate
+
+## install the required packages (need to be done only once)
+pip install -r ${smk_dir}/submodules/ficture/requirements.txt
+```

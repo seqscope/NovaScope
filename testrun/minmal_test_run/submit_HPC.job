@@ -13,9 +13,9 @@
 #SBATCH --output=./logs/NovaScope-master-%j_%x.out  # Log file path
 
 # Paths
-smk_dir="/path/to/NovaScope"                         # [REPLACE] Path to the NovaScope pipeline repo.
-job_dir="$smk_dir/testrun/minimal_test_run"          # Path to your Job directory, which should have a config_job.yaml file and will be used to save the log files.
-slurm_params="--profile $smk_dir/slurm"              # Path to the SLURM parameter directory, which should include a config.yaml file.
+smk_dir="/path/to/NovaScope"                                            # [REPLACE] Path to the NovaScope pipeline repo.
+job_dir="$smk_dir/testrun/minimal_test_run"                             # Path to your Job directory, which should have a config_job.yaml file and will be used to save the log files.
+slurm_params="--profile /path/to/the/slurm/configuration/directory"     # [REPLACE] Path to the SLURM parameter directory, which should include a config.yaml file. For example, if your snakemake is version v7.29.0, use `--profile $smk_dir/info/slurm/v7.29.0`
 
 # Execute the NovaScope pipeline via SLURM
 snakemake $slurm_params --latency-wait 120 -s $smk_dir/NovaScope.smk -d $job_dir
