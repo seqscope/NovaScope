@@ -813,6 +813,30 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Requests">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#main-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      Main Options
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plus-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      Plus Options
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
@@ -1485,6 +1509,30 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Requests">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#main-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      Main Options
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plus-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      Plus Options
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
@@ -1834,12 +1882,13 @@
 <p class="admonition-title">Info</p>
 <p>The <code>request</code> parameter should indicate the <strong>final output</strong> required, and all intermediary files contributing to the final output will be automatically generated (i.e., the dependencies between rules). </p>
 </div>
+<h5 id="main-options">Main Options<a class="headerlink" href="#main-options" title="Permanent link">&para;</a></h5>
 <p>Below are the options with their final output files and links to detailed output information. For more insights into the excution flow, please consult the <a href="../../walkthrough/execution_guide/rule_execution/">execution flow by request</a> alongside the <a href="https://seqscope.github.io/NovaScope/#an-overview-of-the-workflow-structure">rulegraph</a>. </p>
 <table>
 <thead>
 <tr>
 <th>Option</th>
-<th>Main/Final Output Files</th>
+<th>Final Output Files</th>
 <th>Details</th>
 </tr>
 </thead>
@@ -1861,17 +1910,30 @@
 </tr>
 <tr>
 <td><code>align-per-run</code></td>
-<td>Binary Alignment Map (BAM) file, Digital gene expression matrix (DGE) for genomic features</td>
+<td>Binary Alignment Map file, Digital gene expression matrix for genomic features</td>
 <td><a href="../../walkthrough/rules/align/">align</a></td>
 </tr>
 <tr>
 <td><code>sge-per-run</code></td>
-<td>Spatial digital gene expression matrix (SGE), Spatial distribution images for transcripts</td>
+<td>SGE, Spatial distribution images for transcripts</td>
 <td><a href="../../walkthrough/rules/dge2sdge/">dge2sdge</a> and <a href="../../walkthrough/rules/sdge_visual/">sdge_visual</a></td>
 </tr>
+</tbody>
+</table>
+<h5 id="plus-options">Plus Options<a class="headerlink" href="#plus-options" title="Permanent link">&para;</a></h5>
+<p>The options below are only for executing the <a href="../../#functionality">additional functionalities</a>. To execute this, make sure you have installed the <a href="../../installation/requirement_for_plus/">additional requirement</a> properly.</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Final Output Files</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
 <tr>
 <td><code>hist-per-run</code></td>
-<td>Geotiff files for coordinate transformation between SGE and histology image, and a resized one</td>
+<td>Geotiff files for coordinate transformation between SGE and histology image</td>
 <td><a href="../../walkthrough/rules/historef/">historef</a></td>
 </tr>
 <tr>
