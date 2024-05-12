@@ -4,27 +4,27 @@ FROM snakemake/snakemake
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+RUN mkdir /app
+
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y \
-    g++ \
-    make \
-    cmake \
-    curl \
-    git \
-    xxd \
-    unzip \
+RUN mkdir -p /var/lib/dpkg/updates && \
+    mkdir -p /var/lib/apt/lists/partial && \
+    touch /var/lib/dpkg/lock && \
+    touch /var/lib/dpkg/lock-frontend
+
+ENV APT_PKGS bzip2 ca-certificates curl wget git unzip g++ make cmake xxd imagemagick gdal-bin python3-gdal time
+
+RUN apt-get update && apt-get install -y --no-install-recommends ${APT_PKGS} \
     zlib1g-dev \
     libbz2-dev \
     libdeflate-dev \
     liblzma-dev \
-	libcurl4-openssl-dev \
-	libgsl0-dev \
-	libncurses5-dev \
-	libperl-dev \
-	libssl-dev \
-    wget \
-    ca-certificates \
+    libcurl4-openssl-dev \
+    libgsl0-dev \
+    libncurses5-dev \
+    libperl-dev \
+    libssl-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /var/lib/dpkg/* /var/cache/apt/* /var/log/apt
 
@@ -58,10 +58,10 @@ RUN curl -k -L -o STAR-${STAR_VERSION}.zip https://github.com/alexdobin/STAR/arc
 
 # Install qgenlib
 RUN git clone https://github.com/hyunminkang/qgenlib.git \
-    && cd qgenlib && \
-    && mkdir build && \
-    && cd build && \
-    && cmake .. && \
+    && cd qgenlib \
+    && mkdir build \
+    && cd build \
+    && cmake .. \
     && make
 
 # Install spatula
@@ -73,14 +73,18 @@ RUN cd spatula \
     && make \
     && cp /app/spatula/bin/spatula /usr/local/bin
 
+# create a virtual python environment
 # Install novascope/ficture
-RUN git clone -b cli https://github.com/seqscope/novascope.git \
+RUN python -m venv /app/venv \
+    && source /app/venv/bin/activate \
+    && git clone -b cli https://github.com/seqscope/novascope.git \
     && cd novascope \
-    && pip install numpy pandas Pillow PyYAML pyarrow \
+    && pip install numpy pandas Pillow PyYAML pyarrow setuptools \
     && cd submodules \
     && rm -rf ficture \
     && git clone -b stable https://github.com/seqscope/ficture.git \
-    && pip install -r ficture/requirements.txt
+    && cd ficture \
+    && pip install -r requirements.txt
 
 # Command to run when starting the container
 COPY ./entrypoint.sh /
