@@ -1,0 +1,4 @@
+[submodule "submodules/ficture"]
+	path = submodules/ficture
+	url = https://github.com/seqscope/ficture
+	branch = stable
