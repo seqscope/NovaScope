@@ -1,2 +1,2 @@
-#!/bin/sh
-popscle $1
+#!/bin/bash
+snakemake $1

@@ -13,7 +13,7 @@ RUN mkdir -p /var/lib/dpkg/updates && \
     touch /var/lib/dpkg/lock && \
     touch /var/lib/dpkg/lock-frontend
 
-ENV APT_PKGS bzip2 ca-certificates curl wget git unzip g++ make cmake xxd imagemagick gdal-bin python3-gdal time
+ENV APT_PKGS bzip2 ca-certificates curl wget git unzip g++ make cmake xxd imagemagick gdal-bin python3-gdal time bash
 
 RUN apt-get update && apt-get install -y --no-install-recommends ${APT_PKGS} \
     zlib1g-dev \
@@ -86,7 +86,9 @@ RUN python -m venv /app/venv \
     && cd ficture \
     && pip install -r requirements.txt
 
+SHELL ["/bin/bash", "-c"]
+
 # Command to run when starting the container
-COPY ./entrypoint.sh /
-RUN chmod 755 /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
+# COPY ./entrypoint.sh /
+# RUN chmod 755 /entrypoint.sh
+ENTRYPOINT ["/bin/bash", "-c"]
