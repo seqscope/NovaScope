@@ -13,7 +13,7 @@ RUN mkdir -p /var/lib/dpkg/updates && \
     touch /var/lib/dpkg/lock && \
     touch /var/lib/dpkg/lock-frontend
 
-ENV APT_PKGS bzip2 ca-certificates curl wget git unzip g++ make cmake xxd imagemagick gdal-bin python3-gdal time bash
+ENV APT_PKGS bzip2 ca-certificates curl wget git unzip g++ make cmake xxd imagemagick gdal-bin python3-gdal time
 
 RUN apt-get update && apt-get install -y --no-install-recommends ${APT_PKGS} \
     zlib1g-dev \

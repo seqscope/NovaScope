@@ -50,18 +50,22 @@ nav:
       - Introduction: index.md
       - Documentation Overview: home/documentation_overview.md
       - Workflow Structure: home/workflow_structure.md
+  - QuickStart:
+      - Introduction: quickstart/intro.md
+      - Docker Example: quickstart/docker.md
+      - Singularity Example: quickstart/singularity.md
   - Installation:
       - Installing NovaScope: installation/requirement.md
       - Environment Setup: installation/env_setup.md
       - Slurm: installation/slurm.md
       - Additional Installations: installation/requirement_for_plus.md
-  - Getting Started:
+  - Basic Usage:
       - Introduction: getting_started/intro.md
       - Accessing Input Data: getting_started/access_data.md 
       - Job Configuration : getting_started/job_config.md
       - Executing NovaScope : getting_started/execute.md
       - Output: getting_started/output.md
-  - NovaScope Walkthrough:
+  - Full Documentation:
       - Introduction: walkthrough/intro.md
       - Rule Execution Guide: 
         - Core Concepts: walkthrough/execution_guide/core_concepts.md

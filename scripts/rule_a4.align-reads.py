@@ -170,8 +170,8 @@ cmd_bai = f"{args.samtools} index -@ {args.threads} {outprefix}Aligned.sortedByC
 execute_with_flag(cmd_bai, f"{outprefix}Aligned.sortedByCoord.out.bam.bai", args.skip_existing, args.overwrite_existing)
 
 ## command to gzip the output files
-cmd_gzip = "/bin/bash -c \"ls %sSolo.out/*/raw/*.{mtx,tsv} | grep -v SJ/raw/feature | xargs -I {} -P %d gzip -f {}\"" % (outprefix, args.threads)
-execute_with_flag(cmd_gzip, f"{outprefix}Solo.out/Gene/raw/matrix.mtx.gz", args.skip_existing, args.overwrite_existing)
+cmd_gzip = "ls %sSolo.out/*/raw/*.{mtx,tsv} | grep -v SJ/raw/feature | xargs -I {} -P %d gzip -f {}" % (outprefix, args.threads)
+execute_with_flag(f"/bin/bash -c '{cmd_gzip}'", f"{outprefix}Solo.out/Gene/raw/matrix.mtx.gz", args.skip_existing, args.overwrite_existing)
 
 if not args.keep_temp_files:
     os.remove(f"{outprefix}{fifo_R1_suffix}")
