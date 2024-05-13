@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="https://seqscope.github.io/NovaScope/getting_started/access_data/">
+        <link rel="canonical" href="https://seqscope.github.io/NovaScope/quickstart/docker/">
       
       
         <link rel="prev" href="../intro/">
       
       
-        <link rel="next" href="../job_config/">
+        <link rel="next" href="../singularity/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -22,7 +22,7 @@
     
     
       
-        <title>Accessing Input Data - NovaScope</title>
+        <title>Docker Example - NovaScope</title>
       
     
     
@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#accessing-example-datasets" class="md-skip">
+        <a href="#setting-up-docker-in-your-system" class="md-skip">
           Skip to content
         </a>
       
@@ -110,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Accessing Input Data
+              Docker Example
             
           </span>
         </div>
@@ -245,11 +245,13 @@
         
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../quickstart/intro/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../intro/" class="md-tabs__link">
           
   
     
@@ -285,13 +287,11 @@
         
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../intro/" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../getting_started/intro/" class="md-tabs__link">
           
   
     
@@ -482,8 +482,10 @@
       
   
   
+    
   
   
+  
     
     
       
@@ -496,19 +498,22 @@
     
     
       
+        
+        
+      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -519,7 +524,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             QuickStart
@@ -533,7 +538,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../quickstart/intro/" class="md-nav__link">
+      <a href="../intro/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -551,10 +556,28 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../quickstart/docker/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Docker Example
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -563,6 +586,51 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#setting-up-docker-in-your-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      Setting up docker in your system
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#download-example-data-and-reference-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      Download example data and reference files
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-the-novascope-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      Running the NovaScope pipeline
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -575,7 +643,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../quickstart/singularity/" class="md-nav__link">
+      <a href="../singularity/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -741,10 +809,8 @@
       
   
   
-    
   
   
-  
     
     
       
@@ -761,22 +827,19 @@
     
     
       
-        
-        
-      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
         
           
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
             
   
   <span class="md-ellipsis">
@@ -787,7 +850,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             Basic Usage
@@ -801,7 +864,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../intro/" class="md-nav__link">
+      <a href="../../getting_started/intro/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -819,30 +882,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Accessing Input Data
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../getting_started/access_data/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -851,77 +894,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#dataset-overview" class="md-nav__link">
-    <span class="md-ellipsis">
-      Dataset Overview
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Dataset Overview">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#minimal-test-run-dataset" class="md-nav__link">
-    <span class="md-ellipsis">
-      Minimal Test Run Dataset
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#shallow-liver-section-dataset" class="md-nav__link">
-    <span class="md-ellipsis">
-      Shallow Liver Section Dataset
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#deep-liver-section-dataset" class="md-nav__link">
-    <span class="md-ellipsis">
-      Deep Liver Section Dataset
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#downloading-the-datasets" class="md-nav__link">
-    <span class="md-ellipsis">
-      Downloading the Datasets
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -934,7 +906,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../job_config/" class="md-nav__link">
+      <a href="../../getting_started/job_config/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -955,7 +927,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../execute/" class="md-nav__link">
+      <a href="../../getting_started/execute/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -976,7 +948,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../output/" class="md-nav__link">
+      <a href="../../getting_started/output/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1518,8 +1490,6 @@
   
   
   
-    
-  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -1528,51 +1498,27 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#dataset-overview" class="md-nav__link">
+  <a href="#setting-up-docker-in-your-system" class="md-nav__link">
     <span class="md-ellipsis">
-      Dataset Overview
+      Setting up docker in your system
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Dataset Overview">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#minimal-test-run-dataset" class="md-nav__link">
-    <span class="md-ellipsis">
-      Minimal Test Run Dataset
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#shallow-liver-section-dataset" class="md-nav__link">
-    <span class="md-ellipsis">
-      Shallow Liver Section Dataset
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#deep-liver-section-dataset" class="md-nav__link">
-    <span class="md-ellipsis">
-      Deep Liver Section Dataset
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#downloading-the-datasets" class="md-nav__link">
+  <a href="#download-example-data-and-reference-files" class="md-nav__link">
     <span class="md-ellipsis">
-      Downloading the Datasets
+      Download example data and reference files
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-the-novascope-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      Running the NovaScope pipeline
     </span>
   </a>
   
@@ -1596,37 +1542,25 @@
   
 
 
-<h1 id="accessing-example-datasets">Accessing Example Datasets<a class="headerlink" href="#accessing-example-datasets" title="Permanent link">&para;</a></h1>
-<h2 id="dataset-overview">Dataset Overview<a class="headerlink" href="#dataset-overview" title="Permanent link">&para;</a></h2>
-<p>There are three example datasets published with the NovaScope protocol. Each input dataset contains two types of FASTQ files: (a) 1st-seq (single-end) FASTQ file that contains spatial barcodes to construct a barcode map, and (b) 2nd-seq (paired-end) FASTQ files that contains spatial barcodes in Read 1, and cDNA sequences in Read 2. </p>
-<h3 id="minimal-test-run-dataset">Minimal Test Run Dataset<a class="headerlink" href="#minimal-test-run-dataset" title="Permanent link">&para;</a></h3>
-<p>This is a small (1.14GB) test run dataset comprising of a subset of the (shallow) liver section data described in <a href="#shallow-liver-section-dataset">Shallow Liver Section Dataset</a>. This dataset is meant to be used to test the sanity of the pipeline, without necessarily offering biologically meaningful interpretation of data. </p>
-<h3 id="shallow-liver-section-dataset">Shallow Liver Section Dataset<a class="headerlink" href="#shallow-liver-section-dataset" title="Permanent link">&para;</a></h3>
-<p>This dataset is a typical (23.7GB) example of Seq-Scope dataset that can be initially generated for a tissue section. Typically, the 2nd-seq FASTQ files contain 150-200M paired-end reads. This should be sufficient to examine the spatial distribution of the transcripts across the tissue, assess the quality of dataset, identify major cell types and marker genes, and perform basic pixel-level decoding of the spatial transcriptome. If the quality of the initial dataset look great, one may decide to sequence the library much more deeply to maximize the information content. (see <a href="#deep-liver-section-dataset">Deep Liver Section Dataset</a> for more details)</p>
-<h3 id="deep-liver-section-dataset">Deep Liver Section Dataset<a class="headerlink" href="#deep-liver-section-dataset" title="Permanent link">&para;</a></h3>
-<p>If the initial examination of the <a href="#shallow-liver-section-dataset">shallow dataset</a> looks promising, one can sequence the library much more deeply, to the level of saturating the library. A deeply sequenced dataset typically contains multiple pairs of FASTQ files, possibly across multiple sequencing runs. The deeply sequenced liver section dataset, available at <a href="https://doi.org/10.7302/tw62-4f97">https://doi.org/10.7302/tw62-4f97</a>, has 7 pairs of FASTQ files (250GB) in addition to the <a href="#shallow-liver-section-dataset">shallow dataset</a>.</p>
-<h2 id="downloading-the-datasets">Downloading the Datasets<a class="headerlink" href="#downloading-the-datasets" title="Permanent link">&para;</a></h2>
-<p>Each of the three datasets have their own DOIs, which can be accessed using the URLs below.</p>
-<ul>
-<li>Minimal Test Run Dataset (1.14GB) : <a href="https://doi.org/10.5281/zenodo.10835761">https://doi.org/10.5281/zenodo.10835761</a></li>
-</ul>
+  <h1>Docker Example</h1>
+
+<p>Running <a href="../../">NovaScope</a> with pre-built docker image requires a system you can run <a href="https://www.docker.com/">docker</a> on. Typically you need a machine (e.g. Ubuntu Desktop or AWS EC2) you have a root access to, with &gt;32GB memory and &gt;64GB disk space.</p>
+<p>It involves three main steps: (1) setting up docker in your system, (2) downloading example data and reference files, and (3) running the pipeline. We will assume that you have <code>/path/to/working/dir</code> as your working directory. We will use the minimal test run data as an example, but you may replace it with other datasets.</p>
+<h2 id="setting-up-docker-in-your-system">Setting up docker in your system<a class="headerlink" href="#setting-up-docker-in-your-system" title="Permanent link">&para;</a></h2>
+<p>If you are new to <a href="https://www.docker.com/">Docker</a>, please refer to the <a href="https://docs.docker.com/get-started/">Docker documentation</a> for installation and basic usage. To ensure that Docker is installed in your system, you can run the following command:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
 <span class="normal">4</span>
-<span class="normal">5</span>
-<span class="normal">6</span>
-<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1">## To download the tarball from Zenodo, you can use the following command</span>
-wget<span class="w"> </span><span class="s2">&quot;https://zenodo.org/records/10835761/files/B08Csub_20240318_raw.tar.gz&quot;</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1">## check the existence and version of docker</span>
+docker<span class="w"> </span>--version
 
-<span class="c1">## uncompress the tarball using the following command:</span>
-mkdir<span class="w"> </span>B08Ctest
-<span class="nb">cd</span><span class="w"> </span>B08Ctest
-tar<span class="w"> </span>xzvf<span class="w"> </span>../B08Csub_20240318_raw.tar.gz
+<span class="c1">## check if a docker container can be run</span>
+docker<span class="w"> </span>run<span class="w"> </span>hello-world
 </code></pre></div></td></tr></table></div>
-<ul>
-<li>Shallow Liver Section Dataset (23.7GB) : <a href="https://doi.org/10.5281/zenodo.10840696">https://doi.org/10.5281/zenodo.10840696</a> </li>
-</ul>
+<p>If the above commands do not run, you need to <a href="https://docs.docker.com/get-docker/">install Docker</a> in your system. Currently, our docker image is built for Intel/AMD x86_64 architecture. </p>
+<h2 id="download-example-data-and-reference-files">Download example data and reference files<a class="headerlink" href="#download-example-data-and-reference-files" title="Permanent link">&para;</a></h2>
+<p>You may download the minimal test run data and STAR mouse reference index by running the following commands:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -1637,33 +1571,41 @@ tar<span class="w"> </span>xzvf<span class="w"> </span>../B08Csub_20240318_raw.t
 <span class="normal"> 8</span>
 <span class="normal"> 9</span>
 <span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1">## To download the tarball from Zenodo, you can use the following command</span>
+<span class="normal">11</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1">## change the directory to your working directory</span>
+<span class="c1">## NOTE: make your to replace /path/to/working/dir/ with your working directory</span>
+<span class="nb">cd</span><span class="w"> </span>/path/to/working/dir/
 
-<span class="c1">## create a directory to store the data</span>
-mkdir<span class="w"> </span>B08Cshallow
-<span class="nb">cd</span><span class="w"> </span>B08Cshallow
+<span class="c1">## download the minimal test run data (takes 1-5 mins) </span>
+wget<span class="w"> </span>https://zenodo.org/records/10835761/files/B08Csub_20240318_raw.tar.gz
+tar<span class="w"> </span>xzvf<span class="w"> </span>B08Csub_20240318_raw.tar.gz
 
-<span class="c1">## download the 1st-seq FASTQ file</span>
-wget<span class="w"> </span><span class="s2">&quot;https://zenodo.org/records/10840696/files/9203-AP.L3.B08C.R1_001.fastq.gz&quot;</span>
-
-<span class="c1">## download the 2nd-seq FASTQ files (R1 and R2)</span>
-wget<span class="w"> </span><span class="s2">&quot;https://zenodo.org/records/10840696/files/9748-YK-3_CGAGGCTG_S3_R1_001.fastq.gz&quot;</span>
-wget<span class="w"> </span><span class="s2">&quot;https://zenodo.org/records/10840696/files/9748-YK-3_CGAGGCTG_S3_R2_001.fastq.gz&quot;</span>
-
-<span class="c1">## Additionally, you may want to download md5sum files </span>
-<span class="c1">## to verify the integrity of the downloaded files</span>
+<span class="c1">## download the STAR mouse reference index (take 10-20 mins)</span>
+wget<span class="w"> </span>https://zenodo.org/records/11181586/files/GRCm39_star_2_7_11b.tar.gz
+tar<span class="w"> </span>xzvf<span class="w"> </span>GRCm39_star_2_7_11b.tar.gz
 </code></pre></div></td></tr></table></div>
-<ul>
-<li>Deep Liver Section Dataset (250GB) : <a href="https://doi.org/10.7302/tw62-4f97">Link to Deep Blue Data</a> <ul>
-<li>Note that you need to use <a href="https://www.globus.org/">Globus</a> to download the dataset.</li>
-<li>Note that this dataset contains only additional 2nd-seq FASTQ files in addition to the <a href="#shallow-liver-section-dataset">Shallow Liver Section Dataset</a>, so you need to download the shallow dataset first. </li>
-</ul>
-</li>
-</ul>
+<h2 id="running-the-novascope-pipeline">Running the NovaScope pipeline<a class="headerlink" href="#running-the-novascope-pipeline" title="Permanent link">&para;</a></h2>
+<p>You may perform a dry-run to test whether the NovaScope pipeline with the minimal test example data is working properly. </p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1">## Test the NovaScope pipeline with dry-run</span>
+<span class="c1">## NOTE: make your to replace /path/to/working/dir/ with your working directory</span>
+docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span>/path/to/working/dir:/data<span class="w"> </span>hyunminkang/novascope<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-c<span class="w"> </span><span class="s2">&quot;snakemake -s /app/novascope/NovaScope.smk --rerun-incomplete -d data/output --configfile /app/novascope/testrun/minimal_test_run/config_job_docker.yaml --dry-run -p&quot;</span>
+</code></pre></div></td></tr></table></div>
+<p>If the dry-run is successful, you may run the pipeline with the following command:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1">## Execute the NovaScope pipeline </span>
+<span class="c1">## NOTE: make your to replace /path/to/working/dir/ with your working directory</span>
+<span class="c1">## --cores 10 can be replaced with the number of cores you want to use</span>
+docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span>/path/to/working/dir:/data<span class="w"> </span>hyunminkang/novascope<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-c<span class="w"> </span><span class="s2">&quot;snakemake -s /app/novascope/NovaScope.smk --rerun-incomplete -d data/output --configfile /app/novascope/testrun/minimal_test_run/config_job_docker.yaml -p --cores 10&quot;</span>
+</code></pre></div></td></tr></table></div>
+<p>The pipeline will generate the output files in the <code>/path/to/working/dir/output</code> directory, typically in 10 minutes.</p>
+<p>To run NovaScope with different datasets, you will need to modify the <a href="https://github.com/seqscope/NovaScope/blob/main/testrun/minimal_test_run/config_job_docker.yaml">Configuration File</a> yourself and specify it as <code>--configfile</code> argument in the command. See detailed instructions in the <a href="../../getting_started/job_config/">Job Configuration</a> section.</p>
 
 
 
