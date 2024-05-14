@@ -1612,10 +1612,8 @@ tar<span class="w"> </span>xzvf<span class="w"> </span>GRCm39_star_2_7_11b.tar.g
 <span class="normal">2</span>
 <span class="normal">3</span>
 <span class="normal">4</span>
-<span class="normal">5</span>
-<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1">## Test the NovaScope pipeline with dry-run</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1">## Test the NovaScope pipeline with dry-run</span>
 <span class="c1">## NOTE: make your to replace /path/to/working/dir/ with your working directory</span>
-docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span>/path/to/working/dir:/data<span class="w"> </span>hyunminkang/novascope<span class="w"> </span><span class="se">\</span>
 singularity<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>--bind<span class="w"> </span>/path/to/working/dir:/data<span class="w"> </span>novascope_latest.sif<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>snakemake<span class="w"> </span>-s<span class="w"> </span>/app/novascope/NovaScope.smk<span class="w"> </span>--rerun-incomplete<span class="w"> </span>-d<span class="w"> </span>data/output<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--configfile<span class="w"> </span>/app/novascope/testrun/minimal_test_run/config_job_docker.yaml<span class="w"> </span>--dry-run<span class="w"> </span>-p
