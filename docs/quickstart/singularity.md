@@ -56,7 +56,6 @@ You may perform a dry-run to test whether the NovaScope pipeline with the minima
 ```bash
 ## Test the NovaScope pipeline with dry-run
 ## NOTE: make your to replace /path/to/working/dir/ with your working directory
-docker run -it --rm -v /path/to/working/dir:/data hyunminkang/novascope \
 singularity exec --bind /path/to/working/dir:/data novascope_latest.sif \
     snakemake -s /app/novascope/NovaScope.smk --rerun-incomplete -d data/output \
     --configfile /app/novascope/testrun/minimal_test_run/config_job_docker.yaml --dry-run -p
