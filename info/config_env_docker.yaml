@@ -1,0 +1,16 @@
+## Path to the dependent software tools
+## Please replace /path/to the actual path to the binary of the software tools
+tools:
+  spatula: "/usr/local/bin/spatula"
+  samtools: "/usr/local/bin/samtools"
+  star: "/usr/local/bin/STAR"
+
+## Path to the reference genomes
+## For each species, you need to provide the path to the STAR index
+ref:
+  align:
+    mouse: "/data/ref/GRCm39_star_2_7_11b"
+    human: "/data/ref/GRCh38_star_2_7_11b"
+
+## Path to the python virtual environment
+pyenv: "/app/venv"
