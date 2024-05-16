@@ -1,4 +1,4 @@
-[submodule "/nfs/turbo/sph-hmkang/index/data/weiqiuc/NovaScope/submodules/ficture"]
-	path = /nfs/turbo/sph-hmkang/index/data/weiqiuc/NovaScope/submodules/ficture
+[submodule "submodules/ficture"]
+	path = submodules/ficture
 	url = https://github.com/seqscope/ficture
 	branch = stable
