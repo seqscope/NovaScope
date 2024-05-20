@@ -18,7 +18,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.11">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.13">
     
     
       
@@ -1813,12 +1813,12 @@ snakemake<span class="w"> </span>--version
 <span class="normal">20</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1">## First, we recommend activating conda/mamba environment before setting up venv, using:</span>
 <span class="c1"># eval &quot;$(/path/to/miniconda3/bin/conda shell.bash hook)&quot;</span>
 <span class="c1"># conda activate snakemake-env</span>
-<span class="c1">##</span>
+
 <span class="c1">## set the path to the python virtual environment directory</span>
 <span class="nv">pyenv_dir</span><span class="o">=</span>/path/to/python/virtual/environment/directory<span class="w">  </span><span class="c1">## provide the path of venv</span>
-<span class="c1">## pyenv_dir=./venvs   ## uncomment this line if you want to create virtual environment locally</span>
-<span class="nv">pyenv_name</span><span class="o">=</span>novascope_venv
-<span class="nv">smk_dir</span><span class="o">=</span>/path/to/the/novascope/directory
+<span class="c1">## pyenv_dir=./venvs                                     ## uncomment this line if you want to create virtual environment locally</span>
+<span class="nv">pyenv_name</span><span class="o">=</span>novascope_venv<span class="w">                                </span><span class="c1">## define the name of python environment </span>
+<span class="nv">smk_dir</span><span class="o">=</span>/path/to/the/novascope/directory<span class="w">                 </span><span class="c1">## specify the path to novascope repository</span>
 
 <span class="c1">## create the python virtual environment (need to be done only once)</span>
 mkdir<span class="w"> </span>-p<span class="w"> </span><span class="si">${</span><span class="nv">pyenv_dir</span><span class="si">}</span>
@@ -1842,8 +1842,13 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 </ul>
 <p>We provide an <a href="https://github.com/seqscope/NovaScope/blob/main/installation/requirement_install_log.md">example work log</a> documenting the installation of the aforementioned software tools.</p>
 <h2 id="installing-novascope_1">Installing NovaScope<a class="headerlink" href="#installing-novascope_1" title="Permanent link">&para;</a></h2>
-<p>To install <a href="../../">NovaScope</a>, clone the repository from GitHub using the following command:</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/seqscope/NovaScope.git
+<p>To install <a href="../../">NovaScope</a>, clone the repository from GitHub using the following command. Use <code>--recursive</code> to initializes and updates each submodule in NovaScope.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>--recursive<span class="w"> </span>https://github.com/seqscope/NovaScope.git<span class="w"> </span>
+</code></pre></div></td></tr></table></div>
+<p>If you've already cloned NovaScope without its submodules (by forgetting to use the <code>--recursive</code> option), you can initialize and update the submodules afterwards with the following commands:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nb">cd</span><span class="w"> </span><span class="nv">$smk_dir</span><span class="w">                         </span><span class="c1">## smk_dir=/path/to/the/novascope/directory</span>
+git<span class="w"> </span>submodule<span class="w"> </span>update<span class="w"> </span>--init
 </code></pre></div></td></tr></table></div>
 <h2 id="preparing-reference-genomes">Preparing Reference Genomes<a class="headerlink" href="#preparing-reference-genomes" title="Permanent link">&para;</a></h2>
 <p>The reference genome for the species of interest must be downloaded and indexed for alignment. <a href="https://github.com/alexdobin/STAR">STARsolo</a> accepts the reference genomes prepared by <a href="https://www.10xgenomics.com/support/software/cell-ranger">cellranger</a>, therefore, one of the simplest way is to download the reference genome from the <a href="https://www.10xgenomics.com/support/software/cell-ranger/downloads">cellranger download</a> page.</p>
@@ -1990,7 +1995,7 @@ gzip<span class="w"> </span>-d<span class="w"> </span>genes/genes.gtf.gz
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.indexes", "navigation.sections", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.8fd75fb4.min.js"></script>
+      <script src="../../assets/javascripts/bundle.c8d2eff1.min.js"></script>
       
         <script src="../../js/open_in_new_tab.js"></script>
       

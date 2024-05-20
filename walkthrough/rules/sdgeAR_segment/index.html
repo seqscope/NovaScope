@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.11">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.13">
     
     
       
@@ -1464,9 +1464,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#1-hexagon-based-sge" class="md-nav__link">
+  <a href="#1-hexagon-indexed-sge" class="md-nav__link">
     <span class="md-ellipsis">
-      (1) Hexagon-based SGE
+      (1) hexagon-indexed SGE
     </span>
   </a>
   
@@ -1592,9 +1592,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#1-hexagon-based-sge" class="md-nav__link">
+  <a href="#1-hexagon-indexed-sge" class="md-nav__link">
     <span class="md-ellipsis">
-      (1) Hexagon-based SGE
+      (1) hexagon-indexed SGE
     </span>
   </a>
   
@@ -1661,7 +1661,7 @@
 
 <h1 id="rule-sdgear_segment">Rule <code>sdgeAR_segment</code>:<a class="headerlink" href="#rule-sdgear_segment" title="Permanent link">&para;</a></h1>
 <h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">&para;</a></h2>
-<p>The <code>sdgeAR_segment</code> transforms pixel-based SGEs into hexagon-based SGEs by aggregating pixels into hexagonal grids, the size of which is determined by the user.</p>
+<p>The <code>sdgeAR_segment</code> transforms transcript-indexed SGEs into hexagon-indexed SGEs by aggregating pixels into hexagonal grids, the size of which is determined by the user.</p>
 <h2 id="input-files">Input Files<a class="headerlink" href="#input-files" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>FICTURE-compatible SGE and the Meta File for Coordinates</strong>
@@ -1671,15 +1671,15 @@ The necessary input files include a FICTURE-compatible SGE and its corresponding
 <p>The rule generates the following output in the specified directory path:
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>&lt;output_directory&gt;/analysis/&lt;run_id&gt;/&lt;unit_id&gt;/segment/
 </code></pre></div></td></tr></table></div></p>
-<h3 id="1-hexagon-based-sge">(1) Hexagon-based SGE<a class="headerlink" href="#1-hexagon-based-sge" title="Permanent link">&para;</a></h3>
+<h3 id="1-hexagon-indexed-sge">(1) hexagon-indexed SGE<a class="headerlink" href="#1-hexagon-indexed-sge" title="Permanent link">&para;</a></h3>
 <p><strong>Description</strong>: This output consists of an SGE formatted by segmenting pixels into hexagonal units. The size of the hexagons is defined by the user. The format of this SGE conforms to the 10x genome standard.</p>
 <p><strong>File Naming Convention</strong>: 
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>&lt;unit_id&gt;.merged.matrix.tsv.gz
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>&lt;unit_id&gt;.transcripts.tsv.gz
 </code></pre></div></td></tr></table></div></p>
 <p><strong>File Format</strong>:</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>The <code>barcodes.tsv.gz</code> and <code>features.tsv.gz</code> in the hexagon-based SGE is a bit different from those in the pixel-based SGE illustrated in Rule <a href="../dge2sdge/"><code>dge2sdge</code></a>.</p>
+<p>The <code>barcodes.tsv.gz</code> and <code>features.tsv.gz</code> in the hexagon-indexed SGE is a bit different from those in the transcript-indexed SGE illustrated in Rule <a href="../dge2sdge/"><code>dge2sdge</code></a>.</p>
 </div>
 <ul>
 <li>
@@ -1746,9 +1746,9 @@ ENSMUSG00000078672  Mup20   Gene Expression
 <span class="w">    </span><span class="nt">precision</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
 <span class="w">    </span><span class="nt">min_pixel_per_unit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
 <span class="w">    </span><span class="nt">char</span><span class="p">:</span><span class="w">                </span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">solofeature</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gn</span><span class="w">    </span>
-<span class="w">        </span><span class="nt">hexagonwidth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">24</span><span class="w">     </span>
-<span class="w">        </span><span class="nt">segmentmove</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w">     </span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">solo_feature</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gn</span><span class="w">    </span>
+<span class="w">        </span><span class="nt">hexagon_width</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">24</span><span class="w">     </span>
+<span class="w">        </span><span class="nt">segment_move</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w">     </span>
 </code></pre></div></td></tr></table></div>
 <ul>
 <li>
@@ -1763,7 +1763,7 @@ Specify coordinate to um translate for hexagon. By default, we consider the spat
 <li><strong>The <code>min_pixel_per_unit</code> Parameter</strong>
   A minimum UMI count of output hexagons</li>
 <li><strong>The <code>char</code> Parameter</strong>
-  Specify the characteristics for the hexagons, including the genomic feature to create hexagon (<code>solo feature</code>), the size for a hexagonal grid (<code>hexagonwidth</code>), and whether the SGE is based on overlapping hexagons or non-overlapping hexagon (<code>segmentmove</code>). When <code>segmentmove</code> is 1, non-overlapping hexagon-based SGE will be created.</li>
+  Specify the characteristics for the hexagons, including the genomic feature to create hexagon (<code>solo_feature</code>), the size for a hexagonal grid (<code>hexagon_width</code>), and whether the SGE is based on overlapping hexagons or non-overlapping hexagon (<code>segment_move</code>). When <code>segment_move</code> is 1, non-overlapping hexagon-indexed SGE will be created.</li>
 </ul>
 <h2 id="dependencies">Dependencies<a class="headerlink" href="#dependencies" title="Permanent link">&para;</a></h2>
 <p>Rule <code>sdgeAR_segment</code> requires input from Rules <code>sdgeAR_reformat</code> and <code>sdge2sdgeAR</code>. Thus, Rule <code>sdgeAR_segment</code> can only execute after <code>sdgeAR_reformat</code> and <code>sdge2sdgeAR</code> and their prerequisite rules when applicable have successfully completed their operations. See an overview of the rule dependencies in the <a href="../../../home/workflow_structure/">Workflow Structure</a>.</p>
@@ -1818,7 +1818,7 @@ Specify coordinate to um translate for hexagon. By default, we consider the spat
     <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "navigation.indexes", "navigation.sections", "content.code.annotate"], "search": "../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.8fd75fb4.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.c8d2eff1.min.js"></script>
       
         <script src="../../../js/open_in_new_tab.js"></script>
       
