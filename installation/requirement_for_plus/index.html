@@ -1533,8 +1533,7 @@
 <h1 id="additional-installations">Additional Installations<a class="headerlink" href="#additional-installations" title="Permanent link">&para;</a></h1>
 <div class="admonition info">
 <p class="admonition-title">Info</p>
-<p>The installations listed below are <strong>OPTIONAL</strong> and are <strong>ONLY</strong> necessary for users who looking to utilize the <a href="../../#functionality">additional functionalities</a>. </p>
-<p>If you are solely processing raw sequencing data into a spatial gene expression matrix, you may skip this step.</p>
+<p>The installations listed below are <strong>OPTIONAL</strong> and are <strong>ONLY</strong> necessary for users who looking to utilize the <a href="../../#functionality">additional functionalities</a>. If you are solely processing raw sequencing data into a spatial gene expression matrix, you may skip this step.</p>
 </div>
 <h2 id="optional-install-the-historef-package">(Optional) Install the historef Package<a class="headerlink" href="#optional-install-the-historef-package" title="Permanent link">&para;</a></h2>
 <div class="admonition info">
@@ -1565,12 +1564,9 @@ pip<span class="w"> </span>install<span class="w"> </span><span class="si">${</s
 <div class="admonition info">
 <p class="admonition-title">Info</p>
 <p>Only required if you want to apply the NovaScope additional reformat features, including the transformation of the spatial digital gene expression matrix (SGE) into a format compatible with <a href="https://seqscope.github.io/ficture/">FICTURE</a>, and the pixel organization into user-defined hexagonal grids in the 10x genomics format. </p>
-</div>
-<p>To utilize these reformatting features, you must install <a href="https://github.com/seqscope/ficture">FICTURE</a>, which NovaScope has already included as a submodule. However, it is essential to install the dependencies of FICTURE into the Python virtual environment you previously created <a href="#python-environment">here</a>.</p>
-<div class="admonition info">
-<p class="admonition-title">Info</p>
 <p>Below is an example of how to install the dependencies for FICTURE as of the time this document was created. Please consult the <a href="https://seqscope.github.io/ficture/install/">official FICTURE instructions</a> for installation guidance.</p>
 </div>
+<p>To utilize these reformatting features, you must install <a href="https://github.com/seqscope/ficture">FICTURE</a>, which NovaScope has already included as a submodule. However, it is essential to install the dependencies of FICTURE into the Python virtual environment you previously created <a href="#python-environment">here</a>.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -1581,7 +1577,10 @@ pip<span class="w"> </span>install<span class="w"> </span><span class="si">${</s
 <span class="normal"> 8</span>
 <span class="normal"> 9</span>
 <span class="normal">10</span>
-<span class="normal">11</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1">## set the path to the python virtual environment directory</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1">## set the path to the python virtual environment directory</span>
 <span class="nv">pyenv_dir</span><span class="o">=</span>/path/to/python/virtual/environment/directory<span class="w">  </span><span class="c1">## provide the path of venv</span>
 <span class="nv">pyenv_name</span><span class="o">=</span>novascope_venv<span class="w">                                </span><span class="c1">## provide the name of the environment you created before</span>
 
@@ -1592,6 +1591,9 @@ pip<span class="w"> </span>install<span class="w"> </span><span class="si">${</s
 
 <span class="c1">## install the required packages (need to be done only once)</span>
 pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span><span class="si">${</span><span class="nv">smk_dir</span><span class="si">}</span>/submodules/ficture/requirements.txt
+
+<span class="c1">## install FICTURE</span>
+pip<span class="w"> </span>install<span class="w"> </span>ficture
 </code></pre></div></td></tr></table></div>
 
 
