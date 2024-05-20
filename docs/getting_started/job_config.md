@@ -210,7 +210,7 @@ The options below are only for executing the [additional functionalities](../ind
 |---------------------|----------------------------------------------------------------------------------------------------------------|-------------------------------------------------------|
 | `hist-per-run`      | Geotiff files for coordinate transformation between SGE and histology image                                    | [historef](../walkthrough/rules/historef.md)                        |
 | `transcript-per-unit`  | SGE in in the FICTURE-compatible format                                                                     | [sdgeAR_reformat](../walkthrough/rules/sdgeAR_reformat.md)                        |
-| `segment-per-unit`     | Hexagon-based SGE in the 10x genomics format                                                                | [sdgeAR_segment](../walkthrough/rules/sdgeAR_segment.md)                        |
+| `segment-per-unit`     | hexagon-indexed SGE in the 10x genomics format                                                                | [sdgeAR_segment](../walkthrough/rules/sdgeAR_segment.md)                        |
 
 
 #### Upstream & Downstream

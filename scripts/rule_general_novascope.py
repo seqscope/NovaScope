@@ -177,7 +177,7 @@ def get_envmodules_for_rule(required_modules, module_config):
 def find_major_axis(filename, format):
     # Usage: 
     #   - It was suggested to use the longer axis as the major axis 
-    #   - Once the major axis was set, the QCed.matrix.tsv.gz and merged.matrix.tsv.gz should be sorted by the major axis
+    #   - Once the major axis was set, the QCed.matrix.tsv.gz and transcripts.tsv.gz should be sorted by the major axis
     # Update:
     #   2024.02: Since the longer axis may change after postsdge_QC, use the barcodes.minmax.tsv to determine the major axis.
     # (1) detect from the "{uid}.coordinate_minmax.tsv"  

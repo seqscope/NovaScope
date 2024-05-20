@@ -61,7 +61,7 @@ The `"transcript-per-unit"` option requests a SGE in a FICTURE-compatible format
 
 ### Request `"segment-per-unit"`
 * **Description**:
-The `"segment-per-unit"` option requests a hexagon-based SGE in the 10x genomics format. It requests the execution of Rule [`sdgeAR_segment`](../rules/sdgeAR_segment.md), alongside the prerequisite rules: [`sdgeAR_reformat`](../rules/sdgeAR_reformat.md), [`sdge2sdgeAR`](../rules/sdge2sdgeAR.md), [`dge2sdge`](../rules/dge2sdge.md), [`align`](../rules/align.md), [`smatch`](../rules/smatch.md), [`sbcd2chip`](../rules/sbcd2chip.md), and [`fastq2sbcd`](../rules/fastq2sbcd.md).
+The `"segment-per-unit"` option requests a hexagon-indexed SGE in the 10x genomics format. It requests the execution of Rule [`sdgeAR_segment`](../rules/sdgeAR_segment.md), alongside the prerequisite rules: [`sdgeAR_reformat`](../rules/sdgeAR_reformat.md), [`sdge2sdgeAR`](../rules/sdge2sdgeAR.md), [`dge2sdge`](../rules/dge2sdge.md), [`align`](../rules/align.md), [`smatch`](../rules/smatch.md), [`sbcd2chip`](../rules/sbcd2chip.md), and [`fastq2sbcd`](../rules/fastq2sbcd.md).
 
 * **Rule Graph**:
 <figure markdown="span">
