@@ -43,7 +43,7 @@ spatula  = env_config.get("tools", {}).get("spatula",   "spatula")
 samtools = env_config.get("tools", {}).get("samtools",  "samtools")
 star     = env_config.get("tools", {}).get("star",      "STAR")
 #ficture  = env_config.get("tools", {}).get("ficture",   "ficture")
-ficture  = os.path.join(smk_dir, "submodules", "ficture", "ficture")
+ficture  = os.path.join(smk_dir, "submodules", "ficture")
 
 #==============================================
 #
