@@ -80,6 +80,9 @@ request = check_request(input_request=config.get("request", ["sge-per-run"]),
                         valid_options=["sbcd-per-flowcell", "sbcd-per-chip", "smatch-per-chip", "align-per-run", "sge-per-run", "hist-per-run", "transcript-per-unit", "segment-per-unit"])
 logging.info(f" - Valid Request(s): {request}")
 
+# alignment type
+align_type  = config.get("upstream", {}).get("align", {}).get('type', 'rna').lower(),
+
 #==============================================
 #
 # Process input
@@ -205,11 +208,18 @@ include: "rules/a02_sbcd2chip.smk"
 include: "rules/a03_smatch.smk"
 
 if any(task in request for task in ["align-per-run", "sge-per-run", "hist-per-run", "segment-per-unit", "transcript-per-unit"]):
-    include: "rules/a04_align.smk"
-    include: "rules/a05_dge2sdge.smk"
+    if align_type == "rna":
+        include: "rules/a04_align.smk"
+        include: "rules/a05_dge2sdge.smk"
+    elif align_type == "adt":
+        include: "rules/a04b_align_adt.smk"
+        include: "rules/a05b_dge2sdge_adt.smk"
+    else:
+        raise ValueError(f"Cannot recognize alignment type: {align_type}")
 
 if "sge-per-run" in request:
-    include: "rules/b01_sdge_visual.smk"
+    if align_type == "rna":
+        include: "rules/b01_sdge_visual.smk"
 
 if "hist-per-run" in request:
     include: "rules/b02_historef.smk"
