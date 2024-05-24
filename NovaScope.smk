@@ -81,7 +81,7 @@ request = check_request(input_request=config.get("request", ["sge-per-run"]),
 logging.info(f" - Valid Request(s): {request}")
 
 # alignment type
-align_type  = config.get("upstream", {}).get("align", {}).get('type', 'rna').lower(),
+align_type  = config.get("upstream", {}).get("align", {}).get("align_type", "rna").lower()
 
 #==============================================
 #

@@ -17,11 +17,8 @@ rule a04b_align_adt:
         skip_sbcd      = get_skip_sbcd(config), 
         adt_format     = config.get("upstream", {}).get("align", {}).get('adt_format', 'totalseq-a').lower(),
         adt_ref        = config.get("upstream", {}).get("align", {}).get('adt_ref', None), 
-        # ref
-        #refidx         = sp2alignref[species],
-        sp2alignref     = env_config.get("ref", {}).get("align", None),
         # module
-        module_cmd        = get_envmodules_for_rule(["python", "samtools"], module_config),
+        module_cmd        = get_envmodules_for_rule(["python"], module_config),
     resources: 
         time = "5:00:00",
         mem  = "6500m"
