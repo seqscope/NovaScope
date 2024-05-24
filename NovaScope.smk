@@ -218,8 +218,8 @@ if any(task in request for task in ["align-per-run", "sge-per-run", "hist-per-ru
         raise ValueError(f"Cannot recognize alignment type: {align_type}")
 
 if "sge-per-run" in request:
-    if align_type == "rna":
-        include: "rules/b01_sdge_visual.smk"
+#    if align_type == "rna":
+     include: "rules/b01_sdge_visual.smk"
 
 if "hist-per-run" in request:
     include: "rules/b02_historef.smk"

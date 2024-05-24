@@ -55,7 +55,7 @@ rule a04b_align_adt:
         # create TSV files
         assert len(input.seq2_fqr1) == len(input.seq2_fqr2) == len(input.smatch_tsv), "The number of input files are not consistent."
         
-        os.makedirs(adt_dir, exist_ok=True)
+        os.makedirs(params.adt_dir, exist_ok=True)
         with open(output.adt_input_tsv, "w") as fout:
             for i in range(len(input.seq2_fqr1)):
                 fout.write(f"{input.seq2_fqr1[i]}\t{input.seq2_fqr2[i]}\t{input.smatch_tsv[i]}\n")
@@ -71,14 +71,12 @@ rule a04b_align_adt:
             --tag {params.adt_ref} \
             --match-tag \
             --build-sge \
-            --merge-sge \
+            --merge-dge \
             --bcd-pos {bcd_pos} \
             --tag-pos {tag_pos} \
             --umi-pos {umi_pos} \
             --spatula {spatula} \
-            --skip-sbcd {params.skip_sbcd} \
             --out {params.adt_dir} 
-            {exist_action} 
 
         """)
 
