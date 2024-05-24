@@ -157,9 +157,9 @@ else:
     df_segment_char = pd.DataFrame({
         'run_id': pd.Series(dtype='object'),
         'unit_id': pd.Series(dtype='object'),
-        'solofeature': pd.Series(dtype='object'),
-        'hexagonwidth': pd.Series(dtype='int64'),  
-        'segmentmove': pd.Series(dtype='int64'), 
+        'solo_feature': pd.Series(dtype='object'),
+        'hexagon_width': pd.Series(dtype='int64'),  
+        'segment_move': pd.Series(dtype='int64'), 
     })
 
 #==============================================
