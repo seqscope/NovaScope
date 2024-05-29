@@ -77,13 +77,9 @@ RUN cd spatula \
 # Install novascope/ficture
 RUN python -m venv /app/venv \
     && source /app/venv/bin/activate \
-    && git clone -b cli https://github.com/seqscope/novascope.git \
-    && cd novascope \
+    && git clone --recursive https://github.com/seqscope/novascope.git \
     && pip install numpy pandas Pillow PyYAML pyarrow setuptools \
-    && cd submodules \
-    && rm -rf ficture \
-    && git clone -b stable https://github.com/seqscope/ficture.git \
-    && cd ficture \
+    && cd novascope/submodules/ficture \
     && pip install -r requirements.txt
 
 SHELL ["/bin/bash", "-c"]
