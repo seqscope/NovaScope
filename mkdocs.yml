@@ -54,6 +54,7 @@ nav:
       - Introduction: quickstart/intro.md
       - Docker Example: quickstart/docker.md
       - Singularity Example: quickstart/singularity.md
+      - Running with Your Own Data: quickstart/custom.md
   - Installation:
       - Installing NovaScope: installation/requirement.md
       - Environment Setup: installation/env_setup.md

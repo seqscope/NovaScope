@@ -57,8 +57,10 @@ You may perform a dry-run to test whether the NovaScope pipeline with the minima
 ## Test the NovaScope pipeline with dry-run
 ## NOTE: make your to replace /path/to/working/dir/ with your working directory
 singularity exec --bind /path/to/working/dir:/data novascope_latest.sif \
-    snakemake -s /app/novascope/NovaScope.smk --rerun-incomplete -d data/output \
-    --configfile /app/novascope/testrun/minimal_test_run/config_job_docker.yaml --dry-run -p
+    snakemake -s /app/novascope/NovaScope.smk \
+    --rerun-incomplete -d data/output \
+    --configfile /app/novascope/testrun/minimal_test_run/config_job_docker.yaml \
+    --dry-run -p
 ```
 
 If the dry-run is successful, you may run the pipeline with the following command:
@@ -68,8 +70,10 @@ If the dry-run is successful, you may run the pipeline with the following comman
 ## NOTE: make your to replace /path/to/working/dir/ with your working directory
 ## --cores 10 can be replaced with the number of cores you want to use
 singularity exec --bind /path/to/working/dir:/data novascope_latest.sif \
-    snakemake -s /app/novascope/NovaScope.smk --rerun-incomplete -d data/output \
-    --configfile /app/novascope/testrun/minimal_test_run/config_job_docker.yaml -p --cores 10
+    snakemake -s /app/novascope/NovaScope.smk \
+    --rerun-incomplete -d data/output \
+    --configfile /app/novascope/testrun/minimal_test_run/config_job_docker.yaml \
+    -p --cores 10
 ```
 
 The pipeline will generate the output files in the `/path/to/working/dir/output` directory, typically in 10 minutes.
