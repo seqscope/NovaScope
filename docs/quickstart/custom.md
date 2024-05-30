@@ -6,7 +6,7 @@ Typically, you may want to locate your config file in your working directory and
 
 The full instruction on how to prepare your job config file is provided in the [Job Configuration](../getting_started/job_config.md) section. If you are using NovaScope using [Docker](https://www.docker.com/) or [Singularity](https://sylabs.io/docs/) container, here are some tips to modify your job config file:
 
-* It would be easiest to start with the [Shallow Liver Section Configuration File](testrun/shallow_liver_section/config_job.yaml).
+* It would be easiest to start with the [Shallow Liver Section Configuration File](https://github.com/seqscope/NovaScope/blob/main/testrun/shallow_liver_section/config_job.yaml).
 * We recommend placing the input FASTQ files in the `${working_dir}/input` directory and the output files in the `${working_dir}/output` directory, and mount the `${working_dir}` to `/data` in the container.
 * Modify `env_yml` to the config file that already exists in the container: `/app/novascope/info/config_env_docker.yaml`, so that you do not have to set up your own environment file.
 * Please see [Job Configuration](../getting_started/job_config.md) section to understand how to update the rest of the input parameters.
