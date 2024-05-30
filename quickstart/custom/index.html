@@ -1554,7 +1554,7 @@
 <p>Typically, you may want to locate your config file in your working directory and specify it in the command. For example, if your config file is located at <code>${working_dir}/config_job.yaml</code>, assuming that the working directory is mounted to <code>/data</code> in the container as given in the example, you can run the pipeline with <code>--configfile /data/config_job.yaml</code> argument.</p>
 <p>The full instruction on how to prepare your job config file is provided in the <a href="../../getting_started/job_config/">Job Configuration</a> section. If you are using NovaScope using <a href="https://www.docker.com/">Docker</a> or <a href="https://sylabs.io/docs/">Singularity</a> container, here are some tips to modify your job config file:</p>
 <ul>
-<li>It would be easiest to start with the <a href="testrun/shallow_liver_section/config_job.yaml">Shallow Liver Section Configuration File</a>.</li>
+<li>It would be easiest to start with the <a href="https://github.com/seqscope/NovaScope/blob/main/testrun/shallow_liver_section/config_job.yaml">Shallow Liver Section Configuration File</a>.</li>
 <li>We recommend placing the input FASTQ files in the <code>${working_dir}/input</code> directory and the output files in the <code>${working_dir}/output</code> directory, and mount the <code>${working_dir}</code> to <code>/data</code> in the container.</li>
 <li>Modify <code>env_yml</code> to the config file that already exists in the container: <code>/app/novascope/info/config_env_docker.yaml</code>, so that you do not have to set up your own environment file.</li>
 <li>Please see <a href="../../getting_started/job_config/">Job Configuration</a> section to understand how to update the rest of the input parameters.</li>
