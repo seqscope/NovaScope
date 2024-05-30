@@ -21,7 +21,10 @@ For example, if you are running a [Docker](https://www.docker.com/) container,
 ## Test the NovaScope pipeline with dry-run
 ## NOTE: make your to replace /path/to/working/dir/ with your working directory
 docker run -it --rm -v /path/to/working/dir:/data hyunminkang/novascope \
-    bash -c "snakemake -s /app/novascope/NovaScope.smk --rerun-incomplete -d data/output --configfile /data/config_job.yaml --dry-run -p"
+    -s /app/novascope/NovaScope.smk \
+    --rerun-incomplete -d data/output \
+    --configfile /data/config_job.yaml \
+    --dry-run -p
 ```
 
 If you are running a [Singularity](https://sylabs.io/docs/) container,
@@ -37,3 +40,12 @@ singularity exec --bind /path/to/working/dir:/data novascope_latest.sif \
 ```
 
 If the dry-run is successful, you may run the full pipeline by substituting `--dry-run` with `--cores [num-cpus]`
+
+If your data contains human samples, you may need to download the GRCh38 reference files. You can download the reference files by running the following commands:
+
+```bash
+## NOTE: make your to replace /path/to/working/dir/ with your working directory
+cd /path/to/working/dir/
+wget https://zenodo.org/records/11181586/files/GRCh38_star_2_7_11b.tar.gz
+tar xzvf GRCh38_star_2_7_11b.tar.gz
+```
