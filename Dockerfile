@@ -85,6 +85,7 @@ RUN python -m venv /app/venv \
 SHELL ["/bin/bash", "-c"]
 
 # Command to run when starting the container
-# COPY ./entrypoint.sh /
-# RUN chmod 755 /entrypoint.sh
-ENTRYPOINT ["/bin/bash", "-c"]
+COPY ./entrypoint.sh /
+RUN chmod 755 /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+#ENTRYPOINT ["/bin/bash", "-c"]

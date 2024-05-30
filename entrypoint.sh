@@ -1,2 +1,2 @@
 #!/bin/bash
-snakemake $1
+snakemake "$@"
