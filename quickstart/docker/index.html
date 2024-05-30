@@ -1611,21 +1611,33 @@ tar<span class="w"> </span>xzvf<span class="w"> </span>GRCm39_star_2_7_11b.tar.g
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
-<span class="normal">4</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1">## Test the NovaScope pipeline with dry-run</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1">## Test the NovaScope pipeline with dry-run</span>
 <span class="c1">## NOTE: make your to replace /path/to/working/dir/ with your working directory</span>
 docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span>/path/to/working/dir:/data<span class="w"> </span>hyunminkang/novascope<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;snakemake -s /app/novascope/NovaScope.smk --rerun-incomplete -d data/output --configfile /app/novascope/testrun/minimal_test_run/config_job_docker.yaml --dry-run -p&quot;</span>
+<span class="w">    </span>-s<span class="w"> </span>/app/novascope/NovaScope.smk<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--rerun-incomplete<span class="w"> </span>-d<span class="w"> </span>data/output<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--configfile<span class="w"> </span>/app/novascope/testrun/minimal_test_run/config_job_docker.yaml<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--dry-run<span class="w"> </span>-p
 </code></pre></div></td></tr></table></div>
 <p>If the dry-run is successful, you may run the pipeline with the following command:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
 <span class="normal">4</span>
-<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1">## Execute the NovaScope pipeline </span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1">## Execute the NovaScope pipeline </span>
 <span class="c1">## NOTE: make your to replace /path/to/working/dir/ with your working directory</span>
 <span class="c1">## --cores 10 can be replaced with the number of cores you want to use</span>
 docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span>/path/to/working/dir:/data<span class="w"> </span>hyunminkang/novascope<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;snakemake -s /app/novascope/NovaScope.smk --rerun-incomplete -d data/output --configfile /app/novascope/testrun/minimal_test_run/config_job_docker.yaml -p --cores 10&quot;</span>
+<span class="w">    </span>-s<span class="w"> </span>/app/novascope/NovaScope.smk<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--rerun-incomplete<span class="w"> </span>-d<span class="w"> </span>data/output<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--configfile<span class="w"> </span>/app/novascope/testrun/minimal_test_run/config_job_docker.yaml<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-p<span class="w"> </span>--cores<span class="w"> </span><span class="m">10</span>
 </code></pre></div></td></tr></table></div>
 <p>The pipeline will generate the output files in the <code>/path/to/working/dir/output</code> directory, typically in 10 minutes.</p>
 <p>To run NovaScope with different datasets, you will need to modify the <a href="https://github.com/seqscope/NovaScope/blob/main/testrun/minimal_test_run/config_job_docker.yaml">Configuration File</a> yourself and specify it as <code>--configfile</code> argument in the command. See detailed instructions in the <a href="../../getting_started/job_config/">Job Configuration</a> section.</p>
