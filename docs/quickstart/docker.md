@@ -34,7 +34,7 @@ wget https://zenodo.org/records/11181586/files/GRCm39_star_2_7_11b.tar.gz
 tar xzvf GRCm39_star_2_7_11b.tar.gz
 ```
 
-## Running the NovaScope pipeline
+## Running the NovaScope pipeline with example dataset
 
 You may perform a dry-run to test whether the NovaScope pipeline with the minimal test example data is working properly. 
 
@@ -42,7 +42,10 @@ You may perform a dry-run to test whether the NovaScope pipeline with the minima
 ## Test the NovaScope pipeline with dry-run
 ## NOTE: make your to replace /path/to/working/dir/ with your working directory
 docker run -it --rm -v /path/to/working/dir:/data hyunminkang/novascope \
-    -c "snakemake -s /app/novascope/NovaScope.smk --rerun-incomplete -d data/output --configfile /app/novascope/testrun/minimal_test_run/config_job_docker.yaml --dry-run -p"
+    -s /app/novascope/NovaScope.smk \
+    --rerun-incomplete -d data/output \
+    --configfile /app/novascope/testrun/minimal_test_run/config_job_docker.yaml \
+    --dry-run -p
 ```
 
 If the dry-run is successful, you may run the pipeline with the following command:
@@ -52,7 +55,10 @@ If the dry-run is successful, you may run the pipeline with the following comman
 ## NOTE: make your to replace /path/to/working/dir/ with your working directory
 ## --cores 10 can be replaced with the number of cores you want to use
 docker run -it --rm -v /path/to/working/dir:/data hyunminkang/novascope \
-    -c "snakemake -s /app/novascope/NovaScope.smk --rerun-incomplete -d data/output --configfile /app/novascope/testrun/minimal_test_run/config_job_docker.yaml -p --cores 10"
+    -s /app/novascope/NovaScope.smk \
+    --rerun-incomplete -d data/output \
+    --configfile /app/novascope/testrun/minimal_test_run/config_job_docker.yaml \
+    -p --cores 10
 ```
 
 The pipeline will generate the output files in the `/path/to/working/dir/output` directory, typically in 10 minutes.
