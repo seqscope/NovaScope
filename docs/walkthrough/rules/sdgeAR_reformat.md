@@ -19,7 +19,7 @@ The rule generates the following output in the specified directory path:
 
 **File Naming Convention**: 
 ```
-<unit_id>.merged.matrix.tsv.gz
+<unit_id>.transcripts.tsv.gz
 ```
 
 **File Format**:

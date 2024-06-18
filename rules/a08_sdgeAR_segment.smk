@@ -8,13 +8,13 @@ rule a08_sdgeAR_segment:
         sdgeAR_seg_raw_ftr   = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.d_{hexagon_width}.raw_{segment_move}", "features.tsv.gz"),
         sdgeAR_seg_raw_mtx   = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.d_{hexagon_width}.raw_{segment_move}", "matrix.mtx.gz"),
     params:
-        solo_feature         = "{solo_feature}",
+        solo_feature        = "{solo_feature}",
         hexagon_width       = "{hexagon_width}",
         n_move              = "{segment_move}",
         precision           = config.get("downstream", {}).get('segment', {}).get('precision', 2), 
         min_pixel_per_unit  = config.get("downstream", {}).get('segment', {}).get('min_pixel_per_unit', 10), 
         # module
-        module_cmd        = get_envmodules_for_rule(["python", "samtools"], module_config),
+        module_cmd          = get_envmodules_for_rule(["python", "samtools"], module_config),
     resources:
         mem  = "7000MB", 
         time = "12:00:00",
@@ -27,7 +27,7 @@ rule a08_sdgeAR_segment:
         set -euo pipefail
         {params.module_cmd}
 
-        command time -v {python} {ficture}/script/make_sge_by_hexagon.py \
+        command time -v {python} {ficture}/ficture/scripts/make_sge_by_hexagon.py \
             --input {input.sdgeAR_transcript} \
             --feature {input.sdgeAR_ftr_tab} \
             --output_path {sdgeAR_seg_raw_dir} \

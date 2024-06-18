@@ -95,12 +95,12 @@ We recommend creating a new Python environment for [NovaScope](../index.md). If 
 ## First, we recommend activating conda/mamba environment before setting up venv, using:
 # eval "$(/path/to/miniconda3/bin/conda shell.bash hook)"
 # conda activate snakemake-env
-##
+
 ## set the path to the python virtual environment directory
 pyenv_dir=/path/to/python/virtual/environment/directory  ## provide the path of venv
-## pyenv_dir=./venvs   ## uncomment this line if you want to create virtual environment locally
-pyenv_name=novascope_venv
-smk_dir=/path/to/the/novascope/directory
+## pyenv_dir=./venvs   									 ## uncomment this line if you want to create virtual environment locally
+pyenv_name=novascope_venv							     ## define the name of python environment 
+smk_dir=/path/to/the/novascope/directory				 ## specify the path to novascope repository
 
 ## create the python virtual environment (need to be done only once)
 mkdir -p ${pyenv_dir}
@@ -128,10 +128,17 @@ We provide an [example work log](https://github.com/seqscope/NovaScope/blob/main
 
 ## Installing NovaScope
 
-To install [NovaScope](../index.md), clone the repository from GitHub using the following command:
+To install [NovaScope](../index.md), clone the repository from GitHub using the following command. Use `--recursive` to initializes and updates each submodule in NovaScope.
 
 ```bash
-git clone https://github.com/seqscope/NovaScope.git
+git clone --recursive https://github.com/seqscope/NovaScope.git 
+```
+
+If you've already cloned NovaScope without its submodules (by forgetting to use the `--recursive` option), you can initialize and update the submodules afterwards with the following commands:
+
+```bash
+cd $smk_dir							## smk_dir=/path/to/the/novascope/directory
+git submodule update --init
 ```
 
 ## Preparing Reference Genomes

@@ -18,10 +18,8 @@ It also provides **additional functionalities**:
 * conversion of spatial gene expression data for compatibility with [FICTURE](https://seqscope.github.io/ficture/),
 * the organization of pixels into customizable hexagonal grids. 
 
-
 ### Infrastructure
 This pipeline is built to operate on Unix-based high-performance computing (HPC) platforms, with the capability to run either directly on local systems or via the [Slurm](https://slurm.schedmd.com/documentation.html) workload manager.
-
 
 ### Overview
 NovaScope primarily consists of two steps as shown in the figure below.

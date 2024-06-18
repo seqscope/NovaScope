@@ -106,7 +106,7 @@ The `analysis` directory includes three subdirectory mainly for the reformatting
 
 * `sgeAR` for the SGE before reformatting, where the "AR" stands for analysis-ready,
 * `preprocess` for the SGE in the FICTURE format,
-* `segment` for the hexagon-based SGE in the 10x genomics format.
+* `segment` for the hexagon-indexed SGE in the 10x genomics format.
 
 ```
 └── analysis

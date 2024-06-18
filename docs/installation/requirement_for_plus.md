@@ -1,9 +1,8 @@
 # Additional Installations
 
 !!! info
-	The installations listed below are **OPTIONAL** and are **ONLY** necessary for users who looking to utilize the [additional functionalities](../index.md#functionality). 
-	
-	If you are solely processing raw sequencing data into a spatial gene expression matrix, you may skip this step.
+	The installations listed below are **OPTIONAL** and are **ONLY** necessary for users who looking to utilize the [additional functionalities](../index.md#functionality). If you are solely processing raw sequencing data into a spatial gene expression matrix, you may skip this step.
+
 
 
 ## (Optional) Install the historef Package
@@ -29,8 +28,11 @@ pip install ${smk_dir}/installation/historef-0.1.2-py3-none-any.whl
 ## (Optional) Install the FICTURE Package
 !!! info 
 	Only required if you want to apply the NovaScope additional reformat features, including the transformation of the spatial digital gene expression matrix (SGE) into a format compatible with [FICTURE](https://seqscope.github.io/ficture/), and the pixel organization into user-defined hexagonal grids in the 10x genomics format. 
+	
+	Below is an example of how to install the dependencies for FICTURE as of the time this document was created. Please consult the [official FICTURE instructions](https://seqscope.github.io/ficture/install/) for installation guidance.
 
-To utilize these reformatting features, you must install the [**stable** branch of FICTURE](https://github.com/seqscope/ficture/tree/stable), which NovaScope has already included as a submodule. However, it is essential to install the dependencies of FICTURE into the Python virtual environment you previously created [here](#python-environment).
+
+To utilize these reformatting features, you must install [FICTURE](https://github.com/seqscope/ficture), which NovaScope has already included as a submodule. However, it is essential to install the dependencies of FICTURE into the Python virtual environment you previously created [here](#python-environment).
 
 ```bash
 ## set the path to the python virtual environment directory
@@ -44,4 +46,7 @@ source ${pyenv_dir}/${pyenv_name}/bin/activate
 
 ## install the required packages (need to be done only once)
 pip install -r ${smk_dir}/submodules/ficture/requirements.txt
+
+## install FICTURE
+pip install ficture
 ```

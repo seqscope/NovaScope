@@ -1,7 +1,7 @@
 # Rule `sdgeAR_segment`:
 
 ## Purpose
-The `sdgeAR_segment` transforms pixel-based SGEs into hexagon-based SGEs by aggregating pixels into hexagonal grids, the size of which is determined by the user.
+The `sdgeAR_segment` transforms transcript-indexed SGEs into hexagon-indexed SGEs by aggregating pixels into hexagonal grids, the size of which is determined by the user.
 
 
 ## Input Files
@@ -15,19 +15,19 @@ The rule generates the following output in the specified directory path:
 <output_directory>/analysis/<run_id>/<unit_id>/segment/
 ```
 
-### (1) Hexagon-based SGE
+### (1) hexagon-indexed SGE
 
 **Description**: This output consists of an SGE formatted by segmenting pixels into hexagonal units. The size of the hexagons is defined by the user. The format of this SGE conforms to the 10x genome standard.
 
 **File Naming Convention**: 
 ```
-<unit_id>.merged.matrix.tsv.gz
+<unit_id>.transcripts.tsv.gz
 ```
 
 **File Format**:
 
 !!! warning
-    The `barcodes.tsv.gz` and `features.tsv.gz` in the hexagon-based SGE is a bit different from those in the pixel-based SGE illustrated in Rule [`dge2sdge`](./dge2sdge.md).
+    The `barcodes.tsv.gz` and `features.tsv.gz` in the hexagon-indexed SGE is a bit different from those in the transcript-indexed SGE illustrated in Rule [`dge2sdge`](./dge2sdge.md).
 
 * `barcodes.tsv.gz`:
 ```
@@ -85,7 +85,7 @@ Specify coordinate to um translate for hexagon. By default, we consider the spat
   * **The `min_pixel_per_unit` Parameter**
   A minimum UMI count of output hexagons
   * **The `char` Parameter**
-  Specify the characteristics for the hexagons, including the genomic feature to create hexagon (`solo_feature`), the size for a hexagonal grid (`hexagon_width`), and whether the SGE is based on overlapping hexagons or non-overlapping hexagon (`segment_move`). When `segment_move` is 1, non-overlapping hexagon-based SGE will be created.
+  Specify the characteristics for the hexagons, including the genomic feature to create hexagon (`solo_feature`), the size for a hexagonal grid (`hexagon_width`), and whether the SGE is based on overlapping hexagons or non-overlapping hexagon (`segment_move`). When `segment_move` is 1, non-overlapping hexagon-indexed SGE will be created.
 
 ## Dependencies
 Rule `sdgeAR_segment` requires input from Rules `sdgeAR_reformat` and `sdge2sdgeAR`. Thus, Rule `sdgeAR_segment` can only execute after `sdgeAR_reformat` and `sdge2sdgeAR` and their prerequisite rules when applicable have successfully completed their operations. See an overview of the rule dependencies in the [Workflow Structure](../../home/workflow_structure.md).

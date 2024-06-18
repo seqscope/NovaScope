@@ -9,7 +9,7 @@ Once you have [installed NovaScope](../installation/requirement.md) and [downloa
 !!! info
     The pipeline requires to have `config_job.yaml` file in the working directory, which will be indicated by `-d` or `--directory` when executing NovaScope, to specify all input files, output files, and parameters. 
 
-For user's convenience, we provide separate example `config_job.yaml` files for the [Minimal Test Run Dataset](https://github.com/seqscope/NovaScope/blob/main/testrun/minmal_test_run/config_job.yaml), [Shallow Liver Section Dataset](https://github.com/seqscope/NovaScope/blob/main/testrun/shallow_liver_section/config_job.yaml), and [Deep Liver Section Dataset](https://github.com/seqscope/NovaScope/blob/main/testrun/deep_liver_section/config_job.yaml) test runs.
+For user's convenience, we provide separate example `config_job.yaml` files for the [Minimal Test Run Dataset](https://github.com/seqscope/NovaScope/blob/main/testrun/minimal_test_run/config_job.yaml), [Shallow Liver Section Dataset](https://github.com/seqscope/NovaScope/blob/main/testrun/shallow_liver_section/config_job.yaml), and [Deep Liver Section Dataset](https://github.com/seqscope/NovaScope/blob/main/testrun/deep_liver_section/config_job.yaml) test runs.
 
 The details of each item specified in the `config_job.yaml` is described below:
 
@@ -210,7 +210,7 @@ The options below are only for executing the [additional functionalities](../ind
 |---------------------|----------------------------------------------------------------------------------------------------------------|-------------------------------------------------------|
 | `hist-per-run`      | Geotiff files for coordinate transformation between SGE and histology image                                    | [historef](../walkthrough/rules/historef.md)                        |
 | `transcript-per-unit`  | SGE in in the FICTURE-compatible format                                                                     | [sdgeAR_reformat](../walkthrough/rules/sdgeAR_reformat.md)                        |
-| `segment-per-unit`     | Hexagon-based SGE in the 10x genomics format                                                                | [sdgeAR_segment](../walkthrough/rules/sdgeAR_segment.md)                        |
+| `segment-per-unit`     | hexagon-indexed SGE in the 10x genomics format                                                                | [sdgeAR_segment](../walkthrough/rules/sdgeAR_segment.md)                        |
 
 
 #### Upstream & Downstream
