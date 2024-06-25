@@ -278,8 +278,9 @@ def define_segchar_df(info, run_id, unit_id, format):
     return df_char
 
 def read_config_for_segment(config, run_id, unit_id, format, silent=False):
-    seg_info = config.get("downstream", {}).get("segment",{}).get(format, None)
+    seg_info = config.get("downstream", {}).get("segment",{}).get(format, {}).get("char", None)
     df_segchar = define_segchar_df(seg_info, run_id, unit_id, format)
+    df_segchar = df_segchar[["run_id", "unit_id", "solo_feature", "polygon_den", "hexagon_width"]]
     if not silent:
         log_dataframe(df_segchar, log_message=f"   - segment parameters ({format}): ", indentation="     ")
     return df_segchar
