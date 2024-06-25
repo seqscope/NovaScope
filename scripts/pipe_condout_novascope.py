@@ -109,38 +109,104 @@ def outfn_hist_per_run(main_dirs, df_hist):
     }
     return out_fn
 
-
-def outfn_segm_per_unit(main_dirs, df_segment_char):
-    out_fn = {
-            'flag': 'segment-per-unit',
-            'root': main_dirs["analysis"],
-            'subfolders_patterns': [
-                                    ([ "{run_id}", "{unit_id}", "segment", "{solo_feature}.d_{hexagon_width}.raw_{segment_move}", "barcodes.tsv.gz"], None),
-                                    ([ "{run_id}", "{unit_id}", "segment", "{solo_feature}.d_{hexagon_width}.raw_{segment_move}", "features.tsv.gz"], None),
-                                    ([ "{run_id}", "{unit_id}", "segment", "{solo_feature}.d_{hexagon_width}.raw_{segment_move}", "matrix.mtx.gz"  ], None),                     
-            ],
-            'zip_args': {
-                'run_id':       df_segment_char["run_id"].values,  
-                'unit_id':      df_segment_char["unit_id"].values,
-                'solo_feature':  df_segment_char["solo_feature"].values,
-                'hexagon_width': df_segment_char["hexagon_width"].values,
-                'segment_move':  df_segment_char['segment_move'].values,
-            },
-    }
-    return out_fn
-
-def outfn_trans_per_unit(main_dirs, df_segment_char):
+def outfn_trans_per_unit(main_dirs, df_run):
     out_fn = {
             'flag': 'transcript-per-unit',
             'root': main_dirs["analysis"],
             'subfolders_patterns': [
                                     ([ "{run_id}", "{unit_id}", "preprocess", "{unit_id}.transcripts.tsv.gz"  ], None),
-                                    ([ "{run_id}", "{unit_id}", "preprocess", "{unit_id}.feature.clean.tsv.gz"], None),
                                     ([ "{run_id}", "{unit_id}", "preprocess", "{unit_id}.feature.tsv.gz"      ], None),                     
             ],
             'zip_args': {
-                'run_id':       df_segment_char["run_id"].values,  
-                'unit_id':      df_segment_char["unit_id"].values,
+                'run_id':       df_run["run_id"].values,  
+                'unit_id':      df_run["unit_id"].values,
             },
     }
     return out_fn
+
+def outfn_filterftr_per_unit(main_dirs, df_run):
+    out_fn = {
+            'flag': 'filterftr-per-unit',
+            'root': main_dirs["analysis"],
+            'subfolders_patterns': [
+                                    ([ "{run_id}", "{unit_id}", "preprocess", "{unit_id}.feature.clean.tsv.gz"], None),
+            ],
+            'zip_args': {
+                'run_id':       df_run["run_id"].values,  
+                'unit_id':      df_run["unit_id"].values,
+            },
+    }
+    return out_fn
+
+def outfn_filterpoly_per_unit(main_dirs, df_segchar):
+    out_fn = {
+            'flag': 'filterpoly-per-unit',
+            'root': main_dirs["analysis"],
+            'subfolders_patterns': [
+                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.den_{polygon_den}.transcripts.tsv.gz"] ,None),
+                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.den_{polygon_den}.coordinate_minmax.tsv"] ,None),
+                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.den_{polygon_den}.feature.tsv.gz"] ,None),
+                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.den_{polygon_den}.boundary.geojson"] ,None),
+            ],
+            'zip_args': {
+                'run_id':        df_segchar["run_id"].values,  
+                'unit_id':       df_segchar["unit_id"].values,
+                'solo_feature':  df_segchar["solo_feature"].values,
+                'polygon_den':   df_segchar["polygon_den"].values
+            },
+    }
+    return out_fn
+
+def outfn_seg10x_per_unit(main_dirs, df_segchar):
+    out_fn = {
+            'flag': 'segment-10x-per-unit',
+            'root': main_dirs["analysis"],
+            'subfolders_patterns': [
+                                    ([ "{run_id}", "{unit_id}", "segment", "{solo_feature}.den_{polygon_den}.d_{hexagon_width}", "10x", "barcodes.tsv.gz"], None),
+                                    ([ "{run_id}", "{unit_id}", "segment", "{solo_feature}.den_{polygon_den}.d_{hexagon_width}", "10x", "features.tsv.gz"], None),
+                                    ([ "{run_id}", "{unit_id}", "segment", "{solo_feature}.den_{polygon_den}.d_{hexagon_width}", "10x", "matrix.mtx.gz"  ], None),                     
+            ],
+            'zip_args': {
+                'run_id':        df_segchar["run_id"].values,  
+                'unit_id':       df_segchar["unit_id"].values,
+                'solo_feature':  df_segchar["solo_feature"].values,
+                'hexagon_width': df_segchar["hexagon_width"].values,
+                'polygon_den':   df_segchar["polygon_den"].values
+            },
+    }
+    return out_fn
+
+
+def outfn_segfict_per_unit(main_dirs, df_segchar):
+    out_fn = {
+            'flag': 'segment-fict-per-unit',
+            'root': main_dirs["analysis"],
+            'subfolders_patterns': [
+                                    ([ "{run_id}", "{unit_id}", "segment", "{solo_feature}.den_{polygon_den}.d_{hexagon_width}", "{unit_id}.{solo_feature}.den_{polygon_den}.d_{hexagon_width}.hexagon.tsv.gz"], None),
+            ],
+            'zip_args': {
+                'run_id':        df_segchar["run_id"].values,  
+                'unit_id':       df_segchar["unit_id"].values,
+                'solo_feature':  df_segchar["solo_feature"].values,
+                'hexagon_width': df_segchar["hexagon_width"].values,
+                'polygon_den':   df_segchar["polygon_den"].values
+            },
+    }
+    return out_fn
+
+# def outfn_hex_per_unit(main_dirs, df_segchar):
+#     out_fn = {
+#             'flag': 'segmentviz-nUMI-per-unit',
+#             'root': main_dirs["analysis"],
+#             'subfolders_patterns': [
+#                                     ([ "{run_id}", "{unit_id}", "segment", "{solo_feature}.den_{polygon_den}.d_{hexagon_width}", "{unit_id}.{solo_feature}.den_{polygon_den}.d_{hexagon_width}.hexagon.tsv.gz"], None),
+#             ],
+#             'zip_args': {
+#                 'run_id':        df_segchar["run_id"].values,  
+#                 'unit_id':       df_segchar["unit_id"].values,
+#                 'solo_feature':  df_segchar["solo_feature"].values,
+#                 'hexagon_width': df_segchar["hexagon_width"].values,
+#                 'polygon_den':   df_segchar["polygon_den"].values
+#             },
+#     }
+#     return out_fn

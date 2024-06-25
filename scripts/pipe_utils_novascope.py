@@ -216,43 +216,73 @@ def add_or_expand_column(df, col_name, default_value):
     return df
 
 def add_default_for_char(df_char, col_w_defval):
-    #df_char["run_id"] = run_id
-    #df_char["unit_id"] = unit_id
     for col_name, default_value in col_w_defval.items():
         df_char = add_or_expand_column(df_char, col_name, default_value)
     return df_char
 
-def read_config_for_segment(config, run_id, unit_id, silent=False):
-    # segment_char_info
-    segment_char_info= config.get("downstream", {}).get("segment",{}).get("char", None)
-    if segment_char_info is not None:
-        df_segment_char = pd.DataFrame(segment_char_info)
-        segment_defvals={
+# def read_config_for_segment(config, run_id, unit_id, silent=False):
+#     # segment_char_info
+#     segment_char_info= config.get("downstream", {}).get("segment",{}).get("char", None)
+#     if segment_char_info is not None:
+#         df_segment_char = pd.DataFrame(segment_char_info)
+#         segment_defvals={
+#             "solo_feature": "gn",
+#             "hexagon_width": 24,
+#         }
+#         df_segment_char["run_id"] = run_id 
+#         df_segment_char["unit_id"] = unit_id
+#         df_segment_char = add_default_for_char(df_segment_char, segment_defvals)
+#     else:
+#         df_segment_char = pd.DataFrame({
+#             "run_id": [run_id],
+#             "unit_id": [unit_id],
+#             "solo_feature": ["gn"],
+#             "hexagon_width": [24],
+#         })
+#     # mu_scale
+#     mu_scale = config.get("downstream", {}).get("mu_scale", 1000)
+#     log_info(f" - Downstream: ", silent)
+#     log_info(f"   - mu scale: {mu_scale}", silent)
+#     if not silent:
+#         log_dataframe(df_segment_char, log_message="   - segment parameters: ", indentation="     ")
+#     return df_segment_char, mu_scale
+
+def define_segchar_df(info, run_id, unit_id, format):
+    if format == "ficture":
+        auto_den_def=True
+    elif format == "10x":
+        auto_den_def=False
+
+    seg_defvals={
             "solo_feature": "gn",
             "hexagon_width": 24,
-            "segment_move": 1
-        }
-        df_segment_char["run_id"] = run_id 
-        df_segment_char["unit_id"] = unit_id
-        df_segment_char = add_default_for_char(df_segment_char, segment_defvals)
+            "auto_density": auto_den_def
+    }
+
+    if info is not None:
+        df_char = pd.DataFrame(info)
+        df_char["run_id"] = run_id
+        df_char["unit_id"] = unit_id
+        df_char = add_default_for_char(df_char, seg_defvals)
     else:
-        df_segment_char = pd.DataFrame({
+        df_char = pd.DataFrame({
             "run_id": [run_id],
             "unit_id": [unit_id],
             "solo_feature": ["gn"],
             "hexagon_width": [24],
-            "segment_move": [1],
+            "auto_density": [auto_den_def]
         })
-    
-    # mu_scale
-    mu_scale = config.get("downstream", {}).get("mu_scale", 1000)
-    log_info(f" - Downstream: ", silent)
-    log_info(f"   - mu scale: {mu_scale}", silent)
+    # replace auto_density by polygon_den: if "auto_density" is True, polygon_den is "auto" else it is "raw"
+    df_char["polygon_den"] = df_char["auto_density"].apply(lambda x: "auto" if x else "raw")
+    df_char = df_char.drop(columns=["auto_density"])
+    return df_char
+
+def read_config_for_segment(config, run_id, unit_id, format, silent=False):
+    seg_info = config.get("downstream", {}).get("segment",{}).get(format, None)
+    df_segchar = define_segchar_df(seg_info, run_id, unit_id, format)
     if not silent:
-        log_dataframe(df_segment_char, log_message="   - segment parameters: ", indentation="     ")
-
-    return df_segment_char, mu_scale
-
+        log_dataframe(df_segchar, log_message=f"   - segment parameters ({format}): ", indentation="     ")
+    return df_segchar
 
 #================================================================================================
 
