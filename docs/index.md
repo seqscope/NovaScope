@@ -6,17 +6,18 @@ NovaScope is a [Snakemake](https://snakemake.readthedocs.io/en/stable/)-based pi
 ### Functionality
 NovaScope features a modular and adaptable design, enabling users to tailor the pipeline according to their particular requirements.
 
-The **main purpose** of NovaScope is to: 
+The **main purpose** of NovaScope is to:
 
 * process raw sequencing data (1st-seq and 2nd-seq);
-* align reads to the reference genome; 
-* produce and visualize spatial gene expression at the submicron resolution. 
+* align reads to the reference genome;
+* produce and visualize spatial gene expression at the submicron resolution, which returns transcript-indexed spatial digital gene expression matrix (SGE).
 
 It also provides **additional functionalities**:
 
-* accurate histological images alignment with transcriptome dataset, 
-* conversion of spatial gene expression data for compatibility with [FICTURE](https://seqscope.github.io/ficture/),
-* the organization of pixels into customizable hexagonal grids. 
+* accurate histological images alignment with transcript-indexed SGE,
+* filtering capatibilities to filter SGE by gene type, gene name, or molecule density,
+* the organization of pixels into customizable hexagonal grids, returning hexagon-indexed SGE,
+* conversion of both transcript-indexed and hexagon-indexed SGE for compatibility with [FICTURE](https://seqscope.github.io/ficture/),
 
 ### Infrastructure
 This pipeline is built to operate on Unix-based high-performance computing (HPC) platforms, with the capability to run either directly on local systems or via the [Slurm](https://slurm.schedmd.com/documentation.html) workload manager.
