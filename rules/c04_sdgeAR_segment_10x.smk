@@ -1,9 +1,6 @@
-# This rule only creates hexagon-indexed SGE from the raw transcript.tsv.gz. No density filtering will be applied.
 rule c04_sdgeAR_segment_10x:
     input:
         sdgeAR_xyrange       = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "sgeAR", "barcodes.minmax.tsv"),
-        # sdgeAR_transcript    = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.transcripts.tsv.gz"),
-        # sdgeAR_ftr_tab       = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.feature.tsv.gz"),
         sdgeAR_transcript    = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.transcripts.tsv.gz") if wildcards.polygon_den=="raw" else os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.den_"+wildcards.polygon_den+".transcripts.tsv.gz"),
         sdgeAR_ftr_tab       = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.feature.tsv.gz")     if wildcards.polygon_den=="raw" else os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.den_"+wildcards.polygon_den+".feature.tsv.gz"),
     output:

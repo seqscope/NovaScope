@@ -4,16 +4,14 @@ from collections import defaultdict
 
 novascope_scripts = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(novascope_scripts)
-from bricks import check_input, check_path, create_dict, get_last5_from_md5, create_symlink, log_dataframe
-from bricks import log_info
+from bricks import check_input, check_path, create_dict, get_last5_from_md5, create_symlink, create_dirs_and_get_paths
+from bricks import log_info, log_dataframe
 
 def read_config_for_ini(config, job_dir, smk_dir, silent=False):
     log_info(f"1. Reading input:", silent)
     log_info(f" - Current job path: {job_dir}")
-
     # config: job
     log_info(f" - Job configuration file: {job_dir}/config_job.yaml", silent)
-
     # config: env
     env_input = config.get("env_yml", os.path.join(smk_dir, "info", "config_env.yaml"))
     if isinstance(env_input, dict):
@@ -22,24 +20,19 @@ def read_config_for_ini(config, job_dir, smk_dir, silent=False):
         env_input_val = env_input
     else:
         raise ValueError("Please provide a valid env config file.")
-
     env_configfile = check_path(env_input_val, job_dir, strict_mode=True, flag="The environment config file")
     env_config = yaml.safe_load(open(env_configfile))
     log_info(f" - Environment configuration file: {env_configfile}", silent)
-
-    # - envmodules
+    #   - envmodules
     module_config = env_config.get("envmodules", None)
     log_info(f" - Environment modules: {module_config}", silent)
-
-    # - python env
+    #   - python env
     pyenv  = env_config.get("pyenv", None)
     assert pyenv is not None, "Please provide a valid python environment."
     assert os.path.exists(pyenv), f"Python environment does not exist: {pyenv}"
-
     python = os.path.join(pyenv, "bin", "python")
     assert os.path.exists(python), f"Python does not exist in your python environment: {python}"
     log_info(f" - Python environment: {pyenv}", silent)
-
     return env_config, module_config, python, pyenv
 
 def read_config_for_seq1(config, job_dir, main_dirs, silent=False):
@@ -197,6 +190,7 @@ def read_config_for_sgevisual(config, env_config, smk_dir, run_id, silent=False)
 
     # return
     return sgevisual_id2params, rid2sgevisual_id
+
 #================================================================================================
 
 # downstream

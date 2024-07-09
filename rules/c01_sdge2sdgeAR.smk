@@ -1,4 +1,4 @@
-rule a06_sdge2sdgeAR:
+rule c01_sdge2sdgeAR:
     input:
         sdge_bcd      = os.path.join(main_dirs["align"], flowcell, chip, "{run_id}", "sge", "barcodes.tsv.gz"),
         sdge_ftr      = os.path.join(main_dirs["align"], flowcell, chip, "{run_id}", "sge", "features.tsv.gz"),

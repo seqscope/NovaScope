@@ -29,7 +29,6 @@ from pipe_condout_novascope import outfn_sbcd_per_fc, outfn_sbcd_per_chip, outfn
 from rule_general_novascope import assign_resource_for_align, get_envmodules_for_rule, get_skip_sbcd, find_major_axis
 
 # set up 
-configure_pandas_display()
 configfile: "config_job.yaml"
 # config = yaml.safe_load(open( "config_job.yaml"))
 
@@ -54,28 +53,26 @@ log_a_separator()
 logging.info(f"2. Processing job config files.")
 
 # output
-main_root = config["output"]
+main_root = config.get("output", None)
 assert main_root is not None, "Provide a valid output directory."
 main_dirs = create_dirs_and_get_paths(main_root, ["seq1st", "seq2nd", "match", "align", "histology", "analysis"])
 logging.info(f" - Output root: {main_root}")
 
 # flowcell
-flowcell = config["input"]["flowcell"]
+flowcell = config.get("input", {}).get("flowcell", None)
 assert flowcell is not None, "Provide a valid Flowcell."
 logging.info(f" - Flowcell: {flowcell}")
 
 # chip
-chip = config["input"]["chip"]
+chip =  config.get("input", {}).get("chip", None)
 assert chip is not None, "Provide a valid Section Chip."
 logging.info(f" - Section Chip: {chip}")
 
 # species
-#species = check_input(config["input"]["species"], {"human", "human_mouse", "mouse", "rat", "worm"}, "species", lower=False)
-species = config["input"]["species"]
+species = config.get("input", {}).get("species", None) 
 logging.info(f" - Species: {species}")
 
 # request
-#request=check_input(config.get("request",["sge-per-run"]),{   "sbcd-per-flowcell", "sbcd-per-chip", "smatch-per-chip", "align-per-run", "sge-per-run", "hist-per-run", "transcript-per-unit", "segment-per-unit"},"request", lower=False)
 request = check_request(input_request=config.get("request", ["sge-per-run"]), 
                         valid_options=["sbcd-per-flowcell", "sbcd-per-chip", "smatch-per-chip", "align-per-run", "sge-per-run", "hist-per-run", 
                                         "transcript-per-unit", "filterftr-per-unit", "filterpoly-per-unit", 
