@@ -13,9 +13,9 @@ The rule generates the following output in the specified directory path:
 <output_directory>/analysis/<run_id>/<unit_id>/preprocess
 ```
 
-### (1) FICTURE-compatible SGE
+### (1) Transcript-indexed SGE in a FICTURE-compatible Format
 
-**Description**: A SGE in the FICTURE format is generated, which contains all informations including the barcode information, features information, and count for each genomic feature. 
+**Description**: A transcript-indexed SGE in the FICTURE format is generated, which contains all informations including the barcode information, features information, and count for each genomic feature. 
 
 **File Naming Convention**: 
 ```
@@ -42,17 +42,15 @@ The rule generates the following output in the specified directory path:
  * `unspl`: the count per gene per barcode for Unspliced
  * `ambig`: the count per gene per barcode for Ambiguous
 
-### (2) Two Tab-delimited Feature Files
-**Description**: This include a feature file (`*.feature.tsv.gz `) that contains information for all features and another feature file (`*.feature.clean.tsv.gz `) that contains information for features aftering the gene-filtering.
+### (2) A Tab-delimited Feature File
+**Description**: This include a feature file (`*.feature.tsv.gz`) that counts UMIs for each gene.
 
 **File Naming Convention**:
 ```
 <unit_id>.feature.tsv.gz 
-<unit_id>.feature.clean.tsv.gz
 ```
 
 **File Format**:
-Those two feature files share the same format:
 
 ```
 gene_id             gene     gn    gt   spl  unspl  ambig
@@ -73,24 +71,10 @@ ENSMUSG00000100480  Gm29156  0     0    0    0      0
 The output file could be used as the input for [FICTURE](https://seqscope.github.io/ficture/).
 
 ## Parameters
-```yaml
-downstream:               
-  gene_filter:            
-   keep_gene_type: "protein_coding,lncRNA"    # genes to keep
-   rm_gene_regex: "^Gm\\d+|^mt-|^MT-"         # genes to remove
-```
-
-* **The `keep_gene_type` Parameter**
-Specifies the types of genes to retain during gene filtering. 
-
-* **The `rm_gene_regex` Parameter**
-Defines the types of genes to be excluded during gene filtering. 
-
-!!! info
-    It is important to note that both parameters utilizes regular expressions.
+No additional parameter is applied in this rule.
 
 ## Dependencies
 Given `sdgeAR_reformat` requires input from Rule `sdge2sdgeAR`, Rule `sdgeAR_reformat` can only execute after `sdge2sdgeAR` and its prerequisite rules have successfully completed their operations. See an overview of the rule dependencies in the [Workflow Structure](../../home/workflow_structure.md).
 
 ## Code Snippet
-The code for this rule is provided in [`a07_sdgeAR_reformat.smk`](https://github.com/seqscope/NovaScope/blob/main/rules/a07_sdgeAR_reformat.smk).
+The code for this rule is provided in [`c02_sdgeAR_reformat.smk`](https://github.com/seqscope/NovaScope/blob/main/rules/c02_sdgeAR_reformat.smk).

@@ -108,7 +108,7 @@ Suggested review steps:
 2. Inspect the "smatch" image for an even distribution of matched barcodes across the tissue area. An unexpected pattern may suggest issues with experimental procedures, like unsuccessful tissue permeabilization.
 
 ## Parameters
-The following parameter in the [job configuration](../../getting_started/job_config.md) file will be applied in this rule.
+The following parameter in the [job configuration](../../basic_usage/job_config.md) file will be applied in this rule.
 
 ```yaml
 upstream:

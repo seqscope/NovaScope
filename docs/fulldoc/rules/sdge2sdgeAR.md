@@ -1,10 +1,9 @@
 # Rule `sdge2sdgeAR`:
 
 ## Purpose
-The `dge2sdgeAR` rule is designed to facilitate the utilization of the spatial digital gene expression matrix(SGE) in NovaScope's reformatting features. The main function of Rule `dge2sdgeAR` is creating a link from the original SGE located at `<output_directory>/align/<flowcell_id>/<chip_id>/<run_id>/sge` to the directory `<output_directory>/analysis/<run_id>/<unit_id>/sgeAR`. 
+The `dge2sdgeAR` rule is designed to facilitate the utilization of the transcript-indexed spatial digital gene expression matrix (SGE) in NovaScope's reformatting features. The main function of Rule `dge2sdgeAR` is creating a link from the original SGE located at `<output_directory>/align/<flowcell_id>/<chip_id>/<run_id>/sge` to the directory `<output_directory>/analysis/<run_id>/<unit_id>/sgeAR`. 
 
-The use of the `sgeAR` subfolder instead of the direct `sge` directory allows for any necessary manual preprocessing of the SGE before reformatting. For more details, see [The `sgeAR` Subfolder and Manual Preprocess](../../getting_started/output.md#analysis).
-
+The use of the `sgeAR` subfolder instead of the direct `sge` directory allows for any necessary manual preprocessing of the SGE before reformatting. For more details, see [The `sgeAR` Subfolder and Manual Preprocess](../../basic_usage/output.md#analysis).
 
 ## Input Files
 * **Spatial Digital Gene Expression Matrix (SGE) and relevant files**
@@ -21,8 +20,11 @@ These output files are identical to those produced by the [`dge2sdge`](./dge2sdg
 ## Output Guidelines
 No action is required.
 
+## Parameters
+No additional parameter is applied in this rule.
+
 ## Dependencies
 Given the input from Rule `dge2sdge` serve as the input for `sdge2sdgeAR`, Rule `sdge2sdgeAR` can only execute if the input SGE is available or the dependent rules have successfully completed their operations. See an overview of the rule dependencies in the [Workflow Structure](../../home/workflow_structure.md).
 
 ## Code Snippet
-The code for this rule is provided in [`a06_sdge2sdgeAR.smk`](https://github.com/seqscope/NovaScope/blob/main/rules/a06_sdge2sdgeAR.smk).
+The code for this rule is provided in [`c01_sdge2sdgeAR.smk`](https://github.com/seqscope/NovaScope/blob/main/rules/c01_sdge2sdgeAR.smk).

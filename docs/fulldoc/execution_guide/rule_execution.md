@@ -1,4 +1,4 @@
-This page provides an overview of the rule execution flow tailored to different **`request`** specified in the [job configuration](../../getting_started/job_config.md) file of [NovaScope](https://seqscope.github.io/NovaScope/). 
+This page provides an overview of the rule execution flow tailored to different **`request`** specified in the [job configuration](../../basic_usage/job_config.md) file of [NovaScope](https://seqscope.github.io/NovaScope/). 
 
 Each `request` option triggers a specific set of rules. Thus, below provides a rulegraph for each `request` option to outline the triggered rules and their interdependencies, detailing distinct processing paths.
 
@@ -34,7 +34,7 @@ For each pair of input 2nd-seq FASTQ files associated with a given chip, the `"s
 
 ### Request `"align-per-run"`
 * **Description**:
-The `"align-per-run"` option request a [Binary Alignment Map (BAM)](http://127.0.0.1:8000/NovaScope/getting_started/job_config/#:~:text=Binary%20Alignment%20Map%20(BAM)) from the alignment as well as the digital gene expression matrices (DGEs) for Gene, GeneFull, splice junctions (SJ), and Velocyto. It provokes the execution of Rule [`align`](../rules/align.md) and its prerequisite rules including [`smatch`](../rules/smatch.md), [`sbcd2chip`](../rules/sbcd2chip.md), and [`fastq2sbcd`](../rules/fastq2sbcd.md).
+The `"align-per-run"` option request a [Binary Alignment Map (BAM)](http://127.0.0.1:8000/NovaScope/basic_usage/job_config/#:~:text=Binary%20Alignment%20Map%20(BAM)) from the alignment as well as the digital gene expression matrices (DGEs) for Gene, GeneFull, splice junctions (SJ), and Velocyto. It provokes the execution of Rule [`align`](../rules/align.md) and its prerequisite rules including [`smatch`](../rules/smatch.md), [`sbcd2chip`](../rules/sbcd2chip.md), and [`fastq2sbcd`](../rules/fastq2sbcd.md).
 
 * **Rule Graph**:
 <figure markdown="span">
@@ -43,7 +43,7 @@ The `"align-per-run"` option request a [Binary Alignment Map (BAM)](http://127.0
 
 ### Request `"sge-per-run"`
 * **Description**:
-The `"sge-per-run"` option inquires: 1) a spatial digital gene expression matrix (SGE) encompassing all genomic features with two plots visualizing the distribution of the aligned spatial barcodes; 2) visualization for genes of interest provided in the [job configuration](../../getting_started/job_config.md) file. It requests the execution of Rule [`dge2sdge`](../rules/dge2sdge.md) and `gene_visual`, alongside the prerequisite rules: [`align`](../rules/align.md), [`smatch`](../rules/smatch.md), [`sbcd2chip`](../rules/sbcd2chip.md), and [`fastq2sbcd`](../rules/fastq2sbcd.md).
+The `"sge-per-run"` option inquires: 1) a spatial digital gene expression matrix (SGE) encompassing all genomic features with two plots visualizing the distribution of the aligned spatial barcodes; 2) visualization for genes of interest provided in the [job configuration](../../basic_usage/job_config.md) file. It requests the execution of Rule [`dge2sdge`](../rules/dge2sdge.md) and `gene_visual`, alongside the prerequisite rules: [`align`](../rules/align.md), [`smatch`](../rules/smatch.md), [`sbcd2chip`](../rules/sbcd2chip.md), and [`fastq2sbcd`](../rules/fastq2sbcd.md).
 
 * **Rule Graph**:
 <figure markdown="span">
@@ -61,7 +61,7 @@ The `"transcript-per-unit"` option requests a SGE in a FICTURE-compatible format
 
 ### Request `"segment-per-unit"`
 * **Description**:
-The `"segment-per-unit"` option requests a hexagon-indexed SGE in the 10x genomics format. It requests the execution of Rule [`sdgeAR_segment`](../rules/sdgeAR_segment.md), alongside the prerequisite rules: [`sdgeAR_reformat`](../rules/sdgeAR_reformat.md), [`sdge2sdgeAR`](../rules/sdge2sdgeAR.md), [`dge2sdge`](../rules/dge2sdge.md), [`align`](../rules/align.md), [`smatch`](../rules/smatch.md), [`sbcd2chip`](../rules/sbcd2chip.md), and [`fastq2sbcd`](../rules/fastq2sbcd.md).
+The `"segment-per-unit"` option requests a hexagon-indexed SGE in the 10x genomics format. It requests the execution of Rule [`sdgeAR_segment`](../rules/sdgeAR_segment_10x.md), alongside the prerequisite rules: [`sdgeAR_reformat`](../rules/sdgeAR_reformat.md), [`sdge2sdgeAR`](../rules/sdge2sdgeAR.md), [`dge2sdge`](../rules/dge2sdge.md), [`align`](../rules/align.md), [`smatch`](../rules/smatch.md), [`sbcd2chip`](../rules/sbcd2chip.md), and [`fastq2sbcd`](../rules/fastq2sbcd.md).
 
 * **Rule Graph**:
 <figure markdown="span">

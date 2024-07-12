@@ -214,43 +214,16 @@ def add_default_for_char(df_char, col_w_defval):
         df_char = add_or_expand_column(df_char, col_name, default_value)
     return df_char
 
-# def read_config_for_segment(config, run_id, unit_id, silent=False):
-#     # segment_char_info
-#     segment_char_info= config.get("downstream", {}).get("segment",{}).get("char", None)
-#     if segment_char_info is not None:
-#         df_segment_char = pd.DataFrame(segment_char_info)
-#         segment_defvals={
-#             "solo_feature": "gn",
-#             "hexagon_width": 24,
-#         }
-#         df_segment_char["run_id"] = run_id 
-#         df_segment_char["unit_id"] = unit_id
-#         df_segment_char = add_default_for_char(df_segment_char, segment_defvals)
-#     else:
-#         df_segment_char = pd.DataFrame({
-#             "run_id": [run_id],
-#             "unit_id": [unit_id],
-#             "solo_feature": ["gn"],
-#             "hexagon_width": [24],
-#         })
-#     # mu_scale
-#     mu_scale = config.get("downstream", {}).get("mu_scale", 1000)
-#     log_info(f" - Downstream: ", silent)
-#     log_info(f"   - mu scale: {mu_scale}", silent)
-#     if not silent:
-#         log_dataframe(df_segment_char, log_message="   - segment parameters: ", indentation="     ")
-#     return df_segment_char, mu_scale
-
 def define_segchar_df(info, run_id, unit_id, format):
     if format == "ficture":
-        auto_den_def=True
+        sge_qc_def=True
     elif format == "10x":
-        auto_den_def=False
+        sge_qc_def=False
 
     seg_defvals={
             "solo_feature": "gn",
             "hexagon_width": 24,
-            "auto_density": auto_den_def
+            "quality_control": sge_qc_def
     }
 
     if info is not None:
@@ -264,17 +237,16 @@ def define_segchar_df(info, run_id, unit_id, format):
             "unit_id": [unit_id],
             "solo_feature": ["gn"],
             "hexagon_width": [24],
-            "auto_density": [auto_den_def]
+            "quality_control": [sge_qc_def]
         })
-    # replace auto_density by polygon_den: if "auto_density" is True, polygon_den is "auto" else it is "raw"
-    df_char["polygon_den"] = df_char["auto_density"].apply(lambda x: "auto" if x else "raw")
-    df_char = df_char.drop(columns=["auto_density"])
+    df_char["sge_qc"] = df_char["quality_control"].apply(lambda x: "filtered" if x else "raw")
+    df_char = df_char.drop(columns=["quality_control"])
     return df_char
 
 def read_config_for_segment(config, run_id, unit_id, format, silent=False):
     seg_info = config.get("downstream", {}).get("segment",{}).get(format, {}).get("char", None)
     df_segchar = define_segchar_df(seg_info, run_id, unit_id, format)
-    df_segchar = df_segchar[["run_id", "unit_id", "solo_feature", "polygon_den", "hexagon_width"]]
+    df_segchar = df_segchar[["run_id", "unit_id", "solo_feature", "sge_qc", "hexagon_width"]]
     if not silent:
         log_dataframe(df_segchar, log_message=f"   - segment parameters ({format}): ", indentation="     ")
     return df_segchar
@@ -288,10 +260,10 @@ def read_config_for_hist(config, job_dir, main_dirs, silent=False):
     log_info(f" - Histology file: Loading", silent)
     hist_info = config.get("input",{}).get("histology", None)
     if hist_info is None:
-        raise ValueError("Please provide a valid histology file when requesting 'hist-per-run' or 'cart-per-hist'...")
+        raise ValueError("Please provide a valid histology file when requesting 'histology-per-run' or 'cart-per-hist'...")
     df_hist = pd.DataFrame(hist_info)
     if df_hist["path"].isnull().any():
-        raise ValueError("Please provide a valid histology file when requesting 'hist-per-run' or 'cart-per-hist'...")
+        raise ValueError("Please provide a valid histology file when requesting 'histology-per-run' or 'cart-per-hist'...")
     # add prefix
     df_hist["flowcell"]      = config["input"]["flowcell"]
     df_hist["flowcell_abbr"] = df_hist["flowcell"].apply(lambda x: x.split("-")[0])

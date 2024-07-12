@@ -1,7 +1,7 @@
 # Rule `sdge_visual`
 
 ## Purpose
-Rule `sdge_visual` is designed to display the spatial expression of specific gene categories in colors red, green, and blue via [`spatula`](https://seqscope.github.io/spatula/). NovaScope enables the visualization of >=1 gene sets. The gene categories for visualization can be defined in the [`config_job.yaml`](../../getting_started/job_config.md) file (refer to [Parameters](#parameters)).
+Rule `sdge_visual` is designed to display the spatial expression of specific gene categories in colors red, green, and blue via [`spatula`](https://seqscope.github.io/spatula/). NovaScope enables the visualization of >=1 gene sets. The gene categories for visualization can be defined in the [`config_job.yaml`](../../basic_usage/job_config.md) file (refer to [Parameters](#parameters)).
 
 ## Input Files
 * **Spatial Digital Gene Expression Matrix (SGE) and Associated Files**

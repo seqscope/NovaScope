@@ -3,10 +3,10 @@
 
 ## Preliminary Steps 
 
-!!! tip
+!!! tip "A Dry Run"
     Before running the full pipeline, performing a sanity check by executing a dry run is highly recommended. A dry run verifies that your `config_job.yaml` is properly configured and outlines the necessary jobs to be executed.
 
-!!! tip
+!!! tip "A Rule Graph / A Directed Acyclic Graph (DAG)"
     Additionally, you can create [a rule graph](../home/workflow_structure.md) that visually represents the structure of the workflow or a [Directed Acyclic Graph (DAG)](https://snakemake.readthedocs.io/en/stable/tutorial/basics.html#step-4-indexing-read-alignments-and-visualizing-the-dag-of-jobs) to view all jobs and their actual dependency structure.
 
 Below provides commands for a dry-run and visualization.
@@ -32,7 +32,7 @@ snakemake --dag  -s $smk_dir/NovaScope.smk --rerun-incomplete -d $job_dir | dot 
 
 ## Execution Options
 
-Below we applied `--rerun-incomplete`, which enables the pipeline to re-run any jobs the output of which is identified as incomplete, and `--latency-wait`, which request the pipeline pauses for the defined time awaiting an output file if not instantly accessible after a job, compensating for filesystem delay. Please note those options are OPTIONAL. For more options, please see the [A Rule Execution Guide](../walkthrough/execution_guide/core_concepts.md#execution-dynamics) and the [official Snakemake documentation](https://snakemake.readthedocs.io/en/stable/index.html).
+Below we applied `--rerun-incomplete`, which enables the pipeline to re-run any jobs the output of which is identified as incomplete, and `--latency-wait`, which request the pipeline pauses for the defined time awaiting an output file if not instantly accessible after a job, compensating for filesystem delay. Please note those options are OPTIONAL. For more options, please see the [A Rule Execution Guide](../fulldoc/execution_guide/core_concepts.md#execution-dynamics) and the [official Snakemake documentation](https://snakemake.readthedocs.io/en/stable/index.html).
 
 ### Option A: Local Execution
 
@@ -60,15 +60,15 @@ See the following examples to see how to execute the pipeline locally:
 
 ### Option B: SLURM using a Master Job
 
-!!! tip
+!!! tip "A Master Job"
     If your computing environment support a job scheduler such [Slurm](https://slurm.schedmd.com/documentation.html), a recommended approach to submit a 'Master Job' that oversees and manage the status of all other jobs. 
 
 First, make sure you have the [Slurm configuration file](../installation/slurm.md) available. The `--latency-wait` and `--rerun-incomplete` options are preset in the example Slurm configuration file, eliminating the need for manual specification.
 
 Now you need to establish the master job, of which the role is to monitor the progress of all tasks and handle job submissions. Create a file similar to the information below. Note that the details of the contents may vary based on your specific computing environment. 
 
-!!! warning 
-       The master job requires minimal memory but an extended time limit to ensure all related jobs are submitted and completed. Otherwise, NovaScope will exit and unfinished jobs will not be executed or tracked.
+!!! warning "Memory and Time Limits"
+       The master job requires **minimal memory but an extended time limit** to ensure all related jobs are submitted and completed. Otherwise, NovaScope will exit and unfinished jobs will not be executed or tracked.
 
 ```bash
 #!/bin/bash

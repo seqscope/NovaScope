@@ -1,7 +1,7 @@
-# Rule `sdgeAR_segment`:
+# Rule `sdgeAR_segment_ficture`:
 
 ## Purpose
-The `sdgeAR_segment` transforms transcript-indexed SGEs into hexagon-indexed SGEs by aggregating pixels into hexagonal grids, the size of which is determined by the user.
+The `sdgeAR_segment_ficture` transforms transcript-indexed SGEs into hexagon-indexed SGEs by aggregating pixels into hexagonal grids, the size of which is determined by the user. This hexagon-indexed SGEs will be in a TSV format that is compatible for FICTURE.
 
 
 ## Input Files
@@ -17,7 +17,7 @@ The rule generates the following output in the specified directory path:
 
 ### (1) hexagon-indexed SGE
 
-**Description**: This output consists of an SGE formatted by segmenting pixels into hexagonal units. The size of the hexagons is defined by the user. The format of this SGE conforms to the 10x genome standard.
+**Description**: This output consists of an SGE formatted by segmenting pixels into hexagonal units. The size of the hexagons is defined by the user. The format of this SGE conforms to the 10x genomics standard.
 
 **File Naming Convention**: 
 ```
@@ -61,7 +61,7 @@ ENSMUSG00000078672	Mup20 	Gene Expression
     * `Data Entries`: Post-dimensions, subsequent lines enumerate non-zero entries in seven columns: row index (feature index), column index (barcode index), and five values (expression levels) corresponds to Gene, GeneFull, Spliced, Unspliced, and Ambiguous.
 
 ## Output Guidelines
-The output file can serve as input for tools that require SGE in the 10x genome format.
+The output file can serve as input for tools that require SGE in the 10x genomics format.
 
 ## Parameters
 ```yaml

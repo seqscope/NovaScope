@@ -1,8 +1,8 @@
-# Setting up a Environment YAML File
+# Setting Up a Environment YAML File
 
-[NovaScope](../index.md) requires a YAML file to configure the environment. This environment configuration file (`config_env.yaml`) is used to specify the paths to the required tools, reference databases, and Python environment. 
+[NovaScope](../index.md) requires a YAML file to configure the environment. This environment configuration file (e.g., `config_env.yaml`) is used to specify the paths to the required tools, reference databases, and Python environment. 
 
-Below is a brief description of all the items in the YAML file. 
+Below is a brief description of all the items in the YAML file.
 
 !!! tip
     To create your own `config_env.yaml` file for the environment setup, you may copy from [our example available in our GitHub repository](https://github.com/seqscope/NovaScope/blob/main/info/config_env.yaml). Remember to replace the placeholders with your specific input variables to customize it according to your needs.
@@ -28,7 +28,7 @@ tools:
 
 For HPC users, it is feasible to use the `envmodules` section to load the required software tools as modules. If a tool is not listed in the `envmodules` section, the pipeline will assume it's installed system-wide. 
 
-!!! tip
+!!! tip 
     The **version** information is required.
 
 ```yaml
@@ -55,18 +55,18 @@ Define all necessary reference databases for the input species in the `ref` fiel
 Specify the reference genome index for alignment with the `align` parameter. Reference genome indices can be accessed via the [cellranger download](https://www.10xgenomics.com/support/software/cell-ranger/downloads) page. Users can also generate their own reference genome index; detailed instructions for building the STAR index from a reference file are provided in the [Requirements](./requirement.md) section.
 
 ### (2) Reference Gene List Directories for Visualizing Spatial Expression Patterns
-The `genelists` parameter should point to the directory containing species-specific gene lists, which are crucial for visualizing spatial expression patterns in Rule [sdge_visual](../walkthrough/rules/sdge_visual.md). This directory must include files named `<gene_group>.genes.tsv` (e.g., `MT.genes.tsv`), with each file listing gene names line-by-line.
+The `genelists` parameter should point to the directory containing species-specific gene lists, which are crucial for visualizing spatial expression patterns in Rule [sdge_visual](../fulldoc/rules/sdge_visual.md). This directory must include files named `<gene_group>.genes.tsv` (e.g., `MT.genes.tsv`), with each file listing gene names line-by-line.
 
 NovaScope provides precompiled gene lists for [mouse (version: mm39)](https://github.com/seqscope/NovaScope/tree/main/info/genelists/mm39) and [human (version: hg38)](https://github.com/seqscope/NovaScope/tree/main/info/genelists/hg38). If the `genelists` parameter is not specified in the `config_env.yaml`, NovaScope defaults to using these files. Alternatively, users may provide their own custom gene list files.
 
-### (3) (Optional) Reference Gene Information for Gene Filtering
+### (3) (Optional) Reference Gene Information for Gene Filtering 
 
 !!! info
-    Gene information files are necessary only if additional reformatting features of NovaScope are utilized. 
+    Gene information files are necessary only if additional functionalities of NovaScope are utilized.
 
-The `geneinfo` parameter specifies the location for gene information files needed for gene filtering during reformatting. [FICTURE](https://seqscope.github.io/ficture/) offers ready-to-use gene information files for [mouse (version: mm39)](https://github.com/seqscope/ficture/blob/stable/info/Mus_musculus.GRCm39.107.names.tsv.gz) and [human (version: hg38)](https://github.com/seqscope/ficture/blob/stable/info/Homo_sapiens.GRCh38.107.names.tsv.gz). If the `geneinfo` field is not included in the `ref` section, NovaScope defaults to using these files from [FICTURE](https://seqscope.github.io/ficture/). 
+The `geneinfo` parameter specifies the path of gene information files needed for gene filtering. NovaScope provides ready-to-use gene information files for [mouse (version: mm39)](https://github.com/seqscope/NovaScope/blob/dev/info/geneinfo/Mus_musculus.GRCm39.107.names.tsv.gz), [human (version: hg38)](https://github.com/seqscope/NovaScope/blob/dev/info/geneinfo/Homo_sapiens.GRCh38.107.names.tsv.gz), and [chick (version: g6a)](https://github.com/seqscope/NovaScope/blob/dev/info/geneinfo/Gallus_gallus.GRCg6a.106.names.tsv.gz). If `geneinfo` is absent, NovaScope uses these files from [FICTURE](https://seqscope.github.io/ficture/). 
 
-Only under the following conditions, users need to prepare and specify a gene information file in the geneinfo: a. the input datasets are from species other than human or mouse; b. the version of the dataset is different from that of the precompiled files (human: hg38; mouse: mm39).
+Only under the following conditions, users need to prepare and specify a gene information file in the geneinfo: a. the input datasets are from species other than human or mouse; b. the version of the dataset is different from that of the precompiled files (human: hg38; mouse: mm39, chick: g6a).
 
 !!! tip
     Ensure that the reference files match the species of your input data.
@@ -102,10 +102,10 @@ pyenv: "/path/to/python/virtual/env"
 
 NovaScope provides two methods for specifying resources for the alignment process:
 
-* **Option `stdin`** allows users to define resources manually in the [job configuration file](../getting_started/job_config.md/#a-template-of-the-config-file).
+* **Option `stdin`** allows users to define resources manually in the [job configuration file](../basic_usage/job_config.md/#a-template-of-the-config-file).
 * **Option `filesize`** allows NovaScope to automatically allocate resources based on the size of the input files and the available computational resources defined in this environment configuration file. **ONLY** when using Option `filesize` must users specify the computing resources available. 
 
-For more information on activating Option `stdin` or `filesize` and the resource allocation strategy for Option `filesize`, visit the [Job Configuration](../getting_started/job_config.md/#upstream) page.
+For more information on activating Option `stdin` or `filesize` and the resource allocation strategy for Option `filesize`, visit the [Job Configuration](../basic_usage/job_config.md/#upstream) page.
 
 An example of how to configure these settings.
 

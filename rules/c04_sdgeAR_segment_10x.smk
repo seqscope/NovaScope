@@ -1,12 +1,12 @@
 rule c04_sdgeAR_segment_10x:
     input:
-        sdgeAR_xyrange       = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "sgeAR", "barcodes.minmax.tsv"),
-        sdgeAR_transcript    = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.transcripts.tsv.gz") if wildcards.polygon_den=="raw" else os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.den_"+wildcards.polygon_den+".transcripts.tsv.gz"),
-        sdgeAR_ftr_tab       = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.feature.tsv.gz")     if wildcards.polygon_den=="raw" else os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.den_"+wildcards.polygon_den+".feature.tsv.gz"),
+        sdgeAR_xyrange      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "sgeAR", "barcodes.minmax.tsv"),
+        sdgeAR_transcript   = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.transcripts.tsv.gz") if wildcards.sge_qc=="raw" else os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}."+wildcards.sge_qc+".transcripts.tsv.gz"),
+        sdgeAR_ftr_tab      = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.feature.tsv.gz")     if wildcards.sge_qc=="raw" else os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}."+wildcards.sge_qc+".feature.tsv.gz"),
     output:
-        sdgeAR_seg_bcd   = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.den_{polygon_den}.d_{hexagon_width}", "10x", "barcodes.tsv.gz"),
-        sdgeAR_seg_ftr   = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.den_{polygon_den}.d_{hexagon_width}", "10x", "features.tsv.gz"),
-        sdgeAR_seg_mtx   = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.den_{polygon_den}.d_{hexagon_width}", "10x", "matrix.mtx.gz"),
+        sdgeAR_seg_bcd      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "barcodes.tsv.gz"),
+        sdgeAR_seg_ftr      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "features.tsv.gz"),
+        sdgeAR_seg_mtx      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "matrix.mtx.gz"),
     params:
         solo_feature        = "{solo_feature}",
         hexagon_width       = "{hexagon_width}",

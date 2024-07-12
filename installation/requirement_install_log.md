@@ -9,7 +9,7 @@ tools_dir=<path_to_your_tool_dir>
 ```
 
 ## 1. Install Snakemake
-For additional information, consult [Snakemake official Documntation](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html).
+For additional information, consult [Snakemake official Documntation](https://snakemake.readthedocs.io/en/stable/basic_usage/installation.html).
 
 ```
 ## In my case, conda is already installed. 

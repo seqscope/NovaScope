@@ -1,23 +1,24 @@
 # Installing NovaScope
 
-Installing [NovaScope](../index.md) involves multiple steps. This document provides instructions on how to install the necessary software tools and obtain reference datasets.
+This document provides instructions on how to install the necessary software tools and obtain reference datasets.
 
 ## Installing Snakemake 
 
-[Snakemake](https://snakemake.readthedocs.io/en/stable/) orchestrates the workflow of [NovaScope](../index.md) pipeline. 
+[Snakemake](https://snakemake.readthedocs.io/en/stable/) orchestrates the workflow of [NovaScope](../index.md) pipeline.
 
 !!! info
 	[NovaScope](../index.md) has been tested for compatibility with [Snakemake](https://snakemake.readthedocs.io/en/stable/) v7.29.0 and v8.6.0.
 
 
 ### Checking Snakemake Installation
-If you are unsure whether [Snakemake](https://snakemake.readthedocs.io/en/stable/) is installed in your system or not, you can check by running the following command:
+
+If you are unsure whether [Snakemake](https://snakemake.readthedocs.io/en/stable/) is installed in your system, you can check by running the following command:
 
 ```sh
 snakemake --version
 ```
 
-In some systems that supports `module`, you may be able to load the `snakemake` module using the following command:
+On systems that support the `module` command, you can load the `snakemake` module using the following command:
 
 ```sh
 ## check if snakemake is available as a module
@@ -29,7 +30,7 @@ module load snakemake
 
 ### Installing Snakemake Using Conda and Mamba
 
-If you need to install [Snakemake](https://snakemake.readthedocs.io/en/stable/), below is a simplified sequence of instruction. Please refer to [official Snakemake documentation](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html) for more detailed instructions.
+If you need to install [Snakemake](https://snakemake.readthedocs.io/en/stable/), below is a simplified sequence of instruction. Please refer to [official Snakemake documentation](https://snakemake.readthedocs.io/en/stable/basic_usage/installation.html) for more detailed instructions.
 
 !!! tip
 
@@ -80,16 +81,17 @@ snakemake --version
 !!! info
 	[NovaScope](../index.md) has been tested for compatibility with [Python](https://www.python.org/) v3.9.12, v3.10, and v3.12.2.
 
-If you don't have Python installed on your system and you follow the above [Snakemake installation instructions](#installing-snakemake-using-conda-and-mamba), Python of the specified version should be installed during the process. 
+If you don't have Python installed on your system and you follow the above [Snakemake installation instructions](#installing-snakemake-using-conda-and-mamba), Python of the specified version should be installed during the process.
 
-If you want to verify the installation or the version of Python on your system, run the following command:
+To verify the installation or the version of Python on your system, run the following command:
 
-```
+```bash
 python --version
 ```
+
 ### Python Environment
 
-We recommend creating a new Python environment for [NovaScope](../index.md). If you already have an existing Python environment with all required packages (see [pyenv_req.txt](https://github.com/seqscope/NovaScope/blob/main/installation/pyenv_req.txt)), you may skip this step. Below is an example of creating a new Python environment:
+We recommend creating a new Python environment for [NovaScope](../index.md) with [all required packages](https://github.com/seqscope/NovaScope/blob/main/installation/pyenv_req.txt). Below is an example:
 
 ```bash
 ## First, we recommend activating conda/mamba environment before setting up venv, using:
@@ -98,7 +100,6 @@ We recommend creating a new Python environment for [NovaScope](../index.md). If 
 
 ## set the path to the python virtual environment directory
 pyenv_dir=/path/to/python/virtual/environment/directory  ## provide the path of venv
-## pyenv_dir=./venvs   									 ## uncomment this line if you want to create virtual environment locally
 pyenv_name=novascope_venv							     ## define the name of python environment 
 smk_dir=/path/to/the/novascope/directory				 ## specify the path to novascope repository
 
@@ -137,13 +138,14 @@ git clone --recursive https://github.com/seqscope/NovaScope.git
 If you've already cloned NovaScope without its submodules (by forgetting to use the `--recursive` option), you can initialize and update the submodules afterwards with the following commands:
 
 ```bash
-cd $smk_dir							## smk_dir=/path/to/the/novascope/directory
+smk_dir=/path/to/the/novascope/directory
+cd $smk_dir
 git submodule update --init
 ```
 
 ## Preparing Reference Genomes
 
-The reference genome for the species of interest must be downloaded and indexed for alignment. [STARsolo](https://github.com/alexdobin/STAR) accepts the reference genomes prepared by [cellranger](https://www.10xgenomics.com/support/software/cell-ranger), therefore, one of the simplest way is to download the reference genome from the [cellranger download](https://www.10xgenomics.com/support/software/cell-ranger/downloads) page.
+The reference genome for the species of interest must be downloaded and indexed for alignment. [STARsolo](https://github.com/alexdobin/STAR) accepts the reference genomes prepared by [cellranger](https://www.10xgenomics.com/support/software/cell-ranger). Therefore, one of the simplest ways is to download the reference genome from the [cellranger download](https://www.10xgenomics.com/support/software/cell-ranger/downloads) page.
 
 Given STAR index packaged by the [cellranger download](https://www.10xgenomics.com/support/software/cell-ranger/downloads) is outdated and will not be compatible with the latest version of STARsolo, we recommend indexing it using the latest version of STARsolo. For human and mouse, we provided examples below to prepare the reference genome. For other species, please follow the instructions provided by [cellranger](https://www.10xgenomics.com/support/software/cell-ranger/downloads) or [STARsolo](https://github.com/alexdobin/STAR) to prepare the reference genome. 
 

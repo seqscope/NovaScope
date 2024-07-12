@@ -74,12 +74,12 @@ logging.info(f" - Species: {species}")
 
 # request
 request = check_request(input_request=config.get("request", ["sge-per-run"]), 
-                        valid_options=["sbcd-per-flowcell", "sbcd-per-chip", "smatch-per-chip", "align-per-run", "sge-per-run", "hist-per-run", 
+                        valid_options=["sbcd-per-flowcell", "sbcd-per-chip", "smatch-per-chip", "align-per-run", "sge-per-run", "histology-per-run", 
                                         "transcript-per-unit", "filterftr-per-unit", "filterpoly-per-unit", 
-                                        "segment-10x-per-unit", "segment-fict-per-unit", "segment-per-unit"])
+                                        "segment-10x-per-unit", "segment-ficture-per-unit", "segment-per-unit"])
 
 if  "segment-per-unit" in request:
-    request = request + ["segment-10x-per-unit", "segment-fict-per-unit"]
+    request = request + ["segment-10x-per-unit", "segment-ficture-per-unit"]
 
 logging.info(f" - Valid Request(s): {request}")
 
@@ -100,7 +100,7 @@ seq1_id, seq1_fq_raw, sc2seq1 = read_config_for_seq1(config, job_dir, main_dirs,
 df_seq2 = read_config_for_seq2(config, job_dir, main_dirs, silent=False)
 
 # per-unit or per-run:
-if any(task in request for task in ["align-per-run", "sge-per-run", "hist-per-run", "transcript-per-unit", "filterftr-per-unit", "filterpoly-per-unit", "segment-10x-per-unit", "segment-fict-per-unit"]):
+if any(task in request for task in ["align-per-run", "sge-per-run", "histology-per-run", "transcript-per-unit", "filterftr-per-unit", "filterpoly-per-unit", "segment-10x-per-unit", "segment-ficture-per-unit"]):
     run_id, rid2seq2 = read_config_for_runid(config, job_dir, main_dirs, df_seq2, silent=False)
 else:
     run_id = None
@@ -113,7 +113,7 @@ df_run = pd.DataFrame({
 })
 
 # sge visual
-if any(task in request for task in ["sge-per-run", "hist-per-run", "transcript-per-unit", "filterftr-per-unit", "filterpoly-per-unit", "segment-10x-per-unit", "segment-fict-per-unit"]):
+if any(task in request for task in ["sge-per-run", "histology-per-run", "transcript-per-unit", "filterftr-per-unit", "filterpoly-per-unit", "segment-10x-per-unit", "segment-ficture-per-unit"]):
     sgevisual_id2params, rid2sgevisual_id = read_config_for_sgevisual(config, env_config, smk_dir, run_id, silent=False)
     # expand df_sge for sge-per-run
     df_sge = pd.DataFrame( [{**row, 'sgevisual_id': sgevisual_id} for _, row in df_run.iterrows() for sgevisual_id in sgevisual_id2params.keys()])
@@ -127,7 +127,7 @@ else:
     })
 
 # hist
-if "hist-per-run" in request:
+if "histology-per-run" in request:
     df_hist = read_config_for_hist(config, job_dir, main_dirs, silent=False)
     df_hist["run_id"] = run_id
 else:
@@ -141,7 +141,7 @@ else:
         'run_id': pd.Series(dtype='object'),
     })
 
-if any(task in request for task in["transcript-per-unit", "filterftr-per-unit", "filterpoly-per-unit", "segment-10x-per-unit", "segment-fict-per-unit"]):
+if any(task in request for task in["transcript-per-unit", "filterftr-per-unit", "filterpoly-per-unit", "segment-10x-per-unit", "segment-ficture-per-unit"]):
     # unit ID: to distinguish the default sge and the sge with manual boundary filtering.
     unit_id, unit_ann, boundary = read_config_for_unitid(config.get("input", {}), job_dir, run_id, silent=False)
 else:
@@ -155,10 +155,10 @@ df_seg_void = pd.DataFrame({
         'unit_id': pd.Series(dtype='object'),
         'solo_feature': pd.Series(dtype='object'),
         'hexagon_width': pd.Series(dtype='int64'), 
-        'polygon_den': pd.Series(dtype='object') 
+        'sge_qc': pd.Series(dtype='object') 
     })
 
-if any(task in request for task in["segment-10x-per-unit", "segment-fict-per-unit"]):
+if any(task in request for task in["segment-10x-per-unit", "segment-ficture-per-unit"]):
     logging.info(f" - Downstream Segmentation:")
     mu_scale = config.get("downstream", {}).get("mu_scale", 1000)
     logging.info(f"   - mu scale: {mu_scale}")
@@ -171,7 +171,7 @@ if "segment-10x-per-unit" in request:
 else:
     df_seg10x = df_seg_void
 
-if "segment-fict-per-unit" in request:
+if "segment-ficture-per-unit" in request:
     df_segfict = read_config_for_segment(config, run_id, unit_id, "ficture", silent=False)
 else:
     df_segfict = df_seg_void
@@ -223,26 +223,26 @@ include: "rules/a01_fastq2sbcd.smk"
 include: "rules/a02_sbcd2chip.smk"
 include: "rules/a03_smatch.smk"
 
-if any(task in request for task in ["align-per-run", "sge-per-run", "hist-per-run", "transcript-per-unit", "filterftr-per-unit", "filterpoly-per-unit", "segment-10x-per-unit", "segment-fict-per-unit"]):
+if any(task in request for task in ["align-per-run", "sge-per-run", "histology-per-run", "transcript-per-unit", "filterftr-per-unit", "filterpoly-per-unit", "segment-10x-per-unit", "segment-ficture-per-unit"]):
     include: "rules/a04_align.smk"
     include: "rules/a05_dge2sdge.smk"
 
-if any(task in request for task in ["sge-per-run", "transcript-per-unit", "filterftr-per-unit", "filterpoly-per-unit", "segment-10x-per-unit", "segment-fict-per-unit"]):
+if any(task in request for task in ["sge-per-run", "transcript-per-unit", "filterftr-per-unit", "filterpoly-per-unit", "segment-10x-per-unit", "segment-ficture-per-unit"]):
     include: "rules/b01_sdge_visual.smk"
 
-if "hist-per-run" in request:
+if "histology-per-run" in request:
     include: "rules/b02_historef.smk"
 
-if any(task in request for task in ["transcript-per-unit", "filterftr-per-unit", "filterpoly-per-unit", "segment-10x-per-unit", "segment-fict-per-unit"]):
+if any(task in request for task in ["transcript-per-unit", "filterftr-per-unit", "filterpoly-per-unit", "segment-10x-per-unit", "segment-ficture-per-unit"]):
     include: "rules/c01_sdge2sdgeAR.smk"
     include: "rules/c02_sdgeAR_reformat.smk"
 
-if any(task in request for task in ["filterftr-per-unit", "filterpoly-per-unit", "segment-10x-per-unit", "segment-fict-per-unit"]):
+if any(task in request for task in ["filterftr-per-unit", "filterpoly-per-unit", "segment-10x-per-unit", "segment-ficture-per-unit"]):
     include: "rules/c03_sdgeAR_polygonfilter.smk"
     include: "rules/c03_sdgeAR_featurefilter.smk"
 
 if "segment-10x-per-unit" in request:
     include: "rules/c04_sdgeAR_segment_10x.smk"
 
-if "segment-fict-per-unit" in request:
+if "segment-ficture-per-unit" in request:
     include: "rules/c04_sdgeAR_segment_ficture.smk"

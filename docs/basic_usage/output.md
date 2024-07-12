@@ -129,7 +129,7 @@ The `analysis` directory includes three subdirectory mainly for the reformatting
     - **Name the dataset:** After preprocessing, the dataset should be named and referred to as `unit_id`.
     - **Save the preprocessed SGE:** Place the manually preprocessed SGE in the `sgeAR` subfolder.
     - **Preprare a coordinate meta file** Prepare a `barcodes.minmax.tsv` with the minimum and maximum of X and Y coordinates in the `sgeAR` subfolder.
-    - **Update the job configuration file:** Provide the `unit_id` in the [job configuration file](../getting_started/job_config.md) to ensure it is recognized in subsequent processing steps.
+    - **Update the job configuration file:** Provide the `unit_id` in the [job configuration file](../basic_usage/job_config.md) to ensure it is recognized in subsequent processing steps.
 
     **Automatic Handling:**
     If reformatting features are requested without manually preparing the SGE in the `sgeAR` as outlined, NovaScope will automatically generate a `unit_id`. It will then link the original SGE from the `sge` subdirectory to the `sgeAR`, facilitating seamless processing.

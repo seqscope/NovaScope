@@ -4,7 +4,7 @@
 The `fastq2sbcd` rule aims to generate a spatial barcode map per-tile basis for an input 1st-seq FASTQ file.
 
 ## Input Files
-The only input file required by `fastq2sbcd` is the 1st-seq FASTQ file. Ensure the raw FASTQ files are correctly formatted and listed in the [job configuration](../../getting_started/job_config.md) file.
+The only input file required by `fastq2sbcd` is the 1st-seq FASTQ file. Ensure the raw FASTQ files are correctly formatted and listed in the [job configuration](../../basic_usage/job_config.md) file.
 
 ## Output Files
 The rule generates the following output in the specified directory path: 
@@ -69,7 +69,7 @@ For accuracy purposes, it's recommended to examine the [`manifest.tsv`](#2-flow-
 
 
 ## Parameters
-The following parameter in the [job configuration](../../getting_started/job_config.md) file will be applied in this rule. 
+The following parameter in the [job configuration](../../basic_usage/job_config.md) file will be applied in this rule. 
 
 ```yaml
 upstream:

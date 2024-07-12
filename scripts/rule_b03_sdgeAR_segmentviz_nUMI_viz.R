@@ -12,7 +12,7 @@ option_list <- list(
 opt_parser <- OptionParser(option_list = option_list)
 opt <- parse_args(opt_parser)
 
-#opt$input<-"n9-hgc2m-b06-07c-mouse-714e6-default.gn.den_raw.hexagon_nUMI.10x.tsv"
+#opt$input<-"n9-hgc2m-b06-07c-mouse-714e6-default.gn.raw.hexagon_nUMI.10x.tsv"
 
 # extract title when it is NULL
 if (is.null(opt$title)) {

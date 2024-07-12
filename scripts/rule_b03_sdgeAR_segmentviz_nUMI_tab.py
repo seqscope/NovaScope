@@ -22,10 +22,10 @@ def numi_per_hex(args):
     for hex_width in hex_widths:
         # df_sge: nUMI per feature per hexagon for one hex_width
         if args.format == "ficture":
-            sge_path=os.path.join(args.in_dir, args.solo_feature+".den_"+args.density_filter+"."+hex_width, f"{args.unit_id}.{args.solo_feature}.den_{args.density_filter}.{hex_width}.hexagon.tsv.gz")
+            sge_path=os.path.join(args.in_dir, args.solo_feature+"."+args.density_filter+"."+hex_width, f"{args.unit_id}.{args.solo_feature}.{args.density_filter}.{hex_width}.hexagon.tsv.gz")
             df_sge=read_tsv_gz(sge_path)
         elif args.format == "10x":
-            sge_path=os.path.join(args.in_dir, args.solo_feature+".den_"+args.density_filter+"."+hex_width, "10x", "matrix.mtx.gz")
+            sge_path=os.path.join(args.in_dir, args.solo_feature+"."+args.density_filter+"."+hex_width, "10x", "matrix.mtx.gz")
             df_sge=read_mtx_gz(sge_path)
             df_sge[args.solo_feature]=df_sge['nUMI']
         # df_hex: nUMI per hexagon for one hex_width
@@ -33,7 +33,7 @@ def numi_per_hex(args):
         df_hex=df_hex.sort_values(by=args.solo_feature, ascending=True)
         if args.write_numi_per_width:
             numi_dir=os.path.dirname(sge_path)
-            numi_path=os.path.join(numi_dir, f"{args.unit_id}.{args.solo_feature}.den_{args.density_filter}.{hex_width}.numi_per_hex.{args.format}.tsv")
+            numi_path=os.path.join(numi_dir, f"{args.unit_id}.{args.solo_feature}.{args.density_filter}.{hex_width}.numi_per_hex.{args.format}.tsv")
             df_hex.to_csv(numi_path, index=False, header=True,sep="\t")
         # df_cutoff: nhex per numi_cutoff for one hex_width
         cutoff_list = [] 
@@ -86,7 +86,7 @@ if __name__ == "__main__":
     '''
     # output 
     if args.output is None:    
-        args.output = os.path.join(args.in_dir, f"{args.unit_id}.{args.solo_feature}.den_{args.density_filter}.hexagon_nUMI.{args.format}.tsv")
+        args.output = os.path.join(args.in_dir, f"{args.unit_id}.{args.solo_feature}.{args.density_filter}.hexagon_nUMI.{args.format}.tsv")
     # cutoffs
     cutoffs = list(map(int, args.cutoffs.split(',')))
     numi_per_hex(args)

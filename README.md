@@ -15,8 +15,8 @@ To run NovaScope, please
 
 ## Examples
 
-We provide three examples in the [testrun folder](./testrun), complete with [concise instructions](https://seqscope.github.io/NovaScope/getting_started/intro/), including:
-* [Accessing Example Datasets](https://seqscope.github.io/NovaScope/getting_started/access_data/);
-* [Configuring a NovaScope Run](https://seqscope.github.io/NovaScope/getting_started/job_config/);
-* [Executing the NovaScope Pipeline](https://seqscope.github.io/NovaScope/getting_started/execute/);
-* [Understanding the Output](https://seqscope.github.io/NovaScope/getting_started/output/).
+We provide three examples in the [testrun folder](./testrun), complete with [concise instructions](https://seqscope.github.io/NovaScope/basic_usage/intro/), including:
+* [Accessing Example Datasets](https://seqscope.github.io/NovaScope/basic_usage/access_data/);
+* [Configuring a NovaScope Run](https://seqscope.github.io/NovaScope/basic_usage/job_config/);
+* [Executing the NovaScope Pipeline](https://seqscope.github.io/NovaScope/basic_usage/execute/);
+* [Understanding the Output](https://seqscope.github.io/NovaScope/basic_usage/output/).

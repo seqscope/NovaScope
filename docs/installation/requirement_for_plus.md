@@ -1,17 +1,13 @@
 # Additional Installations
 
 !!! info
-	The installations listed below are **OPTIONAL** and are **ONLY** necessary for users who looking to utilize the [additional functionalities](../index.md#functionality). If you are solely processing raw sequencing data into a spatial gene expression matrix, you may skip this step.
+	The installations below are **OPTIONAL** and are **ONLY** necessary for users who looking to utilize the [additional functionalities](../index.md#functionality). To solely utilize the [main functionalities](../index.md#functionality), skip this step.
 
-
-
-## (Optional) Install the historef Package
+## Install the historef Package
 !!! info 
 	Only required if you want to align your histology images with the spatial gene expression data. 
 
-Below is an example instruction to install the [historef](https://github.com/seqscope/historef) package in the same python environment you built in [Configuring Python Virtual Environment](#configuring-python-virtual-environment).
-
-To access the most recent version, please see [its GitHub repository](https://github.com/seqscope/historef?tab=readme-ov-file).
+Install the [historef](https://github.com/seqscope/historef) package in [your Python environment](./requirement.md#configuring-python-virtual-environment). For the most recent version, please see [its GitHub repository](https://github.com/seqscope/historef?tab=readme-ov-file).
 
 ```bash
 ### activate your python environment
@@ -19,20 +15,17 @@ To access the most recent version, please see [its GitHub repository](https://gi
 source ${pyenv_dir}/$pyenv_name/bin/activate
 
 ### download the historef package
-wget -P ${smk_dir}/installation https://github.com/seqscope/historef/releases/download/v0.1.2/historef-0.1.2-py3-none-any.whl
+wget -P ${smk_dir}/installation https://github.com/seqscope/historef/releases/download/v0.1.3/historef-0.1.3-py3-none-any.whl
 
 ## install the historef package
-pip install ${smk_dir}/installation/historef-0.1.2-py3-none-any.whl
+pip install ${smk_dir}/installation/historef-0.1.3-py3-none-any.whl
 ```
 
-## (Optional) Install the FICTURE Package
+## Install the FICTURE Package
 !!! info 
-	Only required if you want to apply the NovaScope additional reformat features, including the transformation of the spatial digital gene expression matrix (SGE) into a format compatible with [FICTURE](https://seqscope.github.io/ficture/), and the pixel organization into user-defined hexagonal grids in the 10x genomics format. 
-	
-	Below is an example of how to install the dependencies for FICTURE as of the time this document was created. Please consult the [official FICTURE instructions](https://seqscope.github.io/ficture/install/) for installation guidance.
+	Only required if you want to apply the filtering capatibility, the pixel organization into hexagonal grids, or formatting SGE for FICTURE.
 
-
-To utilize these reformatting features, you must install [FICTURE](https://github.com/seqscope/ficture), which NovaScope has already included as a submodule. However, it is essential to install the dependencies of FICTURE into the Python virtual environment you previously created [here](#python-environment).
+NovaScope has already included [FICTURE](https://github.com/seqscope/ficture) as a submodule, but it is essential to install [FICTURE](https://github.com/seqscope/ficture) and its dependencies into [your Python virtual environment](./requirement.md#configuring-python-virtual-environment). For more details, please consult [FICTURE's instructions](https://seqscope.github.io/ficture/install/).
 
 ```bash
 ## set the path to the python virtual environment directory

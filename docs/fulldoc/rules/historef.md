@@ -27,8 +27,8 @@ The referenced histology file, which is in [GeoTIFF](https://en.wikipedia.org/wi
 <magnification><flowcell_abbreviation>-<chip_id>-<species>-<figtype>.tif"
 ```
 
- * The `magnification` and `figtype` are derived from the `magnification` and `figtype` fields within the `histology` in the `input` section of the [job configuration](../../getting_started/job_config.md) file.
- * The `flowcell_abbreviation` is derived by splitting the `flowcell_id`, which is sourced from the `flowcell` field in `input` section of the [job configuration](../../getting_started/job_config.md) file, by "-" and taking the first part.
+ * The `magnification` and `figtype` are derived from the `magnification` and `figtype` fields within the `histology` in the `input` section of the [job configuration](../../basic_usage/job_config.md) file.
+ * The `flowcell_abbreviation` is derived by splitting the `flowcell_id`, which is sourced from the `flowcell` field in `input` section of the [job configuration](../../basic_usage/job_config.md) file, by "-" and taking the first part.
 
 **File Visualization**:
 <figure markdown="span">
@@ -50,8 +50,8 @@ A TIFF file shares the identical dimensions with both the ["smatch" image](./sma
 <magnification><flowcell_abbreviation>-<chip_id>-<species>-<figtype>-fit.tif"
 ```
 
- * The `magnification` and `figtype` are derived from the `magnification` and `figtype` fields within the `histology` section of the [job configuration](../../getting_started/job_config.md) file.
- * The `flowcell_abbreviation` is derived by splitting the `flowcell_id`, which is sourced from the `flowcell` field in `input` section of the [job configuration](../../getting_started/job_config.md) file, by "-" and taking the first part.
+ * The `magnification` and `figtype` are derived from the `magnification` and `figtype` fields within the `histology` section of the [job configuration](../../basic_usage/job_config.md) file.
+ * The `flowcell_abbreviation` is derived by splitting the `flowcell_id`, which is sourced from the `flowcell` field in `input` section of the [job configuration](../../basic_usage/job_config.md) file, by "-" and taking the first part.
 
 **File Visualization**:
 <figure markdown="span">
@@ -65,7 +65,7 @@ To verify the accuracy of the alignment, it is recommended to compare the [re-si
 
 ## Parameters
 
-The following parameter in the [job configuration](../../getting_started/job_config.md) file will be applied in this rule.
+The following parameter in the [job configuration](../../basic_usage/job_config.md) file will be applied in this rule.
 
 ```yaml
 histology:

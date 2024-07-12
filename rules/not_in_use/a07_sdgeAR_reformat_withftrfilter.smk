@@ -12,7 +12,7 @@ def locate_geneinfo(sp2geneinfo, species, ficture):
     assert os.path.exists(geneinfo), f"Error: The gene information file for {species} does not exist. Please verify the file path in your environment configuration file."
     return geneinfo
 
-rule a07_sdgeAR_reformat:
+rule c02_sdgeAR_reformat:
     input:
         sdgeAR_bcd        = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "sgeAR", "barcodes.tsv.gz"),
         sdgeAR_ftr        = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "sgeAR", "features.tsv.gz"),

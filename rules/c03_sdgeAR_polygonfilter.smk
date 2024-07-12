@@ -4,33 +4,30 @@ rule c03_sdgeAR_polygonfilter:
         sdgeAR_ftr_tabqc        = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.feature.clean.tsv.gz"),
         sdgeAR_transcript       = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.transcripts.tsv.gz"),
     output:
-        sdgeAR_transcript_den   = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.den_{polygon_den}.transcripts.tsv.gz"),
-        sdgeAR_xyrange_den      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.den_{polygon_den}.coordinate_minmax.tsv"),
-        sdgeAR_ftr_den          = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.den_{polygon_den}.feature.tsv.gz"),
-        sdgeAR_bd_den           = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.den_{polygon_den}.boundary.geojson"),
+        sdgeAR_transcript_qc   = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.transcripts.tsv.gz"),
+        sdgeAR_xyrange_qc      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.coordinate_minmax.tsv"),
+        sdgeAR_ftr_qc          = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.feature.tsv.gz"),
+        sdgeAR_bd_qc           = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.boundary.geojson"),
     params:
         # params
         solo_feature            = "{solo_feature}",
-        polygon_den             = "{polygon_den}",
-        radius                  = config.get("downstream", {}).get('polygon_density_filter', {}).get("radius", 15),
-        quartile                = config.get("downstream", {}).get('polygon_density_filter', {}).get('quartile', 2),  
-        hex_n_move              = config.get("downstream", {}).get('polygon_density_filter', {}).get('hex_n_move', 1),   
-        polygon_min_size        = config.get("downstream", {}).get('polygon_density_filter', {}).get('polygon_min_size', 500),  
+        sge_qc                  = "{sge_qc}",
+        radius                  = config.get("downstream", {}).get('sge_qcsity_filter', {}).get("radius", 15),
+        quartile                = config.get("downstream", {}).get('sge_qcsity_filter', {}).get('quartile', 2),  
+        hex_n_move              = config.get("downstream", {}).get('sge_qcsity_filter', {}).get('hex_n_move', 1),   
+        polygon_min_size        = config.get("downstream", {}).get('sge_qcsity_filter', {}).get('polygon_min_size', 500),  
         # files
-        sdgeAR_bd_strict        = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.den_{polygon_den}.boundary.strict.geojson"), 
-        sdgeAR_bd_lenient       = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.den_{polygon_den}.boundary.lenient.geojson"), 
-        sdgeAR_ftr_strict       = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.den_{polygon_den}.feature.strict.tsv.gz"), 
-        sdgeAR_ftr_lenient      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.den_{polygon_den}.feature.lenient.tsv.gz"), 
+        sdgeAR_bd_strict        = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.boundary.strict.geojson"), 
+        sdgeAR_bd_lenient       = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.boundary.lenient.geojson"), 
+        sdgeAR_ftr_strict       = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.feature.strict.tsv.gz"), 
+        sdgeAR_ftr_lenient      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.feature.lenient.tsv.gz"), 
         # module
         module_cmd              = get_envmodules_for_rule(["python", "samtools"], module_config),
-    threads: 2
     resources:
-        mem = "14000MB",
-        time = "20:00:00",
-        #mem  = lambda params: "6500MB" if params_skip_density_QC else "14000MB",
-        #time = lambda params: "2:00:00" if params_skip_density_QC else "20:00:00",
+        mem  = lambda params: "6500MB" if "{sge_qc}" else "14000MB",
+        time = lambda params: "2:00:00" if "{sge_qc}" else "20:00:00",
     run:
-        sdgeAR_den_pref         = output.sdgeAR_transcript_den.replace(".transcripts.tsv.gz", ""),
+        sdgeAR_qc_pref         = output.sdgeAR_transcript_qc.replace(".transcripts.tsv.gz", ""),
 
         major_axis=find_major_axis(input.sdgeAR_xyrange, format="col")
         shell(
@@ -38,13 +35,13 @@ rule c03_sdgeAR_polygonfilter:
         {params.module_cmd}
         source {pyenv}/bin/activate
 
-        if [ {params.polygon_den} == "auto" ]; then     
+        if [ {params.sge_qc} == "filtered" ]; then     
 
             command time -v {python} {ficture}/ficture/scripts/filter_poly.py \
                 --input {input.sdgeAR_transcript} \
                 --feature {input.sdgeAR_ftr_tabqc} \
-                --output {output.sdgeAR_transcript_den} \
-                --output_boundary {sdgeAR_den_pref} \
+                --output {output.sdgeAR_transcript_qc} \
+                --output_boundary {sdgeAR_qc_pref} \
                 --filter_based_on {params.solo_feature} \
                 --mu_scale {mu_scale} \
                 --radius {params.radius} \
@@ -59,22 +56,23 @@ rule c03_sdgeAR_polygonfilter:
                 tabix_column="-b3 -e3"
             fi
 
-            zcat {output.sdgeAR_transcript_den} | bgzip -c > {output.sdgeAR_transcript_den}.tmp.gz
-            mv {output.sdgeAR_transcript_den}.tmp.gz {output.sdgeAR_transcript_den}
-            tabix -0 -f -s1 $tabix_column {output.sdgeAR_transcript_den}
+            zcat {output.sdgeAR_transcript_qc} | bgzip -c > {output.sdgeAR_transcript_qc}.tmp.gz
+            mv {output.sdgeAR_transcript_qc}.tmp.gz {output.sdgeAR_transcript_qc}
+            tabix -0 -f -s1 $tabix_column {output.sdgeAR_transcript_qc}
 
-            ln -s {params.sdgeAR_ftr_strict} {output.sdgeAR_ftr_den}
-            ln -s {params.sdgeAR_bd_strict} {output.sdgeAR_bd_den}
-        elif [ {params.polygon_den} == "raw" ]; then
-            ln -s {input.sdgeAR_transcript} {output.sdgeAR_transcript_den}
+            ln -s {params.sdgeAR_ftr_strict} {output.sdgeAR_ftr_qc}
+            ln -s {params.sdgeAR_bd_strict} {output.sdgeAR_bd_qc}
+        
+        elif [ {params.sge_qc} == "raw" ]; then
+            ln -s {input.sdgeAR_transcript} {output.sdgeAR_transcript_qc}
 
-            gzip -cd {input.sdgeAR_transcript} | \
+            gzip -cd {input.sdgeAR_transcript_qc} | \
                 awk 'BEGIN{{FS=OFS="\t"}} NR==1{{for(i=1;i<=NF;i++){{if($i=="X")x=i;if($i=="Y")y=i}}print $x,$y;next}}{{print $x,$y}}' | \
                 perl -slane 'print join("\t",$F[0]/{mu_scale},$F[1]/{mu_scale})' -- -mu_scale="{mu_scale}" | \
-                awk 'BEGIN {{FS=OFS="\t"; min1 = "undef"; max1 = "undef"; min2 = "undef"; max2 = "undef";} } {{if (NR == 2 || $1 < min1) min1 = $1; if (NR == 2 || $1 > max1) max1 = $1; if (NR == 2 || $2 < min2) min2 = $2; if (NR == 2 || $2 > max2) max2 = $2;}} END {{print "xmin", min1; print "xmax", max1; print "ymin", min2; print "ymax", max2;}}' > {output.sdgeAR_xyrange_den}
+                awk 'BEGIN {{FS=OFS="\t"; min1 = "undef"; max1 = "undef"; min2 = "undef"; max2 = "undef";} } {{if (NR == 2 || $1 < min1) min1 = $1; if (NR == 2 || $1 > max1) max1 = $1; if (NR == 2 || $2 < min2) min2 = $2; if (NR == 2 || $2 > max2) max2 = $2;}} END {{print "xmin", min1; print "xmax", max1; print "ymin", min2; print "ymax", max2;}}' > {output.sdgeAR_xyrange_qc}
 
-            ln -s {input.sdgeAR_ftr_tabqc} {output.sdgeAR_ftr_den}
-            touch {output.sdgeAR_bd_den}
+            ln -s {input.sdgeAR_ftr_tabqc} {output.sdgeAR_ftr_qc}
+            touch {output.sdgeAR_bd_qc}
         fi
         """
         )

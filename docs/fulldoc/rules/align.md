@@ -118,7 +118,7 @@ It is suggested to review the summary metrics to confirm the total read count, t
 
 ## Parameters
 
-The following parameter in the [job configuration](../../getting_started/job_config.md) file will be applied in this rule.
+The following parameter in the [job configuration](../../basic_usage/job_config.md) file will be applied in this rule.
 
 ```yaml
 upstream:
@@ -152,7 +152,7 @@ upstream:
      | `len_umi`     | `--len_umi`         | The length of the UMI sequence (randomer) to be copied from Read 2 (beginning) to Read 1 (after spatial barcode) | 9       |
      | `len_r2`      | `--len_r2`          | The length of Read 2 sequences to be trimmed                                       | 101               |
 
-     * `skip_sbcd`: This is useful if the 1st-seq spatial barcode lacks sufficient bases. When absent in the [job configuration](../../getting_started/job_config.md) file, NovaScope determines `skip_sbcd` following the [`format`](./fastq2sbcd.md#parameters) in `fastq2sbcd`: 1 for DraI31 and 0 for DraI32.
+     * `skip_sbcd`: This is useful if the 1st-seq spatial barcode lacks sufficient bases. When absent in the [job configuration](../../basic_usage/job_config.md) file, NovaScope determines `skip_sbcd` following the [`format`](./fastq2sbcd.md#parameters) in `fastq2sbcd`: 1 for DraI31 and 0 for DraI32.
 
 * **Alignment Paramaters**
 
@@ -172,8 +172,31 @@ upstream:
 
 * **The `resource` Parameter**
 
-     The `resource` parameters, specific to HPC users, determine the partitions, CPU count, and memory allocation for the alignment process. Details for the `resource` parameters in `align` are provided in the [`upstream` parameters](../../getting_started/job_config.md/#upstream) in [Job Configuration](../../getting_started/job_config.md).
+     The `resource` parameters, specific to HPC users, determine the partitions, CPU count, and memory allocation for the alignment process. Details for the `resource` parameters in `align` are provided in the [`upstream` parameters](../../basic_usage/job_config.md/#upstream) in [Job Configuration](../../basic_usage/job_config.md).
 
+     *  `assign_type`: two available options for how NovaScope allocates resources for alignment. The options include `"stdin"` (recommended) and `"filesize"`. Details for each option are provided in the blocks below. 
+     * ??? note "Option `stdin`"
+          **Advantages:**
+          - Directly allocates resources as specified in the `stdin` field, bypassing calculations for precision in resource management.
+          - Enables customization of resources for different datasets in the job configuration file, allowing for optimization of costs based on file size.
+          **Disadvantages:**
+          - Requires users to specify resources for each job unless default settings (partition name, threads, memory) fit the computing environment. An example is provided in the [template](#a-template-of-the-config-file).
+
+     * ??? note "Option `filesize`"
+          **Advantages:**
+          - Automatically allocates resources based on the total size of input 2nd-seq FASTQ files and specified computing resources in the [environment configuration file](../installation/env_setup.md#optional-computing-capabilities).
+          - Once computing resources are specified in the environment file, they automatically apply to all jobs, simplifying the setup.
+          **Disadvantages:**
+          - Requires computing time to calculate the total size of input files, potentially delaying the start of data processing.
+
+            The resource allocation strategy is as follows:
+
+            | Total File Size (GB) | Memory Allocated for Alignment (GB) |
+            |----------------------|-------------------------------------|
+            | Under 200            | 70                                  |
+            | 200 to 400           | 140                                 |
+            | Over 400             | 330                                 |
+     
 ## Dependencies
 Rule `align` requires the matched spatial barcode files from Rule [`smatch`](./smatch.md) generates. Hence, if the [input files](#input-files) are not available, `align` relies on the successful completion of [`smatch`](./smatch.md) for proper operation. See an overview of the rule dependencies in the [Workflow Structure](../../home/workflow_structure.md).
 
