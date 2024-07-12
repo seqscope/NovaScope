@@ -1,8 +1,8 @@
 rule c04_sdgeAR_segment_ficture:
     input:
         sdgeAR_xyrange       = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "sgeAR", "barcodes.minmax.tsv"),
-        sdgeAR_transcript_qc = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.transcripts.tsv.gz"),
-        sdgeAR_bd_qc         = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.boundary.geojson") if wildcards.sge_qc == "filtered" else "",
+        sdgeAR_transcript_in = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.transcripts.tsv.gz") if wildcards.sge_qc=="raw" else os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}."+wildcards.sge_qc+".transcripts.tsv.gz"),
+        sdgeAR_bd_in         = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.boundary.geojson") if wildcards.sge_qc == "filtered" else "",
     output:
         sdgeAR_hxg          = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.d_{hexagon_width}.hexagon.tsv.gz"),
     params:
@@ -21,8 +21,8 @@ rule c04_sdgeAR_segment_ficture:
 
         major_axis       = find_major_axis(input.sdgeAR_xyrange, format="col")
 
-        if os.path.isfile(input.sdgeAR_bd_qc):
-            boundary_args = f"--boundary {input.sdgeAR_bd_qc}"
+        if os.path.isfile(input.sdgeAR_bd_in):
+            boundary_args = f"--boundary {input.sdgeAR_bd_in}"
         else:
             boundary_args = ""
 
@@ -36,7 +36,7 @@ rule c04_sdgeAR_segment_ficture:
 
         ### skip the --ct_header to use the default value.
         command time -v {python} {ficture}/ficture/scripts/make_dge_univ.py \
-            --input {input.sdgeAR_transcript_qc} \
+            --input {input.sdgeAR_transcript_in} \
             --output {sdgeAR_hxg_unzip} \
             --mu_scale {mu_scale} \
             --key {params.solo_feature} \

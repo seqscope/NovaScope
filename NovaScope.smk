@@ -166,28 +166,9 @@ if any(task in request for task in["segment-10x-per-unit", "segment-ficture-per-
 else:
     logging.info(f" - Downstream Segmentation: Skipping")
 
-
-if "segment-10x-per-unit" in request:
-    df_seg10x = read_config_for_segment(config, run_id, unit_id, "10x", silent=False)
-else:
-    df_seg10x = df_seg_void
-
-if "segment-ficture-per-unit" in request:
-    df_segfict = read_config_for_segment(config, run_id, unit_id, "ficture", silent=False)
-else:
-    df_segfict = df_seg_void
-
-if "segment-10x-per-unit" in request and "segment-ficture-per-unit" in request
-    df_seg = pd.concat([df_seg10x, df_segfict], ignore_index=True)
-    df_seg = df_seg.drop_duplicates()
-elif "segment-10x-per-unit" not in request and "segment-ficture-per-unit" in request:
-    df_seg = df_segfict
-elif "segment-10x-per-unit" in request and "segment-ficture-per-unit" not in request:
-    df_seg = df_seg10x
-else:
-    df_seg = df_seg_void
-
-print(df_seg)
+df_seg10x = read_config_for_segment(config, run_id, unit_id, "10x", silent=False) if "segment-10x-per-unit" in request else df_seg_void
+df_segfict = read_config_for_segment(config, run_id, unit_id, "ficture", silent=False) if "segment-ficture-per-unit" in request else df_seg_void
+df_seg = pd.concat([df_seg10x, df_segfict], ignore_index=True).drop_duplicates() 
 
 #==============================================
 #
