@@ -1,14 +1,13 @@
 rule c04_sdgeAR_segment_10x:
     input:
-        sdgeAR_xyrange       = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "sgeAR", "barcodes.minmax.tsv"),
-        sdgeAR_transcript_in = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess",
-                                                            ("{unit_id}.transcripts.tsv.gz" if wildcards.sge_qc=="raw" else "{unit_id}.{solo_feature}."+wildcards.sge_qc+".transcripts.tsv.gz")),
-        sdgeAR_ftrtab_in     = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess",
-                                                            ("{unit_id}.feature.tsv.gz"     if wildcards.sge_qc=="raw" else "{unit_id}.{solo_feature}."+wildcards.sge_qc+".feature.tsv.gz")),
+        sdgeAR_xyrange  = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "sgeAR", "barcodes.minmax.tsv"),    # Use sdgeAR_xyrange instead of xyrange_in to determine the major axis is because the transcript was sorted by the longer axis in sdgeAR_xyrange and the longer axis may be different between sdgeAR_xyrange and xyrange.
+        transcript_in   = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", ("{unit_id}.transcripts.tsv.gz" if wildcards.sge_qc=="raw" else "{unit_id}.{solo_feature}."+wildcards.sge_qc+".transcripts.tsv.gz")),
+        ftr_in          = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", ("{unit_id}.feature.tsv.gz"     if wildcards.sge_qc=="raw" else "{unit_id}.{solo_feature}."+wildcards.sge_qc+".feature.tsv.gz")),
+        xyrange_in      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.coordinate_minmax.tsv"),    # This file is not used but is required to make sure every transcript file has a corresponding xyrange file.
     output:
-        sdgeAR_seg_bcd      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "barcodes.tsv.gz"),
-        sdgeAR_seg_ftr      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "features.tsv.gz"),
-        sdgeAR_seg_mtx      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "matrix.mtx.gz"),
+        hexagon_bcd      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "barcodes.tsv.gz"),
+        hexagon_ftr      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "features.tsv.gz"),
+        hexagon_mtx      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "matrix.mtx.gz"),
     params:
         solo_feature        = "{solo_feature}",
         hexagon_width       = "{hexagon_width}",
@@ -21,18 +20,18 @@ rule c04_sdgeAR_segment_10x:
         mem  = "7000MB", 
         time = "12:00:00",
     run:
-        major_axis=find_major_axis(input.sdgeAR_xyrange, format="col")
+        major_axis=find_major_axis(input.sdgeAR_xyrange, format="col") 
         # dirs
-        sdgeAR_seg_dir = os.path.dirname(output.sdgeAR_seg_bcd)
+        hexagon_dir = os.path.dirname(output.hexagon_bcd)
         shell(
         r"""
         set -euo pipefail
         {params.module_cmd}
 
         command time -v {python} {ficture}/ficture/scripts/make_sge_by_hexagon.py \
-            --input {input.sdgeAR_transcript_in} \
-            --feature {input.sdgeAR_ftrtab_in} \
-            --output_path {sdgeAR_seg_dir} \
+            --input {input.transcript_in} \
+            --feature {input.ftr_in} \
+            --output_path {hexagon_dir} \
             --mu_scale {mu_scale} \
             --major_axis {major_axis} \
             --key {params.solo_feature} \

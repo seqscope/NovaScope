@@ -1,18 +1,20 @@
 # Welcome to NovaScope documentation
 
 ## Introduction
-NovaScope is a [Snakemake](https://snakemake.readthedocs.io/en/stable/)-based pipeline that processes spatial transcriptomics data generated from the [Seq-Scope](https://doi.org/10.1016/j.cell.2021.05.010). Currently, it is tailored to process the spatial arrays generated from the Illumina [NovaSeq 6000](https://www.illumina.com/systems/sequencing-platforms/novaseq.html) platform. 
+NovaScope is a [Snakemake](https://snakemake.readthedocs.io/en/stable/)-based pipeline that processes spatial transcriptomics data generated from the [Seq-Scope](https://doi.org/10.1016/j.cell.2021.05.010). Currently, it is  specifically tailored for spatial arrays generated from the Illumina [NovaSeq 6000](https://www.illumina.com/systems/sequencing-platforms/novaseq.html) platform. 
 
 ### Functionality
+
 The **main purpose** of NovaScope is to process the Seq-Scope sequencing data from scratch to a spatial digital gene expression (SGE) matrix  compatible with variaous single cell and spatial analysis methods.
 
 Additionaly, it provides **plus functionalities**, including histology alignment with SGE matrix, SGE filtering, SGE segment, and SGE reformatting. See more details about the main and plus functionalities in the [WorkFlow Structure](./home/workflow_structure.md).
 
-NovaScope features a modular and adaptable design, enabling users to tailor the pipeline according to their particular requirements. The use of Snakemake also ensures streamlined workflow management, reproducibility, and scalability,
+### Characteristics
+NovaScope features a modular and adaptable design, allowing users to tailor the pipeline according to their particular requirements. The use of Snakemake ensures streamlined workflow management, reproducibility, and scalability.
 
-This pipeline is built to operate on Unix-based high-performance computing (HPC) platforms, with the capability to run either directly on local systems or via the [Slurm](https://slurm.schedmd.com/documentation.html) workload manager.
+Additionally, NovaScope is designed to operate on Unix-based high-performance computing (HPC) platforms. It provides flexibility in deployment, allowing execution directly on local systems or through the [Slurm](https://slurm.schedmd.com/documentation.html) workload manager.
 
-### Overview
+### An Overview
 NovaScope primarily consists of two steps as shown in the figure below.
 
 <figure markdown="span">

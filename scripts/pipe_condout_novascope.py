@@ -167,7 +167,6 @@ def outfn_seg10x_per_unit(main_dirs, df_segchar):
                                     ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "barcodes.tsv.gz"], None),
                                     ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "features.tsv.gz"], None),
                                     ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "matrix.mtx.gz"  ], None),   
-                                    ([ "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.coordinate_minmax.tsv"], None),              
             ],
             'zip_args': {
                 'run_id':        df_segchar["run_id"].values,  
@@ -186,7 +185,6 @@ def outfn_segfict_per_unit(main_dirs, df_segchar):
             'root': main_dirs["analysis"],
             'subfolders_patterns': [
                                     ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.d_{hexagon_width}.hexagon.tsv.gz"], None),
-                                    ([ "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.coordinate_minmax.tsv"], None), 
             ],
             'zip_args': {
                 'run_id':        df_segchar["run_id"].values,  

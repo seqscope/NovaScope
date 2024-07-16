@@ -14,9 +14,9 @@ def locate_geneinfo(sp2geneinfo, species, novascope_dir):
 
 rule c03_sdgeAR_featurefilter:
     input:
-        sdgeAR_ftr_tab    = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.feature.tsv.gz"),
+        ftr        = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.feature.tsv.gz"),
     output:
-        sdgeAR_ftr_clean  = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.feature.clean.tsv.gz"),
+        ftr_clean  = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.feature.clean.tsv.gz"),
     params:
         sp2geneinfo       = env_config.get("ref", {}).get("geneinfo", None),
         species           = species,
@@ -48,13 +48,13 @@ rule c03_sdgeAR_featurefilter:
         else:
             gct_args = f"--min_ct_per_feature {params.min_ct_per_feature}"
 
-        # sdgeAR_ftr_clean_unzip = output.sdgeAR_ftr_clean.replace(".gz", "")
+        # sdgeAR_ftr_clean_unzip = output.ftr_clean.replace(".gz", "")
         shell(
         r"""
         set -euo pipefail
         {params.module_cmd}
         source {pyenv}/bin/activate
 
-        command time -v {python} {novascope_scripts}/rule_c03.feature_filter.py --input {input.sdgeAR_ftr_tab} --output {output.sdgeAR_ftr_clean}  {gtype_args} {gname_args} {gct_args}
+        command time -v {python} {novascope_scripts}/rule_c03.feature_filter.py --input {input.ftr} --output {output.ftr_clean}  {gtype_args} {gname_args} {gct_args}
         """
         )
