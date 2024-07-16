@@ -139,14 +139,16 @@ def outfn_filterftr_per_unit(main_dirs, df_run):
     return out_fn
 
 def outfn_filterpoly_per_unit(main_dirs, df_segchar):
+    # note this only applies to sge_qc = "filtered"
+    df_segchar = df_segchar[df_segchar["sge_qc"] == "filtered"]
     out_fn = {
             'flag': 'filterpoly-per-unit',
             'root': main_dirs["analysis"],
             'subfolders_patterns': [
-                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.transcripts.tsv.gz"] ,None),
-                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.coordinate_minmax.tsv"] ,None),
-                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.feature.tsv.gz"] ,None),
-                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.boundary.geojson"] ,None),
+                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.transcripts.tsv.gz"], None),
+                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.coordinate_minmax.tsv"], None),
+                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.feature.tsv.gz"], None),
+                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.boundary.geojson"], None),
             ],
             'zip_args': {
                 'run_id':        df_segchar["run_id"].values,  
@@ -162,9 +164,10 @@ def outfn_seg10x_per_unit(main_dirs, df_segchar):
             'flag': 'segment-10x-per-unit',
             'root': main_dirs["analysis"],
             'subfolders_patterns': [
-                                    ([ "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "barcodes.tsv.gz"], None),
-                                    ([ "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "features.tsv.gz"], None),
-                                    ([ "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "matrix.mtx.gz"  ], None),                     
+                                    ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "barcodes.tsv.gz"], None),
+                                    ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "features.tsv.gz"], None),
+                                    ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "matrix.mtx.gz"  ], None),   
+                                    ([ "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.coordinate_minmax.tsv"], None),              
             ],
             'zip_args': {
                 'run_id':        df_segchar["run_id"].values,  
@@ -182,7 +185,8 @@ def outfn_segfict_per_unit(main_dirs, df_segchar):
             'flag': 'segment-ficture-per-unit',
             'root': main_dirs["analysis"],
             'subfolders_patterns': [
-                                    ([ "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.d_{hexagon_width}.hexagon.tsv.gz"], None),
+                                    ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.d_{hexagon_width}.hexagon.tsv.gz"], None),
+                                    ([ "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.coordinate_minmax.tsv"], None), 
             ],
             'zip_args': {
                 'run_id':        df_segchar["run_id"].values,  
@@ -193,20 +197,3 @@ def outfn_segfict_per_unit(main_dirs, df_segchar):
             },
     }
     return out_fn
-
-# def outfn_hex_per_unit(main_dirs, df_segchar):
-#     out_fn = {
-#             'flag': 'segmentviz-nUMI-per-unit',
-#             'root': main_dirs["analysis"],
-#             'subfolders_patterns': [
-#                                     ([ "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.d_{hexagon_width}.hexagon.tsv.gz"], None),
-#             ],
-#             'zip_args': {
-#                 'run_id':        df_segchar["run_id"].values,  
-#                 'unit_id':       df_segchar["unit_id"].values,
-#                 'solo_feature':  df_segchar["solo_feature"].values,
-#                 'hexagon_width': df_segchar["hexagon_width"].values,
-#                 'sge_qc':   df_segchar["sge_qc"].values
-#             },
-#     }
-#     return out_fn

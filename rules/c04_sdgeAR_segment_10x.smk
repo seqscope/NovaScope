@@ -1,8 +1,10 @@
 rule c04_sdgeAR_segment_10x:
     input:
         sdgeAR_xyrange       = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "sgeAR", "barcodes.minmax.tsv"),
-        sdgeAR_transcript_in = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.transcripts.tsv.gz") if wildcards.sge_qc=="raw" else os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}."+wildcards.sge_qc+".transcripts.tsv.gz"),
-        sdgeAR_ftr_in        = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.feature.tsv.gz")     if wildcards.sge_qc=="raw" else os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}."+wildcards.sge_qc+".feature.tsv.gz"),
+        sdgeAR_transcript_in = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess",
+                                                            ("{unit_id}.transcripts.tsv.gz" if wildcards.sge_qc=="raw" else "{unit_id}.{solo_feature}."+wildcards.sge_qc+".transcripts.tsv.gz")),
+        sdgeAR_ftrtab_in     = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess",
+                                                            ("{unit_id}.feature.tsv.gz"     if wildcards.sge_qc=="raw" else "{unit_id}.{solo_feature}."+wildcards.sge_qc+".feature.tsv.gz")),
     output:
         sdgeAR_seg_bcd      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "barcodes.tsv.gz"),
         sdgeAR_seg_ftr      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "features.tsv.gz"),
@@ -29,7 +31,7 @@ rule c04_sdgeAR_segment_10x:
 
         command time -v {python} {ficture}/ficture/scripts/make_sge_by_hexagon.py \
             --input {input.sdgeAR_transcript_in} \
-            --feature {input.sdgeAR_ftr_in} \
+            --feature {input.sdgeAR_ftrtab_in} \
             --output_path {sdgeAR_seg_dir} \
             --mu_scale {mu_scale} \
             --major_axis {major_axis} \

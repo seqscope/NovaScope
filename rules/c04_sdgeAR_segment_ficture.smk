@@ -1,13 +1,15 @@
 rule c04_sdgeAR_segment_ficture:
     input:
         sdgeAR_xyrange       = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "sgeAR", "barcodes.minmax.tsv"),
-        sdgeAR_transcript_in = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.transcripts.tsv.gz") if wildcards.sge_qc=="raw" else os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}."+wildcards.sge_qc+".transcripts.tsv.gz"),
-        sdgeAR_bd_in         = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.boundary.geojson") if wildcards.sge_qc == "filtered" else "",
+        sdgeAR_transcript_in = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", 
+                                                            ("{unit_id}.{solo_feature}."+wildcards.sge_qc+".transcripts.tsv.gz" if wildcards.sge_qc == "filtered" else "{unit_id}.transcripts.tsv.gz")),
+        sdgeAR_bd_in         = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.boundary.geojson") if wildcards.sge_qc == "filtered" else [],
     output:
         sdgeAR_hxg          = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.d_{hexagon_width}.hexagon.tsv.gz"),
     params:
         solo_feature        = "{solo_feature}",
         train_width         = "{hexagon_width}",
+        sge_qc              = "{sge_qc}",
         hex_n_move          = config.get("downstream", {}).get('segment', {}).get('hex_n_move', 1), 
         precision           = config.get("downstream", {}).get('segment', {}).get('precision', 2), 
         min_density         = config.get("downstream", {}).get('segment', {}).get('ficture', {}).get('min_density', 0.3),
@@ -21,7 +23,7 @@ rule c04_sdgeAR_segment_ficture:
 
         major_axis       = find_major_axis(input.sdgeAR_xyrange, format="col")
 
-        if os.path.isfile(input.sdgeAR_bd_in):
+        if params.sge_qc == "filtered":
             boundary_args = f"--boundary {input.sdgeAR_bd_in}"
         else:
             boundary_args = ""

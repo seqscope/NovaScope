@@ -235,6 +235,7 @@ if any(task in request for task in ["transcript-per-unit", "filterftr-per-unit",
 if any(task in request for task in ["filterftr-per-unit", "filterpoly-per-unit", "segment-10x-per-unit", "segment-ficture-per-unit"]):
     include: "rules/c03_sdgeAR_polygonfilter.smk"
     include: "rules/c03_sdgeAR_featurefilter.smk"
+    include: "rules/c03_sdgeAR_minmax.smk"
 
 if "segment-10x-per-unit" in request:
     include: "rules/c04_sdgeAR_segment_10x.smk"
