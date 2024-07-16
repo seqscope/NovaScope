@@ -41,7 +41,6 @@ def main():
     args.output = "/nfs/turbo/umms-leeju/nova/v2/analysis/n8-htwlw-b07c-mm10gg6ascribble-bec99/n8-htwlw-b07c-mm10gg6ascribble-bec99-default/preprocess/n8-htwlw-b07c-mm10gg6ascribble-bec99-default.feature.clean.tsv.gz"
     args.min_ct_per_feature = 50
     args.rm_gene_regex = "^mm10_____Gm\d+|^mm10_____mt-|^mm10_____MT-"
-    args.rm_gene_regex = "^mm10_____Gm\d+|^mm10_____mt-|^mm10_____MT-"
     args.geneinfo = "/nfs/turbo/sph-hmkang/index/data/weiqiuc/NovaFlow/misc/create_geneinfo/mm10gg6ascribble.mm10gg6a.mix.names.tsv.gz"
     args.kept_gene_type = "protein_coding|lncRNA"
     """

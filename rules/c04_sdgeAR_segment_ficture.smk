@@ -19,16 +19,16 @@ rule c04_sdgeAR_segment_ficture:
         mem  = "28000MB", 
         time = "72:00:00"
     run:
-        hexagon_unzip = output.hexagon.rstrip(".gz")
-
+        # major axis
         major_axis       = find_major_axis(input.sdgeAR_xyrange, format="col")
+        # dirs/files
+        hexagon_unzip = output.hexagon.rstrip(".gz")
 
         if params.sge_qc == "filtered":
             boundary_args = f"--boundary {input.boundary_in}"
         else:
             boundary_args = ""
 
-        # if hex_n_move is float, convert it to int
         if isinstance(params.hex_n_move, float):
             params.hex_n_move = int(params.hex_n_move)
         
