@@ -184,7 +184,7 @@ upstream:
 
      * ??? note "Option `filesize`"
           **Advantages:**
-          - Automatically allocates resources based on the total size of input 2nd-seq FASTQ files and specified computing resources in the [environment configuration file](../installation/env_setup.md#optional-computing-capabilities).
+          - Automatically allocates resources based on the total size of input 2nd-seq FASTQ files and specified computing resources in the [environment configuration file](../../installation/env_setup.md).
           - Once computing resources are specified in the environment file, they automatically apply to all jobs, simplifying the setup.
           **Disadvantages:**
           - Requires computing time to calculate the total size of input files, potentially delaying the start of data processing.

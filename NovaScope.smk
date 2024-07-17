@@ -158,7 +158,7 @@ df_seg_void = pd.DataFrame({
         'sge_qc': pd.Series(dtype='object') 
     })
 
-if any(task in request for task in["segment-10x-per-unit", "segment-ficture-per-unit"]):
+if any(task in request for task in["filterpoly-per-unit", "segment-10x-per-unit", "segment-ficture-per-unit"]):
     logging.info(f" - Downstream Segmentation:")
     mu_scale = config.get("downstream", {}).get("mu_scale", 1000)
     logging.info(f"   - mu scale: {mu_scale}")
