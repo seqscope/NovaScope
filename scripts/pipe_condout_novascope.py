@@ -146,9 +146,12 @@ def outfn_filterpoly_per_unit(main_dirs, df_segchar):
             'root': main_dirs["analysis"],
             'subfolders_patterns': [
                     (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.transcripts.tsv.gz"], None),
+                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.transcripts.tsv.gz.tbi"], None),
                     (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.coordinate_minmax.tsv"], None),
-                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.feature.tsv.gz"], None),
-                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.boundary.geojson"], None),
+                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.feature.strict.tsv.gz"], None),
+                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.boundary.strict.geojson"], None),
+                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.feature.lenient.tsv.gz"], None),
+                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.boundary.lenient.geojson"], None),
             ],
             'zip_args': {
                 'run_id':        df_segchar["run_id"].values,  

@@ -1,7 +1,7 @@
 # Rule `historef`
 
 ## Purpose
-The goal of `historef` rule is to match the histology image with the spatial coordinates of the spatial digital gene expression matrix (SGE). This is achieved by aligning fiducial markers observable in both the histology image and the [composite image](./align.md#3-a-comprehensive-view-of-sbcd-smatch-and-sge-images) of "sbcd", "smatch", and "sge" images. The current pipeline allows multiple input histology files.
+The goal of `historef` rule is to match the histology image with the spatial coordinates of the spatial digital gene expression (SGE) matrix. This is achieved by aligning fiducial markers observable in both the histology image and the [composite image](./align.md#3-a-comprehensive-view-of-sbcd-smatch-and-sge-images) of "sbcd", "smatch", and "sge" images. The current pipeline allows multiple input histology files.
 
 ## Input Files
 

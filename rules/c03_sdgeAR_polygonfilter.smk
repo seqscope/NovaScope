@@ -5,11 +5,13 @@ rule c03_sdgeAR_polygonfilter:
         transcript_tbi      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.transcripts.tsv.gz.tbi"),
         ftr_clean           = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.feature.clean.tsv.gz"),
     output:
-        transcript_qc       = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.transcripts.tsv.gz"),
-        transcript_qc_tbi   = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.transcripts.tsv.gz.tbi"),
-        xyrange_qc          = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.coordinate_minmax.tsv"),
-        ftr_qc              = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.feature.tsv.gz"),       # This file has never been used.
-        bd_qc               = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.boundary.geojson"),
+        transcript_qc       = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.transcripts.tsv.gz"),       # lenient 
+        transcript_qc_tbi   = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.transcripts.tsv.gz.tbi"),   # lenient
+        xyrange_qc          = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.coordinate_minmax.tsv"),    # lenient
+        bd_strict           = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.boundary.strict.geojson"), 
+        bd_lenient          = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.boundary.lenient.geojson"), 
+        ftr_strict          = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.feature.strict.tsv.gz"), 
+        ftr_lenient         = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.feature.lenient.tsv.gz"), 
     params:
         # params
         solo_feature        = "{solo_feature}",
@@ -17,11 +19,6 @@ rule c03_sdgeAR_polygonfilter:
         quartile            = config.get("downstream", {}).get('polygon_density_filter', {}).get('quartile', 2),  
         hex_n_move          = config.get("downstream", {}).get('polygon_density_filter', {}).get('hex_n_move', 1),   
         polygon_min_size    = config.get("downstream", {}).get('polygon_density_filter', {}).get('polygon_min_size', 500),  
-        # files
-        bd_strict           = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.boundary.strict.geojson"), 
-        bd_lenient          = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.boundary.lenient.geojson"), 
-        ftr_strict          = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.feature.strict.tsv.gz"), 
-        ftr_lenient         = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.feature.lenient.tsv.gz"), 
         # module
         module_cmd          = get_envmodules_for_rule(["python", "samtools"], module_config),
     resources:
@@ -58,9 +55,6 @@ rule c03_sdgeAR_polygonfilter:
         zcat {output.transcript_qc} | bgzip -c > {output.transcript_qc}.tmp.gz
         mv {output.transcript_qc}.tmp.gz {output.transcript_qc}
         tabix -0 -f -s1 $tabix_column {output.transcript_qc}
-
-        ln -s {params.ftr_strict} {output.ftr_qc}
-        ln -s {params.bd_strict} {output.bd_qc}
         
         """
         )

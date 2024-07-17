@@ -6,14 +6,14 @@ Once you have [installed NovaScope](../installation/requirement.md) and [downloa
     The job configuration file must adhere to the following guidelines:
 
     * **Naming convention**: `config_job.yaml`.
-    * **Location**: Ensure the `config_job.yaml` file is placed in the working directory. The working directory should be specified to NovaScope using the -d or --directory option.
+    * **Location**: Ensure the `config_job.yaml` file is placed in the working directory. The working directory should be specified to NovaScope using the `-d` or `--directory` option.
     * **Fields**: The `config_job.yaml` file must include the following fields: : `input`, `output`, `request`, `env_yml`. Additional fields can be included as per the user's requirements.
 
 ### Prepare the Job Configuration file
 
 Prepare your job configuration file following the template below:
 
-* For parameters in the "Main Fields", more details are provided below the template. Mandatory fields are marked as "REQUIRED FIELD".
+* For parameters in the "Main Fields", more details are provided at the [Main Fields](#main-fields). Mandatory fields are marked as "REQUIRED FIELD".
 * For additional parameters, below only includes minimal descriptions. More details are outlined in the [NovaScope Full Documentation](../fulldoc/intro.md), under the specific rule pages to which they apply.
 
 For user's convenience, we provide separate example `config_job.yaml` files for the [Minimal Test Run](https://github.com/seqscope/NovaScope/blob/main/testrun/minimal_test_run/config_job.yaml), [Shallow Liver Test Run](https://github.com/seqscope/NovaScope/blob/main/testrun/shallow_liver_section/config_job.yaml), and [Deep Liver Test Run](https://github.com/seqscope/NovaScope/blob/main/testrun/deep_liver_section/config_job.yaml).
@@ -142,31 +142,33 @@ env_yml: <path_to_config_env.yaml_file>         ## If absent, NovaScope use the 
 #    polygon_min_size: 500    
 #    quartile: 2
 #
-#  segment:                   
-#    10x:                                       ## specify the parameters for hexagon in 10x genomics format    
-#      min_pixel_per_unit: 10                   ## specify a minimum UMI count of hexagons
-#      char:                                    ## specify the characteristics for hexagon segment, including genomic feature, hexagon size and polygon density filtering
-#        - solo_feature: gn                     ## genomic feature
-#          hexagon_width: 24                    ## hexagonal grid width
-#          quality_control: FALSE               ## if both gene-filtering and polygon-filtering should be applied
+#  segment:
+#    hex_n_move: 1                              ## specify the sliding step in segmentation
+#    precision: 2                               ## specify the precision for spatial location in segmentation
+#    10x:                                       ## specify the parameters for hexagon in 10x genomics format   
+#      min_pixel_per_unit: 10                   
+#      char:                                    ## specify the characteristics for hexagon segmentation
+#        - solo_feature: gn                     
+#          hexagon_width: 18                   
+#          quality_control: FALSE               
 #      # - ...                                  ## if more than 1 set of hexagon is needed 
-#    ficture:                                   ## specify the parameters for hexagon in FICTURE-compatible format    
-#      min_density: 0.3                         ## specify a minimum density of hexagons
+#    ficture:                                   ## specify the characteristics for hexagon in FICTURE-compatible format    
+#      min_density: 0.3                         
 #      char:
 #        - solo_feature: gn
-#          hexagon_width: 12
-#          quality_control: TRUE                ##
+#          hexagon_width: 18
+#          quality_control: TRUE                
 #      # - ...                                  ## if more than 1 set of hexagon is needed 
 ```
 
-### Detailed Description of Main Fields
+### Main Fields
 
 #### Input
 !!! tip "Relative Path"
     NovaScope supports using relative paths in the job configuration file, which should be relative to the working directory. If a relative path is found, NovaScope automatically obtains its real path and uses it in the process.
 
 * **`seq1st`**:
-    * *`id`*: The `id` will be used to organize the 1st-seq FASTQ files. Make sure the `id` parameter for 1st-seq in the corresponding flowcell is unique.  
+    * *`id`*: The `id` will be used to organize the 1st-seq FASTQ files. Make sure the `id` field for 1st-seq in the corresponding flowcell is unique.  
 
     * *`layout`*: A spatial barcode (sbcd) layout file to provide the layout of tiles in a chip with the following format. If absent, [NovaScope](https://seqscope.github.io/NovaScope/) will automatically look for the sbcd layout within the NovaScope repository at [info/assets/layout_per_tile_basis](https://github.com/seqscope/NovaScope/tree/main/info/assets/layout_per_tile_basis), using the section chip ID for reference.
         ```yaml
@@ -179,7 +181,7 @@ env_yml: <path_to_config_env.yaml_file>         ## If absent, NovaScope use the 
         * `row` & `col`: The layout position;
         * `rowshift` & `colshift`: The gap information
 
-* **`seq2nd`**: This parameter requires all FASTQ pairs associated with the input section chip to be provided under `seq2nd`. 
+* **`seq2nd`**: This field requires all FASTQ pairs associated with the input section chip to be provided under `seq2nd`. 
 
     ??? note "How to generate `seq2nd_pair_id`?"
         If an ID is not specified, NovaScope will automatically generate one using the format `<flowcell_id>.<chip_id>.<randomer>`, where `randomer` is the last 5 digits of the md5 hash of the real path of the read 1 FASTQ file from the 2nd-seq.
@@ -204,14 +206,16 @@ env_yml: <path_to_config_env.yaml_file>         ## If absent, NovaScope use the 
 #### Output
 The output directory will be used to organize the input files and store output files. Please see the structure directory [here](output.md).
 
-#### Requests
-The pipeline interprets the requested output files via `request` and determines the execution flow. The `request` allows multiple desired output.
+#### Request
+The pipeline interprets the requested output files via the `request` field and determines the execution flow. The `request` field allows multiple desired output.
  
 !!! info
-    The `request` parameter should indicate the **final output** required, and all intermediary files contributing to the final output will be automatically generated (i.e., the dependencies between rules). 
+    The `request` field should indicate the **final output** required, and all intermediary files contributing to the final output will be automatically generated (i.e., the dependencies between rules). 
 
-##### Main Options 
-Below are the options with their final output files and links to detailed output information. For more insights into the excution flow, please consult the [execution flow by request](../fulldoc/execution_guide/rule_execution.md) alongside the [rulegraph](https://seqscope.github.io/NovaScope/#an-overview-of-the-workflow-structure). 
+##### Main Request 
+Below are request options for NovaScope's [main functionalities](../home/workflow_structure.md#main-workflow), alongside their final output and links to detailed output information. 
+
+For more insights into the excution flow, please consult the [execution flow by request](../fulldoc/execution_guide/rule_execution.md) alongside the [rulegraph](https://seqscope.github.io/NovaScope/#an-overview-of-the-workflow-structure). 
 
 
 | Option              | Final Output Files                                                                                 | Details      |
@@ -219,18 +223,17 @@ Below are the options with their final output files and links to detailed output
 | `sbcd-per-flowcell` | Spatial barcode maps for a flowcell at per-tile basis, and a manifest file of summary statistics for each tile. | [fastq2sbcd](../fulldoc/rules/fastq2sbcd.md#output-files)|
 | `sbcd-per-chip`     | A spatial barcode map for a chip, and an image of spatial barcode distribution.| [sbcd2chip](../fulldoc/rules/sbcd2chip.md#output-files)|
 | `smatch-per-chip`   | A TSV file of spatial barcodes matched to the 2nd-Seq reads, and an image of matched spatial barcode distribution. | [smatch](../fulldoc/rules/smatch.md#output-files) |
-| `align-per-run`     | A Binary Alignment Map file with summary metrics, and  a digital gene expression matrix for genomic features. | [align](../fulldoc/rules/align.md)                              |
-| `sge-per-run`       | An SGE matrix with a coordinate metadata file, an image showing distributions of all, matched, and aligned spatial barcodes, and images of specific gene expressions.| [dge2sdge](../fulldoc/rules/dge2sdge.md) and [sdge_visual](../fulldoc/rules/sdge_visual.md)  |
+| `align-per-run`     | A Binary Alignment Map file with summary metrics, and  a digital gene expression matrix for genomic features. | [align](../fulldoc/rules/align.md#output-files)                              |
+| `sge-per-run`       | An SGE matrix with a coordinate metadata file, an image showing distributions of all, matched, and aligned spatial barcodes, and images of specific gene expressions.| [dge2sdge](../fulldoc/rules/dge2sdge.md#output-files) and [sdge_visual](../fulldoc/rules/sdge_visual.md#output-files)  |
 
-##### Plus Options 
-The options below are only for executing the [additional functionalities](../index.md#functionality). To execute this, make sure you have installed the [additional requirement](../installation/requirement_for_plus.md) properly.
+##### Plus Request 
+The options below are only for executing the [additional functionalities](../home/workflow_structure.md#plus-workflow). Please make sure you have installed the [additional requirements](../installation/requirement_for_plus.md#output-files) properly.
 
-| Option              | Final Output Files                                                                                  | Details   |
-|---------------------|---------------------------------------------------------------------------------------------------- |---|
-| `histology-per-run`   | Geotiff files for coordinate transformation between SGE matrix and histology image| [historef](../fulldoc/rules/historef.md)                        |
-| `transcript-per-unit` | An SGE matrix in the TSV format that is compatible to FICTURE | [sdgeAR_reformat](../fulldoc/rules/sdgeAR_reformat.md)          |
-| `filterftr-per-unit`  | A feature file for genes that pass gene-based filtering, formatted as a TSV file that contains detailed information about each gene. | [sdgeAR_segment_10x](../fulldoc/rules/sdgeAR_segment_10x.md)    |
-| `filterpoly-per-unit` | An SGE matrix, a coordinate metadata file, a feature file, and a boundary JSON file, all reflecting the SGE that passed the polygon-based density filtering.| [sdgeAR_segment_10x](../fulldoc/rules/sdgeAR_segment_10x.md)|
-| `segment-10x-per-unit`| A hexagon-indexed SGE matrix in the 10x genomics format |[sdgeAR_segment_10x](../fulldoc/rules/sdgeAR_segment_10x.md) |
-| `segment-ficture-per-unit`| A hexagon-indexed SGE matrix in the FICTURE-compatible TSV format | [sdgeAR_segment_ficture](../fulldoc/rules/sdgeAR_segment_ficture.md) |
-| `segment-per-unit`    | Hexagon-indexed SGE matrices in 10x genomics format and in FICTURE-compatible TSV format                | [sdgeAR_segment_10x](../fulldoc/rules/sdgeAR_segment_10x.md)    |
+| Option                | Final Output Files                                                                                  | Details   |
+|-----------------------|---------------------------------------------------------------------------------------------------- |---|
+| `histology-per-run`   | Geotiff files for coordinate transformation between SGE matrix and histology image.| [historef](../fulldoc/rules/historef.md#output-files)                        |
+| `transcript-per-unit` | An SGE matrix in the TSV format that is compatible to FICTURE. | [sdgeAR_reformat](../fulldoc/rules/sdgeAR_reformat.md#output-files)          |
+| `filterftr-per-unit`  | A feature file for genes that pass gene-based filtering, formatted as a TSV file that contains detailed information about each gene. | [sdgeAR_featurefilter](../fulldoc/rules/sdgeAR_featurefilter.md#output-files)    |
+| `filterpoly-per-unit` | An SGE matrix, a coordinate metadata file, a feature file, and a boundary JSON file, all reflecting the SGE matrix that passed the polygon-based density filtering.| [sdgeAR_polygonfilter](../fulldoc/rules/sdgeAR_polygonfilter.md#output-files)|
+| `segment-10x-per-unit`| A hexagon-indexed SGE matrix in the 10x genomics format. |[sdgeAR_segment_10x](../fulldoc/rules/sdgeAR_segment_10x.md#output-files) |
+| `segment-ficture-per-unit`| A hexagon-indexed SGE matrix in the FICTURE-compatible TSV format. | [sdgeAR_segment_ficture](../fulldoc/rules/sdgeAR_segment_ficture.md#output-files) |

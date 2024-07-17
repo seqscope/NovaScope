@@ -43,7 +43,7 @@ The `"align-per-run"` option request a [Binary Alignment Map (BAM)](http://127.0
 
 ### Request `"sge-per-run"`
 * **Description**:
-The `"sge-per-run"` option inquires: 1) a spatial digital gene expression matrix (SGE) encompassing all genomic features with two plots visualizing the distribution of the aligned spatial barcodes; 2) visualization for genes of interest provided in the [job configuration](../../basic_usage/job_config.md) file. It requests the execution of Rule [`dge2sdge`](../rules/dge2sdge.md) and `gene_visual`, alongside the prerequisite rules: [`align`](../rules/align.md), [`smatch`](../rules/smatch.md), [`sbcd2chip`](../rules/sbcd2chip.md), and [`fastq2sbcd`](../rules/fastq2sbcd.md).
+The `"sge-per-run"` option inquires: 1) a spatial digital gene expression (SGE) matrix encompassing all genomic features with two plots visualizing the distribution of the aligned spatial barcodes; 2) visualization for genes of interest provided in the [job configuration](../../basic_usage/job_config.md) file. It requests the execution of Rule [`dge2sdge`](../rules/dge2sdge.md) and `gene_visual`, alongside the prerequisite rules: [`align`](../rules/align.md), [`smatch`](../rules/smatch.md), [`sbcd2chip`](../rules/sbcd2chip.md), and [`fastq2sbcd`](../rules/fastq2sbcd.md).
 
 * **Rule Graph**:
 <figure markdown="span">

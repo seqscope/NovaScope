@@ -29,9 +29,14 @@ In addition to the main functions, NovaScope offers **additional capabilities** 
 3. SGE matrix reformatting from 10x genomics format to a TSV format compatible with FICTURE (Rule `c02_sdgeAR_reformat`)
 4. SGE matrix segmentation from transcript-indexed SGE to hexagon-indexed SGE in 10x genomics or FICTURE-compatible TSV format (Rules `c04_sdgeAR_segment_10x` and `c04_sdgeAR_segment_ficture`)
 
-The plus workflow, detailing both main and additional rules and their interdependencies, is depicted below.
+The plus workflow, detailing both main and additional rules and their interdependencies, is depicted below. The prerequisite rules for `sdgeAR_segment_10x` and `sdgeAR_segment_ficture` vary based on the need for SGE matrix filtering.
 
 <figure markdown="span">
-![rulegraph](../images/rulegraphs/rulegraph_additional.png){ width="70%" }
+![rulegraph](../images/rulegraphs/rulegraph_plus.png){ width="70%" }
 </figure>
-**Figure 2: Plus workflow rule graph.** The prerequisite rules for `c04_sdgeAR_segment_10x` and `c04_sdgeAR_segment_ficture` vary based on the need for SGE matrix filtering. If filtering is needed, the prerequisites are `c01_sdge2sdgeAR` and `c03_sdgeAR_polygonfilter`. If filtering is not needed, the prerequisites are `c01_sdge2sdgeAR` and `c02_sdgeAR_reformat`.
+**Figure 2: Plus workflow rule graph.** In this example workflow, SGE matrix filtering is requested for segmentation in the FICTURE-compatible TSV format (`sdgeAR_segment_ficture`), but not for segmentation in the 10x Genomics format(`c04_sdgeAR_segment_10x`). As shown in the workflow, when SGE matrix filtering is enabled, the prerequisites are `sdge2sdgeAR` and `sdgeAR_polygonfilter`. If filtering is not enabled, the prerequisites are `sdge2sdgeAR`, `sdgeAR_reformat`, and `sdgeAR_minmax`.
+
+
+
+
+

@@ -12,7 +12,7 @@ Additionaly, it provides **plus functionalities**, including histology alignment
 ### Characteristics
 NovaScope features a modular and adaptable design, allowing users to tailor the pipeline according to their particular requirements. The use of Snakemake ensures streamlined workflow management, reproducibility, and scalability.
 
-Additionally, NovaScope is designed to operate on Unix-based high-performance computing (HPC) platforms. It provides flexibility in deployment, allowing execution directly on local systems or through the [Slurm](https://slurm.schedmd.com/documentation.html) workload manager.
+Additionally, NovaScope is designed to operate on Unix-based high-performance computing (HPC) platforms. It provides flexibility in deployment, allowing execution directly on local systems or through the [SLURM](https://slurm.schedmd.com/documentation.html) workload manager.
 
 ### An Overview
 NovaScope primarily consists of two steps as shown in the figure below.

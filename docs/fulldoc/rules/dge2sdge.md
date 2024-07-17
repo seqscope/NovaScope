@@ -1,7 +1,7 @@
 # Rule `dge2sdge`:
 
 ## Purpose
-The `dge2sdge` generates a transcript-indexed spatial digital gene expression matrix (SGE) using the digital gene expression matrix (DGE) from alignment and spatial maps.
+The `dge2sdge` generates a spatial digital gene expression (SGE) matrix using the digital gene expression matrix (DGE) from alignment and spatial maps.
 
 ## Input Files
 * **Per-Chip Spatial Barcode Map and Manifest File**
@@ -17,7 +17,7 @@ The rule generates the following output in the specified directory path:
 <output_directory>/align/<flowcell_id>/<chip_id>/<run_id>/sge
 ```
 
-### (1) Transcript-indexed Spatial Digital Gene Expression Matrix (SGE)
+### (1) A Spatial Digital Gene Expression (SGE) Matrix
 
 **Description**: A transcript-indexed SGE in 10x Genomics format is generated, which contains all available genomic feature. 
 
@@ -64,7 +64,7 @@ ENSMUSG00000100480	Gm29156	3	0,0,0,0,0
     * `Dimensions`: Following the header, the first line details the matrix dimensions: the count of rows (features), columns (barcodes), and non-zero entries.
     * `Data Entries`: Post-dimensions, subsequent lines enumerate non-zero entries in seven columns: row index (feature index), column index (barcode index), and five values (expression levels) corresponds to Gene, GeneFull, Spliced, Unspliced, and Ambiguous.
 
-### (2) A Comprehensive View of Spatial Barcodes Distribution.
+### (2) A Comprehensive View of Spatial Barcodes Distribution
 **Description**: A side-by-side presentation of three sets of barcodes, including: all spatial barcodes from the spatial map (see Rule [`sbcd2chip`](./sbcd2chip.md)), matched spatial barcodes (see Rule [`smatch`](./smatch.md)), and aligned spatial barcodes.
 
 **File Naming Convention**:

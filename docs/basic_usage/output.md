@@ -87,7 +87,7 @@ The `histology` directory is designated for holding both the input histology fil
 The `align` directory encompasses several subdirectories, including: 
 
 * `bam` for alignment outcomes such as the BAM file, summary metrics, and visualizations;
-* `sge` for a spatial gene expression matrix (SGE) and visualizations; 
+* `sge` for a spatial gene expression (SGE) matrix and visualizations; 
 
 ```
 └── align
@@ -102,11 +102,11 @@ The `align` directory encompasses several subdirectories, including:
 
 ### analysis
 
-The `analysis` directory includes three subdirectory mainly for the reformatting SGE:
+The `analysis` directory includes three subdirectory mainly for the reformatting SGE matrix:
 
-* `sgeAR` for the SGE before reformatting, where the "AR" stands for analysis-ready,
-* `preprocess` for the SGE in the FICTURE format,
-* `segment` for the hexagon-indexed SGE in the 10x genomics format.
+* `sgeAR` for the SGE matrix before reformatting, where the "AR" stands for analysis-ready,
+* `preprocess` for the reformatted and filtered SGE matrices, filtered feature file, and meta files for coordinates,
+* `segment` for the hexagon-indexed SGE.
 
 ```
 └── analysis
@@ -121,18 +121,18 @@ The `analysis` directory includes three subdirectory mainly for the reformatting
 ```
 
 ??? Note "The `sgeAR` Subfolder and Manual Preprocess"
-    The `sgeAR` subfolder is specifically designed to host input SGEs that require reformatting. This subfolder is particularly useful when users wish to manually preprocess SGEs, such as applying boundary filtering, before they undergo reformatting.
+    The `sgeAR` subfolder is specifically designed to host input SGE matrix that require reformatting. This subfolder is particularly useful when users wish to manually preprocess SGE, such as applying boundary filtering, before they undergo reformatting.
 
-    **To manually preprocess an SGE:**
+    **To manually preprocess an SGE matrix:**
     
-    - **Preprocess the SGE:** Users must manually preprocess the SGE according to their specific requirements.
+    - **Preprocess the SGE matrix:** Users must manually preprocess the SGE matrix according to their specific requirements.
     - **Name the dataset:** After preprocessing, the dataset should be named and referred to as `unit_id`.
-    - **Save the preprocessed SGE:** Place the manually preprocessed SGE in the `sgeAR` subfolder.
+    - **Save the preprocessed SGE matrix:** Place the manually preprocessed SGE matrix in the `sgeAR` subfolder.
     - **Preprare a coordinate meta file** Prepare a `barcodes.minmax.tsv` with the minimum and maximum of X and Y coordinates in the `sgeAR` subfolder.
     - **Update the job configuration file:** Provide the `unit_id` in the [job configuration file](../basic_usage/job_config.md) to ensure it is recognized in subsequent processing steps.
 
     **Automatic Handling:**
-    If reformatting features are requested without manually preparing the SGE in the `sgeAR` as outlined, NovaScope will automatically generate a `unit_id`. It will then link the original SGE from the `sge` subdirectory to the `sgeAR`, facilitating seamless processing.
+    If reformatting features are requested without manually preparing the SGE matrix in the `sgeAR` as outlined, NovaScope will automatically generate a `unit_id`. It will then link the original SGE matrix from the `sge` subdirectory to the `sgeAR`, facilitating seamless processing.
 
 
 ## Downstream Analysis 

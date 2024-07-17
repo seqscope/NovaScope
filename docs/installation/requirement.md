@@ -123,7 +123,7 @@ pip install -r ${smk_dir}/installation/pyenv_req.txt
 * [samtools](https://www.htslib.org/) (v1.13; v1.14; v1.19)
 * [spatula](https://seqscope.github.io/spatula/) (v0.1.0)
 * [ImageMagick](https://imagemagick.org/) (7.1.0-25.lua and 7.1.1-30)
-* [GDAL](https://gdal.org/) (v3.5.1) (Optional, required for histology alignments)
+* [GDAL](https://gdal.org/) (v3.5.1): Optional. Only required for histology alignment.
 
 We provide an [example work log](https://github.com/seqscope/NovaScope/blob/main/installation/requirement_install_log.md) documenting the installation of the aforementioned software tools.
 

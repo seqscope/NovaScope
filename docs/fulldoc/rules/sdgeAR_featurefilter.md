@@ -1,7 +1,7 @@
 # Rule `sdgeAR_featurefilter`:
 
 ## Purpose
-The `sdgeAR_featurefilter` filters the transcript-indexed spatial digital gene expression matrix (SGE) by gene types, gene names, or number of UMIs.
+The `sdgeAR_featurefilter` filters the spatial digital gene expression (SGE) matrix by gene types, gene names, or the number of UMIs per gene.
 
 ## Input Files
 
@@ -27,10 +27,10 @@ The rule generates the following output in the specified directory path:
 Those two feature files share the same format:
 
 ```
-gene_id             gene     gn    gt   spl  unspl  ambig
-ENSMUSG00000100764  Gm29155  3     3    1    0      2
-ENSMUSG00000100635  Gm29157  0     0    0    0      0
-ENSMUSG00000100480  Gm29156  0     0    0    0      0
+gene_id             gene           gn    gt    spl  unspl  ambig
+ENSMUSG00000051285  Pcmtd1         1396  321   284  21     2
+ENSMUSG00000057363  Uxs1           144   147   143  2      0
+ENSMUSG00000097648  9330185C12Rik  1     55    1    8      0
 ```
 
  * `gene_id`: Gene Ensemble ID

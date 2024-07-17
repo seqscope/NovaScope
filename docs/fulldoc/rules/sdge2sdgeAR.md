@@ -1,12 +1,12 @@
 # Rule `sdge2sdgeAR`:
 
 ## Purpose
-The `dge2sdgeAR` rule is designed to facilitate the utilization of the transcript-indexed spatial digital gene expression matrix (SGE) in NovaScope's reformatting features. The main function of Rule `dge2sdgeAR` is creating a link from the original SGE located at `<output_directory>/align/<flowcell_id>/<chip_id>/<run_id>/sge` to the directory `<output_directory>/analysis/<run_id>/<unit_id>/sgeAR`. 
+The `dge2sdgeAR` rule is designed to facilitate the utilization of the transcript-indexed spatial digital gene expression (SGE) matrix in NovaScope's reformatting features. The main function of Rule `dge2sdgeAR` is creating a link from the original SGE located at `<output_directory>/align/<flowcell_id>/<chip_id>/<run_id>/sge` to the directory `<output_directory>/analysis/<run_id>/<unit_id>/sgeAR`. 
 
 The use of the `sgeAR` subfolder instead of the direct `sge` directory allows for any necessary manual preprocessing of the SGE before reformatting. For more details, see [The `sgeAR` Subfolder and Manual Preprocess](../../basic_usage/output.md#analysis).
 
 ## Input Files
-* **Spatial Digital Gene Expression Matrix (SGE) and relevant files**
+* **Spatial Digital Gene Expression (SGE) Matrix and relevant files**
 Required input files include a SGE, its related visualizations, and the meta file for X Y coordinates, which are created by Rule [`dge2sdge`](./dge2sdge.md).
 
 ## Output Files
