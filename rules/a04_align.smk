@@ -58,7 +58,7 @@ rule a04_align:
         {params.module_cmd}
         source {pyenv}/bin/activate
 
-        command time -v {python} {novascope_scripts}/rule_a4.align-reads.py \
+        command time -v {python} {novascope_scripts}/rule_a04.align-reads.py \
             --fq1 {input.seq2_fqr1} \
             --fq2 {input.seq2_fqr2} \
             --whitelist-match {input.smatch_tsv} \

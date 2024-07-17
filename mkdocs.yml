@@ -57,32 +57,36 @@ nav:
       - Running with Your Own Data: quickstart/custom.md
   - Installation:
       - Installing NovaScope: installation/requirement.md
-      - Environment Setup: installation/env_setup.md
-      - Slurm: installation/slurm.md
       - Additional Installations: installation/requirement_for_plus.md
+      - Environment Setup: installation/env_setup.md
+      - SLURM: installation/slurm.md
   - Basic Usage:
-      - Introduction: getting_started/intro.md
-      - Accessing Input Data: getting_started/access_data.md 
-      - Job Configuration : getting_started/job_config.md
-      - Executing NovaScope : getting_started/execute.md
-      - Output: getting_started/output.md
+      - Introduction: basic_usage/intro.md
+      - Accessing Input Data: basic_usage/access_data.md 
+      - Job Configuration : basic_usage/job_config.md
+      - Executing NovaScope : basic_usage/execute.md
+      - Output: basic_usage/output.md
   - Full Documentation:
-      - Introduction: walkthrough/intro.md
-      - Rule Execution Guide: 
-        - Core Concepts: walkthrough/execution_guide/core_concepts.md
-        - Execution Flow by Request: walkthrough/execution_guide/rule_execution.md
+      - Introduction: fulldoc/intro.md
+      - A Rule Execution Guide: 
+        - Core Concepts: fulldoc/execution_guide/core_concepts.md
+        - Execution Flow by Request: fulldoc/execution_guide/rule_execution.md
       - Main Rules:
-        - fastq2sbcd: walkthrough/rules/fastq2sbcd.md 
-        - sbcd2chip : walkthrough/rules/sbcd2chip.md
-        - smatch : walkthrough/rules/smatch.md
-        - align: walkthrough/rules/align.md
-        - dge2sdge: walkthrough/rules/dge2sdge.md
-        - sdge_visual: walkthrough/rules/sdge_visual.md
+        - fastq2sbcd: fulldoc/rules/fastq2sbcd.md 
+        - sbcd2chip : fulldoc/rules/sbcd2chip.md
+        - smatch : fulldoc/rules/smatch.md
+        - align: fulldoc/rules/align.md
+        - dge2sdge: fulldoc/rules/dge2sdge.md
+        - sdge_visual: fulldoc/rules/sdge_visual.md
       - Plus Rules:
-        - historef: walkthrough/rules/historef.md
-        - sdge2sdgeAR: walkthrough/rules/sdge2sdgeAR.md
-        - sdgeAR_reformat: walkthrough/rules/sdgeAR_reformat.md
-        - sdgeAR_segment: walkthrough/rules/sdgeAR_segment.md
+        - historef: fulldoc/rules/historef.md
+        - sdge2sdgeAR: fulldoc/rules/sdge2sdgeAR.md
+        - sdgeAR_reformat: fulldoc/rules/sdgeAR_reformat.md
+        - sdgeAR_minmax: fulldoc/rules/sdgeAR_minmax.md
+        - sdgeAR_featurefilter: fulldoc/rules/sdgeAR_featurefilter.md
+        - sdgeAR_polygonfilter: fulldoc/rules/sdgeAR_polygonfilter.md
+        - sdgeAR_segment_10x: fulldoc/rules/sdgeAR_segment_10x.md
+        - sdgeAR_segment_ficture: fulldoc/rules/sdgeAR_segment_ficture.md
 
 # Markdown Extensions
 markdown_extensions:

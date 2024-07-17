@@ -4,16 +4,14 @@ from collections import defaultdict
 
 novascope_scripts = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(novascope_scripts)
-from bricks import check_input, check_path, create_dict, get_last5_from_md5, create_symlink, log_dataframe
-from bricks import log_info
+from bricks import check_input, check_path, create_dict, get_last5_from_md5, create_symlink, create_dirs_and_get_paths
+from bricks import log_info, log_dataframe
 
 def read_config_for_ini(config, job_dir, smk_dir, silent=False):
     log_info(f"1. Reading input:", silent)
     log_info(f" - Current job path: {job_dir}")
-
     # config: job
     log_info(f" - Job configuration file: {job_dir}/config_job.yaml", silent)
-
     # config: env
     env_input = config.get("env_yml", os.path.join(smk_dir, "info", "config_env.yaml"))
     if isinstance(env_input, dict):
@@ -22,24 +20,19 @@ def read_config_for_ini(config, job_dir, smk_dir, silent=False):
         env_input_val = env_input
     else:
         raise ValueError("Please provide a valid env config file.")
-
     env_configfile = check_path(env_input_val, job_dir, strict_mode=True, flag="The environment config file")
     env_config = yaml.safe_load(open(env_configfile))
     log_info(f" - Environment configuration file: {env_configfile}", silent)
-
-    # - envmodules
+    #   - envmodules
     module_config = env_config.get("envmodules", None)
     log_info(f" - Environment modules: {module_config}", silent)
-
-    # - python env
+    #   - python env
     pyenv  = env_config.get("pyenv", None)
     assert pyenv is not None, "Please provide a valid python environment."
     assert os.path.exists(pyenv), f"Python environment does not exist: {pyenv}"
-
     python = os.path.join(pyenv, "bin", "python")
     assert os.path.exists(python), f"Python does not exist in your python environment: {python}"
     log_info(f" - Python environment: {pyenv}", silent)
-
     return env_config, module_config, python, pyenv
 
 def read_config_for_seq1(config, job_dir, main_dirs, silent=False):
@@ -197,6 +190,7 @@ def read_config_for_sgevisual(config, env_config, smk_dir, run_id, silent=False)
 
     # return
     return sgevisual_id2params, rid2sgevisual_id
+
 #================================================================================================
 
 # downstream
@@ -216,43 +210,46 @@ def add_or_expand_column(df, col_name, default_value):
     return df
 
 def add_default_for_char(df_char, col_w_defval):
-    #df_char["run_id"] = run_id
-    #df_char["unit_id"] = unit_id
     for col_name, default_value in col_w_defval.items():
         df_char = add_or_expand_column(df_char, col_name, default_value)
     return df_char
 
-def read_config_for_segment(config, run_id, unit_id, silent=False):
-    # segment_char_info
-    segment_char_info= config.get("downstream", {}).get("segment",{}).get("char", None)
-    if segment_char_info is not None:
-        df_segment_char = pd.DataFrame(segment_char_info)
-        segment_defvals={
+def define_segchar_df(info, run_id, unit_id, format):
+    if format == "ficture":
+        sge_qc_def=True
+    elif format == "10x":
+        sge_qc_def=False
+
+    seg_defvals={
             "solo_feature": "gn",
             "hexagon_width": 24,
-            "segment_move": 1
-        }
-        df_segment_char["run_id"] = run_id 
-        df_segment_char["unit_id"] = unit_id
-        df_segment_char = add_default_for_char(df_segment_char, segment_defvals)
+            "quality_control": sge_qc_def
+    }
+
+    if info is not None:
+        df_char = pd.DataFrame(info)
+        df_char["run_id"] = run_id
+        df_char["unit_id"] = unit_id
+        df_char = add_default_for_char(df_char, seg_defvals)
     else:
-        df_segment_char = pd.DataFrame({
+        df_char = pd.DataFrame({
             "run_id": [run_id],
             "unit_id": [unit_id],
             "solo_feature": ["gn"],
             "hexagon_width": [24],
-            "segment_move": [1],
+            "quality_control": [sge_qc_def]
         })
-    
-    # mu_scale
-    mu_scale = config.get("downstream", {}).get("mu_scale", 1000)
-    log_info(f" - Downstream: ", silent)
-    log_info(f"   - mu scale: {mu_scale}", silent)
+    df_char["sge_qc"] = df_char["quality_control"].apply(lambda x: "filtered" if x else "raw")
+    df_char = df_char.drop(columns=["quality_control"])
+    return df_char
+
+def read_config_for_segment(config, run_id, unit_id, format, silent=False):
+    seg_info = config.get("downstream", {}).get("segment",{}).get(format, {}).get("char", None)
+    df_segchar = define_segchar_df(seg_info, run_id, unit_id, format)
+    df_segchar = df_segchar[["run_id", "unit_id", "solo_feature", "sge_qc", "hexagon_width"]]
     if not silent:
-        log_dataframe(df_segment_char, log_message="   - segment parameters: ", indentation="     ")
-
-    return df_segment_char, mu_scale
-
+        log_dataframe(df_segchar, log_message=f"   - segment parameters ({format}): ", indentation="     ")
+    return df_segchar
 
 #================================================================================================
 
@@ -263,10 +260,10 @@ def read_config_for_hist(config, job_dir, main_dirs, silent=False):
     log_info(f" - Histology file: Loading", silent)
     hist_info = config.get("input",{}).get("histology", None)
     if hist_info is None:
-        raise ValueError("Please provide a valid histology file when requesting 'hist-per-run' or 'cart-per-hist'...")
+        raise ValueError("Please provide a valid histology file when requesting 'histology-per-run' or 'cart-per-hist'...")
     df_hist = pd.DataFrame(hist_info)
     if df_hist["path"].isnull().any():
-        raise ValueError("Please provide a valid histology file when requesting 'hist-per-run' or 'cart-per-hist'...")
+        raise ValueError("Please provide a valid histology file when requesting 'histology-per-run' or 'cart-per-hist'...")
     # add prefix
     df_hist["flowcell"]      = config["input"]["flowcell"]
     df_hist["flowcell_abbr"] = df_hist["flowcell"].apply(lambda x: x.split("-")[0])

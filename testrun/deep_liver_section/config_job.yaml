@@ -1,4 +1,4 @@
-## See more details for each parameter at https://github.com/seqscope/NovaScope/blob/main/docs/getting_started/job_config.md
+## See more details for each parameter at https://github.com/seqscope/NovaScope/blob/main/docs/basic_usage/job_config.md
 ## IMPORTANT TODO: DOWNLOAD THE SHALLOW INPUT DATA from https://doi.org/10.5281/zenodo.10835761
 ##                 DOWNLOAD ADDITIONAL FASTQ FILES from http://deepblue.lib.umich.edu/data/concern/data_sets/2227mq44w
 ## IMPORTANT TODO: REPLACE THE FOLLOWING VARIABLES BEFORE USE

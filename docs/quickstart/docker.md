@@ -63,4 +63,4 @@ docker run -it --rm -v /path/to/working/dir:/data hyunminkang/novascope \
 
 The pipeline will generate the output files in the `/path/to/working/dir/output` directory, typically in 10 minutes.
 
-To run NovaScope with different datasets, you will need to modify the [Configuration File](https://github.com/seqscope/NovaScope/blob/main/testrun/minimal_test_run/config_job_docker.yaml) yourself and specify it as `--configfile` argument in the command. See detailed instructions in the [Job Configuration](../getting_started/job_config.md) section.
+To run NovaScope with different datasets, you will need to modify the [Configuration File](https://github.com/seqscope/NovaScope/blob/main/testrun/minimal_test_run/config_job_docker.yaml) yourself and specify it as `--configfile` argument in the command. See detailed instructions in the [Job Configuration](../basic_usage/job_config.md) section.
