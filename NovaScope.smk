@@ -162,13 +162,12 @@ if any(task in request for task in["filterpoly-per-unit", "segment-10x-per-unit"
     logging.info(f" - Downstream Segmentation:")
     mu_scale = config.get("downstream", {}).get("mu_scale", 1000)
     logging.info(f"   - mu scale: {mu_scale}")
-    # segment info (multiple pairs)
 else:
     logging.info(f" - Downstream Segmentation: Skipping")
 
-df_seg10x = read_config_for_segment(config, run_id, unit_id, "10x", silent=False) if "segment-10x-per-unit" in request else df_seg_void
-df_segfict = read_config_for_segment(config, run_id, unit_id, "ficture", silent=False) if "segment-ficture-per-unit" in request else df_seg_void
-df_seg = pd.concat([df_seg10x, df_segfict], ignore_index=True).drop_duplicates() 
+df_seg10x = read_config_for_segment(config, run_id, unit_id, "10x", silent=False) if any(task in request for task in ["filterpoly-per-unit", "segment-10x-per-unit"]) else df_seg_void
+df_segfict = read_config_for_segment(config, run_id, unit_id, "ficture", silent=False) if any(task in request for task in ["filterpoly-per-unit", "segment-ficture-per-unit"]) else df_seg_void
+df_seg = pd.concat([df_seg10x, df_segfict], ignore_index=True).drop_duplicates()
 
 #==============================================
 #
@@ -195,7 +194,7 @@ output_filename_conditions = [
     outfn_hist_per_run(main_dirs, df_hist),
     outfn_trans_per_unit(main_dirs, df_run),
     outfn_filterftr_per_unit(main_dirs, df_run),
-    outfn_filterpoly_per_unit(main_dirs, df_segfict),
+    outfn_filterpoly_per_unit(main_dirs, df_seg),
     outfn_segfict_per_unit(main_dirs, df_segfict),
     outfn_seg10x_per_unit(main_dirs, df_seg10x),
 ]
@@ -231,11 +230,11 @@ if "histology-per-run" in request:
 if any(task in request for task in ["transcript-per-unit", "filterftr-per-unit", "filterpoly-per-unit", "segment-10x-per-unit", "segment-ficture-per-unit"]):
     include: "rules/c01_sdge2sdgeAR.smk"
     include: "rules/c02_sdgeAR_reformat.smk"
-
-if any(task in request for task in ["filterftr-per-unit", "filterpoly-per-unit", "segment-10x-per-unit", "segment-ficture-per-unit"]):
-    include: "rules/c03_sdgeAR_polygonfilter.smk"
-    include: "rules/c03_sdgeAR_featurefilter.smk"
     include: "rules/c03_sdgeAR_minmax.smk"
+    include: "rules/c03_sdgeAR_featurefilter.smk"
+
+if any(task in request for task in [ "filterpoly-per-unit", "segment-10x-per-unit", "segment-ficture-per-unit"]):
+    include: "rules/c03_sdgeAR_polygonfilter.smk"
 
 if "segment-10x-per-unit" in request:
     include: "rules/c04_sdgeAR_segment_10x.smk"

@@ -68,5 +68,5 @@ Each `request` option triggers a specific set of rules. Thus, below provides a r
 ### `"segment-ficture-per-unit"`
 * **Rule Graph**:
 <figure markdown="span">
-![rg_sge](../../images/rulegraphs/rulegraph_segment_10x_per_unit.png){ width="100%" }
+![rg_sge](../../images/rulegraphs/rulegraph_segment_ficture_per_unit.png){ width="100%" }
 </figure>

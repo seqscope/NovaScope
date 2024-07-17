@@ -82,6 +82,7 @@ nav:
         - historef: fulldoc/rules/historef.md
         - sdge2sdgeAR: fulldoc/rules/sdge2sdgeAR.md
         - sdgeAR_reformat: fulldoc/rules/sdgeAR_reformat.md
+        - sdgeAR_minmax: fulldoc/rules/sdgeAR_minmax.md
         - sdgeAR_featurefilter: fulldoc/rules/sdgeAR_featurefilter.md
         - sdgeAR_polygonfilter: fulldoc/rules/sdgeAR_polygonfilter.md
         - sdgeAR_segment_10x: fulldoc/rules/sdgeAR_segment_10x.md
