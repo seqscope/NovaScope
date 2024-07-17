@@ -48,8 +48,7 @@ rule c04_sdgeAR_segment_10x:
             --hex_width {params.hexagon_width} \
             --n_move {params.hex_n_move} \
             --min_ct_per_unit {params.min_pixel_per_unit} \
-            --transfer_gene_prefix \
-            {boundary_args}
+            --transfer_gene_prefix {boundary_args}
 
         """
         )

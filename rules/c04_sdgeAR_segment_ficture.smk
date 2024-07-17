@@ -47,9 +47,8 @@ rule c04_sdgeAR_segment_ficture:
             --min_density_per_unit {params.min_density} \
             --n_move {params.hex_n_move} \
             --precision {params.precision} \
-            --major_axis {major_axis} \
-            {boundary_args}
-
+            --major_axis {major_axis} {boundary_args}
+            
         ## Shuffle hexagon
         sort -S 10G -k1,1n {hexagon_unzip} | gzip -c > {output.hexagon}  
 
