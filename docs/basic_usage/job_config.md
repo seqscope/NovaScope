@@ -149,14 +149,14 @@ env_yml: <path_to_config_env.yaml_file>         ## If absent, NovaScope use the 
 #      min_pixel_per_unit: 10                   
 #      char:                                    ## specify the characteristics for hexagon segmentation
 #        - solo_feature: gn                     
-#          hexagon_width: 18                   
+#          hexagon_width: 24                   
 #          quality_control: FALSE               
 #      # - ...                                  ## if more than 1 set of hexagon is needed 
 #    ficture:                                   ## specify the characteristics for hexagon in FICTURE-compatible format    
 #      min_density: 0.3                         
 #      char:
 #        - solo_feature: gn
-#          hexagon_width: 18
+#          hexagon_width: 24
 #          quality_control: TRUE                
 #      # - ...                                  ## if more than 1 set of hexagon is needed 
 ```
@@ -214,9 +214,6 @@ The pipeline interprets the requested output files via the `request` field and d
 
 ##### Main Request 
 Below are request options for NovaScope's [main functionalities](../home/workflow_structure.md#main-workflow), alongside their final output and links to detailed output information. 
-
-For more insights into the excution flow, please consult the [execution flow by request](../fulldoc/execution_guide/rule_execution.md) alongside the [rulegraph](https://seqscope.github.io/NovaScope/#an-overview-of-the-workflow-structure). 
-
 
 | Option              | Final Output Files                                                                                 | Details      |
 |---------------------|----------------------------------------------------------------------------------------------------|--------------|

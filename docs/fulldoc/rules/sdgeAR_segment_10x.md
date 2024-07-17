@@ -82,7 +82,7 @@ downstream:
      min_pixel_per_unit: 10                   ## specify a minimum UMI count of hexagons
      char:                                    ## specify the characteristics for hexagon segmentation, including genomic feature, hexagon size and SGE filtering
        - solo_feature: gn                     ## genomic feature
-         hexagon_width: 18                    ## hexagonal grid width
+         hexagon_width: 24                    ## hexagonal grid width
          quality_control: FALSE               ## if both gene-filtering and polygon-filtering should be applied
      # - ...                                  ## if more than 1 set of hexagon is needed ```
 ```
