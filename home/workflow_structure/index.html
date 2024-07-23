@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#main-workflow" class="md-skip">
+        <a href="#novascope-workflows" class="md-skip">
           Skip to content
         </a>
       
@@ -468,6 +468,8 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
           
@@ -495,6 +497,8 @@
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
+  
+    
   
   
     <label class="md-nav__title" for="__toc">
@@ -1596,6 +1600,8 @@
   
   
   
+    
+  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -1639,13 +1645,16 @@
   
 
 
-  <h1>Workflow Structure</h1>
-
-<p>Below is the description of the <strong>main</strong> and <strong>plus</strong> workflows of <a href="../../">NovaScope</a> using rule graphs. </p>
+<h1 id="novascope-workflows">NovaScope Workflows<a class="headerlink" href="#novascope-workflows" title="Permanent link">&para;</a></h1>
+<p>Below is the description of the <strong>main</strong> and <strong>plus</strong> workflows of <a href="../../">NovaScope</a> using rule graphs.</p>
 <p>For further details on the rules, their execution, and the workflow's structure, please refer to the <a href="../../fulldoc/intro/">NovaScope Full Documentation</a>.</p>
 <details class="note">
-<summary>What is a "workflow" and a "rule"?</summary>
-<p>In Snakemake, a workflow is a series of steps designed to process data, defined by rules. Each rule specifies a particular task, such as aligning sequences, filtering data, or converting file formats. Rules are interdependent tasks within a workflow, ensuring tasks are executed in the correct sequence. Below, rule graphs show the dependencies in the main and plus workflows.</p>
+<summary>What is a 'workflow' and a 'rule'?</summary>
+<p>In Snakemake, a workflow is a series of steps for processing data, defined by rules. Each <a href="../../fulldoc/execution_guide/core_concepts/#rule">rule</a> specifies a task that transforms input files into output files, such as aligning sequences or filtering data. A rule file details the required inputs, resulting outputs, and necessary actions.</p>
+</details>
+<details class="note">
+<summary>What are 'rule dependencies' and a 'rule graph'?</summary>
+<p>Rule dependencies, determined by input and output files, ensure tasks are executed in the correct sequence within a workflow. Below, we use <a href="../../fulldoc/execution_guide/core_concepts/#rulegraph">rule graphs</a> illustrate these dependencies in the main and plus workflows, showing how tasks are interconnected and the order of execution.</p>
 </details>
 <h2 id="main-workflow">Main Workflow<a class="headerlink" href="#main-workflow" title="Permanent link">&para;</a></h2>
 <p>For the <strong>main function</strong> of NovaScope, the mapping of each step to its specific rule is as follows:</p>
@@ -1662,18 +1671,18 @@
 </figure>
 <p><strong>Figure 1: Main workflow rule graph.</strong> Each node represents a specific rule in the Snakemake workflow, and arrows indicate dependencies, pointing from prerequisite to dependent rules. Prerequisite rules must be completed before the dependent rule can commence.</p>
 <h2 id="plus-workflow">Plus Workflow<a class="headerlink" href="#plus-workflow" title="Permanent link">&para;</a></h2>
-<p>In addition to the main functions, NovaScope offers <strong>additional capabilities</strong> as below:</p>
+<p>In addition to the main functions, NovaScope offers <strong>additional capabilities</strong> as outlined below:</p>
 <ol>
 <li>Histology alignment (Rule <code>b02_historef</code>)</li>
 <li>SGE matrix filtering by gene type, gene name, UMI count, or UMI density (Rules <code>c03_sdgeAR_featurefilter</code> and <code>c03_sdge_polygonfilter</code>)</li>
-<li>SGE matrix reformatting from 10x genomics format to a TSV format compatible with FICTURE (Rule <code>c02_sdgeAR_reformat</code>)</li>
-<li>SGE matrix segmentation from transcript-indexed SGE to hexagon-indexed SGE in 10x genomics or FICTURE-compatible TSV format (Rules <code>c04_sdgeAR_segment_10x</code> and <code>c04_sdgeAR_segment_ficture</code>)</li>
+<li>SGE matrix reformatting from 10x Genomics format to a TSV format compatible with FICTURE (Rule <code>c02_sdgeAR_reformat</code>)</li>
+<li>SGE matrix segmentation from transcript-indexed SGE to hexagon-indexed SGE in 10x Genomics or FICTURE-compatible TSV format (Rules <code>c04_sdgeAR_segment_10x</code> and <code>c04_sdgeAR_segment_ficture</code>)</li>
 </ol>
-<p>The plus workflow, detailing both main and additional rules and their interdependencies, is depicted below. </p>
+<p>The plus workflow, detailing both main and additional rules and their interdependencies, is depicted below.</p>
 <figure>
 <img alt="rulegraph" src="../../images/rulegraphs/rulegraph_plus.png" width="70%" />
 </figure>
-<p><strong>Figure 2: Plus workflow rule graph.</strong> The prerequisite rules for <code>sdgeAR_segment_10x</code> and <code>sdgeAR_segment_ficture</code> vary based on the need for SGE matrix filtering. This example workflow shows a job requests a filtered hexagon-indexed SGE in FICTURE-compatible format, but a raw hexagon-indexed SGE in 10x Genomics format. See more details in the <a href="../../fulldoc/execution_guide/rule_execution/#segment-10x-per-unit">Execution Flow by Request</a>.</p>
+<p><strong>Figure 2: Plus workflow rule graph.</strong> The prerequisite rules for <code>sdgeAR_segment_10x</code> and <code>sdgeAR_segment_ficture</code> vary based on the need for SGE matrix filtering. This example workflow shows a job requesting a filtered hexagon-indexed SGE in FICTURE-compatible format, but a raw hexagon-indexed SGE in 10x Genomics format. See more details in the <a href="../../fulldoc/execution_guide/rule_execution/#segment-10x-per-unit">Execution Flow by Request</a>.</p>
 
 
 

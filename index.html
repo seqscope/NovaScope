@@ -1578,9 +1578,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#an-overview" class="md-nav__link">
+  <a href="#overview" class="md-nav__link">
     <span class="md-ellipsis">
-      An Overview
+      Overview
     </span>
   </a>
   
@@ -1618,28 +1618,35 @@
   
 
 
-<h1 id="welcome-to-novascope-documentation">Welcome to NovaScope documentation<a class="headerlink" href="#welcome-to-novascope-documentation" title="Permanent link">&para;</a></h1>
+<h1 id="welcome-to-novascope-documentation">Welcome to NovaScope Documentation<a class="headerlink" href="#welcome-to-novascope-documentation" title="Permanent link">&para;</a></h1>
 <h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
-<p>NovaScope is a <a href="https://snakemake.readthedocs.io/en/stable/">Snakemake</a>-based pipeline that processes spatial transcriptomics data generated from the <a href="https://doi.org/10.1016/j.cell.2021.05.010">Seq-Scope</a>. Currently, it is  specifically tailored for spatial arrays generated from the Illumina <a href="https://www.illumina.com/systems/sequencing-platforms/novaseq.html">NovaSeq 6000</a> platform. </p>
+<p>NovaScope is a <a href="https://snakemake.readthedocs.io/en/stable/">Snakemake</a>-based pipeline designed to process spatial transcriptomics data generated from <a href="https://doi.org/10.1016/j.cell.2021.05.010">Seq-Scope</a>. It is specifically tailored for spatial arrays produced by the Illumina <a href="https://www.illumina.com/systems/sequencing-platforms/novaseq.html">NovaSeq 6000</a> platform.</p>
 <h3 id="functionality">Functionality<a class="headerlink" href="#functionality" title="Permanent link">&para;</a></h3>
-<p>The <strong>main purpose</strong> of NovaScope is to process the Seq-Scope sequencing data from scratch to a spatial digital gene expression (SGE) matrix  compatible with variaous single cell and spatial analysis methods.</p>
-<p>Additionaly, it provides <strong>plus functionalities</strong>, including histology alignment with SGE matrix, SGE filtering, SGE segment, and SGE reformatting. See more details about the main and plus functionalities in the <a href="home/workflow_structure/">WorkFlow Structure</a>.</p>
+<p>The <strong>main purpose</strong> of NovaScope is to process Seq-Scope sequencing data from scratch to a spatial digital gene expression (SGE) matrix compatible with various single-cell and spatial analysis methods.</p>
+<p>Additionally, it provides <strong>additional functionalities</strong>, including histology alignment with the SGE matrix, SGE filtering, SGE segmentation, and SGE reformatting. For more details about the main and additional functionalities, please refer to the <a href="home/workflow_structure/">Workflow Structure</a>.</p>
 <h3 id="characteristics">Characteristics<a class="headerlink" href="#characteristics" title="Permanent link">&para;</a></h3>
-<p>NovaScope features a modular and adaptable design, allowing users to tailor the pipeline according to their particular requirements. The use of Snakemake ensures streamlined workflow management, reproducibility, and scalability.</p>
-<p>Additionally, NovaScope is designed to operate on Unix-based high-performance computing (HPC) platforms. It provides flexibility in deployment, allowing execution directly on local systems or through the <a href="https://slurm.schedmd.com/documentation.html">SLURM</a> workload manager.</p>
-<h3 id="an-overview">An Overview<a class="headerlink" href="#an-overview" title="Permanent link">&para;</a></h3>
-<p>NovaScope primarily consists of two steps as shown in the figure below.</p>
+<p>NovaScope features a modular and adaptable design, allowing users to tailor the pipeline to their specific requirements. The use of Snakemake ensures streamlined workflow management, reproducibility, and scalability.</p>
+<p>NovaScope is designed to operate on Unix-based high-performance computing (HPC) platforms. It provides flexibility in deployment, allowing execution directly on local systems or through the <a href="https://slurm.schedmd.com/documentation.html">SLURM</a> workload manager.</p>
+<h3 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h3>
+<p>NovaScope primarily consists of two steps, as illustrated in the figure below.</p>
 <figure>
-<img alt="Novascope Overview" src="images/novascope_overview.png" width="100%" />
+<img alt="NovaScope Overview" src="images/novascope_overview.png" width="100%" />
 </figure>
 <p><strong>Figure 1: Overview of the NovaScope pipeline:</strong> Step 1 processes the 1st-seq FASTQ files to generate spatial barcode maps for each "Chip", a 10x6 array of tiles. Step 2 processes the 2nd-seq FASTQ files, aligns reads to the reference genome, and produces spatial gene expression at submicron resolution.</p>
 <h3 id="links">Links<a class="headerlink" href="#links" title="Permanent link">&para;</a></h3>
 <ul>
 <li>
-<p>The Preprint for NovaScope: <a href="https://www.biorxiv.org/content/10.1101/2024.03.29.587285v1">DOI: 10.1101/2024.03.29.587285</a>.</p>
+<p>The preprint for NovaScope: <a href="https://www.biorxiv.org/content/10.1101/2024.03.29.587285v1">DOI: 10.1101/2024.03.29.587285</a>.</p>
 </li>
 <li>
 <p>An exemplary downstream analysis to analyze the SGE matrix generated by NovaScope is provided at <a href="https://github.com/seqscope/NovaScope-exemplary-downstream-analysis">NovaScope-exemplary-downstream-analysis</a>.</p>
+</li>
+<li>
+<p>Integrated Tools: NovaScope leverages several other tools from our lab to provide its full functionality. Please refer to the links below for more information on these integrated tools:</p>
+<ul>
+<li><a href="https://seqscope.github.io/spatula/">spatula</a></li>
+<li><a href="https://seqscope.github.io/ficture/">FICTURE</a></li>
+</ul>
 </li>
 </ul>
 

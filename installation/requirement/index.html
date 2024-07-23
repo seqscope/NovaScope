@@ -1796,7 +1796,7 @@
 
 
 <h1 id="installing-novascope">Installing NovaScope<a class="headerlink" href="#installing-novascope" title="Permanent link">&para;</a></h1>
-<p>This document provides instructions on how to install the necessary software tools and obtain reference datasets.</p>
+<p>This document provides instructions on how to install the necessary software tools and how to obtain reference datasets.</p>
 <h2 id="installing-snakemake">Installing Snakemake<a class="headerlink" href="#installing-snakemake" title="Permanent link">&para;</a></h2>
 <p><a href="https://snakemake.readthedocs.io/en/stable/">Snakemake</a> orchestrates the workflow of <a href="../../">NovaScope</a> pipeline.</p>
 <div class="admonition info">
@@ -1819,7 +1819,7 @@ module<span class="w"> </span>avail<span class="w"> </span>snakemake
 module<span class="w"> </span>load<span class="w"> </span>snakemake
 </code></pre></div></td></tr></table></div>
 <h3 id="installing-snakemake-using-conda-and-mamba">Installing Snakemake Using Conda and Mamba<a class="headerlink" href="#installing-snakemake-using-conda-and-mamba" title="Permanent link">&para;</a></h3>
-<p>If you need to install <a href="https://snakemake.readthedocs.io/en/stable/">Snakemake</a>, below is a simplified sequence of instruction. Please refer to <a href="https://snakemake.readthedocs.io/en/stable/basic_usage/installation.html">official Snakemake documentation</a> for more detailed instructions.</p>
+<p>If you need to install <a href="https://snakemake.readthedocs.io/en/stable/">Snakemake</a>, below is a simplified sequence of instruction. Please refer to <a href="https://snakemake.readthedocs.io/en/stable/basic_usage/installation.html">official Snakemake documentation</a> for detailed instructions.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>It is recommended to install <a href="https://snakemake.readthedocs.io/en/stable/">Snakemake</a> using <a href="https://docs.conda.io/en/latest/">conda</a> and/or <a href="https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html">mamba</a>. </p>
@@ -1966,12 +1966,12 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 git<span class="w"> </span>submodule<span class="w"> </span>update<span class="w"> </span>--init
 </code></pre></div></td></tr></table></div>
 <h2 id="preparing-reference-genomes">Preparing Reference Genomes<a class="headerlink" href="#preparing-reference-genomes" title="Permanent link">&para;</a></h2>
-<p>The reference genome for the species of interest must be downloaded and indexed for alignment. <a href="https://github.com/alexdobin/STAR">STARsolo</a> accepts the reference genomes prepared by <a href="https://www.10xgenomics.com/support/software/cell-ranger">cellranger</a>. Therefore, one of the simplest ways is to download the reference genome from the <a href="https://www.10xgenomics.com/support/software/cell-ranger/downloads">cellranger download</a> page.</p>
-<p>Given STAR index packaged by the <a href="https://www.10xgenomics.com/support/software/cell-ranger/downloads">cellranger download</a> is outdated and will not be compatible with the latest version of STARsolo, we recommend indexing it using the latest version of STARsolo. For human and mouse, we provided examples below to prepare the reference genome. For other species, please follow the instructions provided by <a href="https://www.10xgenomics.com/support/software/cell-ranger/downloads">cellranger</a> or <a href="https://github.com/alexdobin/STAR">STARsolo</a> to prepare the reference genome. </p>
-<p>Please note that this indexing process will take A LOT OF TIME, typically a few to several hours.</p>
+<p>To align sequences, download and index the reference genome for your species. <a href="https://github.com/alexdobin/STAR">STARsolo</a> accepts reference genomes prepared by <a href="https://www.10xgenomics.com/support/software/cell-ranger">cellranger</a>. One of the easiest ways is to download the genome from the <a href="https://www.10xgenomics.com/support/software/cell-ranger/downloads">cellranger download page</a>.</p>
+<p>However, the STAR index from cellranger may be outdated and incompatible with the latest STARsolo version. We recommend indexing it using the latest STARsolo. For human and mouse, see the examples below. For other species, follow the instructions from <a href="https://www.10xgenomics.com/support/software/cell-ranger/downloads">cellranger</a> or <a href="https://github.com/alexdobin/STAR">STARsolo</a>.</p>
+<p>Note: This indexing process takes several hours.</p>
 <details class="mouse" open="open">
 <summary>Mouse</summary>
-<p>The recommended reference genome for mouse is GRCm39. </p>
+<p>The recommended reference genome for mouse is GRCm39.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>

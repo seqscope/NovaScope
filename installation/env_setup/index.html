@@ -806,9 +806,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-reference-gene-list-directories-for-visualizing-spatial-expression-patterns" class="md-nav__link">
+  <a href="#2-reference-gene-list-files-for-spatial-expression-visualization" class="md-nav__link">
     <span class="md-ellipsis">
-      (2) Reference Gene List Directories for Visualizing Spatial Expression Patterns
+      (2) Reference Gene List Files for Spatial Expression Visualization
     </span>
   </a>
   
@@ -1707,9 +1707,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-reference-gene-list-directories-for-visualizing-spatial-expression-patterns" class="md-nav__link">
+  <a href="#2-reference-gene-list-files-for-spatial-expression-visualization" class="md-nav__link">
     <span class="md-ellipsis">
-      (2) Reference Gene List Directories for Visualizing Spatial Expression Patterns
+      (2) Reference Gene List Files for Spatial Expression Visualization
     </span>
   </a>
   
@@ -1766,14 +1766,14 @@
 
 
 <h1 id="setting-up-a-environment-yaml-file">Setting Up a Environment YAML File<a class="headerlink" href="#setting-up-a-environment-yaml-file" title="Permanent link">&para;</a></h1>
-<p><a href="../../">NovaScope</a> requires a YAML file to configure the environment. This environment configuration file (e.g., <code>config_env.yaml</code>) is used to specify the paths to the required tools, reference databases, and Python environment. </p>
+<p><a href="../../">NovaScope</a> requires a YAML file to configure the environment. This file (e.g., <code>config_env.yaml</code>) specifies paths to tools, reference databases, and the Python environment.</p>
 <p>Below is a brief description of all the items in the YAML file.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>To create your own <code>config_env.yaml</code> file for the environment setup, you may copy from <a href="https://github.com/seqscope/NovaScope/blob/main/info/config_env.yaml">our example available in our GitHub repository</a>. Remember to replace the placeholders with your specific input variables to customize it according to your needs.</p>
 </div>
 <h2 id="tools">Tools<a class="headerlink" href="#tools" title="Permanent link">&para;</a></h2>
-<p>The pipeline automatically detects and includes undefined tools in the system path, allowing for their use without manual configuration. </p>
+<p>The pipeline detects and includes undefined tools in the system path automatically.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
@@ -1816,21 +1816,23 @@
 </details>
 <details class="note">
 <summary><code>samtools</code></summary>
-<p>Using <code>envmodules</code> to load <code>samtools</code> can be an alternative to specifying its path in <a href="#tools"><code>tools</code></a>. The given example is designed for instances where <code>samtools</code> is integrated into the <code>Bioinformatics</code> module system, which necessitates loading the <code>Bioinformatics</code> module prior to loading <code>samtools</code>. In this case, provide all modules that required to be loaded in the correct order, joint by <code>&amp;&amp;</code>.</p>
+<p>Using <code>envmodules</code> to load <code>samtools</code> can be an alternative to specifying its path in <a href="#tools"><code>tools</code></a>. </p>
+<p>The given example is designed for instances where <code>samtools</code> is integrated into the <code>Bioinformatics</code> module system, which necessitates loading the <code>Bioinformatics</code> module prior to loading <code>samtools</code>. In this case, provide all modules that required to be loaded in the correct order, joint by <code>&amp;&amp;</code>.</p>
 </details>
 <h2 id="reference-databases">Reference Databases<a class="headerlink" href="#reference-databases" title="Permanent link">&para;</a></h2>
 <p>Define all necessary reference databases for the input species in the <code>ref</code> field.</p>
 <h3 id="1-reference-genome-index-for-alignment">(1) Reference Genome Index for Alignment<a class="headerlink" href="#1-reference-genome-index-for-alignment" title="Permanent link">&para;</a></h3>
-<p>Specify the reference genome index for alignment with the <code>align</code> parameter. Reference genome indices can be accessed via the <a href="https://www.10xgenomics.com/support/software/cell-ranger/downloads">cellranger download</a> page. Users can also generate their own reference genome index; detailed instructions for building the STAR index from a reference file are provided in the <a href="../requirement/">Requirements</a> section.</p>
-<h3 id="2-reference-gene-list-directories-for-visualizing-spatial-expression-patterns">(2) Reference Gene List Directories for Visualizing Spatial Expression Patterns<a class="headerlink" href="#2-reference-gene-list-directories-for-visualizing-spatial-expression-patterns" title="Permanent link">&para;</a></h3>
-<p>The <code>genelists</code> parameter should point to the directory containing species-specific gene lists, which are crucial for visualizing spatial expression patterns in Rule <a href="../../fulldoc/rules/sdge_visual/">sdge_visual</a>. This directory must include files named <code>&lt;gene_group&gt;.genes.tsv</code> (e.g., <code>MT.genes.tsv</code>), with each file listing gene names line-by-line.</p>
-<p>NovaScope provides precompiled gene lists for <a href="https://github.com/seqscope/NovaScope/tree/main/info/genelists/mm39">mouse (version: mm39)</a> and <a href="https://github.com/seqscope/NovaScope/tree/main/info/genelists/hg38">human (version: hg38)</a>. If the <code>genelists</code> parameter is not specified in the <code>config_env.yaml</code>, NovaScope defaults to using these files. Alternatively, users may provide their own custom gene list files.</p>
+<p>Specify the alignment reference genome index in the <code>align</code> field. Reference genome indices can be accessed via the <a href="https://www.10xgenomics.com/support/software/cell-ranger/downloads">cellranger download</a> page. Users can also generate their own reference genome index. Detailed instructions for building the STAR index are provided in the <a href="../requirement/">Requirements</a> section.</p>
+<h3 id="2-reference-gene-list-files-for-spatial-expression-visualization">(2) Reference Gene List Files for Spatial Expression Visualization<a class="headerlink" href="#2-reference-gene-list-files-for-spatial-expression-visualization" title="Permanent link">&para;</a></h3>
+<p>The <code>genelists</code> field should point to the directory containing species-specific gene lists, which are crucial for visualizing spatial expression patterns in Rule <a href="../../fulldoc/rules/sdge_visual/">sdge_visual</a>. This directory must include files named <code>&lt;gene_group&gt;.genes.tsv</code> (e.g., <code>MT.genes.tsv</code>), with each file listing gene names line-by-line.</p>
+<p>NovaScope provides precompiled gene lists for <a href="https://github.com/seqscope/NovaScope/tree/main/info/genelists/mm39">mouse (version: mm39)</a> and <a href="https://github.com/seqscope/NovaScope/tree/main/info/genelists/hg38">human (version: hg38)</a>. If the <code>genelists</code> field is not specified in the <code>config_env.yaml</code>, NovaScope defaults to using these files. Alternatively, users may provide their own custom gene list files.</p>
 <h3 id="3-optional-reference-gene-information-for-gene-filtering">(3) (Optional) Reference Gene Information for Gene Filtering<a class="headerlink" href="#3-optional-reference-gene-information-for-gene-filtering" title="Permanent link">&para;</a></h3>
 <div class="admonition info">
 <p class="admonition-title">Info</p>
 <p>Gene information files are necessary only if additional functionalities of NovaScope are utilized.</p>
 </div>
-<p>The <code>geneinfo</code> parameter specifies the path of gene information files needed for gene filtering. NovaScope provides ready-to-use gene information files for <a href="https://github.com/seqscope/NovaScope/blob/dev/info/geneinfo/Mus_musculus.GRCm39.107.names.tsv.gz">mouse (version: mm39)</a>, <a href="https://github.com/seqscope/NovaScope/blob/dev/info/geneinfo/Homo_sapiens.GRCh38.107.names.tsv.gz">human (version: hg38)</a>, and <a href="https://github.com/seqscope/NovaScope/blob/dev/info/geneinfo/Gallus_gallus.GRCg6a.106.names.tsv.gz">chick (version: g6a)</a>. If <code>geneinfo</code> is absent, NovaScope uses these files from <a href="https://seqscope.github.io/ficture/">FICTURE</a>. </p>
+<p>The <code>geneinfo</code> field specifies the path of gene information files needed for gene filtering. </p>
+<p>NovaScope provides ready-to-use gene information files for <a href="https://github.com/seqscope/NovaScope/blob/dev/info/geneinfo/Mus_musculus.GRCm39.107.names.tsv.gz">mouse (version: mm39)</a>, <a href="https://github.com/seqscope/NovaScope/blob/dev/info/geneinfo/Homo_sapiens.GRCh38.107.names.tsv.gz">human (version: hg38)</a>, and <a href="https://github.com/seqscope/NovaScope/blob/dev/info/geneinfo/Gallus_gallus.GRCg6a.106.names.tsv.gz">chick (version: g6a)</a>. If <code>geneinfo</code> is absent, NovaScope uses these files from <a href="https://seqscope.github.io/ficture/">FICTURE</a>. </p>
 <p>Only under the following conditions, users need to prepare and specify a gene information file in the geneinfo: a. the input datasets are from species other than human or mouse; b. the version of the dataset is different from that of the precompiled files (human: hg38; mouse: mm39, chick: g6a).</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
