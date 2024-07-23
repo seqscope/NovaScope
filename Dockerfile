@@ -65,7 +65,7 @@ RUN git clone https://github.com/hyunminkang/qgenlib.git \
     && make
 
 # Install spatula
-RUN git clone -b dev https://github.com/seqscope/spatula.git
+RUN git clone https://github.com/seqscope/spatula.git
 RUN cd spatula \
     && mkdir build \
     && cd build \
