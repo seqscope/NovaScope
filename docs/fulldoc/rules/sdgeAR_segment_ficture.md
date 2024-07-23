@@ -5,8 +5,7 @@ The `sdgeAR_segment_ficture` transforms transcript-indexed SGEs into hexagon-ind
 
 ## Input Files
 * **A SGE matrix in a FICTURE-compatible Format and Correspondings Files**
-The necessary input files include a FICTURE-compatible SGE matrix and its corresponding meta file for X and Y coordinates. If the user requests 
-filtered hexagon-indexed SGE matrix (i.e., `quality_control` field in the [job configuration](../../basic_usage/job_config.md) file is `TRUE`), this rule uses the filtered SGE matrix and its meta file for coordinates from Rule [`sdgeAR_polygonfilter`](./sdgeAR_polygonfilter.md). Otherwise, it uses the raw SGE matrix created by Rule [`sdgeAR_reformat`](./sdgeAR_reformat.md) and its meta file for coordinates from Rule [`sdgeAR_minmax`](./sdgeAR_minmax.md). 
+The necessary input files include a FICTURE-compatible SGE matrix and its corresponding meta file for X and Y coordinates. If the user requests filtered hexagon-indexed SGE matrix (i.e., `quality_control` field in the [job configuration](../../basic_usage/job_config.md) file is `TRUE`), this rule uses the filtered SGE matrix and its meta file for coordinates from Rule [`sdgeAR_polygonfilter`](./sdgeAR_polygonfilter.md). Otherwise, it uses the raw SGE matrix created by Rule [`sdgeAR_reformat`](./sdgeAR_reformat.md) and its meta file for coordinates from Rule [`sdgeAR_minmax`](./sdgeAR_minmax.md). 
 
 * **(Optional) A Strict Boundary GEOJSON File**
 When segmenting a filtered SGE matrix, the strict boundary GEOJSON file from Rule [`sdgeAR_polygonfilter`](./sdgeAR_polygonfilter.md) will be applied.
@@ -22,7 +21,7 @@ The rule generates the following output in the specified directory path:
 
 ### (1) hexagon-indexed SGE
 
-**Description**: This output consists of an SGE formatted by segmenting pixels into hexagonal units. The size of the hexagons is defined by the user. The format of this SGE is compatible to FICTURE.
+**Description**: This output consists of an SGE formatted by segmenting pixels into hexagonal units. The size of the hexagons is defined by the user. This SGE is in TSV format compatible to FICTURE.
 
 **File Naming Convention**: 
 ```

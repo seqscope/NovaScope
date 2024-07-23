@@ -4,11 +4,11 @@
     We recommended to integrate SLURM scheduler with NovaScope, which can automate the process of submitting your jobs.
 
 !!! info
-    Please be aware that Snakemake introduced significant updates for cluster configuration starting from **version 8**. Thus, we advise checking to verify your Snakemake version using `snakemake --version`. 
+    Please be aware that Snakemake introduced significant updates for cluster configuration starting from **version 8**. Thus, we advise checking to verify your Snakemake version using `snakemake --version`.
 
 In NovaScope, we utilized a cluster configuration profile to define the details of the cluster and resources given its consistency and time-saving benefits. More details are provided below. Those files were crafted with inspiration from the [smk-simple-slurm](https://github.com/jdblischak/smk-simple-slurm) repository.
 
-## A Cluster Configuration file for Snakemake v7.29.0
+## A Cluster Configuration File for Snakemake v7.29.0
 
 Create a `config.yaml` with the following settings. Please substitute the placeholders, which are marked with `<>`, to suit your specific case. Please see our example file at [slurm/v7.29.0/config.yaml](https://github.com/seqscope/NovaScope/blob/main/info/slurm/v7.29.0/config.yaml). 
 
@@ -103,5 +103,5 @@ printshellcmds: <print_commands>            # replace <print_commands> with True
 software-deployment-method: conda
 ```
 
-## Additional functions
+## Additional Functions
 If you encounter situations where your jobs fail without any warnings, it is feasible to using a cluster status script to keep track of your jobs. See details [here](https://github.com/jdblischak/smk-simple-slurm/tree/main/extras).

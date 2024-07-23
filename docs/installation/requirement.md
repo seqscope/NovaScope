@@ -1,8 +1,8 @@
 # Installing NovaScope
 
-This document provides instructions on how to install the necessary software tools and obtain reference datasets.
+This document provides instructions on how to install the necessary software tools and how to obtain reference datasets.
 
-## Installing Snakemake 
+## Installing Snakemake
 
 [Snakemake](https://snakemake.readthedocs.io/en/stable/) orchestrates the workflow of [NovaScope](../index.md) pipeline.
 
@@ -30,7 +30,7 @@ module load snakemake
 
 ### Installing Snakemake Using Conda and Mamba
 
-If you need to install [Snakemake](https://snakemake.readthedocs.io/en/stable/), below is a simplified sequence of instruction. Please refer to [official Snakemake documentation](https://snakemake.readthedocs.io/en/stable/basic_usage/installation.html) for more detailed instructions.
+If you need to install [Snakemake](https://snakemake.readthedocs.io/en/stable/), below is a simplified sequence of instruction. Please refer to [official Snakemake documentation](https://snakemake.readthedocs.io/en/stable/basic_usage/installation.html) for detailed instructions.
 
 !!! tip
 
@@ -145,14 +145,14 @@ git submodule update --init
 
 ## Preparing Reference Genomes
 
-The reference genome for the species of interest must be downloaded and indexed for alignment. [STARsolo](https://github.com/alexdobin/STAR) accepts the reference genomes prepared by [cellranger](https://www.10xgenomics.com/support/software/cell-ranger). Therefore, one of the simplest ways is to download the reference genome from the [cellranger download](https://www.10xgenomics.com/support/software/cell-ranger/downloads) page.
+To align sequences, download and index the reference genome for your species. [STARsolo](https://github.com/alexdobin/STAR) accepts reference genomes prepared by [cellranger](https://www.10xgenomics.com/support/software/cell-ranger). One of the easiest ways is to download the genome from the [cellranger download page](https://www.10xgenomics.com/support/software/cell-ranger/downloads).
 
-Given STAR index packaged by the [cellranger download](https://www.10xgenomics.com/support/software/cell-ranger/downloads) is outdated and will not be compatible with the latest version of STARsolo, we recommend indexing it using the latest version of STARsolo. For human and mouse, we provided examples below to prepare the reference genome. For other species, please follow the instructions provided by [cellranger](https://www.10xgenomics.com/support/software/cell-ranger/downloads) or [STARsolo](https://github.com/alexdobin/STAR) to prepare the reference genome. 
+However, the STAR index from cellranger may be outdated and incompatible with the latest STARsolo version. We recommend indexing it using the latest STARsolo. For human and mouse, see the examples below. For other species, follow the instructions from [cellranger](https://www.10xgenomics.com/support/software/cell-ranger/downloads) or [STARsolo](https://github.com/alexdobin/STAR).
 
-Please note that this indexing process will take A LOT OF TIME, typically a few to several hours.
+Note: This indexing process takes several hours.
 
 ???+ Mouse
-	The recommended reference genome for mouse is GRCm39. 
+	The recommended reference genome for mouse is GRCm39.
 
 	```bash
 	## download the reference genome package

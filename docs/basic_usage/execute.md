@@ -10,6 +10,7 @@
     Additionally, you can create [a rule graph](../home/workflow_structure.md) that visually represents the structure of the workflow or a [Directed Acyclic Graph (DAG)](https://snakemake.readthedocs.io/en/stable/tutorial/basics.html#step-4-indexing-read-alignments-and-visualizing-the-dag-of-jobs) to view all jobs and their actual dependencies.
 
 Below provides commands for a dry-run and visualization.
+
 ```bash
 # paths
 smk_dir=/path/to/the/novascope/repository
@@ -32,7 +33,7 @@ snakemake --dag  -s $smk_dir/NovaScope.smk --rerun-incomplete -d $job_dir | dot 
 
 ## Execution Options
 
-Below we applied: 
+Below we applied:
 
 * `--rerun-incomplete` to enable the pipeline to re-run any jobs the output of which is identified as incomplete, 
 * `--latency-wait` to request the pipeline pauses for the defined time awaiting an output file if not instantly accessible after a job, compensating for filesystem delay.
@@ -61,7 +62,6 @@ See the following examples to see how to execute the pipeline locally:
 * [Minimal Test Run](https://github.com/seqscope/NovaScope/blob/main/testrun/minimal_test_run/submit_local.sh)
 * [Shallow Liver Section](https://github.com/seqscope/NovaScope/blob/main/testrun/shallow_liver_section/submit_local.sh)
 * [Deep Liver Section](https://github.com/seqscope/NovaScope/blob/main/testrun/deep_liver_section/submit_local.sh)
-
 
 ### Option B: SLURM using a Master Job
 
@@ -110,7 +110,7 @@ Specific examples prepared for the three datasets are provided below:
 
 Then submit the master job through `sbatch`:
 
-```
+```bash
 sbatch submit_HPC.job
 ```
 
@@ -135,4 +135,3 @@ slurm_params="--profile /path/to/the/slurm/configuration/directory"  # The SLURM
 ## execute the NovaScope pipeline
 snakemake $slurm_params -s ${smk_dir}/NovaScope.smk -d $job_dir
 ```
-

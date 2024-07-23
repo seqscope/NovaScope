@@ -19,7 +19,7 @@ The rule generates the following output in the specified directory path:
 
 ### (1) Per-Chip Spatial Barcode Map
 
-**Description**: This is a compressed, tab-delimited file mapping barcodes to global spatial coordinates on the chip, with duplicate barcodes removed. Note that only one spatial barcode map is produced for a chip, both lane ID and tile ID are set to `1`.
+**Description**: This is a compressed, tab-delimited file mapping spatial barcodes to global spatial coordinates on the chip, with duplicate barcodes removed. Note that only one spatial barcode map is produced for a chip, both lane ID and tile ID are set to `1`.
 
 **File Naming Convention**: `1_1.sbcds.sorted.tsv.gz`
 

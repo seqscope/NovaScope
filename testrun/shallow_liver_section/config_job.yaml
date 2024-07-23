@@ -1,5 +1,5 @@
 ## See more details for each parameter at https://github.com/seqscope/NovaScope/blob/main/docs/basic_usage/job_config.md
-## IMPORTANT TODO: DOWNLOAD THE INPUT DATA from https://doi.org/10.5281/zenodo.10840696
+## IMPORTANT TODO: DOWNLOAD THE INPUT DATA from https://zenodo.org/doi/10.5281/zenodo.10840695
 ## IMPORTANT TODO: REPLACE THE FOLLOWING VARIABLES BEFORE USE
 ## /path/to/input/dir  to the absolute path of the input data
 ## /path/to/output/dir to the absolute path of the output directory

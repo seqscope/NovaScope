@@ -1,15 +1,15 @@
 # Setting Up a Environment YAML File
 
-[NovaScope](../index.md) requires a YAML file to configure the environment. This environment configuration file (e.g., `config_env.yaml`) is used to specify the paths to the required tools, reference databases, and Python environment. 
+[NovaScope](../index.md) requires a YAML file to configure the environment. This file (e.g., `config_env.yaml`) specifies paths to tools, reference databases, and the Python environment.
 
 Below is a brief description of all the items in the YAML file.
 
 !!! tip
     To create your own `config_env.yaml` file for the environment setup, you may copy from [our example available in our GitHub repository](https://github.com/seqscope/NovaScope/blob/main/info/config_env.yaml). Remember to replace the placeholders with your specific input variables to customize it according to your needs.
 
-## Tools 
+## Tools
 
-The pipeline automatically detects and includes undefined tools in the system path, allowing for their use without manual configuration. 
+The pipeline detects and includes undefined tools in the system path automatically.
 
 ```yaml
 tools:
@@ -20,13 +20,12 @@ tools:
 ??? note "`samtools`"
     For users in High-Performance Computing (HPC) environments with `samtools` installed, it's feasible to use `envmodules` (see [Environment Modules](#environment-modules)) to load `samtools` rather than defining its path here.
 
-
 ## (Optional) Environment Modules
   
 !!! info
     Only applicable to HPC environments. For local executions, remove this section from `config_env.yaml`.
 
-For HPC users, it is feasible to use the `envmodules` section to load the required software tools as modules. If a tool is not listed in the `envmodules` section, the pipeline will assume it's installed system-wide. 
+For HPC users, it is feasible to use the `envmodules` section to load the required software tools as modules. If a tool is not listed in the `envmodules` section, the pipeline will assume it's installed system-wide.
 
 !!! tip 
     The **version** information is required.
@@ -42,31 +41,36 @@ envmodules:
 ```
 
 ??? note "`python`"
-    If your Python environment was set up using a Python accessed through a module, specify the same Python module in the envmodules section to maintain the environment. If using a local Python installation (not through `module load`), DO NOT INCLUDE any Python module here.
+    If your Python environment was set up using a Python accessed through a module, specify the same Python module in the `envmodules` section to maintain the environment. If using a local Python installation (not through `module load`), DO NOT INCLUDE any Python module here.
 
 ??? note "`samtools`"
-    Using `envmodules` to load `samtools` can be an alternative to specifying its path in [`tools`](#tools). The given example is designed for instances where `samtools` is integrated into the `Bioinformatics` module system, which necessitates loading the `Bioinformatics` module prior to loading `samtools`. In this case, provide all modules that required to be loaded in the correct order, joint by `&&`.
+    Using `envmodules` to load `samtools` can be an alternative to specifying its path in [`tools`](#tools).
+
+    The given example is designed for instances where `samtools` is integrated into the `Bioinformatics` module system, which necessitates loading the `Bioinformatics` module prior to loading `samtools`. In this case, provide all modules that required to be loaded in the correct order, joint by `&&`.
 
 ## Reference Databases
 
 Define all necessary reference databases for the input species in the `ref` field.
 
 ### (1) Reference Genome Index for Alignment
-Specify the reference genome index for alignment with the `align` parameter. Reference genome indices can be accessed via the [cellranger download](https://www.10xgenomics.com/support/software/cell-ranger/downloads) page. Users can also generate their own reference genome index; detailed instructions for building the STAR index from a reference file are provided in the [Requirements](./requirement.md) section.
+Specify the alignment reference genome index in the `align` field. Reference genome indices can be accessed via the [cellranger download](https://www.10xgenomics.com/support/software/cell-ranger/downloads) page. Users can also generate their own reference genome index. Detailed instructions for building the STAR index are provided in the [Requirements](./requirement.md) section.
 
-### (2) Reference Gene List Directories for Visualizing Spatial Expression Patterns
-The `genelists` parameter should point to the directory containing species-specific gene lists, which are crucial for visualizing spatial expression patterns in Rule [sdge_visual](../fulldoc/rules/sdge_visual.md). This directory must include files named `<gene_group>.genes.tsv` (e.g., `MT.genes.tsv`), with each file listing gene names line-by-line.
+### (2) Reference Gene List Files for Spatial Expression Visualization
 
-NovaScope provides precompiled gene lists for [mouse (version: mm39)](https://github.com/seqscope/NovaScope/tree/main/info/genelists/mm39) and [human (version: hg38)](https://github.com/seqscope/NovaScope/tree/main/info/genelists/hg38). If the `genelists` parameter is not specified in the `config_env.yaml`, NovaScope defaults to using these files. Alternatively, users may provide their own custom gene list files.
+The `genelists` field should point to the directory containing species-specific gene lists, which are crucial for visualizing spatial expression patterns in Rule [sdge_visual](../fulldoc/rules/sdge_visual.md). This directory must include files named `<gene_group>.genes.tsv` (e.g., `MT.genes.tsv`), with each file listing gene names line-by-line.
+
+NovaScope provides precompiled gene lists for [mouse (version: mm39)](https://github.com/seqscope/NovaScope/tree/main/info/genelists/mm39) and [human (version: hg38)](https://github.com/seqscope/NovaScope/tree/main/info/genelists/hg38). If the `genelists` field is not specified in the `config_env.yaml`, NovaScope defaults to using these files. Alternatively, users may provide their own custom gene list files.
 
 ### (3) (Optional) Reference Gene Information for Gene Filtering 
 
 !!! info
     Gene information files are necessary only if additional functionalities of NovaScope are utilized.
 
-The `geneinfo` parameter specifies the path of gene information files needed for gene filtering. NovaScope provides ready-to-use gene information files for [mouse (version: mm39)](https://github.com/seqscope/NovaScope/blob/dev/info/geneinfo/Mus_musculus.GRCm39.107.names.tsv.gz), [human (version: hg38)](https://github.com/seqscope/NovaScope/blob/dev/info/geneinfo/Homo_sapiens.GRCh38.107.names.tsv.gz), and [chick (version: g6a)](https://github.com/seqscope/NovaScope/blob/dev/info/geneinfo/Gallus_gallus.GRCg6a.106.names.tsv.gz). If `geneinfo` is absent, NovaScope uses these files from [FICTURE](https://seqscope.github.io/ficture/). 
+The `geneinfo` field specifies the path of gene information files needed for gene filtering. 
 
-Only under the following conditions, users need to prepare and specify a gene information file in the geneinfo: a. the input datasets are from species other than human or mouse; b. the version of the dataset is different from that of the precompiled files (human: hg38; mouse: mm39, chick: g6a).
+By Default, NovaScope use the precompiled gene information files, including one for [mouse (version: mm39)](https://github.com/seqscope/NovaScope/blob/dev/info/geneinfo/Mus_musculus.GRCm39.107.names.tsv.gz), one for [human (version: hg38)](https://github.com/seqscope/NovaScope/blob/dev/info/geneinfo/Homo_sapiens.GRCh38.107.names.tsv.gz), and one for [chick (version: g6a)](https://github.com/seqscope/NovaScope/blob/dev/info/geneinfo/Gallus_gallus.GRCg6a.106.names.tsv.gz). I
+
+Only under the following conditions, users need to prepare and specify a gene information file in the `geneinfo` field: a. the input datasets are from species other than human or mouse; b. the version of the dataset is different from that of the precompiled files (human: hg38; mouse: mm39, chick: g6a).
 
 !!! tip
     Ensure that the reference files match the species of your input data.

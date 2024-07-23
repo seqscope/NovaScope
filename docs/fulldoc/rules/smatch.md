@@ -130,7 +130,7 @@ upstream:
     | Parameter     | `spatula` parameter| Description                                                                                   | Default Value |
     |---------------|---------------------|-----------------------------------------------------------------------------------------------|----------------------------|
     | `skip_sbcd`   | `--skip-sbcd`       | The number of initial bases to omit from the read.*   | 1                          |
-    | `match_len`   | `--match-len`       | The length of the spatial barcode to be considered as a perfectmatch.                         | 27                         |
+    | `match_len`   | `--match-len`       | The length of the spatial barcode to be considered as a perfect match.                         | 27                         |
 
     * `skip_sbcd`: This is useful if the 1st-seq spatial barcode lacks sufficient bases. When it is absent, NovaScope determines `skip_sbcd` following the [`format`](./fastq2sbcd.md#parameters) of `fastq2sbcd`: 1 for DraI31 and 0 for DraI32.
 

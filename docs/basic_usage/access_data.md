@@ -3,12 +3,12 @@
 
 ## Dataset Overview
 
-There are three example datasets published with the NovaScope protocol. 
+There are three example datasets published with the NovaScope protocol.
 
-Each input dataset contains two types of FASTQ files: 
+Each input dataset contains two types of FASTQ files:
 
 * 1st-seq (single-end) FASTQ file that contains spatial barcodes to construct a barcode map,
-* 2nd-seq (paired-end) FASTQ files that contains spatial barcodes in Read 1, and cDNA sequences in Read 2.
+* 2nd-seq (paired-end) FASTQ files that contain spatial barcodes in Read 1, and cDNA sequences in Read 2.
 
 ### Minimal Test Run Dataset
 
@@ -16,7 +16,7 @@ This is a small (1.14GB) test run dataset comprising of a subset of a liver sect
 
 ### Shallow Liver Section Dataset
 
-This dataset is a typical (23.7GB) example of Seq-Scope dataset that can be initially generated for a tissue section. Typically, the 2nd-seq FASTQ files contain 150-200M paired-end reads. This should be sufficient to examine the spatial distribution of the transcripts across the tissue, assess the quality of dataset, identify major cell types and marker genes, and perform basic pixel-level decoding of the spatial transcriptome. 
+This dataset is a typical (23.7GB) example of Seq-Scope dataset that can be initially generated for a tissue section. Typically, the 2nd-seq FASTQ files contain 150-200M paired-end reads. This should be sufficient to examine the spatial distribution of the transcripts across the tissue, assess the quality of dataset, identify major cell types and marker genes, and perform basic pixel-level decoding of the spatial transcriptome.
 
 ### Deep Liver Section Dataset
 

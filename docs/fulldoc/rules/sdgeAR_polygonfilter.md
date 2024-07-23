@@ -126,7 +126,7 @@ downstream:
 ```
 
 * **The `radius` Parameter**
-The radius refers to the circumradius (the radius of the circumscribed circle around the polygon). The radius will be used to calcualte the polygon diameter as well as the polygon area.
+The radius refers to the circumradius (the radius of the circumscribed circle around the polygon). The radius will be used to calculate the polygon diameter as well as the polygon area.
 
 * **The `hex_n_move` Parameter**
 Define n moves when collapse to polygon. When `hex_n_move` is 1, non-overlapping polygons will be applied. Otherwise, use overlapping polygons.

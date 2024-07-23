@@ -4,7 +4,7 @@
 	The installations below are **OPTIONAL** and are **ONLY** necessary for who looking to utilize the [additional functionalities](../home/workflow_structure.md#plus-workflow). To solely utilize the [main functionalities](../home/workflow_structure.md#main-workflow), skip this step.
 
 ## Install the historef Package
-!!! info 
+!!! info
 	Only required if you want to align your histology images with the spatial digital gene expression (SGE) matrix.
 
 Install the [historef](https://github.com/seqscope/historef) package in [your Python environment](./requirement.md#configuring-python-virtual-environment). For the most recent version, please see [its GitHub repository](https://github.com/seqscope/historef?tab=readme-ov-file).

@@ -16,7 +16,7 @@ The rule generates the following output in the specified directory path:
 
 ### (1) A Tab-delimited Clean Feature File
 
-**Description**: A clean feature file (`*.feature.clean.tsv.gz`) that counts UMIs for features aftering gene-filtering.
+**Description**: A clean feature file (`*.feature.clean.tsv.gz`) that counts UMIs for features after gene-filtering.
 
 **File Naming Convention**:
 ```
@@ -54,10 +54,10 @@ downstream:
 ```
 
 * **The `keep_gene_type` Parameter**
-Specifies the types of genes to retain during gene filtering. 
+Specifies the types of genes to retain during gene filtering.
 
 * **The `rm_gene_regex` Parameter**
-Defines the types of genes to be excluded during gene filtering. 
+Defines the types of genes to be excluded during gene filtering.
 
 * **The `min_ct_per_feature` Parameter**
 Defines the minimal UMI count for genes. Genes of which number of UMI is smaller than this cutoff will be removed.

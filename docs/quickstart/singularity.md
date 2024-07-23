@@ -11,7 +11,7 @@ If you are new to [Singularity](https://sylabs.io/docs/), please refer to the [S
 singularity --version
 ```
 
-In some systems, you may need to load the singularity module before running the above command. 
+In some systems, you may need to load the singularity module before running the above command.
 For example, in the HPC environment, you may need to run the following command:
 
 ```bash

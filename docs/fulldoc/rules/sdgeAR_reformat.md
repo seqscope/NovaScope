@@ -15,7 +15,7 @@ The rule generates the following output in the specified directory path:
 
 ### (1) An SGE in a FICTURE-compatible Format
 
-**Description**: A transcript-indexed SGE in the FICTURE format is generated, which contains all informations including the barcode information, features information, and count for each genomic feature. 
+**Description**: A transcript-indexed SGE in the FICTURE format is generated, which contains all information including the barcode information, features information, and count for each genomic feature.
 
 **File Naming Convention**: 
 ```

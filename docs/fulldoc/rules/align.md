@@ -3,7 +3,7 @@
 ## Purpose
 The purpose of the `align` rule is to map the reads from 2nd-seq FASTQ files to the reference genome, focusing on a per-chip approach. For a chip associated with multiple pairs of 2nd-seq FASTQ files, NovaScope executes the `align` rule once utilizing all file pairs.
 
-Specifically, the process involves 1) combining all FASTQ files from 2nd-seq that are related to this chip, 2) discarding any 2nd-seq reads from that do not possess a spatial barcode sequence (HDMI) identified in 1st-seq, 3) mapping 2nd-seq reads to the reference genome utilizing [STARsolo](https://github.com/alexdobin/STAR/tree/master).
+Specifically, the process involves: 1) combining all FASTQ files from 2nd-seq that are related to this chip, 2) discarding any 2nd-seq reads from that do not possess a spatial barcode sequence (HDMI) identified in 1st-seq, 3) mapping 2nd-seq reads to the reference genome utilizing [STARsolo](https://github.com/alexdobin/STAR/tree/master).
 
 ## Input Files
 * **2nd-seq FASTQ file**

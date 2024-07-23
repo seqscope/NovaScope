@@ -3,7 +3,7 @@ This page provides an overview of the rule execution flow tailored to different 
 Each `request` option triggers a specific set of rules. Thus, below provides a rulegraph for each `request` option to outline the triggered rules and their interdependencies, detailing distinct processing paths.
 
 !!! info
-    The visual guides below are constructed from a **baseline scenario** where only the initial input 1st-seq and 2nd-seq FASTQ files are present, with no prior processing or intermediate files generated.
+    The [rulegraphs](./core_concepts.md#rulegraph) below are constructed from a **baseline scenario** where only the initial input 1st-seq and 2nd-seq FASTQ files are present, with no prior processing or intermediate files generated.
 
 ### `"sbcd-per-flowcell"`
 

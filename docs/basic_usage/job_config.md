@@ -168,7 +168,7 @@ env_yml: <path_to_config_env.yaml_file>         ## If absent, NovaScope use the 
     NovaScope supports using relative paths in the job configuration file, which should be relative to the working directory. If a relative path is found, NovaScope automatically obtains its real path and uses it in the process.
 
 * **`seq1st`**:
-    * *`id`*: The `id` will be used to organize the 1st-seq FASTQ files. Make sure the `id` field for 1st-seq in the corresponding flowcell is unique.  
+    * *`id`*: The `id` will be used to organize the 1st-seq FASTQ files. Make sure the `id` field for 1st-seq in the corresponding flow cell is unique.  
 
     * *`layout`*: A spatial barcode (sbcd) layout file to provide the layout of tiles in a chip with the following format. If absent, [NovaScope](https://seqscope.github.io/NovaScope/) will automatically look for the sbcd layout within the NovaScope repository at [info/assets/layout_per_tile_basis](https://github.com/seqscope/NovaScope/tree/main/info/assets/layout_per_tile_basis), using the section chip ID for reference.
         ```yaml
@@ -186,7 +186,7 @@ env_yml: <path_to_config_env.yaml_file>         ## If absent, NovaScope use the 
     ??? note "How to generate `seq2nd_pair_id`?"
         If an ID is not specified, NovaScope will automatically generate one using the format `<flowcell_id>.<chip_id>.<randomer>`, where `randomer` is the last 5 digits of the md5 hash of the real path of the read 1 FASTQ file from the 2nd-seq.
 
-* **`run_id`**: Only needed if alignment is required to generate the requested output. It is used as an identifier for alignment and Spatial Digital Gene Expression matrices (SGEs) to differentiate between input 2nd-seq FASTQ files. This is particularly useful when generating SGEs using the same 1st-seq files but different 2nd-seq files. If not provided, NovaScope will generate it based on the flowcell ID, chip ID, and all input 2nd-seq read 1 FASTQ files.
+* **`run_id`**: Only needed if alignment is required to generate the requested output. It is used as an identifier for alignment and Spatial Digital Gene Expression matrices (SGEs) to differentiate between input 2nd-seq FASTQ files. This is particularly useful when generating SGEs using the same 1st-seq files but different 2nd-seq files. If not provided, NovaScope will generate it based on the flow cell ID, chip ID, and all input 2nd-seq read 1 FASTQ files.
 
     ??? note "How to generate `run_id`?"
         NovaScope automatically generates `run_id` in the format `<flowcell_id>-<chip_id>-<species>-<randomer>`. The `randomer` is created by sorting all input seq2nd_pair_id, concatenating these seq2nd_pair_id into a single long string, and then computing the md5 hash of this string. The last 5 digits of this hash are used as the `randomer`.
@@ -194,7 +194,7 @@ env_yml: <path_to_config_env.yaml_file>         ## If absent, NovaScope use the 
 * **`unit_id`**: Only needed if reformat feature is required to generate the requested output. It acts as an identifier for SGEs that are prepared for reformatting. This identifier is especially useful when users wish to manually modify SGE outside of NovaScope and then proceed to reformat both the original and modified SGEs. The `unit_id` ensures clear distinction between the original and modified datasets.
 
     ??? note "How to generate `unit_id`"
-        If `unit_id` is not specified and reformatting is requested, it will default to `<run_id>-default`, indicating that no manual preprocessing has occurred. 
+        If `unit_id` is not specified and reformatting is requested, it will default to `<run_id>-default`, indicating that no manual preprocessing has occurred.
         
         Users who prefer to reformat manually modified SGEs should define their own `unit_id`. We recommend incorporating `run_id` into the `unit_id` to maintain a clear trace of the dataset lineage.
 
@@ -229,7 +229,7 @@ The options below are only for executing the [additional functionalities](../hom
 | Option                | Final Output Files                                                                                  | Details   |
 |-----------------------|---------------------------------------------------------------------------------------------------- |---|
 | `histology-per-run`   | Geotiff files for coordinate transformation between SGE matrix and histology image.| [historef](../fulldoc/rules/historef.md#output-files)                        |
-| `transcript-per-unit` | An SGE matrix in the TSV format that is compatible to FICTURE. | [sdgeAR_reformat](../fulldoc/rules/sdgeAR_reformat.md#output-files)          |
+| `transcript-per-unit` | An SGE matrix in the TSV format that is compatible toFICTURE. | [sdgeAR_reformat](../fulldoc/rules/sdgeAR_reformat.md#output-files)          |
 | `filterftr-per-unit`  | A feature file for genes that pass gene-based filtering, formatted as a TSV file that contains detailed information about each gene. | [sdgeAR_featurefilter](../fulldoc/rules/sdgeAR_featurefilter.md#output-files)    |
 | `filterpoly-per-unit` | An SGE matrix, a coordinate metadata file, a feature file, and a boundary JSON file, all reflecting the SGE matrix that passed the polygon-based density filtering.| [sdgeAR_polygonfilter](../fulldoc/rules/sdgeAR_polygonfilter.md#output-files)|
 | `segment-10x-per-unit`| A hexagon-indexed SGE matrix in the 10x genomics format. |[sdgeAR_segment_10x](../fulldoc/rules/sdgeAR_segment_10x.md#output-files) |

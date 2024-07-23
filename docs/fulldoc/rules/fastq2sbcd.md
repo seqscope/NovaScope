@@ -7,7 +7,8 @@ The `fastq2sbcd` rule aims to generate a spatial barcode map per-tile basis for 
 The only input file required by `fastq2sbcd` is the 1st-seq FASTQ file. Ensure the raw FASTQ files are correctly formatted and listed in the [job configuration](../../basic_usage/job_config.md) file.
 
 ## Output Files
-The rule generates the following output in the specified directory path: 
+The rule generates the following output in the specified directory path:
+
 ```
 <output_directory>/seq1st/<flowcell_id>/sbcds/<seq1st_id>
 ```
@@ -15,7 +16,7 @@ The rule generates the following output in the specified directory path:
 ### (1) Per-Tile Spatial Barcode Maps
 
 **Description**:
-The spatial barcode map for each tile is stored in a zipped, tab-separated file. These files map the barcodes to their coordinates within the tile, facilitating easier matching with 2nd-Seq sequences through reverse-complemented barcodes.
+The spatial barcode map for each tile is stored in a zipped, tab-separated file. These files map spatial barcodes to their coordinates within the tile, facilitating easier matching with 2nd-Seq sequences through reverse-complemented barcodes.
 
 **File Naming Convention**:
  `<lane_id>_<tile_id>.sbcds.sorted.tsv.gz`
