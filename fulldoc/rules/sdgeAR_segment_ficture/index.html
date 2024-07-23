@@ -1781,8 +1781,7 @@
 <ul>
 <li>
 <p><strong>A SGE matrix in a FICTURE-compatible Format and Correspondings Files</strong>
-The necessary input files include a FICTURE-compatible SGE matrix and its corresponding meta file for X and Y coordinates. If the user requests 
-filtered hexagon-indexed SGE matrix (i.e., <code>quality_control</code> field in the <a href="../../../basic_usage/job_config/">job configuration</a> file is <code>TRUE</code>), this rule uses the filtered SGE matrix and its meta file for coordinates from Rule <a href="../sdgeAR_polygonfilter/"><code>sdgeAR_polygonfilter</code></a>. Otherwise, it uses the raw SGE matrix created by Rule <a href="../sdgeAR_reformat/"><code>sdgeAR_reformat</code></a> and its meta file for coordinates from Rule <a href="../sdgeAR_minmax/"><code>sdgeAR_minmax</code></a>. </p>
+The necessary input files include a FICTURE-compatible SGE matrix and its corresponding meta file for X and Y coordinates. If the user requests filtered hexagon-indexed SGE matrix (i.e., <code>quality_control</code> field in the <a href="../../../basic_usage/job_config/">job configuration</a> file is <code>TRUE</code>), this rule uses the filtered SGE matrix and its meta file for coordinates from Rule <a href="../sdgeAR_polygonfilter/"><code>sdgeAR_polygonfilter</code></a>. Otherwise, it uses the raw SGE matrix created by Rule <a href="../sdgeAR_reformat/"><code>sdgeAR_reformat</code></a> and its meta file for coordinates from Rule <a href="../sdgeAR_minmax/"><code>sdgeAR_minmax</code></a>. </p>
 </li>
 <li>
 <p><strong>(Optional) A Strict Boundary GEOJSON File</strong>
@@ -1796,7 +1795,7 @@ When segmenting a filtered SGE matrix, the strict boundary GEOJSON file from Rul
 * <code>&lt;sge_qc&gt;</code> stands for whether gene-filtering and polygon-filtering have been applied to the SGE matrix. For filtered SGE, <code>&lt;sge_qc&gt;</code> is set to <code>filtered</code>. Otherwise, <code>&lt;sge_qc&gt;</code> is <code>raw</code>.
 * <code>&lt;hexagon_width&gt;</code> represents the hexagon size.</p>
 <h3 id="1-hexagon-indexed-sge">(1) hexagon-indexed SGE<a class="headerlink" href="#1-hexagon-indexed-sge" title="Permanent link">&para;</a></h3>
-<p><strong>Description</strong>: This output consists of an SGE formatted by segmenting pixels into hexagonal units. The size of the hexagons is defined by the user. The format of this SGE is compatible to FICTURE.</p>
+<p><strong>Description</strong>: This output consists of an SGE formatted by segmenting pixels into hexagonal units. The size of the hexagons is defined by the user. This SGE is in TSV format compatible to FICTURE.</p>
 <p><strong>File Naming Convention</strong>: 
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>&lt;unit_id&gt;.&lt;solo_feature&gt;.&lt;sge_qc&gt;.d_&lt;hexagon_width&gt;.hexagon.tsv.gz
 </code></pre></div></td></tr></table></div></p>

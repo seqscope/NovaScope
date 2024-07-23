@@ -1721,7 +1721,7 @@
 <p class="admonition-title">A Rule Graph / A Directed Acyclic Graph (DAG)</p>
 <p>Additionally, you can create <a href="../../home/workflow_structure/">a rule graph</a> that visually represents the structure of the workflow or a <a href="https://snakemake.readthedocs.io/en/stable/tutorial/basics.html#step-4-indexing-read-alignments-and-visualizing-the-dag-of-jobs">Directed Acyclic Graph (DAG)</a> to view all jobs and their actual dependencies.</p>
 </div>
-<p>Below provides commands for a dry-run and visualization.
+<p>Below provides commands for a dry-run and visualization.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -1755,9 +1755,9 @@ snakemake<span class="w"> </span>--rulegraph<span class="w">  </span>-s<span cla
 
 <span class="c1">## - (2) DAG</span>
 snakemake<span class="w"> </span>--dag<span class="w">  </span>-s<span class="w"> </span><span class="nv">$smk_dir</span>/NovaScope.smk<span class="w"> </span>--rerun-incomplete<span class="w"> </span>-d<span class="w"> </span><span class="nv">$job_dir</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>dot<span class="w"> </span>-Tpdf<span class="w"> </span>&gt;<span class="w"> </span>dag.pdf
-</code></pre></div></td></tr></table></div></p>
+</code></pre></div></td></tr></table></div>
 <h2 id="execution-options">Execution Options<a class="headerlink" href="#execution-options" title="Permanent link">&para;</a></h2>
-<p>Below we applied: </p>
+<p>Below we applied:</p>
 <ul>
 <li><code>--rerun-incomplete</code> to enable the pipeline to re-run any jobs the output of which is identified as incomplete, </li>
 <li><code>--latency-wait</code> to request the pipeline pauses for the defined time awaiting an output file if not instantly accessible after a job, compensating for filesystem delay.</li>
@@ -1857,7 +1857,7 @@ snakemake<span class="w"> </span><span class="nv">$slurm_params</span><span clas
 <li><a href="https://github.com/seqscope/NovaScope/blob/main/testrun/deep_liver_section/submit_HPC.job">Deep Liver Section</a></li>
 </ul>
 <p>Then submit the master job through <code>sbatch</code>:</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>sbatch submit_HPC.job
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>sbatch<span class="w"> </span>submit_HPC.job
 </code></pre></div></td></tr></table></div>
 <h3 id="option-c-slurm-via-command-lines">Option C: SLURM via Command Lines<a class="headerlink" href="#option-c-slurm-via-command-lines" title="Permanent link">&para;</a></h3>
 <p>For a small number of quick jobs, you can execute NovaScope with <a href="https://slurm.schedmd.com/documentation.html">SLURM</a> using a single command line without a master job. </p>

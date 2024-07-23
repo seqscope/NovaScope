@@ -1800,12 +1800,12 @@
 <h2 id="input-files">Input Files<a class="headerlink" href="#input-files" title="Permanent link">&para;</a></h2>
 <p>The only input file required by <code>fastq2sbcd</code> is the 1st-seq FASTQ file. Ensure the raw FASTQ files are correctly formatted and listed in the <a href="../../../basic_usage/job_config/">job configuration</a> file.</p>
 <h2 id="output-files">Output Files<a class="headerlink" href="#output-files" title="Permanent link">&para;</a></h2>
-<p>The rule generates the following output in the specified directory path: 
+<p>The rule generates the following output in the specified directory path:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>&lt;output_directory&gt;/seq1st/&lt;flowcell_id&gt;/sbcds/&lt;seq1st_id&gt;
-</code></pre></div></td></tr></table></div></p>
+</code></pre></div></td></tr></table></div>
 <h3 id="1-per-tile-spatial-barcode-maps">(1) Per-Tile Spatial Barcode Maps<a class="headerlink" href="#1-per-tile-spatial-barcode-maps" title="Permanent link">&para;</a></h3>
 <p><strong>Description</strong>:
-The spatial barcode map for each tile is stored in a zipped, tab-separated file. These files map the barcodes to their coordinates within the tile, facilitating easier matching with 2nd-Seq sequences through reverse-complemented barcodes.</p>
+The spatial barcode map for each tile is stored in a zipped, tab-separated file. These files map spatial barcodes to their coordinates within the tile, facilitating easier matching with 2nd-Seq sequences through reverse-complemented barcodes.</p>
 <p><strong>File Naming Convention</strong>:
  <code>&lt;lane_id&gt;_&lt;tile_id&gt;.sbcds.sorted.tsv.gz</code></p>
 <p><strong>File Format</strong>:

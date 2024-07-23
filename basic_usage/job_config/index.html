@@ -2068,7 +2068,7 @@
 <p><strong><code>seq1st</code></strong>:</p>
 <ul>
 <li>
-<p><em><code>id</code></em>: The <code>id</code> will be used to organize the 1st-seq FASTQ files. Make sure the <code>id</code> field for 1st-seq in the corresponding flowcell is unique.  </p>
+<p><em><code>id</code></em>: The <code>id</code> will be used to organize the 1st-seq FASTQ files. Make sure the <code>id</code> field for 1st-seq in the corresponding flow cell is unique.  </p>
 </li>
 <li>
 <p><em><code>layout</code></em>: A spatial barcode (sbcd) layout file to provide the layout of tiles in a chip with the following format. If absent, <a href="https://seqscope.github.io/NovaScope/">NovaScope</a> will automatically look for the sbcd layout within the NovaScope repository at <a href="https://github.com/seqscope/NovaScope/tree/main/info/assets/layout_per_tile_basis">info/assets/layout_per_tile_basis</a>, using the section chip ID for reference.
@@ -2095,7 +2095,7 @@
 </details>
 </li>
 <li>
-<p><strong><code>run_id</code></strong>: Only needed if alignment is required to generate the requested output. It is used as an identifier for alignment and Spatial Digital Gene Expression matrices (SGEs) to differentiate between input 2nd-seq FASTQ files. This is particularly useful when generating SGEs using the same 1st-seq files but different 2nd-seq files. If not provided, NovaScope will generate it based on the flowcell ID, chip ID, and all input 2nd-seq read 1 FASTQ files.</p>
+<p><strong><code>run_id</code></strong>: Only needed if alignment is required to generate the requested output. It is used as an identifier for alignment and Spatial Digital Gene Expression matrices (SGEs) to differentiate between input 2nd-seq FASTQ files. This is particularly useful when generating SGEs using the same 1st-seq files but different 2nd-seq files. If not provided, NovaScope will generate it based on the flow cell ID, chip ID, and all input 2nd-seq read 1 FASTQ files.</p>
 <details class="note">
 <summary>How to generate <code>run_id</code>?</summary>
 <p>NovaScope automatically generates <code>run_id</code> in the format <code>&lt;flowcell_id&gt;-&lt;chip_id&gt;-&lt;species&gt;-&lt;randomer&gt;</code>. The <code>randomer</code> is created by sorting all input seq2nd_pair_id, concatenating these seq2nd_pair_id into a single long string, and then computing the md5 hash of this string. The last 5 digits of this hash are used as the <code>randomer</code>.</p>
@@ -2105,7 +2105,7 @@
 <p><strong><code>unit_id</code></strong>: Only needed if reformat feature is required to generate the requested output. It acts as an identifier for SGEs that are prepared for reformatting. This identifier is especially useful when users wish to manually modify SGE outside of NovaScope and then proceed to reformat both the original and modified SGEs. The <code>unit_id</code> ensures clear distinction between the original and modified datasets.</p>
 <details class="note">
 <summary>How to generate <code>unit_id</code></summary>
-<p>If <code>unit_id</code> is not specified and reformatting is requested, it will default to <code>&lt;run_id&gt;-default</code>, indicating that no manual preprocessing has occurred. </p>
+<p>If <code>unit_id</code> is not specified and reformatting is requested, it will default to <code>&lt;run_id&gt;-default</code>, indicating that no manual preprocessing has occurred.</p>
 <p>Users who prefer to reformat manually modified SGEs should define their own <code>unit_id</code>. We recommend incorporating <code>run_id</code> into the <code>unit_id</code> to maintain a clear trace of the dataset lineage.</p>
 </details>
 </li>
@@ -2182,7 +2182,7 @@
 </tr>
 <tr>
 <td><code>transcript-per-unit</code></td>
-<td>An SGE matrix in the TSV format that is compatible to FICTURE.</td>
+<td>An SGE matrix in the TSV format that is compatible toFICTURE.</td>
 <td><a href="../../fulldoc/rules/sdgeAR_reformat/#output-files">sdgeAR_reformat</a></td>
 </tr>
 <tr>

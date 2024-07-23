@@ -1791,7 +1791,7 @@
 <p class="admonition-title">Info</p>
 <p>Only applicable to HPC environments. For local executions, remove this section from <code>config_env.yaml</code>.</p>
 </div>
-<p>For HPC users, it is feasible to use the <code>envmodules</code> section to load the required software tools as modules. If a tool is not listed in the <code>envmodules</code> section, the pipeline will assume it's installed system-wide. </p>
+<p>For HPC users, it is feasible to use the <code>envmodules</code> section to load the required software tools as modules. If a tool is not listed in the <code>envmodules</code> section, the pipeline will assume it's installed system-wide.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>The <strong>version</strong> information is required.</p>
@@ -1812,11 +1812,11 @@
 </code></pre></div></td></tr></table></div>
 <details class="note">
 <summary><code>python</code></summary>
-<p>If your Python environment was set up using a Python accessed through a module, specify the same Python module in the envmodules section to maintain the environment. If using a local Python installation (not through <code>module load</code>), DO NOT INCLUDE any Python module here.</p>
+<p>If your Python environment was set up using a Python accessed through a module, specify the same Python module in the <code>envmodules</code> section to maintain the environment. If using a local Python installation (not through <code>module load</code>), DO NOT INCLUDE any Python module here.</p>
 </details>
 <details class="note">
 <summary><code>samtools</code></summary>
-<p>Using <code>envmodules</code> to load <code>samtools</code> can be an alternative to specifying its path in <a href="#tools"><code>tools</code></a>. </p>
+<p>Using <code>envmodules</code> to load <code>samtools</code> can be an alternative to specifying its path in <a href="#tools"><code>tools</code></a>.</p>
 <p>The given example is designed for instances where <code>samtools</code> is integrated into the <code>Bioinformatics</code> module system, which necessitates loading the <code>Bioinformatics</code> module prior to loading <code>samtools</code>. In this case, provide all modules that required to be loaded in the correct order, joint by <code>&amp;&amp;</code>.</p>
 </details>
 <h2 id="reference-databases">Reference Databases<a class="headerlink" href="#reference-databases" title="Permanent link">&para;</a></h2>
@@ -1832,8 +1832,8 @@
 <p>Gene information files are necessary only if additional functionalities of NovaScope are utilized.</p>
 </div>
 <p>The <code>geneinfo</code> field specifies the path of gene information files needed for gene filtering. </p>
-<p>NovaScope provides ready-to-use gene information files for <a href="https://github.com/seqscope/NovaScope/blob/dev/info/geneinfo/Mus_musculus.GRCm39.107.names.tsv.gz">mouse (version: mm39)</a>, <a href="https://github.com/seqscope/NovaScope/blob/dev/info/geneinfo/Homo_sapiens.GRCh38.107.names.tsv.gz">human (version: hg38)</a>, and <a href="https://github.com/seqscope/NovaScope/blob/dev/info/geneinfo/Gallus_gallus.GRCg6a.106.names.tsv.gz">chick (version: g6a)</a>. If <code>geneinfo</code> is absent, NovaScope uses these files from <a href="https://seqscope.github.io/ficture/">FICTURE</a>. </p>
-<p>Only under the following conditions, users need to prepare and specify a gene information file in the geneinfo: a. the input datasets are from species other than human or mouse; b. the version of the dataset is different from that of the precompiled files (human: hg38; mouse: mm39, chick: g6a).</p>
+<p>By Default, NovaScope use the precompiled gene information files, including one for <a href="https://github.com/seqscope/NovaScope/blob/dev/info/geneinfo/Mus_musculus.GRCm39.107.names.tsv.gz">mouse (version: mm39)</a>, one for <a href="https://github.com/seqscope/NovaScope/blob/dev/info/geneinfo/Homo_sapiens.GRCh38.107.names.tsv.gz">human (version: hg38)</a>, and one for <a href="https://github.com/seqscope/NovaScope/blob/dev/info/geneinfo/Gallus_gallus.GRCg6a.106.names.tsv.gz">chick (version: g6a)</a>. I</p>
+<p>Only under the following conditions, users need to prepare and specify a gene information file in the <code>geneinfo</code> field: a. the input datasets are from species other than human or mouse; b. the version of the dataset is different from that of the precompiled files (human: hg38; mouse: mm39, chick: g6a).</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>Ensure that the reference files match the species of your input data.</p>
