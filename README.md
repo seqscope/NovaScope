@@ -2,9 +2,9 @@
 
 NovaScope is a [Snakemake](https://snakemake.readthedocs.io/en/stable/)-based pipeline designed for processing spatial transcriptomics data generated from [Seq-Scope](https://doi.org/10.1016/j.cell.2021.05.010). Currently, it is optimized for handling spatial arrays produced by the Illumina [NovaSeq 6000](https://www.illumina.com/systems/sequencing-platforms/novaseq.html) platform.
 
-For a detailed tutorial, please visit: [NovaScope Tutorial](https://seqscope.github.io/NovaScope).
+For a detailed tutorial, please visit [NovaScope Tutorial](https://seqscope.github.io/NovaScope).
 
-You can find the preprint at: [DOI: 10.1101/2024.03.29.587285](https://www.biorxiv.org/content/10.1101/2024.03.29.587285v1).
+You can find the preprint at [DOI: 10.1101/2024.03.29.587285](https://www.biorxiv.org/content/10.1101/2024.03.29.587285v1).
 
 ## Installation
 
@@ -30,4 +30,4 @@ The Full Documentation serves as a comprehensive overview of NovaScope's functio
 
 ## Exemplary Downstream Analysis
 
-For the spatial digital gene expression matrix created by NovaScope, we provide an exemplary downstream analysis at [NovaScope-exemplary-downstream-analysis (NEDA)](https://seqscope.github.io/NovaScope-exemplary-downstream-analysis/). NEDA demonstrates (1) how to identify spatial factors at a pixel-level resolution and (2) how to identify cell-type clusters by aggregate SGE matrix at the cellular level according to histology files.
+For the spatial digital gene expression matrix created by NovaScope, we provide an exemplary downstream analysis at [NovaScope-exemplary-downstream-analysis (NEDA)](https://seqscope.github.io/NovaScope-exemplary-downstream-analysis/). NEDA demonstrates (1) how to identify spatial factors at a pixel-level resolution and (2) how to identify cell-type clusters by aggregating the SGE matrix at the cellular level according to histology files.
