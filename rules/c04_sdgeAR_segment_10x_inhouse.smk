@@ -27,39 +27,48 @@ rule c04_sdgeAR_segment_10x_inhouse:
         major_axis=find_major_axis(input.sdgeAR_xyrange, format="col") 
         # dirs/files
         hexagon_dir = os.path.join(os.path.dirname(output.hexagon_log), "10x")
+        hexagon_bcd = os.path.join(hexagon_dir, "barcodes.tsv.gz")
+        hexagon_ftr = os.path.join(hexagon_dir, "features.tsv.gz")
+        hexagon_mtx = os.path.join(hexagon_dir, "matrix.mtx.gz")
         
         if params.sge_qc == "filtered":
             boundary_args = f"--boundary {input.boundary_in}"
         else:
             boundary_args = ""
         
-        # Attempt to do segmentation
-        try:
-            shell(
-            r"""
-            set -euo pipefail
-            {params.module_cmd}
-
-            command time -v {python} {ficture}/ficture/scripts/make_sge_by_hexagon.py \
-                --input {input.transcript_in} \
-                --feature {input.ftr_in} \
-                --output_path {hexagon_dir} \
-                --mu_scale {mu_scale} \
-                --major_axis {major_axis} \
-                --key {params.solo_feature} \
-                --precision {params.precision} \
-                --hex_width {params.hexagon_width} \
-                --n_move {params.hex_n_move} \
-                --min_ct_per_unit {params.min_pixel_per_unit} \
-                --transfer_gene_prefix {boundary_args}
-            """
-            )
-            # write down a log file to indicate the segmentation is done
+        # Check if the segmentation is done in the previous runs
+        if os.path.exists(hexagon_bcd) and os.path.exists(hexagon_ftr) and os.path.exists(hexagon_mtx):
             with open(output.hexagon_log, "w") as f:
                 f.write("Done")
-        # add an exception to catch the error, which may happen when the dataset is shallow
-        except Exception as e:
-            with open(output.hexagon_log, "w") as f:
-                f.write("Failed")
+        # if the segmentation is not done, do the segmentation
+        else:
+            # Attempt to do segmentation
+            try:
+                shell(
+                r"""
+                set -euo pipefail
+                {params.module_cmd}
+
+                command time -v {python} {ficture}/ficture/scripts/make_sge_by_hexagon.py \
+                    --input {input.transcript_in} \
+                    --feature {input.ftr_in} \
+                    --output_path {hexagon_dir} \
+                    --mu_scale {mu_scale} \
+                    --major_axis {major_axis} \
+                    --key {params.solo_feature} \
+                    --precision {params.precision} \
+                    --hex_width {params.hexagon_width} \
+                    --n_move {params.hex_n_move} \
+                    --min_ct_per_unit {params.min_pixel_per_unit} \
+                    --transfer_gene_prefix {boundary_args}
+                """
+                )
+                # write down a log file to indicate the segmentation is done
+                with open(output.hexagon_log, "w") as f:
+                    f.write("Done")
+            # add an exception to catch the error, which may happen when the dataset is shallow
+            except Exception as e:
+                with open(output.hexagon_log, "w") as f:
+                    f.write("Failed")
 
         

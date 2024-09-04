@@ -1,6 +1,12 @@
 # Generate output file name by request
 # for upstream pipeline (NovaScope)
 
+#===============================================================================
+#
+#        Output files for each run
+#
+#===============================================================================
+
 def outfn_sbcd_per_fc(main_dirs, df_run):
     outfn= {
         'flag': 'sbcd-per-flowcell',
@@ -31,24 +37,6 @@ def outfn_sbcd_per_chip(main_dirs, df_run):
     }
     return outfn
 
-def outfn_smatch_per_chip(main_dirs, df_seq2):
-    outfn = {
-        'flag': 'smatch-per-chip',
-        'root': main_dirs["match"],
-        'subfolders_patterns': [
-                                (["{flowcell}", "{chip}", "{seq2_id}", "{seq2_id}"+".R1.match.sorted.uniq.tsv.gz"], None),
-                                (["{flowcell}", "{chip}", "{seq2_id}", "{seq2_id}"+".R1.summary.tsv"], None),
-                                (["{flowcell}", "{chip}", "{seq2_id}", "{seq2_id}"+".R1.counts.tsv"], None),
-                                (["{flowcell}", "{chip}", "{seq2_id}", "{seq2_id}"+".R1.match.png"], None),
-        ],
-        'zip_args': {
-            'flowcell':      df_seq2["flowcell"].values,
-            'chip':          df_seq2["chip"].values,
-            'seq2_id':       df_seq2["seq2_id"].values,  
-        },
-    }
-    return outfn
-
 def outfn_align_per_run(main_dirs, df_run):
     outfn = {
         'flag': 'align-per-run',
@@ -69,6 +57,72 @@ def outfn_align_per_run(main_dirs, df_run):
         },
     }
     return outfn
+
+
+def outfn_trans_per_unit(main_dirs, df_run):
+    out_fn = {
+            'flag': 'transcript-per-unit',
+            'root': main_dirs["analysis"],
+            'subfolders_patterns': [
+                                    ([ "{run_id}", "{unit_id}", "preprocess", "{unit_id}.transcripts.tsv.gz"  ], None),
+                                    ([ "{run_id}", "{unit_id}", "preprocess", "{unit_id}.feature.tsv.gz"      ], None),                     
+            ],
+            'zip_args': {
+                'run_id':       df_run["run_id"].values,  
+                'unit_id':      df_run["unit_id"].values,
+            },
+    }
+    return out_fn
+
+def outfn_filterftr_per_unit(main_dirs, df_run):
+    out_fn = {
+            'flag': 'filterftr-per-unit',
+            'root': main_dirs["analysis"],
+            'subfolders_patterns': [
+                                    ([ "{run_id}", "{unit_id}", "preprocess", "{unit_id}.feature.clean.tsv.gz"], None),
+            ],
+            'zip_args': {
+                'run_id':       df_run["run_id"].values,  
+                'unit_id':      df_run["unit_id"].values,
+            },
+    }
+    return out_fn
+
+def outfnlist_by_run(main_dirs, df_run):
+    outfnlist = [
+    outfn_sbcd_per_fc(main_dirs, df_run),
+    outfn_sbcd_per_chip(main_dirs, df_run),
+    outfn_align_per_run(main_dirs, df_run),
+    outfn_trans_per_unit(main_dirs, df_run),
+    outfn_filterftr_per_unit(main_dirs, df_run)
+    ]
+    return outfnlist
+
+
+#===============================================================================
+#
+#        Output files for each seq2 id, sgevisual id, histology id
+#
+#===============================================================================
+
+def outfn_smatch_per_chip(main_dirs, df_seq2):
+    outfn = {
+        'flag': 'smatch-per-chip',
+        'root': main_dirs["match"],
+        'subfolders_patterns': [
+                                (["{flowcell}", "{chip}", "{seq2_id}", "{seq2_id}"+".R1.match.sorted.uniq.tsv.gz"], None),
+                                (["{flowcell}", "{chip}", "{seq2_id}", "{seq2_id}"+".R1.summary.tsv"], None),
+                                (["{flowcell}", "{chip}", "{seq2_id}", "{seq2_id}"+".R1.counts.tsv"], None),
+                                (["{flowcell}", "{chip}", "{seq2_id}", "{seq2_id}"+".R1.match.png"], None),
+        ],
+        'zip_args': {
+            'flowcell':      df_seq2["flowcell"].values,
+            'chip':          df_seq2["chip"].values,
+            'seq2_id':       df_seq2["seq2_id"].values,  
+        },
+    }
+    return outfn
+
 
 
 def outfn_sge_per_run(main_dirs, df_sge):
@@ -109,34 +163,11 @@ def outfn_hist_per_run(main_dirs, df_hist):
     }
     return out_fn
 
-def outfn_trans_per_unit(main_dirs, df_run):
-    out_fn = {
-            'flag': 'transcript-per-unit',
-            'root': main_dirs["analysis"],
-            'subfolders_patterns': [
-                                    ([ "{run_id}", "{unit_id}", "preprocess", "{unit_id}.transcripts.tsv.gz"  ], None),
-                                    ([ "{run_id}", "{unit_id}", "preprocess", "{unit_id}.feature.tsv.gz"      ], None),                     
-            ],
-            'zip_args': {
-                'run_id':       df_run["run_id"].values,  
-                'unit_id':      df_run["unit_id"].values,
-            },
-    }
-    return out_fn
-
-def outfn_filterftr_per_unit(main_dirs, df_run):
-    out_fn = {
-            'flag': 'filterftr-per-unit',
-            'root': main_dirs["analysis"],
-            'subfolders_patterns': [
-                                    ([ "{run_id}", "{unit_id}", "preprocess", "{unit_id}.feature.clean.tsv.gz"], None),
-            ],
-            'zip_args': {
-                'run_id':       df_run["run_id"].values,  
-                'unit_id':      df_run["unit_id"].values,
-            },
-    }
-    return out_fn
+#===============================================================================
+#
+#        Output files for each segchar id
+#
+#===============================================================================
 
 def outfn_filterpoly_per_unit(main_dirs, df_segchar):
     # note this only applies to sge_qc = "filtered"
@@ -162,14 +193,17 @@ def outfn_filterpoly_per_unit(main_dirs, df_segchar):
     }
     return out_fn
 
-def outfn_seg10x_per_unit(main_dirs, df_segchar):
+def outfn_seg10x_per_unit(main_dirs, df_segchar, use_inhouse):
+    inhouse_mode = lambda: use_inhouse 
     out_fn = {
             'flag': 'segment-10x-per-unit',
             'root': main_dirs["analysis"],
             'subfolders_patterns': [
-                                    ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "barcodes.tsv.gz"], None),
-                                    ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "features.tsv.gz"], None),
-                                    ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "matrix.mtx.gz"  ], None),   
+                                    ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "barcodes.tsv.gz"],  lambda: use_inhouse is False),
+                                    ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "features.tsv.gz"],  lambda: use_inhouse is False),
+                                    ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "matrix.mtx.gz"  ],  lambda: use_inhouse is False),   
+                                    ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.d_{hexagon_width}.10x.log"], lambda: use_inhouse is True)
+
             ],
             'zip_args': {
                 'run_id':        df_segchar["run_id"].values,  
@@ -182,12 +216,13 @@ def outfn_seg10x_per_unit(main_dirs, df_segchar):
     return out_fn
 
 
-def outfn_segfict_per_unit(main_dirs, df_segchar):
+def outfn_segfict_per_unit(main_dirs, df_segchar, use_inhouse):
     out_fn = {
             'flag': 'segment-ficture-per-unit',
             'root': main_dirs["analysis"],
             'subfolders_patterns': [
-                                    ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.d_{hexagon_width}.hexagon.tsv.gz"], None),
+                                    ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.d_{hexagon_width}.hexagon.tsv.gz"], lambda: use_inhouse is False),
+                                    ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.d_{hexagon_width}.hexagon.log"], lambda: use_inhouse is True)
             ],
             'zip_args': {
                 'run_id':        df_segchar["run_id"].values,  

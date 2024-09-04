@@ -25,12 +25,12 @@ from bricks import setup_logging, end_logging, configure_pandas_display, log_a_s
 from bricks import check_input, check_path, check_request, create_dict, create_symlink, create_dirs_and_get_paths
 from bricks import list_outputfn_by_request, create_symlinks_by_list
 from pipe_utils_novascope import read_config_for_ini, read_config_for_runid, read_config_for_unitid, read_config_for_segment, read_config_for_hist, read_config_for_seq1, read_config_for_seq2, read_config_for_sgevisual
-from pipe_condout_novascope import outfn_sbcd_per_fc, outfn_sbcd_per_chip, outfn_smatch_per_chip, outfn_align_per_run, outfn_sge_per_run, outfn_hist_per_run, outfn_trans_per_unit, outfn_filterftr_per_unit, outfn_filterpoly_per_unit, outfn_seg10x_per_unit, outfn_segfict_per_unit
+from pipe_condout_novascope import outfnlist_by_run, outfn_smatch_per_chip, outfn_sge_per_run, outfn_hist_per_run, outfn_filterpoly_per_unit, outfn_seg10x_per_unit, outfn_segfict_per_unit
 from rule_general_novascope import assign_resource_for_align, get_envmodules_for_rule, get_skip_sbcd, find_major_axis
 
 # set up 
 configfile: "config_job.yaml"
-# config = yaml.safe_load(open( "config_job.yaml"))
+# config = yaml.safe_load(open("config_job.yaml"))
 
 setup_logging(job_dir, smk_name+"_read-in")
 log_a_separator()
@@ -43,6 +43,9 @@ spatula  = env_config.get("tools", {}).get("spatula",   "spatula")
 samtools = env_config.get("tools", {}).get("samtools",  "samtools")
 star     = env_config.get("tools", {}).get("star",      "STAR")
 ficture  = os.path.join(smk_dir, "submodules", "ficture")
+
+# - use in house or standard rules
+use_inhouse = config.get("use_inhouse", False)
 
 #==============================================
 #
@@ -183,21 +186,21 @@ log_a_separator()
 logging.info(f"4. Expected output filenames.")
 
 # required df: df_run, df_seq2, df_sge, df_hist, df_segment_char
-
 # output files are generated based on the requests and extra conditions
 output_filename_conditions = [
-    outfn_sbcd_per_fc(main_dirs, df_run),
-    outfn_sbcd_per_chip(main_dirs, df_run),
+    # per seq2 id
     outfn_smatch_per_chip(main_dirs, df_seq2),
-    outfn_align_per_run(main_dirs, df_run),
+    # per sgevisual id
     outfn_sge_per_run(main_dirs, df_sge),
+    # per hist_std_prefix
     outfn_hist_per_run(main_dirs, df_hist),
-    outfn_trans_per_unit(main_dirs, df_run),
-    outfn_filterftr_per_unit(main_dirs, df_run),
+    # per sge_qc
     outfn_filterpoly_per_unit(main_dirs, df_seg),
-    outfn_segfict_per_unit(main_dirs, df_segfict),
-    outfn_seg10x_per_unit(main_dirs, df_seg10x),
+    # per sge_qc & solo_feature & hexagon_width
+    outfn_segfict_per_unit(main_dirs, df_segfict, use_inhouse),
+    outfn_seg10x_per_unit(main_dirs, df_seg10x, use_inhouse),
 ]
+output_filename_conditions.extend(outfnlist_by_run(main_dirs, df_run))
 
 requested_files = list_outputfn_by_request(output_filename_conditions, request, debug=False)
 
@@ -236,8 +239,13 @@ if any(task in request for task in ["transcript-per-unit", "filterftr-per-unit",
 if any(task in request for task in [ "filterpoly-per-unit", "segment-10x-per-unit", "segment-ficture-per-unit"]):
     include: "rules/c03_sdgeAR_polygonfilter.smk"
 
-if "segment-10x-per-unit" in request:
-    include: "rules/c04_sdgeAR_segment_10x.smk"
-
-if "segment-ficture-per-unit" in request:
-    include: "rules/c04_sdgeAR_segment_ficture.smk"
+if use_inhouse:
+    if "segment-10x-per-unit" in request:
+        include: "rules/c04_sdgeAR_segment_10x_inhouse.smk"
+    if "segment-ficture-per-unit" in request:
+        include: "rules/c04_sdgeAR_segment_ficture_inhouse.smk"
+else:
+    if "segment-10x-per-unit" in request:
+        include: "rules/c04_sdgeAR_segment_10x.smk"
+    if "segment-ficture-per-unit" in request:
+        include: "rules/c04_sdgeAR_segment_ficture.smk"

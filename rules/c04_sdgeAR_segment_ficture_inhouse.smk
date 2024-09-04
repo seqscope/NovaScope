@@ -34,39 +34,46 @@ rule c04_sdgeAR_segment_ficture_inhouse:
         if isinstance(params.hex_n_move, float):
             params.hex_n_move = int(params.hex_n_move)
         
-        try:
-            shell(
-            r"""
-            {params.module_cmd}
-            source {pyenv}/bin/activate
-
-            ### skip the --ct_header to use the default value.
-            command time -v {python} {ficture}/ficture/scripts/make_dge_univ.py \
-                --input {input.transcript_in} \
-                --output {hexagon_unzip} \
-                --mu_scale {mu_scale} \
-                --key {params.solo_feature} \
-                --hex_width {params.train_width} \
-                --min_density_per_unit {params.min_density} \
-                --n_move {params.hex_n_move} \
-                --precision {params.precision} \
-                --major_axis {major_axis} {boundary_args}
-                
-            ## Shuffle hexagon
-            sort -S 10G -k1,1n {hexagon_unzip} | gzip -c > {hexagon}  
-
-            if [ -f {hexagon_unzip} ]; then
-                rm {hexagon_unzip}
-            fi
-            """
-            )
-            # write down a log file to indicate the segmentation is done
+        # Check if the segmentation is done in the previous runs
+        if os.path.exists(hexagon):
             with open(output.hexagon_log, "w") as f:
                 f.write("Done")
-        # add an exception to catch the error, which may happen when the dataset is shallow
-        except Exception as e:
-            with open(output.hexagon_log, "w") as f:
-                f.write("Failed")
+        # if the segmentation is not done, do the segmentation
+        else:
+            # Attempt to do segmentation
+            try:
+                shell(
+                r"""
+                {params.module_cmd}
+                source {pyenv}/bin/activate
+
+                ### skip the --ct_header to use the default value.
+                command time -v {python} {ficture}/ficture/scripts/make_dge_univ.py \
+                    --input {input.transcript_in} \
+                    --output {hexagon_unzip} \
+                    --mu_scale {mu_scale} \
+                    --key {params.solo_feature} \
+                    --hex_width {params.train_width} \
+                    --min_density_per_unit {params.min_density} \
+                    --n_move {params.hex_n_move} \
+                    --precision {params.precision} \
+                    --major_axis {major_axis} {boundary_args}
+                    
+                ## Shuffle hexagon
+                sort -S 10G -k1,1n {hexagon_unzip} | gzip -c > {hexagon}  
+
+                if [ -f {hexagon_unzip} ]; then
+                    rm {hexagon_unzip}
+                fi
+                """
+                )
+                # write down a log file to indicate the segmentation is done
+                with open(output.hexagon_log, "w") as f:
+                    f.write("Done")
+            # add an exception to catch the error, which may happen when the dataset is shallow
+            except Exception as e:
+                with open(output.hexagon_log, "w") as f:
+                    f.write("Failed")
 
 
 
