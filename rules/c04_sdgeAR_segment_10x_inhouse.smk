@@ -16,8 +16,8 @@ rule c04_sdgeAR_segment_10x_inhouse:
         sge_qc              = "{sge_qc}",
         hex_n_move          = config.get("downstream", {}).get('segment', {}).get('hex_n_move', 1), 
         precision           = config.get("downstream", {}).get('segment', {}).get('precision', 2), 
-        min_pixel_per_unit  = config.get("downstream", {}).get('segment', {}).get('10x', {}).get('min_pixel_per_unit', 10), 
-        # module
+        min_density_per_unit = config.get("downstream", {}).get('segment', {}).get('10x', {}).get('min_density_per_unit', 0.01), 
+        min_ct_per_unit     = config.get("downstream", {}).get('segment', {}).get('10x', {}).get('min_ct_per_unit', 10),        # module
         module_cmd          = get_envmodules_for_rule(["python", "samtools"], module_config),
     resources:
         mem  = "7000MB", 

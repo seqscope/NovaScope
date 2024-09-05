@@ -53,7 +53,7 @@ if __name__ == "__main__":
     parser.add_argument('-s', '--solo_feature', default="gn", type=str, help='Solo feature')
     parser.add_argument('-a', '--density_filter', default="auto", type=str, help='Auto density')
     parser.add_argument('-o', '--output', type=str, default=None, help='Output CSV file path')
-    parser.add_argument('-c', '--cutoffs', type=str, default="10,20,30,40,50,100,200,300,400,500,1000,2000,3000,5000", help='Comma-separated list of cutoffs')
+    parser.add_argument('-c', '--cutoffs', type=str, default="0,10,20,30,40,50,100,200,300,400,500,1000,2000,3000,5000", help='Comma-separated list of cutoffs')
     parser.add_argument('-l', '--hex-width', type=str, default="d_12,d_18,d_24,d_36,d_48,d_72,d_96,d_120", help='Comma-separated list of hex_widths (hex_width) for the input files')
     parser.add_argument('-w', '--write-numi-per-width', action='store_true', default=False, help='Write nUMI per hexagon for each hexagon width')
     args = parser.parse_args()

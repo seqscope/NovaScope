@@ -15,7 +15,8 @@ rule c04_sdgeAR_segment_10x:
         sge_qc              = "{sge_qc}",
         hex_n_move          = config.get("downstream", {}).get('segment', {}).get('hex_n_move', 1), 
         precision           = config.get("downstream", {}).get('segment', {}).get('precision', 2), 
-        min_pixel_per_unit  = config.get("downstream", {}).get('segment', {}).get('10x', {}).get('min_pixel_per_unit', 10), 
+        min_density_per_unit = config.get("downstream", {}).get('segment', {}).get('10x', {}).get('min_density_per_unit', 0.01), 
+        min_ct_per_unit     = config.get("downstream", {}).get('segment', {}).get('10x', {}).get('min_ct_per_unit', 10),
         # module
         module_cmd          = get_envmodules_for_rule(["python", "samtools"], module_config),
     resources:
@@ -47,7 +48,8 @@ rule c04_sdgeAR_segment_10x:
             --precision {params.precision} \
             --hex_width {params.hexagon_width} \
             --n_move {params.hex_n_move} \
-            --min_ct_per_unit {params.min_pixel_per_unit} \
+            --min_ct_per_unit {params.min_ct_per_unit} \
+            --min_ct_density {params.min_density_per_unit} \
             --transfer_gene_prefix {boundary_args}
 
         """
