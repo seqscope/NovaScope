@@ -2,14 +2,14 @@ rule c04_sdgeAR_segment_10x_inhouse:
     input:
         sdgeAR_xyrange  = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "sgeAR", "barcodes.minmax.tsv"),    # Use sdgeAR_xyrange instead of xyrange_in to determine the major axis is because the transcript was sorted by the longer axis in sdgeAR_xyrange and the longer axis may be different between sdgeAR_xyrange and xyrange.
         transcript_in   = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", ("{unit_id}.transcripts.tsv.gz" if wildcards.sge_qc=="raw" else "{unit_id}.{solo_feature}."+wildcards.sge_qc+".transcripts.tsv.gz")),
-        ftr_in          = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", ("{unit_id}.feature.tsv.gz"     if wildcards.sge_qc=="raw" else "{unit_id}.{solo_feature}."+wildcards.sge_qc+".feature.tsv.gz")),
+        ftr_in          = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", ("{unit_id}.feature.tsv.gz"     if wildcards.sge_qc=="raw" else "{unit_id}.feature.clean.tsv.gz")),
         boundary_in     = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.boundary.strict.geojson") if wildcards.sge_qc == "filtered" else [],
         xyrange_in      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.coordinate_minmax.tsv"),    # This file is not used but is required to make sure every transcript file has a corresponding xyrange file.
     output:
         # hexagon_bcd      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "barcodes.tsv.gz"),
         # hexagon_ftr      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "features.tsv.gz"),
         # hexagon_mtx      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "matrix.mtx.gz"),
-        hexagon_log         = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.d_{hexagon_width}.10x.log")
+        hexagon_log         = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.10x.d_{hexagon_width}.log")
     params:
         solo_feature        = "{solo_feature}",
         hexagon_width       = "{hexagon_width}",
@@ -27,6 +27,7 @@ rule c04_sdgeAR_segment_10x_inhouse:
         major_axis=find_major_axis(input.sdgeAR_xyrange, format="col") 
         # dirs/files
         hexagon_dir = os.path.join(os.path.dirname(output.hexagon_log), "10x")
+        os.makedirs(hexagon_dir, exist_ok=True)
         hexagon_bcd = os.path.join(hexagon_dir, "barcodes.tsv.gz")
         hexagon_ftr = os.path.join(hexagon_dir, "features.tsv.gz")
         hexagon_mtx = os.path.join(hexagon_dir, "matrix.mtx.gz")
@@ -59,7 +60,7 @@ rule c04_sdgeAR_segment_10x_inhouse:
                     --precision {params.precision} \
                     --hex_width {params.hexagon_width} \
                     --n_move {params.hex_n_move} \
-                    --min_ct_per_unit {params.min_pixel_per_unit} \
+                    --min_ct_per_unit {params.min_ct_per_unit} \
                     --transfer_gene_prefix {boundary_args}
                 """
                 )
@@ -70,5 +71,6 @@ rule c04_sdgeAR_segment_10x_inhouse:
             except Exception as e:
                 with open(output.hexagon_log, "w") as f:
                     f.write("Failed")
+                    f.write(str(e))
 
         

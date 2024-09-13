@@ -62,14 +62,14 @@ theme_wc <- function(base_size = 14) {
 base_palette <- brewer.pal(9, "Set3")
 color_palette <- colorRampPalette(base_palette[3:9])(8)
 
+message(paste0("Reading the input file from: "), opt$input)
+
 df <- read.csv(opt$input,sep="\t") 
 df$hex_width<-factor(df$hex_width, levels = c("d_12", "d_18", "d_24", "d_36", "d_48", "d_72", "d_96", "d_120"))
-
 
 ymax <- max(df$nhex)
 yticks <- c(1, 5, 10, 20, 50, 100, 200, 500, 1000, 5000, 10000, 100000, 1000000, 10000000)
 yticks <- yticks[yticks <= ymax]
-
 
 p <- ggplot(df,  aes(x = nUMI_cutoff, y = nhex, color = hex_width)) + #facet_wrap(~data, scales = "free_y") +
   geom_line(size = 1) +
@@ -84,5 +84,6 @@ p <- ggplot(df,  aes(x = nUMI_cutoff, y = nhex, color = hex_width)) + #facet_wra
   theme_minimal() +
   theme_wc()
 
-
+# print out the location of the output for the user
+message(paste0("Writing the output file to: "), opt$output)
 ggsave(opt$output, plot = p, width = 10, height = 5, dpi = 300)

@@ -25,10 +25,11 @@ from bricks import setup_logging, end_logging, configure_pandas_display, log_a_s
 from bricks import check_input, check_path, check_request, create_dict, create_symlink, create_dirs_and_get_paths
 from bricks import list_outputfn_by_request, create_symlinks_by_list
 from pipe_utils_novascope import read_config_for_ini, read_config_for_runid, read_config_for_unitid, read_config_for_segment, read_config_for_hist, read_config_for_seq1, read_config_for_seq2, read_config_for_sgevisual
-from pipe_condout_novascope import outfnlist_by_run, outfn_smatch_per_chip, outfn_sge_per_run, outfn_hist_per_run, outfn_filterpoly_per_unit, outfn_seg10x_per_unit, outfn_segfict_per_unit
+from pipe_condout_novascope import outfn_smatch_per_chip, outfn_sge_per_run, outfn_hist_per_run, outfnlist_by_seg, outfnlist_by_run
 from rule_general_novascope import assign_resource_for_align, get_envmodules_for_rule, get_skip_sbcd, find_major_axis
 
 # set up 
+configure_pandas_display()
 configfile: "config_job.yaml"
 # config = yaml.safe_load(open("config_job.yaml"))
 
@@ -44,8 +45,6 @@ samtools = env_config.get("tools", {}).get("samtools",  "samtools")
 star     = env_config.get("tools", {}).get("star",      "STAR")
 ficture  = os.path.join(smk_dir, "submodules", "ficture")
 
-# - use in house or standard rules
-use_inhouse = config.get("use_inhouse", False)
 
 #==============================================
 #
@@ -83,6 +82,11 @@ request = check_request(input_request=config.get("request", ["sge-per-run"]),
 
 if  "segment-per-unit" in request:
     request = request + ["segment-10x-per-unit", "segment-ficture-per-unit"]
+
+# - segmentviz or not 
+segmentviz = config.get("downstream", {}).get("segmentviz", None)
+if segmentviz:
+    request = request + ["segment-viz-per-unit"]
 
 logging.info(f" - Valid Request(s): {request}")
 
@@ -158,7 +162,8 @@ df_seg_void = pd.DataFrame({
         'unit_id': pd.Series(dtype='object'),
         'solo_feature': pd.Series(dtype='object'),
         'hexagon_width': pd.Series(dtype='int64'), 
-        'sge_qc': pd.Series(dtype='object') 
+        'sge_qc': pd.Series(dtype='object'),
+        'sge_format': pd.Series(dtype='object'),
     })
 
 if any(task in request for task in["filterpoly-per-unit", "segment-10x-per-unit", "segment-ficture-per-unit"]):
@@ -168,9 +173,9 @@ if any(task in request for task in["filterpoly-per-unit", "segment-10x-per-unit"
 else:
     logging.info(f" - Downstream Segmentation: Skipping")
 
-df_seg10x = read_config_for_segment(config, run_id, unit_id, "10x", silent=False) if any(task in request for task in ["filterpoly-per-unit", "segment-10x-per-unit"]) else df_seg_void
+df_seg10x  = read_config_for_segment(config, run_id, unit_id, "10x", silent=False)     if any(task in request for task in ["filterpoly-per-unit", "segment-10x-per-unit"]) else df_seg_void
 df_segfict = read_config_for_segment(config, run_id, unit_id, "ficture", silent=False) if any(task in request for task in ["filterpoly-per-unit", "segment-ficture-per-unit"]) else df_seg_void
-df_seg = pd.concat([df_seg10x, df_segfict], ignore_index=True).drop_duplicates()
+df_seg = pd.concat([df_seg10x, df_segfict], ignore_index=True).drop_duplicates().reset_index(drop=True)
 
 #==============================================
 #
@@ -194,15 +199,11 @@ output_filename_conditions = [
     outfn_sge_per_run(main_dirs, df_sge),
     # per hist_std_prefix
     outfn_hist_per_run(main_dirs, df_hist),
-    # per sge_qc
-    outfn_filterpoly_per_unit(main_dirs, df_seg),
-    # per sge_qc & solo_feature & hexagon_width
-    outfn_segfict_per_unit(main_dirs, df_segfict, use_inhouse),
-    outfn_seg10x_per_unit(main_dirs, df_seg10x, use_inhouse),
 ]
 output_filename_conditions.extend(outfnlist_by_run(main_dirs, df_run))
+output_filename_conditions.extend(outfnlist_by_seg(main_dirs, df_seg, segmentviz))    # segment & segmentviz
 
-requested_files = list_outputfn_by_request(output_filename_conditions, request, debug=False)
+requested_files = list_outputfn_by_request(output_filename_conditions, request, debug=True)
 
 rule all:
     input:
@@ -230,20 +231,19 @@ if any(task in request for task in ["sge-per-run", "transcript-per-unit", "filte
 if "histology-per-run" in request:
     include: "rules/b02_historef.smk"
 
-if any(task in request for task in ["transcript-per-unit", "filterftr-per-unit", "filterpoly-per-unit", "segment-10x-per-unit", "segment-ficture-per-unit"]):
+if any(task in request for task in ["transcript-per-unit", "filterftr-per-unit", "filterpoly-per-unit", "segment-10x-per-unit", "segment-ficture-per-unit", "segment-viz-per-unit"]):
     include: "rules/c01_sdge2sdgeAR.smk"
     include: "rules/c02_sdgeAR_reformat.smk"
     include: "rules/c03_sdgeAR_minmax.smk"
     include: "rules/c03_sdgeAR_featurefilter.smk"
 
-if any(task in request for task in [ "filterpoly-per-unit", "segment-10x-per-unit", "segment-ficture-per-unit"]):
+if any(task in request for task in [ "filterpoly-per-unit", "segment-10x-per-unit", "segment-ficture-per-unit", "segment-viz-per-unit"]):
     include: "rules/c03_sdgeAR_polygonfilter.smk"
 
-if use_inhouse:
-    if "segment-10x-per-unit" in request:
-        include: "rules/c04_sdgeAR_segment_10x_inhouse.smk"
-    if "segment-ficture-per-unit" in request:
-        include: "rules/c04_sdgeAR_segment_ficture_inhouse.smk"
+if segmentviz:
+    include: "rules/b03_sdgeAR_segmentviz.smk"
+    include: "rules/c04_sdgeAR_segment_10x_inhouse.smk"
+    include: "rules/c04_sdgeAR_segment_ficture_inhouse.smk"
 else:
     if "segment-10x-per-unit" in request:
         include: "rules/c04_sdgeAR_segment_10x.smk"

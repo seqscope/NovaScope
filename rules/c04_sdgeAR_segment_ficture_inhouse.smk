@@ -5,9 +5,10 @@ rule c04_sdgeAR_segment_ficture_inhouse:
         boundary_in         = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.boundary.strict.geojson") if wildcards.sge_qc == "filtered" else [],
         xyrange_in          = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.coordinate_minmax.tsv"),    # This file is not used but is required to make sure every transcript file has a corresponding xyrange file.
     output:
-        hexagon_log         = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.d_{hexagon_width}.ficture.log")
+        hexagon_log         = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.ficture.d_{hexagon_width}.log")
         #hexagon            = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.d_{hexagon_width}.hexagon.tsv.gz"),
     params:
+        hexagon_prefix      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.d_{hexagon_width}"),
         solo_feature        = "{solo_feature}",
         train_width         = "{hexagon_width}",
         sge_qc              = "{sge_qc}",
@@ -24,8 +25,8 @@ rule c04_sdgeAR_segment_ficture_inhouse:
         # major axis
         major_axis    = find_major_axis(input.sdgeAR_xyrange, format="col")
         # dirs/files
-        hexagon_unzip = output.hexagon_log.rstrip("ficture.log")+"hexagon.tsv"
-        hexagon       = output.hexagon_log.rstrip("ficture.log")+"hexagon.tsv.gz"
+        hexagon_unzip = params.hexagon_prefix + ".hexagon.tsv"
+        hexagon       = params.hexagon_prefix + ".hexagon.tsv.gz"
 
         if params.sge_qc == "filtered":
             boundary_args = f"--boundary {input.boundary_in}"
@@ -62,7 +63,7 @@ rule c04_sdgeAR_segment_ficture_inhouse:
                     --major_axis {major_axis} {boundary_args}
                     
                 ## Shuffle hexagon
-                sort -S 10G -k1,1n {hexagon_unzip} | gzip -c > {hexagon}  
+                sort -S 10G -k1,1n {hexagon_unzip} | gzip -c > {hexagon} 
 
                 if [ -f {hexagon_unzip} ]; then
                     rm {hexagon_unzip}

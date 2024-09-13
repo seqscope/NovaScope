@@ -1,6 +1,6 @@
 # Generate output file name by request
 # for upstream pipeline (NovaScope)
-
+import pandas as pd
 #===============================================================================
 #
 #        Output files for each run
@@ -123,8 +123,6 @@ def outfn_smatch_per_chip(main_dirs, df_seq2):
     }
     return outfn
 
-
-
 def outfn_sge_per_run(main_dirs, df_sge):
     out_fn ={
         'flag': 'sge-per-run',
@@ -170,8 +168,8 @@ def outfn_hist_per_run(main_dirs, df_hist):
 #===============================================================================
 
 def outfn_filterpoly_per_unit(main_dirs, df_segchar):
-    # note this only applies to sge_qc = "filtered"
-    df_segchar = df_segchar[df_segchar["sge_qc"] == "filtered"]
+    df_segchar = df_segchar[["run_id", "unit_id", "solo_feature", "sge_qc"]]   # only keep the required columns
+    df_segchar = df_segchar[df_segchar["sge_qc"] == "filtered"] # note this only applies to sge_qc = "filtered"
     out_fn = {
             'flag': 'filterpoly-per-unit',
             'root': main_dirs["analysis"],
@@ -188,13 +186,13 @@ def outfn_filterpoly_per_unit(main_dirs, df_segchar):
                 'run_id':        df_segchar["run_id"].values,  
                 'unit_id':       df_segchar["unit_id"].values,
                 'solo_feature':  df_segchar["solo_feature"].values,
-                'sge_qc':        df_segchar["sge_qc"].values
+                'sge_qc':        df_segchar["sge_qc"].values,
             },
     }
     return out_fn
 
-def outfn_seg10x_per_unit(main_dirs, df_segchar, use_inhouse):
-    inhouse_mode = lambda: use_inhouse 
+def outfn_seg10x_per_unit(main_dirs, df_segchar, segmentviz):
+    use_inhouse= lambda: segmentviz is not None
     out_fn = {
             'flag': 'segment-10x-per-unit',
             'root': main_dirs["analysis"],
@@ -202,34 +200,65 @@ def outfn_seg10x_per_unit(main_dirs, df_segchar, use_inhouse):
                                     ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "barcodes.tsv.gz"],  lambda: use_inhouse is False),
                                     ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "features.tsv.gz"],  lambda: use_inhouse is False),
                                     ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "matrix.mtx.gz"  ],  lambda: use_inhouse is False),   
-                                    ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.d_{hexagon_width}.10x.log"], lambda: use_inhouse is True)
-
+                                    ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.10x.d_{hexagon_width}.log"], lambda: use_inhouse is True)
             ],
             'zip_args': {
                 'run_id':        df_segchar["run_id"].values,  
                 'unit_id':       df_segchar["unit_id"].values,
                 'solo_feature':  df_segchar["solo_feature"].values,
                 'hexagon_width': df_segchar["hexagon_width"].values,
-                'sge_qc':        df_segchar["sge_qc"].values
+                'sge_qc':        df_segchar["sge_qc"].values,
             },
     }
     return out_fn
 
-
-def outfn_segfict_per_unit(main_dirs, df_segchar, use_inhouse):
+def outfn_segfict_per_unit(main_dirs, df_segchar, segmentviz):
+    use_inhouse= lambda: segmentviz is not None
     out_fn = {
             'flag': 'segment-ficture-per-unit',
             'root': main_dirs["analysis"],
             'subfolders_patterns': [
                                     ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.d_{hexagon_width}.hexagon.tsv.gz"], lambda: use_inhouse is False),
-                                    ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.d_{hexagon_width}.hexagon.log"], lambda: use_inhouse is True)
+                                    ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.ficture.d_{hexagon_width}.log"], lambda: use_inhouse is True)
             ],
             'zip_args': {
                 'run_id':        df_segchar["run_id"].values,  
                 'unit_id':       df_segchar["unit_id"].values,
                 'solo_feature':  df_segchar["solo_feature"].values,
                 'hexagon_width': df_segchar["hexagon_width"].values,
-                'sge_qc':        df_segchar["sge_qc"].values
+                'sge_qc':        df_segchar["sge_qc"].values,
             },
     }
     return out_fn
+
+def outfn_segviz_per_unit(main_dirs, df_segchar, segmentviz):
+    df_segchar = pd.DataFrame( [{**row, 'segviz_format': viz_format} for _, row in df_segchar.iterrows() for viz_format in segmentviz])
+    out_fn = {
+            'flag': 'segment-viz-per-unit',
+            'root': main_dirs["analysis"],
+            'subfolders_patterns': [
+                                    ([ "{run_id}", "{unit_id}", "segment", "{unit_id}.{solo_feature}.raw.{segviz_format}.segmentviz.log"], None),
+                                    ([ "{run_id}", "{unit_id}", "segment", "{unit_id}.{solo_feature}.filtered.{segviz_format}.segmentviz.log"], None),
+            ],
+            'zip_args': {
+                'run_id':        df_segchar["run_id"].values,
+                'unit_id':       df_segchar["unit_id"].values,
+                'solo_feature':  df_segchar["solo_feature"].values,
+                'segviz_format': df_segchar["segviz_format"].values,
+            },
+    }
+    return out_fn
+
+def outfnlist_by_seg(main_dirs, df_segchar, segmentviz):
+    outfnlist = []
+    outfnlist.append(outfn_filterpoly_per_unit(main_dirs, df_segchar))
+    if segmentviz:
+        df_seg_viz= df_segchar[['run_id', 'unit_id', 'solo_feature']].drop_duplicates().reset_index(drop=True)
+        outfnlist.append(outfn_segviz_per_unit(main_dirs, df_seg_viz, segmentviz))
+    df_segchar_10x= df_segchar[df_segchar["sge_format"] == "10x"]
+    if not df_segchar_10x.empty:
+        outfnlist.append(outfn_seg10x_per_unit(main_dirs, df_segchar_10x, segmentviz))
+    df_segchar_ficture= df_segchar[df_segchar["sge_format"] == "ficture"]
+    if not df_segchar_ficture.empty:
+        outfnlist.append(outfn_segfict_per_unit(main_dirs, df_segchar_ficture, segmentviz))
+    return outfnlist

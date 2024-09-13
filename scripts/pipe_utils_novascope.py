@@ -240,13 +240,13 @@ def define_segchar_df(info, run_id, unit_id, format):
             "quality_control": [sge_qc_def]
         })
     df_char["sge_qc"] = df_char["quality_control"].apply(lambda x: "filtered" if x else "raw")
-    df_char = df_char.drop(columns=["quality_control"])
     return df_char
 
 def read_config_for_segment(config, run_id, unit_id, format, silent=False):
     seg_info = config.get("downstream", {}).get("segment",{}).get(format, {}).get("char", None)
     df_segchar = define_segchar_df(seg_info, run_id, unit_id, format)
-    df_segchar = df_segchar[["run_id", "unit_id", "solo_feature", "sge_qc", "hexagon_width"]]
+    df_segchar["sge_format"]=format
+    df_segchar = df_segchar[["run_id", "unit_id", "solo_feature", "sge_qc", "sge_format", "hexagon_width"]].drop_duplicates()
     if not silent:
         log_dataframe(df_segchar, log_message=f"   - segment parameters ({format}): ", indentation="     ")
     return df_segchar
@@ -271,7 +271,7 @@ def read_config_for_hist(config, job_dir, main_dirs, silent=False):
     df_hist["species"]       = config["input"]["species"]
     df_hist["magnification"] = df_hist["magnification"].fillna("10X")
     df_hist["figtype"]       = df_hist["figtype"].fillna("hne")
-    df_hist["hist_std_prefix"]=df_hist["magnification"]+df_hist["flowcell_abbr"]+"-"+df_hist["chip"]+"-"+df_hist["species"]+"-"+df_hist["figtype"]
+    df_hist["hist_std_prefix"] = df_hist["magnification"]+df_hist["flowcell_abbr"]+"-"+df_hist["chip"]+"-"+df_hist["species"]+"-"+df_hist["figtype"]
     # add paths and archive the files
     df_hist["hist_raw_inputpath"] = df_hist["path"].apply(lambda x: check_path(x, job_dir, strict_mode=True))   # hist_raw_inputpath is the real path
     df_hist["hist_raw_stddir"] = df_hist.apply(lambda x: os.path.join(main_dirs["histology"], x["flowcell"], x["chip"], "raw"), axis=1)

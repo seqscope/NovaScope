@@ -51,44 +51,18 @@ if __name__ == "__main__":
     parser.add_argument('-u', '--unit-id', type=str, help='Unit ID')
     parser.add_argument('-m', '--format', type=str, choices=["ficture", "10x"], help='hexagon')
     parser.add_argument('-s', '--solo_feature', default="gn", type=str, help='Solo feature')
-    parser.add_argument('-a', '--density_filter', default="auto", type=str, help='Auto density')
+    parser.add_argument('-a', '--density-filter', default="auto", type=str, help='Auto density')
     parser.add_argument('-o', '--output', type=str, default=None, help='Output CSV file path')
     parser.add_argument('-c', '--cutoffs', type=str, default="0,10,20,30,40,50,100,200,300,400,500,1000,2000,3000,5000", help='Comma-separated list of cutoffs')
     parser.add_argument('-l', '--hex-width', type=str, default="d_12,d_18,d_24,d_36,d_48,d_72,d_96,d_120", help='Comma-separated list of hex_widths (hex_width) for the input files')
     parser.add_argument('-w', '--write-numi-per-width', action='store_true', default=False, help='Write nUMI per hexagon for each hexagon width')
     args = parser.parse_args()
-    '''
-    # ficture
-    python /nfs/turbo/sph-hmkang/index/data/weiqiuc/NovaScope/scripts/rule_b03_sdgeAR_segmentviz_nUMI_tab.py \
-        --in-dir /nfs/turbo/umms-leeju/nova/v2/analysis/n9-hgc2m-b06-07c-mouse-714e6/n9-hgc2m-b06-07c-mouse-714e6-default/segment \
-        --format ficture \
-        --density_filter auto \
-        --unit-id n9-hgc2m-b06-07c-mouse-714e6-default
-    args.in_dir="/nfs/turbo/umms-leeju/nova/v2/analysis/n9-hgc2m-b06-07c-mouse-714e6/n9-hgc2m-b06-07c-mouse-714e6-default/segment"
-    args.unit_id="n9-hgc2m-b06-07c-mouse-714e6-default"
-    args.solo_feature="gn"
-    args.density_filter="auto"
-    args.hex_width="d_12,d_18,d_24,d_36,d_48,d_72,d_96"
-    args.cutoffs="10,20,30,40,50,100,200,300,400,500,1000,2000,3000,5000"
-    # 10x
-    python /nfs/turbo/sph-hmkang/index/data/weiqiuc/NovaScope/scripts/rule_b03_sdgeAR_segmentviz_nUMI_tab.py \
-        --in-dir /nfs/turbo/umms-leeju/nova/v2/analysis/n9-hgc2m-b06-07c-mouse-714e6/n9-hgc2m-b06-07c-mouse-714e6-default/segment \
-        --format 10x \
-        --density_filter raw \
-        --unit-id n9-hgc2m-b06-07c-mouse-714e6-default \
-        --write-numi-per-width
-    args.in_dir="/nfs/turbo/umms-leeju/nova/v2/analysis/n9-hgc2m-b06-07c-mouse-714e6/n9-hgc2m-b06-07c-mouse-714e6-default/segment"
-    args.unit_id="n9-hgc2m-b06-07c-mouse-714e6-default"
-    args.solo_feature="gn"
-    args.density_filter="raw"
-    args.hex_width="d_12,d_18,d_24,d_36,d_48,d_72,d_96,d_120"
-    args.cutoffs="10,20,30,40,50,100,200,300,400,500,1000,2000,3000,5000"
-    '''
     # output 
     if args.output is None:    
-        args.output = os.path.join(args.in_dir, f"{args.unit_id}.{args.solo_feature}.{args.density_filter}.hexagon_nUMI.{args.format}.tsv")
+        args.output = os.path.join(args.in_dir, f"{args.unit_id}.{args.solo_feature}.{args.density_filter}.{args.format}.segmentviz.tsv")
     # cutoffs
     cutoffs = list(map(int, args.cutoffs.split(',')))
     numi_per_hex(args)
+    print(f"The summary file is generated at: {args.output}.")
 
 
