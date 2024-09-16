@@ -70,13 +70,22 @@ rule c04_sdgeAR_segment_ficture_inhouse:
                 fi
                 """
                 )
-                # write down a log file to indicate the segmentation is done
-                with open(output.hexagon_log, "w") as f:
-                    f.write("Done")
+                # get the number of rows in the hexagon file
+                nhex = int(subprocess.check_output(f"gzip -dc {hexagon} | wc -l", shell=True).decode().strip())
+                print(f"The hexagon-indexed SGE has {nhex} hexagons.")
+                if nhex > 1:    # header
+                    with open(output.hexagon_log, "w") as f:
+                        f.write("Done")
+                else:
+                    with open(output.hexagon_log, "w") as f:
+                        f.write("Failed")
+                        f.write("Returned 0 hexagons")
             # add an exception to catch the error, which may happen when the dataset is shallow
             except Exception as e:
+                print(str(e))
                 with open(output.hexagon_log, "w") as f:
                     f.write("Failed")
+                    f.write(str(e))
 
 
 

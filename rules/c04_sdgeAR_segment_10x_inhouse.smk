@@ -64,11 +64,21 @@ rule c04_sdgeAR_segment_10x_inhouse:
                     --transfer_gene_prefix {boundary_args}
                 """
                 )
-                # write down a log file to indicate the segmentation is done
-                with open(output.hexagon_log, "w") as f:
-                    f.write("Done")
+                # assign the text in the 3rd row in the mtx file to variable "mtx_info"
+                mtx_info = shell(f"zcat {hexagon_mtx} | head -n 3 | tail -n 1")
+                # nhex should be the 2nd element in the mtx_info
+                nhex=int(mtx_info.split()[1])
+                print(f"The hexagon-indexed SGE has {nhex} hexagons.")
+                if nhex > 0:
+                    with open(output.hexagon_log, "w") as f:
+                        f.write("Done")
+                else:
+                    with open(output.hexagon_log, "w") as f:
+                        f.write("Failed")
+                        f.write("The hexagon-indexed SGE has 0 hexagons.")
             # add an exception to catch the error, which may happen when the dataset is shallow
             except Exception as e:
+                print(str(e))
                 with open(output.hexagon_log, "w") as f:
                     f.write("Failed")
                     f.write(str(e))

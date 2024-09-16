@@ -7,12 +7,15 @@ library("tidyverse")
 option_list <- list(
   make_option(c("-i", "--input"), type = "character", default = NULL, help = "Input CSV file path", metavar = "character"),
   make_option(c("-o", "--output"), type = "character", default = NULL, help = "Output plot file path", metavar = "character"),
-  make_option(c("-u", "--title"), type = "character", default = NULL, help = "Title of the figure")
+  make_option(c("-u", "--title"), type = "character", default = NULL, help = "Title of the figure"),
+  make_option(c("-y", "--yaxis"), type = "character", default = "count", help = "The y axis label, count or percentage", metavar = "character")
 )
 opt_parser <- OptionParser(option_list = option_list)
 opt <- parse_args(opt_parser)
-
-#opt$input<-"n9-hgc2m-b06-07c-mouse-714e6-default.gn.raw.hexagon_nUMI.10x.tsv"
+#opt$input<-"/nfs/turbo/umms-leeju/nova/v2/analysis/n8-htwlw-t03c-mouse-5d3eb/n8-htwlw-t03c-mouse-5d3eb-default/segment/n8-htwlw-t03c-mouse-5d3eb-default.gn.filtered.10x.segmentviz.tsv"
+#opt$output<-"/nfs/turbo/umms-leeju/nova/v2/analysis/n8-htwlw-t03c-mouse-5d3eb/n8-htwlw-t03c-mouse-5d3eb-default/segment/n8-htwlw-t03c-mouse-5d3eb-default.gn.filtered.10x.segmentviz_2.png" 
+#opt$title<-"n8-htwlw-t03c-mouse-5d3eb-default_10x_filtered"
+#opt$yaxis<-"percentage"
 
 # extract title when it is NULL
 if (is.null(opt$title)) {
@@ -67,23 +70,49 @@ message(paste0("Reading the input file from: "), opt$input)
 df <- read.csv(opt$input,sep="\t") 
 df$hex_width<-factor(df$hex_width, levels = c("d_12", "d_18", "d_24", "d_36", "d_48", "d_72", "d_96", "d_120"))
 
-ymax <- max(df$nhex)
-yticks <- c(1, 5, 10, 20, 50, 100, 200, 500, 1000, 5000, 10000, 100000, 1000000, 10000000)
-yticks <- yticks[yticks <= ymax]
 
-p <- ggplot(df,  aes(x = nUMI_cutoff, y = nhex, color = hex_width)) + #facet_wrap(~data, scales = "free_y") +
-  geom_line(size = 1) +
-  geom_point(size = 2) +
+if (opt$yaxis == "count") {
+  ymax <- max(df$nhex)
+  yticks <- c(0, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000, 50000, 100000, 200000, 500000,  1000000,  2000000, 5000000, 10000000)
+  yticks <- yticks[yticks <= ymax]
+  ylab <- "Num of Hexagons"
+  p <- ggplot(df,  aes(x = nUMI_cutoff, y = nhex, color = hex_width)) + #facet_wrap(~data, scales = "free_y") +
+    geom_line(size = 1) +
+    geom_point(size = 2) +
+    scale_y_log10(breaks = sort(unique(yticks)), labels = as.character(sort(unique(yticks))))
+} else if (opt$yaxis == "percentage") {
+  yticks <- c(0,10, 20, 30, 40, 50, 60, 70, 80, 90, 100)
+  ylab <- "Percentage of Hexagons (%)"
+  df_max<-df%>%
+    group_by(hex_width)%>%
+    summarise(max_nhex = max(nhex))%>%
+    ungroup()%>%
+    as.data.frame()
+  # create the percentage column
+  p<-df%>%
+    left_join(df_max, by = c("hex_width" = "hex_width"))%>%
+    mutate(hex_percentage = nhex/max_nhex*100)%>%
+    mutate(hex_percentage = as.integer(hex_percentage))%>%
+    ggplot(aes(x = nUMI_cutoff, y = hex_percentage, color = hex_width)) +
+    geom_line(size = 1) +
+    geom_point(size = 2) +
+    scale_y_continuous(breaks = yticks, labels = as.character(yticks)) +
+    # define y range
+    coord_cartesian(ylim = c(0, 100))
+}else {
+  stop("Invalid y-axis option. Please choose 'count' or 'percentage'.", call. = FALSE)
+}
+
+p2<-p+
   scale_x_log10(breaks = sort(unique(df$nUMI_cutoff)), labels = as.character(sort(unique(df$nUMI_cutoff)))) +
-  scale_y_log10(breaks = sort(unique(yticks)), labels = as.character(sort(unique(yticks)))) +
   scale_color_manual(values = color_palette) +  # Use the custom color palette
+  theme_minimal() +
   labs(title = opt$title,
        x = "nUMI Cutoffs",
-       y = "Num of Hexagons",
+       y = ylab,
        color = "Hexagon Widths") +
-  theme_minimal() +
   theme_wc()
 
 # print out the location of the output for the user
 message(paste0("Writing the output file to: "), opt$output)
-ggsave(opt$output, plot = p, width = 10, height = 5, dpi = 300)
+ggsave(opt$output, plot = p2, width = 10, height = 5, dpi = 300)
