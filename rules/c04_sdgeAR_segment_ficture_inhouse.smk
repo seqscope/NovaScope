@@ -16,11 +16,12 @@ rule c04_sdgeAR_segment_ficture_inhouse:
         precision           = config.get("downstream", {}).get('segment', {}).get('precision', 2), 
         min_density_per_unit= config.get("downstream", {}).get('segment', {}).get('ficture', {}).get('min_density_per_unit', 0.01),
         min_ct_per_unit     = config.get("downstream", {}).get('segment', {}).get('ficture', {}).get('min_ct_per_unit', 10),
+        exist_action        = config.get("downstream", {}).get('segment', {}).get('ficture', {}).get('exist_action', "overwrite"), # ["skip", "overwrite"] # for the inhouse production pipeline, because the parameters has been changed: density from 0.3 to 0.01, ct from 20 to 10, do not use the previous hexagon file.
         # module
         module_cmd          = get_envmodules_for_rule(["python", "samtools"], module_config)
     resources:
         mem  = "28000MB", 
-        time = "72:00:00"
+        time = "10:00:00"
     run:
         # major axis
         major_axis    = find_major_axis(input.sdgeAR_xyrange, format="col")
@@ -36,11 +37,11 @@ rule c04_sdgeAR_segment_ficture_inhouse:
         if isinstance(params.hex_n_move, float):
             params.hex_n_move = int(params.hex_n_move)
         
-        # Check if the segmentation is done in the previous runs
-        if os.path.exists(hexagon):
+        # To leverage the existing segmentation and the segmentation is done, skip the segmentation
+        if params.exist_action == "skip" and os.path.exists(hexagon):
             with open(output.hexagon_log, "w") as f:
                 f.write("Done")
-        # if the segmentation is not done, do the segmentation
+        # if the segmentation is not done, or exist_action is "overwrite", do the segmentation
         else:
             # Attempt to do segmentation
             try:

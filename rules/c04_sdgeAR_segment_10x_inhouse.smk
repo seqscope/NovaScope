@@ -1,3 +1,21 @@
+
+def get_nbcd_from_mtx(file_path):
+    with gzip.open(file_path, 'rt') as f:
+        row_count = 0
+
+        for line in f:
+            # Skip comment lines that start with '%'
+            if line.startswith('%'):
+                continue
+
+            row_count += 1
+
+            # Once we reach the 3rd non-comment line, return it
+            if row_count == 3:
+                nbcd=int(line.strip().split()[1])
+                return nbcd
+    return None
+
 rule c04_sdgeAR_segment_10x_inhouse:
     input:
         sdgeAR_xyrange  = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "sgeAR", "barcodes.minmax.tsv"),    # Use sdgeAR_xyrange instead of xyrange_in to determine the major axis is because the transcript was sorted by the longer axis in sdgeAR_xyrange and the longer axis may be different between sdgeAR_xyrange and xyrange.
@@ -11,17 +29,21 @@ rule c04_sdgeAR_segment_10x_inhouse:
         # hexagon_mtx      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "matrix.mtx.gz"),
         hexagon_log         = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.10x.d_{hexagon_width}.log")
     params:
+        # basic params
         solo_feature        = "{solo_feature}",
         hexagon_width       = "{hexagon_width}",
         sge_qc              = "{sge_qc}",
+        # aux params
         hex_n_move          = config.get("downstream", {}).get('segment', {}).get('hex_n_move', 1), 
         precision           = config.get("downstream", {}).get('segment', {}).get('precision', 2), 
-        min_density_per_unit = config.get("downstream", {}).get('segment', {}).get('10x', {}).get('min_density_per_unit', 0.01), 
-        min_ct_per_unit     = config.get("downstream", {}).get('segment', {}).get('10x', {}).get('min_ct_per_unit', 10),        # module
+        min_density_per_unit= config.get("downstream", {}).get('segment', {}).get('10x', {}).get('min_density_per_unit', 0.01), 
+        min_ct_per_unit     = config.get("downstream", {}).get('segment', {}).get('10x', {}).get('min_ct_per_unit', 10),
+        exist_action        = config.get("downstream", {}).get('segment', {}).get('10x', {}).get('exist_action', "overwrite"), # ["skip", "overwrite"]
+        # modules
         module_cmd          = get_envmodules_for_rule(["python", "samtools"], module_config),
     resources:
         mem  = "7000MB", 
-        time = "12:00:00",
+        time = "6:00:00",
     run:
         # major axis
         major_axis=find_major_axis(input.sdgeAR_xyrange, format="col") 
@@ -38,7 +60,7 @@ rule c04_sdgeAR_segment_10x_inhouse:
             boundary_args = ""
         
         # Check if the segmentation is done in the previous runs
-        if os.path.exists(hexagon_bcd) and os.path.exists(hexagon_ftr) and os.path.exists(hexagon_mtx):
+        if params.exist_action == "skip" and os.path.exists(hexagon_bcd) and os.path.exists(hexagon_ftr) and os.path.exists(hexagon_mtx):
             with open(output.hexagon_log, "w") as f:
                 f.write("Done")
         # if the segmentation is not done, do the segmentation
@@ -65,9 +87,7 @@ rule c04_sdgeAR_segment_10x_inhouse:
                 """
                 )
                 # assign the text in the 3rd row in the mtx file to variable "mtx_info"
-                mtx_info = shell(f"zcat {hexagon_mtx} | head -n 3 | tail -n 1")
-                # nhex should be the 2nd element in the mtx_info
-                nhex=int(mtx_info.split()[1])
+                nhex=get_nbcd_from_mtx(hexagon_mtx)
                 print(f"The hexagon-indexed SGE has {nhex} hexagons.")
                 if nhex > 0:
                     with open(output.hexagon_log, "w") as f:

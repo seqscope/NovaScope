@@ -28,7 +28,7 @@ rule b03_sdgeAR_segmentviz:
         segment_dir = os.path.dirname(os.path.dirname(input.hexagon_log_d12))
 
         segmentviz_tab = output.segmentviz_log.rstrip(".log") + ".tsv"
-        segmentviz_png = output.segmentviz_log.rstrip(".log") + ".png"
+        segmentviz_png = output.segmentviz_log.rstrip(".log") + ".space.png"
 
         # collect available widths by log files        
         print(f" Input file in {params.sge_format} format...")
@@ -59,10 +59,9 @@ rule b03_sdgeAR_segmentviz:
                 --write-numi-per-width
             
             echo -e "     - Plotting number of hexagons per nUMI cutoff..."
-            Rscript {novascope_scripts}/rule_b03_sdgeAR_segmentviz_nUMI_viz.R --input {segmentviz_tab} --output {segmentviz_png} --title {params.png_title} 
+            Rscript {novascope_scripts}/rule_b03_sdgeAR_segmentviz_nUMI_viz.R --input {segmentviz_tab} --output {segmentviz_png} --title {params.png_title}  --yaxis space
             """
             )
-
         # write down a log file to indicate the segmentation is done
         with open(output.segmentviz_log, "w") as f:
             f.write(f"Number of hexagon widths: {len(hex_width_list)}")
