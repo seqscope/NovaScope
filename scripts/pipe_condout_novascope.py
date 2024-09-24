@@ -192,14 +192,15 @@ def outfn_filterpoly_per_unit(main_dirs, df_segchar):
     return out_fn
 
 def outfn_seg10x_per_unit(main_dirs, df_segchar, segmentviz):
+    print("segmentviz", segmentviz)
     use_inhouse= lambda: segmentviz is not None
     out_fn = {
             'flag': 'segment-10x-per-unit',
             'root': main_dirs["analysis"],
             'subfolders_patterns': [
-                                    ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "barcodes.tsv.gz"],  lambda: use_inhouse is False),
-                                    ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "features.tsv.gz"],  lambda: use_inhouse is False),
-                                    ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "matrix.mtx.gz"  ],  lambda: use_inhouse is False),   
+                                    ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "barcodes.tsv.gz"],  lambda: segmentviz is None),
+                                    ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "features.tsv.gz"],  lambda: segmentviz is None),
+                                    ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "matrix.mtx.gz"  ],  lambda: segmentviz is None),   
                                     ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.10x.d_{hexagon_width}.log"], lambda: use_inhouse is True)
             ],
             'zip_args': {
@@ -218,7 +219,7 @@ def outfn_segfict_per_unit(main_dirs, df_segchar, segmentviz):
             'flag': 'segment-ficture-per-unit',
             'root': main_dirs["analysis"],
             'subfolders_patterns': [
-                                    ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.d_{hexagon_width}.hexagon.tsv.gz"], lambda: use_inhouse is False),
+                                    ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.d_{hexagon_width}.hexagon.tsv.gz"], lambda: segmentviz is None),
                                     ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.ficture.d_{hexagon_width}.log"], lambda: use_inhouse is True)
             ],
             'zip_args': {
