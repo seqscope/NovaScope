@@ -167,20 +167,22 @@ def outfn_hist_per_run(main_dirs, df_hist):
 #
 #===============================================================================
 
-def outfn_filterpoly_per_unit(main_dirs, df_segchar):
+def outfn_filterpoly_per_unit(main_dirs, df_segchar, segmentviz):
+    use_inhouse= lambda: segmentviz is not None
     df_segchar = df_segchar[["run_id", "unit_id", "solo_feature", "sge_qc"]]   # only keep the required columns
     df_segchar = df_segchar[df_segchar["sge_qc"] == "filtered"] # note this only applies to sge_qc = "filtered"
     out_fn = {
             'flag': 'filterpoly-per-unit',
             'root': main_dirs["analysis"],
             'subfolders_patterns': [
-                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.transcripts.tsv.gz"], None),
-                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.transcripts.tsv.gz.tbi"], None),
-                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.coordinate_minmax.tsv"], None),
-                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.feature.strict.tsv.gz"], None),
-                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.boundary.strict.geojson"], None),
-                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.feature.lenient.tsv.gz"], None),
-                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.boundary.lenient.geojson"], None),
+                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.transcripts.tsv.gz"], lambda: segmentviz is None),
+                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.transcripts.tsv.gz.tbi"], lambda: segmentviz is None),
+                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.coordinate_minmax.tsv"], lambda: segmentviz is None),
+                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.feature.strict.tsv.gz"], lambda: segmentviz is None),
+                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.boundary.strict.geojson"], lambda: segmentviz is None),
+                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.feature.lenient.tsv.gz"], lambda: segmentviz is None),
+                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.boundary.lenient.geojson"], lambda: segmentviz is None),
+                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.log"], lambda: use_inhouse is True),
             ],
             'zip_args': {
                 'run_id':        df_segchar["run_id"].values,  
@@ -192,7 +194,6 @@ def outfn_filterpoly_per_unit(main_dirs, df_segchar):
     return out_fn
 
 def outfn_seg10x_per_unit(main_dirs, df_segchar, segmentviz):
-    print("segmentviz", segmentviz)
     use_inhouse= lambda: segmentviz is not None
     out_fn = {
             'flag': 'segment-10x-per-unit',
@@ -252,7 +253,7 @@ def outfn_segviz_per_unit(main_dirs, df_segchar, segmentviz):
 
 def outfnlist_by_seg(main_dirs, df_segchar, segmentviz):
     outfnlist = []
-    outfnlist.append(outfn_filterpoly_per_unit(main_dirs, df_segchar))
+    outfnlist.append(outfn_filterpoly_per_unit(main_dirs, df_segchar, segmentviz))
     if segmentviz:
         df_seg_viz= df_segchar[['run_id', 'unit_id', 'solo_feature']].drop_duplicates().reset_index(drop=True)
         outfnlist.append(outfn_segviz_per_unit(main_dirs, df_seg_viz, segmentviz))

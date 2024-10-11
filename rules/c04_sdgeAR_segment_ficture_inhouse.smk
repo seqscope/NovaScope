@@ -1,18 +1,17 @@
 rule c04_sdgeAR_segment_ficture_inhouse:
     input:
-        sdgeAR_xyrange      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "sgeAR", "barcodes.minmax.tsv"),    # Use sdgeAR_xyrange instead of xyrange_in to determine the major axis is because the transcript was sorted by the longer axis in sdgeAR_xyrange and the longer axis may be different between sdgeAR_xyrange and xyrange.
-        transcript_in       = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", ("{unit_id}.{solo_feature}."+wildcards.sge_qc+".transcripts.tsv.gz" if wildcards.sge_qc == "filtered" else "{unit_id}.transcripts.tsv.gz")),
-        boundary_in         = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.boundary.strict.geojson") if wildcards.sge_qc == "filtered" else [],
-        xyrange_in          = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.coordinate_minmax.tsv"),    # This file is not used but is required to make sure every transcript file has a corresponding xyrange file.
+        sdgeAR_xyrange      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "sgeAR", "barcodes.minmax.tsv"),    # The reason for using sdgeAR_xyrange instead of xyrange_in to determine the main axis is that the transcript was sorted by the longer axis in sdgeAR_xyrange, and the longer axis may differ between sdgeAR_xyrange and xyrange_in.
+        transcript_in       = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.transcripts.tsv.gz") if wildcards.sge_qc=="raw" else [], 
+        polygonfilter_log   = lambda wildcards: [] if wildcards.sge_qc=="raw" else os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.filtered.log"),
+        xyrange_in          = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.coordinate_minmax.tsv")  if wildcards.sge_qc=="raw" else [],    # This file is not used but is required to make sure every transcript file has a corresponding xyrange_in file.
     output:
         hexagon_log         = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.ficture.d_{hexagon_width}.log")
-        #hexagon            = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.d_{hexagon_width}.hexagon.tsv.gz"),
     params:
         hexagon_prefix      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.d_{hexagon_width}"),
         solo_feature        = "{solo_feature}",
         train_width         = "{hexagon_width}",
         sge_qc              = "{sge_qc}",
-        hex_n_move          = config.get("downstream", {}).get('segment', {}).get('hex_n_move', 1), 
+        hex_n_move          = int(config.get("downstream", {}).get('segment', {}).get('hex_n_move', 1)), 
         precision           = config.get("downstream", {}).get('segment', {}).get('precision', 2), 
         min_density_per_unit= config.get("downstream", {}).get('segment', {}).get('ficture', {}).get('min_density_per_unit', 0.01),
         min_ct_per_unit     = config.get("downstream", {}).get('segment', {}).get('ficture', {}).get('min_ct_per_unit', 10),
@@ -23,71 +22,78 @@ rule c04_sdgeAR_segment_ficture_inhouse:
         mem  = "28000MB", 
         time = "10:00:00"
     run:
-        # major axis
-        major_axis    = find_major_axis(input.sdgeAR_xyrange, format="col")
         # dirs/files
         hexagon_unzip = params.hexagon_prefix + ".hexagon.tsv"
         hexagon       = params.hexagon_prefix + ".hexagon.tsv.gz"
 
+        # 1) If polygonfilter failed, skip the segmentation
         if params.sge_qc == "filtered":
-            boundary_args = f"--boundary {input.boundary_in}"
+            # check the status of the previous step
+            polygonfilter_status = open(input.polygonfilter_log).read().strip()
+            if "Failed" in polygonfilter_status:
+                with open(output.hexagon_log, "w") as f:
+                    f.write(polygonfilter_status)
+                print(f"Skip hexagon segmentation: The polygonfilter step failed (see {input.polygonfilter_log}).")
+                return
+            
+            # update the boundary file
+            boundary_in = input.polygonfilter_log.replace(".filtered.log", ".boundary.strict.geojson")
+            boundary_args = f"--boundary {boundary_in}"
         else:
             boundary_args = ""
 
-        if isinstance(params.hex_n_move, float):
-            params.hex_n_move = int(params.hex_n_move)
-        
-        # To leverage the existing segmentation and the segmentation is done, skip the segmentation
+        # 2) If the segmentation exists and the exist_action is "skip", skip the segmentation
         if params.exist_action == "skip" and os.path.exists(hexagon):
+            print("Skip hexagon segmentation: The segmentation exists.")
             with open(output.hexagon_log, "w") as f:
                 f.write("Done")
-        # if the segmentation is not done, or exist_action is "overwrite", do the segmentation
-        else:
-            # Attempt to do segmentation
-            try:
-                shell(
-                r"""
-                {params.module_cmd}
-                source {pyenv}/bin/activate
+            return 
 
-                ### skip the --ct_header to use the default value.
-                command time -v {python} {ficture}/ficture/scripts/make_dge_univ.py \
-                    --input {input.transcript_in} \
-                    --output {hexagon_unzip} \
-                    --mu_scale {mu_scale} \
-                    --key {params.solo_feature} \
-                    --hex_width {params.train_width} \
-                    --min_ct_per_unit {params.min_ct_per_unit} \
-                    --min_density_per_unit {params.min_density_per_unit} \
-                    --n_move {params.hex_n_move} \
-                    --precision {params.precision} \
-                    --major_axis {major_axis} {boundary_args}
-                    
-                ## Shuffle hexagon
-                sort -S 10G -k1,1n {hexagon_unzip} | gzip -c > {hexagon} 
+        # 3) Start the hexagon segmentation
+        print("Start hexagon segmentation...")
 
-                if [ -f {hexagon_unzip} ]; then
-                    rm {hexagon_unzip}
-                fi
-                """
-                )
-                # get the number of rows in the hexagon file
-                nhex = int(subprocess.check_output(f"gzip -dc {hexagon} | wc -l", shell=True).decode().strip())
-                print(f"The hexagon-indexed SGE has {nhex} hexagons.")
-                if nhex > 1:    # header
-                    with open(output.hexagon_log, "w") as f:
-                        f.write("Done")
-                else:
-                    with open(output.hexagon_log, "w") as f:
-                        f.write("Failed")
-                        f.write("Returned 0 hexagons")
-            # add an exception to catch the error, which may happen when the dataset is shallow
-            except Exception as e:
-                print(str(e))
+        major_axis    = find_major_axis(input.sdgeAR_xyrange, format="col")
+
+        try:
+            shell(
+            r"""
+            {params.module_cmd}
+            source {pyenv}/bin/activate
+
+            ### skip the --ct_header to use the default value.
+            command time -v {python} {ficture}/ficture/scripts/make_dge_univ.py \
+                --input {input.transcript_in} \
+                --output {hexagon_unzip} \
+                --mu_scale {mu_scale} \
+                --key {params.solo_feature} \
+                --hex_width {params.train_width} \
+                --min_ct_per_unit {params.min_ct_per_unit} \
+                --min_density_per_unit {params.min_density_per_unit} \
+                --n_move {params.hex_n_move} \
+                --precision {params.precision} \
+                --major_axis {major_axis} {boundary_args}
+                
+            ## Shuffle hexagon
+            sort -S 10G -k1,1n {hexagon_unzip} | gzip -c > {hexagon} 
+
+            if [ -f {hexagon_unzip} ]; then
+                rm {hexagon_unzip}
+            fi
+            """
+            )
+            # sanity check: empty sge
+            nhex = int(subprocess.check_output(f"gzip -dc {hexagon} | wc -l", shell=True).decode().strip())
+            print(f"The hexagon-indexed SGE has {nhex} hexagons.")
+            if nhex > 1:    # header
                 with open(output.hexagon_log, "w") as f:
-                    f.write("Failed")
-                    f.write(str(e))
-
-
-
+                    f.write("Done")
+            else:
+                with open(output.hexagon_log, "w") as f:
+                    f.write("Failed: c04_sdgeAR_segment_ficture_inhouse")
+                    f.write("Issue: Returned 0 hexagons")
+        except Exception as e:
+            print(str(e))
+            with open(output.hexagon_log, "w") as f:
+                f.write("Failed: c04_sdgeAR_segment_ficture_inhouse")
+                f.write("Issue: "+str(e))
 

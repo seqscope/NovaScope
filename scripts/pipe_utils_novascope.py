@@ -161,6 +161,7 @@ def convert_sgevisual_list2df(config, refgl_dir):
     sge_visual_params = config.get("upstream",{}).get("visualization",{}).get("drawsge",{}).get("genes", sge_visual_defparams)
     df_sge_visual = pd.DataFrame(sge_visual_params).drop_duplicates()
     # Transform the DataFrame
+    assert refgl_dir is not None, f"Provide a valid gene list directory for your species."
     df_sge_visual['params'] = transform_sge_visual(df_sge_visual, refgl_dir)
     df_sge_visual['sgevisual_id'] = df_sge_visual.apply(lambda x: f"{x['red']}_{x['green']}_{x['blue']}", axis=1)
     return df_sge_visual[['sgevisual_id', 'params']]
@@ -174,16 +175,18 @@ def read_config_for_sgevisual(config, env_config, smk_dir, run_id, silent=False)
     } 
     species = config["input"]["species"]
     refgl_dir = env_config.get("ref",{}).get("genelists",{}).get(species, sp2refgl_dir.get(species, None))
-    assert refgl_dir is not None, f"Provide a valid gene list directory for species {species}."
 
     # input pd with sgevisual_id and params
     df_sge_visual = convert_sgevisual_list2df(config, refgl_dir)
+    log_dataframe(df_sge_visual)
+
     sgevisual_id2params = df_sge_visual.set_index("sgevisual_id")["params"].to_dict()
 
+    print(sgevisual_id2params)
     # create a dict from unit_id from run_id to df_sge_visual["sgevisual_id"] one key to a list and remove duplicates
     rid2sgevisual_id = defaultdict(list)
     rid2sgevisual_id[run_id] = list(df_sge_visual["sgevisual_id"].unique())
-
+    
     # log info
     log_info(f"   - Reference gene list directory: {refgl_dir}", silent)
     log_info(f"   - SGE visualization(s): {', '.join(df_sge_visual['sgevisual_id'].tolist())}", silent)

@@ -85,9 +85,13 @@ if  "segment-per-unit" in request:
 
 # - segmentviz or not 
 segmentviz = config.get("downstream", {}).get("segmentviz", None)
-if segmentviz:
+
+if segmentviz and "segment-per-unit" not in request:
     request = request + ["segment-viz-per-unit"]
 
+if "segment-viz-per-unit" in request and segmentviz is None:
+    segmentviz=["10x"] # use 10x as default
+    
 logging.info(f" - Valid Request(s): {request}")
 
 #==============================================
@@ -120,18 +124,22 @@ df_run = pd.DataFrame({
 })
 
 # sge visual
-if any(task in request for task in ["sge-per-run", "histology-per-run", "transcript-per-unit", "filterftr-per-unit", "filterpoly-per-unit", "segment-10x-per-unit", "segment-ficture-per-unit"]):
-    sgevisual_id2params, rid2sgevisual_id = read_config_for_sgevisual(config, env_config, smk_dir, run_id, silent=False)
-    # expand df_sge for sge-per-run
-    df_sge = pd.DataFrame( [{**row, 'sgevisual_id': sgevisual_id} for _, row in df_run.iterrows() for sgevisual_id in sgevisual_id2params.keys()])
-else:
-    logging.info(f" - SGE visualization: Skipping")
-    df_sge = pd.DataFrame({
+df_sge_void=pd.DataFrame({
         'flowcell': pd.Series(dtype='object'),
         'chip': pd.Series(dtype='object'),
         'run_id': pd.Series(dtype='object'),
         'sgevisual_id': pd.Series(dtype='object'),
     })
+
+draw_sge=config.get("upstream",{}).get("visualization",{}).get("drawsge",{}).get("action", True)
+
+if any(task in request for task in ["sge-per-run", "histology-per-run", "transcript-per-unit", "filterftr-per-unit", "filterpoly-per-unit", "segment-10x-per-unit", "segment-ficture-per-unit"]) and draw_sge:
+    sgevisual_id2params, rid2sgevisual_id = read_config_for_sgevisual(config, env_config, smk_dir, run_id, silent=False)
+    # expand df_sge for sge-per-run
+    df_sge = pd.DataFrame( [{**row, 'sgevisual_id': sgevisual_id} for _, row in df_run.iterrows() for sgevisual_id in sgevisual_id2params.keys()])
+else:
+    logging.info(f" - SGE visualization: Skipping")
+    df_sge = df_sge_void
 
 # hist
 if "histology-per-run" in request:
@@ -237,14 +245,14 @@ if any(task in request for task in ["transcript-per-unit", "filterftr-per-unit",
     include: "rules/c03_sdgeAR_minmax.smk"
     include: "rules/c03_sdgeAR_featurefilter.smk"
 
-if any(task in request for task in [ "filterpoly-per-unit", "segment-10x-per-unit", "segment-ficture-per-unit", "segment-viz-per-unit"]):
-    include: "rules/c03_sdgeAR_polygonfilter.smk"
-
 if segmentviz:
-    include: "rules/b03_sdgeAR_segmentviz.smk"
+    include: "rules/c03_sdgeAR_polygonfilter_inhouse.smk"
     include: "rules/c04_sdgeAR_segment_10x_inhouse.smk"
     include: "rules/c04_sdgeAR_segment_ficture_inhouse.smk"
+    include: "rules/b03_sdgeAR_segmentviz.smk"
 else:
+    if any(task in request for task in [ "filterpoly-per-unit", "segment-10x-per-unit", "segment-ficture-per-unit" ]):
+        include: "rules/c03_sdgeAR_polygonfilter.smk"
     if "segment-10x-per-unit" in request:
         include: "rules/c04_sdgeAR_segment_10x.smk"
     if "segment-ficture-per-unit" in request:

@@ -19,14 +19,11 @@ def get_nbcd_from_mtx(file_path):
 rule c04_sdgeAR_segment_10x_inhouse:
     input:
         sdgeAR_xyrange  = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "sgeAR", "barcodes.minmax.tsv"),    # Use sdgeAR_xyrange instead of xyrange_in to determine the major axis is because the transcript was sorted by the longer axis in sdgeAR_xyrange and the longer axis may be different between sdgeAR_xyrange and xyrange.
-        transcript_in   = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", ("{unit_id}.transcripts.tsv.gz" if wildcards.sge_qc=="raw" else "{unit_id}.{solo_feature}."+wildcards.sge_qc+".transcripts.tsv.gz")),
+        transcript_in   = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", ("{unit_id}.transcripts.tsv.gz" if wildcards.sge_qc=="raw" else "{unit_id}.{solo_feature}."+wildcards.sge_qc+".log")), # use long file
         ftr_in          = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", ("{unit_id}.feature.tsv.gz"     if wildcards.sge_qc=="raw" else "{unit_id}.feature.clean.tsv.gz")),
-        boundary_in     = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.boundary.strict.geojson") if wildcards.sge_qc == "filtered" else [],
-        xyrange_in      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.coordinate_minmax.tsv"),    # This file is not used but is required to make sure every transcript file has a corresponding xyrange file.
+        boundary_in     = lambda wildcards: [] if wildcards.sge_qc == "raw" else os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.boundary.strict.geojson"),
+        xyrange_in      = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.coordinate_minmax.tsv")  if wildcards.sge_qc=="raw" else [],    # This file is not used but is required to make sure every transcript file has a corresponding xyrange file.
     output:
-        # hexagon_bcd      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "barcodes.tsv.gz"),
-        # hexagon_ftr      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "features.tsv.gz"),
-        # hexagon_mtx      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "matrix.mtx.gz"),
         hexagon_log         = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.10x.d_{hexagon_width}.log")
     params:
         # basic params
@@ -53,55 +50,71 @@ rule c04_sdgeAR_segment_10x_inhouse:
         hexagon_bcd = os.path.join(hexagon_dir, "barcodes.tsv.gz")
         hexagon_ftr = os.path.join(hexagon_dir, "features.tsv.gz")
         hexagon_mtx = os.path.join(hexagon_dir, "matrix.mtx.gz")
-        
+
+        # 1) If polygonfilter failed, skip the segmentation
         if params.sge_qc == "filtered":
-            boundary_args = f"--boundary {input.boundary_in}"
+            # check the status of the previous step
+            polygonfilter_status = open(input.polygonfilter_log).read().strip()
+            if "Failed" in polygonfilter_status:
+                with open(output.hexagon_log, "w") as f:
+                    f.write(polygonfilter_status)
+                print(f"Skip hexagon segmentation: The polygonfilter step failed (see {input.polygonfilter_log}).")
+                return
+            
+            # update the boundary file
+            boundary_in = input.polygonfilter_log.replace(".filtered.log", ".boundary.strict.geojson")
+            boundary_args = f"--boundary {boundary_in}"
         else:
             boundary_args = ""
+
         
-        # Check if the segmentation is done in the previous runs
+        # 2) If the segmentation exists and the exist_action is "skip", skip the segmentation
         if params.exist_action == "skip" and os.path.exists(hexagon_bcd) and os.path.exists(hexagon_ftr) and os.path.exists(hexagon_mtx):
+            print("Skip hexagon segmentation: The segmentation exists.")
             with open(output.hexagon_log, "w") as f:
                 f.write("Done")
-        # if the segmentation is not done, do the segmentation
-        else:
-            # Attempt to do segmentation
-            try:
-                shell(
-                r"""
-                set -euo pipefail
-                {params.module_cmd}
+            return 
 
-                command time -v {python} {ficture}/ficture/scripts/make_sge_by_hexagon.py \
-                    --input {input.transcript_in} \
-                    --feature {input.ftr_in} \
-                    --output_path {hexagon_dir} \
-                    --mu_scale {mu_scale} \
-                    --major_axis {major_axis} \
-                    --key {params.solo_feature} \
-                    --precision {params.precision} \
-                    --hex_width {params.hexagon_width} \
-                    --n_move {params.hex_n_move} \
-                    --min_ct_per_unit {params.min_ct_per_unit} \
-                    --min_ct_density {params.min_density_per_unit} \
-                    --transfer_gene_prefix {boundary_args}
-                """
-                )
-                # assign the text in the 3rd row in the mtx file to variable "mtx_info"
-                nhex=get_nbcd_from_mtx(hexagon_mtx)
-                print(f"The hexagon-indexed SGE has {nhex} hexagons.")
-                if nhex > 0:
-                    with open(output.hexagon_log, "w") as f:
-                        f.write("Done")
-                else:
-                    with open(output.hexagon_log, "w") as f:
-                        f.write("Failed")
-                        f.write("The hexagon-indexed SGE has 0 hexagons.")
-            # add an exception to catch the error, which may happen when the dataset is shallow
-            except Exception as e:
-                print(str(e))
+        # 3) Start the hexagon segmentation
+        print("Start hexagon segmentation...")
+
+        major_axis    = find_major_axis(input.sdgeAR_xyrange, format="col")
+
+        try:
+            shell(
+            r"""
+            set -euo pipefail
+            {params.module_cmd}
+
+            command time -v {python} {ficture}/ficture/scripts/make_sge_by_hexagon.py \
+                --input {input.transcript_in} \
+                --feature {input.ftr_in} \
+                --output_path {hexagon_dir} \
+                --mu_scale {mu_scale} \
+                --major_axis {major_axis} \
+                --key {params.solo_feature} \
+                --precision {params.precision} \
+                --hex_width {params.hexagon_width} \
+                --n_move {params.hex_n_move} \
+                --min_ct_per_unit {params.min_ct_per_unit} \
+                --min_ct_density {params.min_density_per_unit} \
+                --transfer_gene_prefix {boundary_args}
+            """
+            )
+            # sanity check: empty sge
+            nhex=get_nbcd_from_mtx(hexagon_mtx)
+            print(f"The hexagon-indexed SGE has {nhex} hexagons.")
+            if nhex > 0:
                 with open(output.hexagon_log, "w") as f:
-                    f.write("Failed")
-                    f.write(str(e))
+                    f.write("Done")
+            else:
+                with open(output.hexagon_log, "w") as f:
+                    f.write("Failed: c04_sdgeAR_segment_10x_inhouse")
+                    f.write("Issue: Returned 0 hexagons")
+        except Exception as e:
+            print(str(e))
+            with open(output.hexagon_log, "w") as f:
+                f.write("Failed: c04_sdgeAR_segment_10x_inhouse")
+                f.write("Issue: "+str(e))
 
         
