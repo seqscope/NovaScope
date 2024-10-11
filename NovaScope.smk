@@ -82,15 +82,6 @@ request = check_request(input_request=config.get("request", ["sge-per-run"]),
 
 if  "segment-per-unit" in request:
     request = request + ["segment-10x-per-unit", "segment-ficture-per-unit"]
-
-# - segmentviz or not 
-segmentviz = config.get("downstream", {}).get("segmentviz", None)
-
-if segmentviz and "segment-per-unit" not in request:
-    request = request + ["segment-viz-per-unit"]
-
-if "segment-viz-per-unit" in request and segmentviz is None:
-    segmentviz=["10x"] # use 10x as default
     
 logging.info(f" - Valid Request(s): {request}")
 
@@ -123,14 +114,7 @@ df_run = pd.DataFrame({
     'run_id': [run_id],
 })
 
-# sge visual
-df_sge_void=pd.DataFrame({
-        'flowcell': pd.Series(dtype='object'),
-        'chip': pd.Series(dtype='object'),
-        'run_id': pd.Series(dtype='object'),
-        'sgevisual_id': pd.Series(dtype='object'),
-    })
-
+# sge visualization
 draw_sge=config.get("upstream",{}).get("visualization",{}).get("drawsge",{}).get("action", True)
 
 if any(task in request for task in ["sge-per-run", "histology-per-run", "transcript-per-unit", "filterftr-per-unit", "filterpoly-per-unit", "segment-10x-per-unit", "segment-ficture-per-unit"]) and draw_sge:
@@ -139,7 +123,7 @@ if any(task in request for task in ["sge-per-run", "histology-per-run", "transcr
     df_sge = pd.DataFrame( [{**row, 'sgevisual_id': sgevisual_id} for _, row in df_run.iterrows() for sgevisual_id in sgevisual_id2params.keys()])
 else:
     logging.info(f" - SGE visualization: Skipping")
-    df_sge = df_sge_void
+    df_sge = pd.DataFrame( [{**row, 'sgevisual_id': None} for _, row in df_run.iterrows()])
 
 # hist
 if "histology-per-run" in request:
@@ -165,6 +149,7 @@ else:
 df_run['unit_id']=unit_id
 
 # downstream
+# - segment
 df_seg_void = pd.DataFrame({
         'run_id': pd.Series(dtype='object'),
         'unit_id': pd.Series(dtype='object'),
@@ -185,6 +170,17 @@ df_seg10x  = read_config_for_segment(config, run_id, unit_id, "10x", silent=Fals
 df_segfict = read_config_for_segment(config, run_id, unit_id, "ficture", silent=False) if any(task in request for task in ["filterpoly-per-unit", "segment-ficture-per-unit"]) else df_seg_void
 df_seg = pd.concat([df_seg10x, df_segfict], ignore_index=True).drop_duplicates().reset_index(drop=True)
 
+# - segmentviz or not 
+segmentviz = config.get("downstream", {}).get("segmentviz", None)
+
+if "segment-viz-per-unit" in request and segmentviz is None:
+    segmentviz=["10x"] # use 10x as default
+
+# - resilient or not
+resilient = config.get("resilient", False)  
+if segmentviz:
+    resilient = True
+
 #==============================================
 #
 # Rule all
@@ -204,12 +200,12 @@ output_filename_conditions = [
     # per seq2 id
     outfn_smatch_per_chip(main_dirs, df_seq2),
     # per sgevisual id
-    outfn_sge_per_run(main_dirs, df_sge),
+    outfn_sge_per_run(main_dirs, df_sge, draw_sge),
     # per hist_std_prefix
     outfn_hist_per_run(main_dirs, df_hist),
 ]
 output_filename_conditions.extend(outfnlist_by_run(main_dirs, df_run))
-output_filename_conditions.extend(outfnlist_by_seg(main_dirs, df_seg, segmentviz))    # segment & segmentviz
+output_filename_conditions.extend(outfnlist_by_seg(main_dirs, df_seg, resilient, segmentviz))    # segment & segmentviz
 
 requested_files = list_outputfn_by_request(output_filename_conditions, request, debug=True)
 
@@ -246,9 +242,9 @@ if any(task in request for task in ["transcript-per-unit", "filterftr-per-unit",
     include: "rules/c03_sdgeAR_featurefilter.smk"
 
 if segmentviz:
-    include: "rules/c03_sdgeAR_polygonfilter_inhouse.smk"
-    include: "rules/c04_sdgeAR_segment_10x_inhouse.smk"
-    include: "rules/c04_sdgeAR_segment_ficture_inhouse.smk"
+    include: "rules/c03_sdgeAR_polygonfilter_resilient.smk"
+    include: "rules/c04_sdgeAR_segment_10x_resilient.smk"
+    include: "rules/c04_sdgeAR_segment_ficture_resilient.smk"
     include: "rules/b03_sdgeAR_segmentviz.smk"
 else:
     if any(task in request for task in [ "filterpoly-per-unit", "segment-10x-per-unit", "segment-ficture-per-unit" ]):

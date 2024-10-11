@@ -182,7 +182,6 @@ def read_config_for_sgevisual(config, env_config, smk_dir, run_id, silent=False)
 
     sgevisual_id2params = df_sge_visual.set_index("sgevisual_id")["params"].to_dict()
 
-    print(sgevisual_id2params)
     # create a dict from unit_id from run_id to df_sge_visual["sgevisual_id"] one key to a list and remove duplicates
     rid2sgevisual_id = defaultdict(list)
     rid2sgevisual_id[run_id] = list(df_sge_visual["sgevisual_id"].unique())

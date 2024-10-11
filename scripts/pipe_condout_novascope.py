@@ -123,7 +123,7 @@ def outfn_smatch_per_chip(main_dirs, df_seq2):
     }
     return outfn
 
-def outfn_sge_per_run(main_dirs, df_sge):
+def outfn_sge_per_run(main_dirs, df_sge, draw_sge):
     out_fn ={
         'flag': 'sge-per-run',
         'root': main_dirs["align"],
@@ -132,7 +132,7 @@ def outfn_sge_per_run(main_dirs, df_sge):
                                 (["{flowcell}", "{chip}", "{run_id}", "sge", "features.tsv.gz"], None),
                                 (["{flowcell}", "{chip}", "{run_id}", "sge", "matrix.mtx.gz"], None),
                                 (["{flowcell}", "{chip}", "{run_id}", "sge", "{run_id}.sge_match_sbcd.png"], None),
-                                (["{flowcell}", "{chip}", "{run_id}", "sge", "{run_id}.sge_visual", "{sgevisual_id}.png"], None),
+                                (["{flowcell}", "{chip}", "{run_id}", "sge", "{run_id}.sge_visual", "{sgevisual_id}.png"], lambda: draw_sge is True),
                                 (["{flowcell}", "{chip}", "{run_id}", "sge", "barcodes.minmax.tsv"], None),
         ],
         'zip_args': {
@@ -167,22 +167,22 @@ def outfn_hist_per_run(main_dirs, df_hist):
 #
 #===============================================================================
 
-def outfn_filterpoly_per_unit(main_dirs, df_segchar, segmentviz):
-    use_inhouse= lambda: segmentviz is not None
+def outfn_filterpoly_per_unit(main_dirs, df_segchar, resilient):
+    #resilient= lambda: segmentviz is not None
     df_segchar = df_segchar[["run_id", "unit_id", "solo_feature", "sge_qc"]]   # only keep the required columns
     df_segchar = df_segchar[df_segchar["sge_qc"] == "filtered"] # note this only applies to sge_qc = "filtered"
     out_fn = {
             'flag': 'filterpoly-per-unit',
             'root': main_dirs["analysis"],
             'subfolders_patterns': [
-                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.transcripts.tsv.gz"], lambda: segmentviz is None),
-                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.transcripts.tsv.gz.tbi"], lambda: segmentviz is None),
-                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.coordinate_minmax.tsv"], lambda: segmentviz is None),
-                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.feature.strict.tsv.gz"], lambda: segmentviz is None),
-                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.boundary.strict.geojson"], lambda: segmentviz is None),
-                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.feature.lenient.tsv.gz"], lambda: segmentviz is None),
-                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.boundary.lenient.geojson"], lambda: segmentviz is None),
-                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.log"], lambda: use_inhouse is True),
+                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.transcripts.tsv.gz"], lambda: resilient is False),
+                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.transcripts.tsv.gz.tbi"], lambda: resilient is False),
+                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.coordinate_minmax.tsv"], lambda: resilient is False),
+                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.feature.strict.tsv.gz"], lambda: resilient is False),
+                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.boundary.strict.geojson"], lambda: resilient is False),
+                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.feature.lenient.tsv.gz"], lambda: resilient is False),
+                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.boundary.lenient.geojson"], lambda: resilient is False),
+                    (["{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.log"], lambda: resilient is True),
             ],
             'zip_args': {
                 'run_id':        df_segchar["run_id"].values,  
@@ -193,16 +193,15 @@ def outfn_filterpoly_per_unit(main_dirs, df_segchar, segmentviz):
     }
     return out_fn
 
-def outfn_seg10x_per_unit(main_dirs, df_segchar, segmentviz):
-    use_inhouse= lambda: segmentviz is not None
+def outfn_seg10x_per_unit(main_dirs, df_segchar, resilient):
     out_fn = {
             'flag': 'segment-10x-per-unit',
             'root': main_dirs["analysis"],
             'subfolders_patterns': [
-                                    ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "barcodes.tsv.gz"],  lambda: segmentviz is None),
-                                    ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "features.tsv.gz"],  lambda: segmentviz is None),
-                                    ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "matrix.mtx.gz"  ],  lambda: segmentviz is None),   
-                                    ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.10x.d_{hexagon_width}.log"], lambda: use_inhouse is True)
+                                    ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "barcodes.tsv.gz"],  lambda: resilient is False),
+                                    ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "features.tsv.gz"],  lambda: resilient is False),
+                                    ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "10x", "matrix.mtx.gz"  ],  lambda: resilient is False),   
+                                    ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.10x.d_{hexagon_width}.log"], lambda: resilient is True)
             ],
             'zip_args': {
                 'run_id':        df_segchar["run_id"].values,  
@@ -214,14 +213,13 @@ def outfn_seg10x_per_unit(main_dirs, df_segchar, segmentviz):
     }
     return out_fn
 
-def outfn_segfict_per_unit(main_dirs, df_segchar, segmentviz):
-    use_inhouse= lambda: segmentviz is not None
+def outfn_segfict_per_unit(main_dirs, df_segchar, resilient):
     out_fn = {
             'flag': 'segment-ficture-per-unit',
             'root': main_dirs["analysis"],
             'subfolders_patterns': [
-                                    ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.d_{hexagon_width}.hexagon.tsv.gz"], lambda: segmentviz is None),
-                                    ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.ficture.d_{hexagon_width}.log"], lambda: use_inhouse is True)
+                                    ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.d_{hexagon_width}.hexagon.tsv.gz"], lambda: resilient is False),
+                                    ([ "{run_id}", "{unit_id}", "segment",    "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.ficture.d_{hexagon_width}.log"], lambda: resilient is True)
             ],
             'zip_args': {
                 'run_id':        df_segchar["run_id"].values,  
@@ -251,16 +249,16 @@ def outfn_segviz_per_unit(main_dirs, df_segchar, segmentviz):
     }
     return out_fn
 
-def outfnlist_by_seg(main_dirs, df_segchar, segmentviz):
+def outfnlist_by_seg(main_dirs, df_segchar, resilient, segmentviz):
     outfnlist = []
-    outfnlist.append(outfn_filterpoly_per_unit(main_dirs, df_segchar, segmentviz))
+    outfnlist.append(outfn_filterpoly_per_unit(main_dirs, df_segchar, resilient))
     if segmentviz:
         df_seg_viz= df_segchar[['run_id', 'unit_id', 'solo_feature']].drop_duplicates().reset_index(drop=True)
         outfnlist.append(outfn_segviz_per_unit(main_dirs, df_seg_viz, segmentviz))
     df_segchar_10x= df_segchar[df_segchar["sge_format"] == "10x"]
     if not df_segchar_10x.empty:
-        outfnlist.append(outfn_seg10x_per_unit(main_dirs, df_segchar_10x, segmentviz))
+        outfnlist.append(outfn_seg10x_per_unit(main_dirs, df_segchar_10x, resilient))
     df_segchar_ficture= df_segchar[df_segchar["sge_format"] == "ficture"]
     if not df_segchar_ficture.empty:
-        outfnlist.append(outfn_segfict_per_unit(main_dirs, df_segchar_ficture, segmentviz))
+        outfnlist.append(outfn_segfict_per_unit(main_dirs, df_segchar_ficture, resilient))
     return outfnlist
