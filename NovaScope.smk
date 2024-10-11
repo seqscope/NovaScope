@@ -78,7 +78,7 @@ logging.info(f" - Species: {species}")
 request = check_request(input_request=config.get("request", ["sge-per-run"]), 
                         valid_options=["sbcd-per-flowcell", "sbcd-per-chip", "smatch-per-chip", "align-per-run", "sge-per-run", "histology-per-run", 
                                         "transcript-per-unit", "filterftr-per-unit", "filterpoly-per-unit", 
-                                        "segment-10x-per-unit", "segment-ficture-per-unit", "segment-per-unit"])
+                                        "segment-10x-per-unit", "segment-ficture-per-unit", "segment-per-unit", "segment-viz-per-unit"])
 
 if  "segment-per-unit" in request:
     request = request + ["segment-10x-per-unit", "segment-ficture-per-unit"]
@@ -115,9 +115,9 @@ df_run = pd.DataFrame({
 })
 
 # sge visualization
-draw_sge=config.get("upstream",{}).get("visualization",{}).get("drawsge",{}).get("action", True)
+drawsge=config.get("upstream",{}).get("visualization",{}).get("drawsge",{}).get("action", True)
 
-if any(task in request for task in ["sge-per-run", "histology-per-run", "transcript-per-unit", "filterftr-per-unit", "filterpoly-per-unit", "segment-10x-per-unit", "segment-ficture-per-unit"]) and draw_sge:
+if any(task in request for task in ["sge-per-run", "histology-per-run", "transcript-per-unit", "filterftr-per-unit", "filterpoly-per-unit", "segment-10x-per-unit", "segment-ficture-per-unit"]) and drawsge:
     sgevisual_id2params, rid2sgevisual_id = read_config_for_sgevisual(config, env_config, smk_dir, run_id, silent=False)
     # expand df_sge for sge-per-run
     df_sge = pd.DataFrame( [{**row, 'sgevisual_id': sgevisual_id} for _, row in df_run.iterrows() for sgevisual_id in sgevisual_id2params.keys()])
@@ -180,6 +180,7 @@ if "segment-viz-per-unit" in request and segmentviz is None:
 resilient = config.get("resilient", False)  
 if segmentviz:
     resilient = True
+logging.info(f" - Resilient: {resilient}")
 
 #==============================================
 #
@@ -200,7 +201,7 @@ output_filename_conditions = [
     # per seq2 id
     outfn_smatch_per_chip(main_dirs, df_seq2),
     # per sgevisual id
-    outfn_sge_per_run(main_dirs, df_sge, draw_sge),
+    outfn_sge_per_run(main_dirs, df_sge, drawsge),
     # per hist_std_prefix
     outfn_hist_per_run(main_dirs, df_hist),
 ]
@@ -241,15 +242,27 @@ if any(task in request for task in ["transcript-per-unit", "filterftr-per-unit",
     include: "rules/c03_sdgeAR_minmax.smk"
     include: "rules/c03_sdgeAR_featurefilter.smk"
 
-if segmentviz:
-    include: "rules/c03_sdgeAR_polygonfilter_resilient.smk"
-    include: "rules/c04_sdgeAR_segment_10x_resilient.smk"
-    include: "rules/c04_sdgeAR_segment_ficture_resilient.smk"
-    include: "rules/b03_sdgeAR_segmentviz.smk"
-else:
-    if any(task in request for task in [ "filterpoly-per-unit", "segment-10x-per-unit", "segment-ficture-per-unit" ]):
+if any(task in request for task in [ "filterpoly-per-unit", "segment-10x-per-unit", "segment-ficture-per-unit" ]):
+    if resilient:
+        include: "rules/c03_sdgeAR_polygonfilter_resilient.smk"
+    else:
         include: "rules/c03_sdgeAR_polygonfilter.smk"
-    if "segment-10x-per-unit" in request:
+        
+if "segment-10x-per-unit" in request:
+    if resilient:
+        #print("segment-10x: resilient")
+        include: "rules/c04_sdgeAR_segment_10x_resilient.smk"
+    else:
+        #print("segment-10x: standard")
         include: "rules/c04_sdgeAR_segment_10x.smk"
-    if "segment-ficture-per-unit" in request:
+
+if "segment-ficture-per-unit" in request:
+    if resilient:
+        #print("segment-ficture: resilient")
+        include: "rules/c04_sdgeAR_segment_ficture_resilient.smk"
+    else:
+        #print("segment-ficture: standard")
         include: "rules/c04_sdgeAR_segment_ficture.smk"
+
+if segmentviz:
+    include: "rules/b03_sdgeAR_segmentviz.smk"

@@ -1,6 +1,6 @@
-# Created an inhouse version for polygonfilter in case this step failed, then the next pipeline can still executed.
+# Created an resilient version for polygonfilter in case this step failed, then the next pipeline can still executed.
 
-rule c03_sdgeAR_polygonfilter_inhouse:
+rule c03_sdgeAR_polygonfilter_resilient:
     input:
         sdgeAR_xyrange      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "sgeAR", "barcodes.minmax.tsv"),
         transcript          = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.transcripts.tsv.gz"),

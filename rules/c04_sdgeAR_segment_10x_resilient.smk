@@ -16,15 +16,15 @@ def get_nbcd_from_mtx(file_path):
                 return nbcd
     return None
 
-rule c04_sdgeAR_segment_10x_inhouse:
+rule c04_sdgeAR_segment_10x_resilient:
     input:
-        sdgeAR_xyrange  = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "sgeAR", "barcodes.minmax.tsv"),    # Use sdgeAR_xyrange instead of xyrange_in to determine the major axis is because the transcript was sorted by the longer axis in sdgeAR_xyrange and the longer axis may be different between sdgeAR_xyrange and xyrange.
-        transcript_in   = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", ("{unit_id}.transcripts.tsv.gz" if wildcards.sge_qc=="raw" else "{unit_id}.{solo_feature}."+wildcards.sge_qc+".log")), # use long file
-        ftr_in          = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", ("{unit_id}.feature.tsv.gz"     if wildcards.sge_qc=="raw" else "{unit_id}.feature.clean.tsv.gz")),
-        boundary_in     = lambda wildcards: [] if wildcards.sge_qc == "raw" else os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.boundary.strict.geojson"),
-        xyrange_in      = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.coordinate_minmax.tsv")  if wildcards.sge_qc=="raw" else [],    # This file is not used but is required to make sure every transcript file has a corresponding xyrange file.
+        sdgeAR_xyrange      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "sgeAR", "barcodes.minmax.tsv"),    # The reason for using sdgeAR_xyrange instead of xyrange_in to determine the main axis is that the transcript was sorted by the longer axis in sdgeAR_xyrange, and the longer axis may differ between sdgeAR_xyrange and xyrange_in.
+        transcript_raw      = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.transcripts.tsv.gz") if wildcards.sge_qc=="raw" else [],  
+        polygonfilter_log   = lambda wildcards: [] if wildcards.sge_qc=="raw" else os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.filtered.log"), 
+        xyrange_in          = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.coordinate_minmax.tsv")  if wildcards.sge_qc=="raw" else [],    # This file is not used but is required to make sure every transcript file has a corresponding xyrange_in file.
+        ftr_in              = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", ("{unit_id}.feature.tsv.gz"     if wildcards.sge_qc=="raw" else "{unit_id}.feature.clean.tsv.gz")),        
     output:
-        hexagon_log         = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.10x.d_{hexagon_width}.log")
+        hexagon_log     = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.10x.d_{hexagon_width}.log")
     params:
         # basic params
         solo_feature        = "{solo_feature}",
@@ -64,8 +64,11 @@ rule c04_sdgeAR_segment_10x_inhouse:
             # update the boundary file
             boundary_in = input.polygonfilter_log.replace(".filtered.log", ".boundary.strict.geojson")
             boundary_args = f"--boundary {boundary_in}"
+            # update transcript file
+            transcript_in = params.transcript_filtered
         else:
             boundary_args = ""
+            transcript_in = input.transcript_raw
 
         
         # 2) If the segmentation exists and the exist_action is "skip", skip the segmentation
@@ -78,7 +81,7 @@ rule c04_sdgeAR_segment_10x_inhouse:
         # 3) Start the hexagon segmentation
         print("Start hexagon segmentation...")
 
-        major_axis    = find_major_axis(input.sdgeAR_xyrange, format="col")
+        major_axis = find_major_axis(input.sdgeAR_xyrange, format="col")
 
         try:
             shell(
@@ -87,7 +90,7 @@ rule c04_sdgeAR_segment_10x_inhouse:
             {params.module_cmd}
 
             command time -v {python} {ficture}/ficture/scripts/make_sge_by_hexagon.py \
-                --input {input.transcript_in} \
+                --input {transcript_in} \
                 --feature {input.ftr_in} \
                 --output_path {hexagon_dir} \
                 --mu_scale {mu_scale} \

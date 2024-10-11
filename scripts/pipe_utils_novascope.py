@@ -178,7 +178,7 @@ def read_config_for_sgevisual(config, env_config, smk_dir, run_id, silent=False)
 
     # input pd with sgevisual_id and params
     df_sge_visual = convert_sgevisual_list2df(config, refgl_dir)
-    log_dataframe(df_sge_visual)
+    log_dataframe(df_sge_visual, log_message=f"   - sge visual parameters: ", indentation="     ")
 
     sgevisual_id2params = df_sge_visual.set_index("sgevisual_id")["params"].to_dict()
 

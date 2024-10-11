@@ -123,7 +123,7 @@ def outfn_smatch_per_chip(main_dirs, df_seq2):
     }
     return outfn
 
-def outfn_sge_per_run(main_dirs, df_sge, draw_sge):
+def outfn_sge_per_run(main_dirs, df_sge, drawsge):
     out_fn ={
         'flag': 'sge-per-run',
         'root': main_dirs["align"],
@@ -132,7 +132,7 @@ def outfn_sge_per_run(main_dirs, df_sge, draw_sge):
                                 (["{flowcell}", "{chip}", "{run_id}", "sge", "features.tsv.gz"], None),
                                 (["{flowcell}", "{chip}", "{run_id}", "sge", "matrix.mtx.gz"], None),
                                 (["{flowcell}", "{chip}", "{run_id}", "sge", "{run_id}.sge_match_sbcd.png"], None),
-                                (["{flowcell}", "{chip}", "{run_id}", "sge", "{run_id}.sge_visual", "{sgevisual_id}.png"], lambda: draw_sge is True),
+                                (["{flowcell}", "{chip}", "{run_id}", "sge", "{run_id}.sge_visual", "{sgevisual_id}.png"], lambda: drawsge is True),
                                 (["{flowcell}", "{chip}", "{run_id}", "sge", "barcodes.minmax.tsv"], None),
         ],
         'zip_args': {
@@ -168,7 +168,6 @@ def outfn_hist_per_run(main_dirs, df_hist):
 #===============================================================================
 
 def outfn_filterpoly_per_unit(main_dirs, df_segchar, resilient):
-    #resilient= lambda: segmentviz is not None
     df_segchar = df_segchar[["run_id", "unit_id", "solo_feature", "sge_qc"]]   # only keep the required columns
     df_segchar = df_segchar[df_segchar["sge_qc"] == "filtered"] # note this only applies to sge_qc = "filtered"
     out_fn = {
