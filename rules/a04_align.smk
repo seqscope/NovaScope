@@ -28,9 +28,9 @@ rule a04_align:
         sp2alignref     = env_config.get("ref", {}).get("align", None),
         species         = species,
         # resource
-        ram            = lambda wildcards: assign_resource_for_align(wildcards.run_id, config, env_config, rid2seq2, main_dirs)["ram"],
+        ram             = lambda wildcards: assign_resource_for_align(wildcards.run_id, config, env_config, rid2seq2, main_dirs)["ram"],
         # module
-        module_cmd        = get_envmodules_for_rule(["python", "samtools"], module_config),
+        module_cmd      = get_envmodules_for_rule(["python", "samtools"], module_config),
     threads: 
         lambda wildcards:  assign_resource_for_align(wildcards.run_id, config, env_config, rid2seq2, main_dirs)["threads"], 
     resources: 

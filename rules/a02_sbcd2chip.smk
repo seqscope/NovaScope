@@ -8,7 +8,9 @@ rule a02_sbcd2chip:
     params:
         # sbcd layout: tile2chip
         sbcd_layout      = check_path(config.get('input', {}).get('seq1st', {}).get('layout', None), job_dir, strict_mode=False),
-        sbcd_layout_def  = lambda wildcards: os.path.join(smk_dir, "info", "assets", "layout_per_tile_basis", wildcards.chip+".layout.tsv"),
+        chip             = "{chip}",
+        # layout         
+        layout_shift       = config.get("upstream", {}).get("sbcd2chip", {}).get('layout_shift', "tobe"),
         # combine 
         gap_row             = config.get("upstream", {}).get("sbcd2chip", {}).get('gap_row', 0.0517),
         gap_col             = config.get("upstream", {}).get("sbcd2chip", {}).get('gap_col', 0.0048),
@@ -30,14 +32,15 @@ rule a02_sbcd2chip:
 
         # Identify the sbcd layout file to use.
         if params.sbcd_layout is not None:
-            assert os.path.exists(params.sbcd_layout), f"The provided sbcd layout file does not exist: {params.sbcd_layout}."
-            print(f"Using the provided sbcd lay out file: {params.sbcd_layout}.")
+            print(f"Using the user-provided sbcd layout file: {params.sbcd_layout}.")
             sbcd_layout = params.sbcd_layout
         else:
-            assert os.path.exists(params.sbcd_layout_def), f"The default sbcd layout file does not exist: {params.sbcd_layout_def}. Check your section chip ID or provide on in the config_job.yaml file"
-            print(f"Using the default sbcd lay out file: {params.sbcd_layout_def}.")
-            sbcd_layout = params.sbcd_layout_def    
-            
+            assert params.shift_type in ["tobe", "tebo"], "Invalid shift type in sbcd2chip in upstream field."
+            sbcd_layout = os.path.join(smk_dir, "info", "assets", "layout_per_tile_basis", params.layout_shift, params.chip+".layout.tsv"),
+            print (f"Using the default sbcd layout file {sbcd_layout}.")
+        
+        assert os.path.exists(sbcd_layout), f"Missing sbcd layout file: {sbcd_layout}."
+                    
         shell(
         r"""
         set -euo pipefail
