@@ -6,11 +6,10 @@ rule a02_sbcd2chip:
         nbcd_mnfst       = os.path.join(main_dirs["seq1st"], "{flowcell}", "nbcds", "{chip}", "manifest.tsv"),
         nbcd_png         = os.path.join(main_dirs["seq1st"], "{flowcell}", "nbcds", "{chip}", "1_1.sbcds.sorted.png"),
     params:
+        chip                = "{chip}",
         # sbcd layout: tile2chip
-        sbcd_layout      = check_path(config.get('input', {}).get('seq1st', {}).get('layout', None), job_dir, strict_mode=False),
-        chip             = "{chip}",
-        # layout         
-        layout_shift       = config.get("upstream", {}).get("sbcd2chip", {}).get('layout_shift', "tobe"),
+        sbcd_layout         = check_path(config.get('input', {}).get('seq1st', {}).get('layout', None), job_dir, strict_mode=False),
+        layout_shift        = config.get('input', {}).get('seq1st', {}).get('layout_shift', "tobe"),
         # combine 
         gap_row             = config.get("upstream", {}).get("sbcd2chip", {}).get('gap_row', 0.0517),
         gap_col             = config.get("upstream", {}).get("sbcd2chip", {}).get('gap_col', 0.0048),
@@ -35,7 +34,7 @@ rule a02_sbcd2chip:
             print(f"Using the user-provided sbcd layout file: {params.sbcd_layout}.")
             sbcd_layout = params.sbcd_layout
         else:
-            assert params.shift_type in ["tobe", "tebo"], "Invalid shift type in sbcd2chip in upstream field."
+            assert params.layout_shift in ["tobe", "tebo"], "Invalid shift type in seq1st in the input field."
             sbcd_layout = os.path.join(smk_dir, "info", "assets", "layout_per_tile_basis", params.layout_shift, params.chip+".layout.tsv"),
             print (f"Using the default sbcd layout file {sbcd_layout}.")
         
