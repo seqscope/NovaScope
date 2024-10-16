@@ -1,4 +1,4 @@
-rule b03_sdgeAR_segmentviz:
+rule b04_sdgeAR_segmentviz:
     input:
         hexagon_log_d12  = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_12",  "{unit_id}.{solo_feature}.{sge_qc}.{sge_format}.d_12.log"),
         hexagon_log_d18  = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_18",  "{unit_id}.{solo_feature}.{sge_qc}.{sge_format}.d_18.log"),
@@ -50,7 +50,7 @@ rule b03_sdgeAR_segmentviz:
             source {pyenv}/bin/activate
             
             echo -e "   - Summarizing number of hexagons per nUMI cutoff..."
-            command time -v {python} {novascope_scripts}/rule_b03_sdgeAR_segmentviz_nUMI_tab.py \
+            command time -v {python} {novascope_scripts}/rule_b04_sdgeAR_segmentviz_nUMI_tab.py \
                 --in-dir {segment_dir} \
                 --unit-id {params.unit_id} \
                 --format {params.sge_format} \
@@ -59,7 +59,7 @@ rule b03_sdgeAR_segmentviz:
                 --write-numi-per-width
             
             echo -e "     - Plotting number of hexagons per nUMI cutoff..."
-            Rscript {novascope_scripts}/rule_b03_sdgeAR_segmentviz_nUMI_viz.R --input {segmentviz_tab} --output {segmentviz_png} --title {params.png_title}  --yaxis space
+            Rscript {novascope_scripts}/rule_b04_sdgeAR_segmentviz_nUMI_viz.R --input {segmentviz_tab} --output {segmentviz_png} --title {params.png_title}  --yaxis space
             """
             )
         # write down a log file to indicate the segmentation is done

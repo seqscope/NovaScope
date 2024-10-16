@@ -225,6 +225,7 @@ end_logging()
 include: "rules/a01_fastq2sbcd.smk"
 include: "rules/a02_sbcd2chip.smk"
 include: "rules/a03_smatch.smk"
+include: "rules/b03_sbcd_layout.smk"
 
 if any(task in request for task in ["align-per-run", "sge-per-run", "histology-per-run", "transcript-per-unit", "filterftr-per-unit", "filterpoly-per-unit", "segment-10x-per-unit", "segment-ficture-per-unit"]):
     include: "rules/a04_align.smk"
@@ -265,4 +266,4 @@ if "segment-ficture-per-unit" in request:
         include: "rules/c04_sdgeAR_segment_ficture.smk"
 
 if segmentviz:
-    include: "rules/b03_sdgeAR_segmentviz.smk"
+    include: "rules/b04_sdgeAR_segmentviz.smk"

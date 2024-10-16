@@ -13,6 +13,10 @@ def outfn_sbcd_per_fc(main_dirs, df_run):
         'root': main_dirs["seq1st"],
         'subfolders_patterns': [
                                 (["{flowcell}", "sbcds", "{seq1_id}", "manifest.tsv"], None),
+                                (["{flowcell}", "images", "{flowcell}_1_1644_1544.evenshift.nbcds.png"], None),
+                                (["{flowcell}", "images", "{flowcell}_1_1644_1544.oddshift.nbcds.png"], None),
+                                (["{flowcell}", "images", "{flowcell}_1_2644_2544.evenshift.nbcds.png"], None),
+                                (["{flowcell}", "images", "{flowcell}_1_2644_2544.oddshift.nbcds.png"], None),
         ],
         'zip_args': {
             'flowcell':    df_run["flowcell"].values,
@@ -20,6 +24,22 @@ def outfn_sbcd_per_fc(main_dirs, df_run):
         },
     }
     return outfn
+
+# def outfn_sbcdlo_per_fc(main_dirs, df_run):
+#     outfn= {
+#         'flag': 'sbcdlayout-per-flowcell',
+#         'root': main_dirs["seq1st"],
+#         'subfolders_patterns': [
+#                                 (["{flowcell}", "images", "{flowcell}_1_1644_1544.evenshift.nbcds.png"], None),
+#                                 (["{flowcell}", "images", "{flowcell}_1_1644_1544.oddshift.nbcds.png"], None),
+#                                 (["{flowcell}", "images", "{flowcell}_1_2644_2544.evenshift.nbcds.png"], None),
+#                                 (["{flowcell}", "images", "{flowcell}_1_2644_2544.oddshift.nbcds.png"], None),
+#         ],
+#         'zip_args': {
+#             'flowcell':    df_run["flowcell"].values,
+#         },
+#     }
+#     return outfn
 
 def outfn_sbcd_per_chip(main_dirs, df_run):
     outfn = {
