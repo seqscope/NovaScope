@@ -19,7 +19,8 @@ rule a03_smatch:
         visual_icol_x             = config.get("upstream", {}).get("visualization", {}).get("drawxy",{}).get("icol_x", 3),
         visual_icol_y             = config.get("upstream", {}).get("visualization", {}).get("drawxy",{}).get("col_y", 4),
         # module
-        module_cmd        = get_envmodules_for_rule(["python", "imagemagick"], module_config)
+        module_cmd        = get_envmodules_for_rule(["imagemagick"], config.get("env",{}).get("envmodules", {}))
+        spatula       = config.get("env",{}).get("tools", {}).get("spatula", "spatula"),
     resources:
         time = "50:00:00",
         mem  = "13000m"
@@ -30,10 +31,9 @@ rule a03_smatch:
         r"""
         set -euo pipefail
         {params.module_cmd}
-        source {pyenv}/bin/activate
 
         echo "Runing step1 match-sbcds.\\n"
-        command time -v {spatula} match-sbcds \
+        command time -v {params.spatula} match-sbcds \
             --fq {input.seq2_fqr1} \
             --sbcd {nbcd_dir} \
             --skip-sbcd {params.skip_sbcd} \
@@ -41,7 +41,7 @@ rule a03_smatch:
             --match-len {params.match_len}
 
         echo "Runing step2 draw-xy.\\n"
-        command time -v {spatula} draw-xy --tsv {output.smatch_tsv} \
+        command time -v {params.spatula} draw-xy --tsv {output.smatch_tsv} \
             --out {output.smatch_png} \
             --coord-per-pixel {params.visual_coord_per_pixel} \
             --icol-x {params.visual_icol_x} \

@@ -2,7 +2,7 @@ rule c04_sdgeAR_segment_10x:
     input:
         sdgeAR_xyrange  = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "sgeAR", "barcodes.minmax.tsv"),    # Use sdgeAR_xyrange instead of xyrange_in to determine the major axis is because the transcript was sorted by the longer axis in sdgeAR_xyrange and the longer axis may be different between sdgeAR_xyrange and xyrange.
         transcript_in   = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", ("{unit_id}.transcripts.tsv.gz" if wildcards.sge_qc=="raw" else "{unit_id}.{solo_feature}."+wildcards.sge_qc+".transcripts.tsv.gz")),
-        ftr_in          = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", ("{unit_id}.feature.tsv.gz"     if wildcards.sge_qc=="raw" else "{unit_id}.{solo_feature}."+wildcards.sge_qc+".feature.tsv.gz")),
+        ftr_in          = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", ("{unit_id}.feature.tsv.gz"     if wildcards.sge_qc=="raw" else "{unit_id}.feature.clean.tsv.gz")),
         boundary_in     = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.boundary.strict.geojson") if wildcards.sge_qc == "filtered" else [],
         xyrange_in      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.coordinate_minmax.tsv"),    # This file is not used but is required to make sure every transcript file has a corresponding xyrange file.
     output:
@@ -13,11 +13,12 @@ rule c04_sdgeAR_segment_10x:
         solo_feature        = "{solo_feature}",
         hexagon_width       = "{hexagon_width}",
         sge_qc              = "{sge_qc}",
+        mu_scale            = config.get("downstream", {}).get("mu_scale", 1000),
         hex_n_move          = config.get("downstream", {}).get('segment', {}).get('hex_n_move', 1), 
         precision           = config.get("downstream", {}).get('segment', {}).get('precision', 2), 
         min_pixel_per_unit  = config.get("downstream", {}).get('segment', {}).get('10x', {}).get('min_pixel_per_unit', 10), 
         # module
-        module_cmd          = get_envmodules_for_rule(["python", "samtools"], module_config),
+        module_cmd          = get_envmodules_for_rule(["python", "samtools"], config.get("env",{}).get("envmodules", {})),
     resources:
         mem  = "7000MB", 
         time = "12:00:00",

@@ -15,12 +15,13 @@ rule c03_sdgeAR_polygonfilter:
     params:
         # params
         solo_feature        = "{solo_feature}",
+        mu_scale            = config.get("downstream", {}).get("mu_scale", 1000),
         radius              = config.get("downstream", {}).get('polygon_density_filter', {}).get("radius", 15),
         quartile            = config.get("downstream", {}).get('polygon_density_filter', {}).get('quartile', 2),  
         hex_n_move          = config.get("downstream", {}).get('polygon_density_filter', {}).get('hex_n_move', 1),   
         polygon_min_size    = config.get("downstream", {}).get('polygon_density_filter', {}).get('polygon_min_size', 500),  
         # module
-        module_cmd          = get_envmodules_for_rule(["python", "samtools"], module_config),
+        module_cmd          = get_envmodules_for_rule(["python", "samtools"], config.get("env",{}).get("envmodules", {})),
     resources:
         mem  = lambda params:  "14000MB",
         time = lambda params:  "10:00:00",

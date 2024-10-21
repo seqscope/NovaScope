@@ -6,20 +6,23 @@ rule a01_fastq2sbcd:
     params:
         sbcd_format = config.get("upstream", {}).get("fastq2sbcd", {}).get('format', "DraI32"),  
         # module
-        module_cmd  = get_envmodules_for_rule(["python"], module_config)
+        module_cmd  = get_envmodules_for_rule(["python"], config.get("env",{}).get("envmodules", {})),
+        spatula     = config.get("env",{}).get("tools", {}).get("spatula", "spatula"),
+        pyenv       = config.get("env",{}).get("pyenv", None),
     resources:
         time = "50:00:00",
         mem  = "70g",
     run:
+        python      = get_python(params.pyenv)
         sbcd_dir    = os.path.dirname(output.sbcd_mnfst)
         shell(
         r"""
         set -euo pipefail
         {params.module_cmd}
-        source {pyenv}/bin/activate
+        source {params.pyenv}/bin/activate
                 
         command time -v {python} {novascope_scripts}/rule_a01.build-spatial-barcode-dict.py \
-            --spatula {spatula} \
+            --spatula {params.spatula} \
             --fq {input.seq1_fq} \
             --format {params.sbcd_format} \
             --out {sbcd_dir} \

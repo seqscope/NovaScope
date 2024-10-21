@@ -12,7 +12,7 @@ rule b01_sdge_visual:
     params:
         sgevisual_id    = "{sgevisual_id}",
         # module
-        module_cmd      = get_envmodules_for_rule(["python", "imagemagick"], module_config),
+        module_cmd      = get_envmodules_for_rule(["python", "imagemagick"], config.get("env",{}).get("envmodules", {})),
         # config
         visual_coord_per_pixel = config.get("upstream", {}).get("visualization", {}).get("drawsge",{}).get("coord_per_pixel", 1000),
         visual_auto_adjust     = " --auto-adjust " if config.get("upstream", {}).get("visualization", {}).get("drawsge",{}).get("auto_adjust", True) else "",

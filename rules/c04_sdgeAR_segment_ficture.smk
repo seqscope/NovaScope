@@ -10,11 +10,12 @@ rule c04_sdgeAR_segment_ficture:
         solo_feature        = "{solo_feature}",
         train_width         = "{hexagon_width}",
         sge_qc              = "{sge_qc}",
+        mu_scale            = config.get("downstream", {}).get("mu_scale", 1000),
         hex_n_move          = config.get("downstream", {}).get('segment', {}).get('hex_n_move', 1), 
         precision           = config.get("downstream", {}).get('segment', {}).get('precision', 2), 
         min_density         = config.get("downstream", {}).get('segment', {}).get('ficture', {}).get('min_density', 0.3),
         # module
-        module_cmd          = get_envmodules_for_rule(["python", "samtools"], module_config)
+        module_cmd          = get_envmodules_for_rule(["python", "samtools"], config.get("env",{}).get("envmodules", {}))
     resources:
         mem  = "28000MB", 
         time = "72:00:00"
@@ -41,7 +42,7 @@ rule c04_sdgeAR_segment_ficture:
         command time -v {python} {ficture}/ficture/scripts/make_dge_univ.py \
             --input {input.transcript_in} \
             --output {hexagon_unzip} \
-            --mu_scale {mu_scale} \
+            --mu_scale {params.mu_scale} \
             --key {params.solo_feature} \
             --hex_width {params.train_width} \
             --min_density_per_unit {params.min_density} \

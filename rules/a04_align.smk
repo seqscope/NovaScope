@@ -25,19 +25,25 @@ rule a04_align:
         exist_action   = config.get("upstream", {}).get("align", {}).get('exist_action', "overwrite"),
         # ref
         #refidx         = sp2alignref[species],
-        sp2alignref     = env_config.get("ref", {}).get("align", None),
+        sp2alignref     = config.get("env",{}).get("ref", {}).get("align", None),
         species         = species,
         # resource
-        ram             = lambda wildcards: assign_resource_for_align(wildcards.run_id, config, env_config, rid2seq2, main_dirs)["ram"],
+        ram             = lambda wildcards: assign_resource_for_align(wildcards.run_id, config, rid2seq2, main_dirs)["ram"],
         # module
-        module_cmd      = get_envmodules_for_rule(["python", "samtools"], module_config),
+        module_cmd      = get_envmodules_for_rule(["python", "samtools"], config.get("env",{}).get("envmodules", {})),
+        spatula         = config.get("env",{}).get("tools", {}).get("spatula", "spatula"),
+        samtools        = config.get("env",{}).get("tools", {}).get("samtools", "samtools"),
+        star            = config.get("env",{}).get("tools", {}).get("star", "STAR"),
+        pyenv           = config.get("env",{}).get("pyenv", None),
     threads: 
-        lambda wildcards:  assign_resource_for_align(wildcards.run_id, config, env_config, rid2seq2, main_dirs)["threads"], 
+        lambda wildcards:  assign_resource_for_align(wildcards.run_id, config, rid2seq2, main_dirs)["threads"], 
     resources: 
         time      = "100:00:00",
-        mem       = lambda wildcards: assign_resource_for_align(wildcards.run_id, config, env_config, rid2seq2, main_dirs)["mem"],
-        partition = lambda wildcards: assign_resource_for_align(wildcards.run_id, config, env_config, rid2seq2, main_dirs)["partition"],
+        mem       = lambda wildcards: assign_resource_for_align(wildcards.run_id, config, rid2seq2, main_dirs)["mem"],
+        partition = lambda wildcards: assign_resource_for_align(wildcards.run_id, config, rid2seq2, main_dirs)["partition"],
     run:
+        python      = get_python(params.pyenv)
+
         # exist action
         exist_action = ""
         assert params.exist_action in ["skip", "overwrite"], "exist_action should be skip or overwrite"
@@ -56,7 +62,7 @@ rule a04_align:
         r"""
         set -euo pipefail
         {params.module_cmd}
-        source {pyenv}/bin/activate
+        source {params.pyenv}/bin/activate
 
         command time -v {python} {novascope_scripts}/rule_a04.align-reads.py \
             --fq1 {input.seq2_fqr1} \
@@ -64,11 +70,11 @@ rule a04_align:
             --whitelist-match {input.smatch_tsv} \
             --filter-match {input.smatch_tsv} \
             --star-index {refidx} \
-            --star-bin {star} \
+            --star-bin {params.star} \
             --min-match-len  {params.min_match_len} \
             --min-match-frac {params.min_match_frac} \
-            --samtools {samtools} \
-            --spatula {spatula} \
+            --samtools {params.samtools} \
+            --spatula {params.spatula} \
             --match-len {params.match_len} \
             --skip-sbcd {params.skip_sbcd} \
             --len-sbcd {params.len_sbcd} \

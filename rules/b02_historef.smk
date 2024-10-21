@@ -10,7 +10,7 @@ rule b02_historef:
         hist_buffer_end     = config.get("histology",{}).get("max_buffer_size", None),
         hist_buffer_step    = config.get("histology",{}).get("buffer_step", 100),
         hist_raster_channel = config.get("histology",{}).get("raster_channel", 1),
-        module_cmd          = get_envmodules_for_rule(["python", "gcc", "gdal"], module_config)
+        module_cmd          = get_envmodules_for_rule(["python", "gcc", "gdal"], config.get("env",{}).get("envmodules", {}))
     threads: 3
     resources:
         time = "5:00:00",

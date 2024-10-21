@@ -18,14 +18,14 @@ rule c03_sdgeAR_featurefilter:
     output:
         ftr_clean  = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.feature.clean.tsv.gz"),
     params:
-        sp2geneinfo       = env_config.get("ref", {}).get("geneinfo", None),
+        sp2geneinfo       = config.get("env",{}).get("ref", {}).get("geneinfo", None),
         species           = species,
         # gene filtering parameters
         kept_gene_type    = config.get("downstream", {}).get('gene_filter', {}).get('kept_gene_type', "protein_coding|lncRNA"),
         rm_gene_regex     = r"{0}".format(config.get("downstream", {}).get('gene_filter', {}).get('rm_gene_regex', "^Gm\\d+|^mt-|^MT-")), 
         min_ct_per_feature= config.get("downstream", {}).get('gene_filter', {}).get('min_ct_per_feature', 50),
         # module
-        module_cmd        = get_envmodules_for_rule(["samtools"], module_config)
+        module_cmd        = get_envmodules_for_rule(["samtools"], config.get("env",{}).get("envmodules", {}))
     threads: 2
     resources:
         mem  = "14000MB",

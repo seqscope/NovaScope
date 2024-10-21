@@ -17,7 +17,7 @@ from collections import OrderedDict
 # * check input func
 # * check path func
 # * create dict func
-# * create symlink func
+# * create symbolic link func
 # * expand func
 # * misc
 
@@ -102,12 +102,12 @@ def check_input(value, valid_options, label, lower=True):
         value = set(value)
         # Set of values 
         if not value.issubset(valid_options):
-            raise ValueError(f"Error: Please provide valid {label} options. Current options: {value}")
+            raise ValueError(f"Error: Please provide valid {label} options. Current {label}: {value}")
         return value
     elif isinstance(value, set):
         # Set of values 
         if not value.issubset(valid_options):
-            raise ValueError(f"Error: Please provide valid {label} options. Current options: {value}")
+            raise ValueError(f"Error: Please provide valid {label} options. Current {label}: {value}")
         return value
     elif isinstance(value, pd.Series):
         # DataFrame column
@@ -146,14 +146,12 @@ def check_path(file_path, work_dir, strict_mode=True, flag="The path"):
         return None
 
 def check_request(input_request, valid_options):
-    logging.info(" - Request(s):")
     valid_requests = [task for task in valid_options if task in input_request]
     invalid_requests = [task for task in input_request if task not in valid_options]
     if not valid_requests:
-        raise ValueError(f"Please provide a valid request: {input_request}")
+        raise ValueError(f"Please provide valid requests: {input_request}")
     if invalid_requests:
-        logging.warning(f"     - Invalid requests (see below) have been identified in the request field. These will be omitted from the processing pipeline.")
-        logging.warning(f"     - List of Invalid Requests: {invalid_requests}")
+        logging.warning(f" - Invalid Request(s): {invalid_requests} (omitted).")
     return valid_requests
 
 #================================================================================================
@@ -194,7 +192,7 @@ def create_dict(df, key_col, val_cols, dict_type, val_type):
 
 #================================================================================================
 
-# create symlink func:
+# create symbolic link func:
 
 def log_info(message, silent=False):
     """Log a message unless silenced."""
@@ -208,7 +206,7 @@ def check_missing_input(input_path, action_if_missing, silent):
         if action_if_missing == "warn":
             raise ValueError(message)
         elif action_if_missing == "skip":
-            log_info("Skipping symlink creation: " + message, silent)
+            log_info("Skipping symbolic link creation: " + message, silent)
             return True
         else:
             raise ValueError("Invalid option for handle_missing_input.")
@@ -222,21 +220,21 @@ def check_and_handle_existing_output(input_path, output_path, action_if_existing
         # broken link
         if not os.path.exists(output_realpath):
             os.unlink(output_path)
-            log_info(f"Removing broken symlink '{output_path}'.", silent)
+            log_info(f"Removing broken symbolic link '{output_path}'.", silent)
             return False     
         else:
             if output_realpath == input_path: # link to the same target
-                log_info(f"Skipping creation as existing symlink '{output_path}' points to the same target.", silent)
+                log_info(f"Skipping creation as existing symbolic link '{output_path}' points to the same target.", silent)
                 return True
             else:                             # link to a different target  
                 if action_if_existing == "replace":
-                    log_info(f"Replacing existing symlink '{output_path}' pointing to a different target.", silent)
+                    log_info(f"Replacing existing symbolic link '{output_path}' pointing to a different target.", silent)
                     os.unlink(output_path)
                     return False
                 elif action_if_existing == "warn":
-                    raise ValueError(f"Output symlink '{output_path}' exists and points to a different target.")
+                    raise ValueError(f"Output symbolic link '{output_path}' exists and points to a different target.")
                 else:
-                    raise ValueError("Invalid option for handle_existing_output.")
+                    raise ValueError("Invalid option for check_and_handle_existing_output.")
     # - file 
     elif os.path.isfile(output_path):
         raise ValueError(f"Output path '{output_path}' exists as a valid file.")
@@ -260,7 +258,7 @@ def create_symlink(input_path, output_path, handle_missing_input="warn", handle_
 
     try:
         os.symlink(input_path, output_path)
-        log_info(f"Created symlink from '{input_path}' to '{output_path}'.", silent)
+        log_info(f"Created symbolic link from '{input_path}' to '{output_path}'.", silent)
     except Exception as e:
         raise ValueError(f"Failed to create symlink: {e}")
 
@@ -299,41 +297,53 @@ def expand(path_pattern, zip_args):
     return [path_pattern.format(**dict(zip(zip_args.keys(), values)))
             for values in zip(*zip_args.values())]
 
-def expand_output_to_filenames(root, subfolders_patterns, product_args, required_output_flag, require_output, debug=False):
-    expanded_lists = []
-    if debug:
-        logging.info(f" - {required_output_flag}: ")
-    if required_output_flag in require_output:
+def expand_output_to_filenames(root, subfolders_patterns, product_args, request_flag, require_output, debug=False):
+    # collect two list one is the outputlist one is skiplist
+    outlist  = []
+    skiplist = []
+    if request_flag in require_output:
         for pattern, extra_condition in subfolders_patterns:
-            expanded_paths = []
+            expanded_paths = list(set(expand(os.path.join(root, *pattern), product_args)))
             if extra_condition is None or extra_condition():
                 # Format each path with the correct combination of arguments
-                expanded_paths = list(set(expand(os.path.join(root, *pattern), product_args)))
-                expanded_lists.extend(expanded_paths)
-                if debug: logging.info(f"   - Fulfill the extra condition {extra_condition}. Including {expanded_paths}...")
+                outlist.extend(expanded_paths)
             else:
-                if debug: logging.info(f"   - Do not fulfill the extra condition {extra_condition}. Skipping...")
+                skiplist.extend(expanded_paths)
+    
+    # Log output or warnings based on conditions
+    if not debug:
+        if outlist:
+            logging.info(f"   - {request_flag}:")
+            [logging.info(f"       {expanded_path}") for expanded_path in outlist]
     else:
-        if debug: logging.info(f"   - Not in the required output, skipping...")  # For debugging
-    if debug: logging.info(f"   => Returning: {expanded_lists if expanded_lists else None}")  # For debugging
-    return expanded_lists if expanded_lists else None
+        if request_flag in require_output:
+            logging.info(f"   - {request_flag}:")
+            if outlist:
+                logging.info("     - Output files to be generated:")
+                [logging.info(f"       {expanded_path}") for expanded_path in outlist]
+            if skiplist:
+                logging.info("     - Output files to be skipped due to unmet conditions:")
+                [logging.info(f"       {expanded_path}") for expanded_path in skiplist]
+        else:
+            logging.info(f"   - {request_flag}: Skipped.")
+
+    return outlist if outlist else None
 
 def list_outputfn_by_request(output_filename_conditions, request, debug=False):
+    logging.info(f' - Checking output by \'request\' and conditions: ')
     requested_files = [
         output
         for cond in output_filename_conditions
         for output in (expand_output_to_filenames(cond['root'], cond['subfolders_patterns'], cond['zip_args'], cond['flag'], request, debug=debug) or [])
     ]
-
     requested_files=list(set(requested_files))
 
-    # sort the list by alphabetical order
-    requested_files.sort()
-
-    #logging.info(f'\n')
-    logging.info(f'Summarizing required output files: ')
-    for output_file_i in requested_files:
-        logging.info(f' - {output_file_i}')
+    # #logging.info(f'\n')
+    # if debug:
+    #     logging.info(f' - Summarizing all output files: ')
+    #     requested_files.sort() # sort the list by alphabetical order
+    #     for output_file_i in requested_files:
+    #         logging.info(f'   - {output_file_i}')
     
     return requested_files
 

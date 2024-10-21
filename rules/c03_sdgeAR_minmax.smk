@@ -5,9 +5,11 @@ rule c03_sdgeAR_minmax:
     output:
         xyrange_raw      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.raw.coordinate_minmax.tsv"),
     params:
+        mu_scale         = config.get("downstream", {}).get("mu_scale", 1000),
         # module
-        module_cmd       = get_envmodules_for_rule(["python", "samtools"], module_config),
+        module_cmd       = get_envmodules_for_rule(["python", "samtools"], config.get("env",{}).get("envmodules", {})),
     run:
+        mu_scale = params.mu_scale
         shell(
         r"""
         {params.module_cmd}
