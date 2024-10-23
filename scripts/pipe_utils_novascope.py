@@ -374,7 +374,7 @@ def process_config_for_hist(df_hist, job_dir, main_dirs, silent=False):
         log_info(f"       Magnification: {row['magnification']}", silent)
         log_info(f"         Figure type: {row['figtype']}", silent)
     
-    df_hist = df_hist[["flowcell", "chip", "hist_std_prefix", "figtype", "magnification"]]
+    df_hist = df_hist[["flowcell", "chip", "run_id", "hist_std_prefix", "figtype", "magnification"]]
     return df_hist
 
 def read_config_for_hist(config, df_run, silent=False):
@@ -388,12 +388,10 @@ def read_config_for_hist(config, df_run, silent=False):
         if df_hist_info["path"].isnull().any():
             raise ValueError("Please provide a valid path to input histology files when requesting 'histology-per-run' ...")
         df_hist = pd.merge(df_run, df_hist_info, how='cross')
-
         df_hist = process_config_for_hist(df_hist, job_dir, main_dirs, silent)
     else:
         log_info(f" - Histology alignment: Skipping...", silent)
         df_hist = df_hist_void
-    log_dataframe(df_hist)
     return df_hist
 
    
