@@ -35,7 +35,7 @@ rule a02_sbcd2chip:
             sbcd_layout = params.sbcd_layout
         else:
             assert params.layout_shift in ["tobe", "tebo"], "Invalid shift type in seq1st in the input field."
-            sbcd_layout = os.path.join(smk_dir, "info", "assets", "layout_per_tile_basis", params.layout_shift, params.chip+".layout.tsv"),
+            sbcd_layout = os.path.join(smk_dir, "info", "assets", "layout_per_tile_basis", params.layout_shift, params.chip+".layout.tsv")
             print (f"Using the default sbcd layout file {sbcd_layout}.")
         
         assert os.path.exists(sbcd_layout), f"Missing sbcd layout file: {sbcd_layout}."
