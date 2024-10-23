@@ -24,8 +24,8 @@ rule c03_sdgeAR_featurefilter:
         kept_gene_type    = config.get("downstream", {}).get('gene_filter', {}).get('kept_gene_type', "protein_coding|lncRNA"),
         rm_gene_regex     = r"{0}".format(config.get("downstream", {}).get('gene_filter', {}).get('rm_gene_regex', "^Gm\\d+|^mt-|^MT-")), 
         min_ct_per_feature= config.get("downstream", {}).get('gene_filter', {}).get('min_ct_per_feature', 50),
-        # module
-        module_cmd        = get_envmodules_for_rule(["samtools"], config.get("env",{}).get("envmodules", {}))
+        # tools
+        module_cmd        = get_envmodules_for_rule(["python", "samtools"], config.get("env",{}).get("envmodules", {}))
     threads: 2
     resources:
         mem  = "14000MB",

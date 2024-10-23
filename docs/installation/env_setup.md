@@ -55,7 +55,10 @@ Define all necessary reference databases for the input species in the `ref` fiel
 ### (1) Reference Genome Index for Alignment
 Specify the alignment reference genome index in the `align` field. Reference genome indices can be accessed via the [cellranger download](https://www.10xgenomics.com/support/software/cell-ranger/downloads) page. Users can also generate their own reference genome index. Detailed instructions for building the STAR index are provided in the [Requirements](./requirement.md) section.
 
-### (2) Reference Gene List Files for Spatial Expression Visualization
+### (2) (Optional) Reference Gene List Files for Spatial Expression Visualization
+
+!!! info
+    By default, NovaScope requires reference gene list files to visualize the spatial expression for gene sets. If the reference files are not available, users could skip the visualization by set `action` in `draw_sge` as `False`.
 
 The `genelists` field should point to the directory containing species-specific gene lists, which are crucial for visualizing spatial expression patterns in Rule [sdge_visual](../fulldoc/rules/sdge_visual.md). This directory must include files named `<gene_group>.genes.tsv` (e.g., `MT.genes.tsv`), with each file listing gene names line-by-line.
 

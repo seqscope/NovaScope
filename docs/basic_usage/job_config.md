@@ -13,7 +13,7 @@ Once you have [installed NovaScope](../installation/requirement.md) and [downloa
 
 Prepare your job configuration file following the template below:
 
-* For parameters in the "Main Fields", more details are provided at the [Main Fields](#main-fields). Mandatory fields are marked as "REQUIRED FIELD".
+* For parameters in the "Main Fields", more details are provided at the [Main Fields](#main-fields) section below. Mandatory fields are marked as "REQUIRED FIELD".
 * For additional parameters, below only includes minimal descriptions. More details are outlined in the [NovaScope Full Documentation](../fulldoc/intro.md), under the specific rule pages to which they apply.
 
 For user's convenience, we provide separate example `config_job.yaml` files for the [Minimal Test Run](https://github.com/seqscope/NovaScope/blob/main/testrun/minimal_test_run/config_job.yaml), [Shallow Liver Test Run](https://github.com/seqscope/NovaScope/blob/main/testrun/shallow_liver_section/config_job.yaml), and [Deep Liver Test Run](https://github.com/seqscope/NovaScope/blob/main/testrun/deep_liver_section/config_job.yaml).
@@ -34,11 +34,12 @@ input:
     id: <seq1st_id>                             ## Optional. Defaults to "L{lane}" if absent.
     fastq: <path_to_seq1st_fastq_file>          ## REQUIRED FIELD
     layout: <path_to_sbcd_layout>               ## Optional. Default based on chip_id
+    layout_shift: <shift_type>                  ## Optional. Default to "tobe", which shifts odd-row tiles in the top layer and even-row tiles in the bottom layer horizontally.
   seq2nd:                                       ## 2nd-seq information. See the "Main Fields" below.
     ## specify the first pair of FASTQs.
     - id: <seq2nd_pair1_id>                     ## Optional. If provided, must be unique among all 2nd-seq pairs. Defaults to automatic assignment based on fastq_R1 if absent (see details below).
-      fastq_R1: <path_to_seq2nd_pair1_fastq_Read1_file> ## REQUIRED FIELD - path to Read 1 FASTQ file,
-      fastq_R2: <path_to_seq2nd_pair1_fastq_Read2_file> ## REQUIRED FIELD - path to Read 2 FASTQ file
+      fastq_R1: <path_to_seq2nd_pair1_fastq_Read1_file> ## REQUIRED FIELD. Path to Read 1 FASTQ file.
+      fastq_R2: <path_to_seq2nd_pair1_fastq_Read2_file> ## REQUIRED FIELD. Path to Read 2 FASTQ file.
     ## if there is a second pair of FASTQs ...
     - id: <seq2nd_pair2_id>                     
       fastq_R1: <path_to_seq2nd_pair2_fastq_Read1_file>
@@ -48,9 +49,9 @@ input:
   unit_id: <unit_id>                            ## Optional. See the "Main Fields" below.
   histology:                                    ## Optional. Histology information. Only required if histology alignment is needed. See the "Main Fields" below.
     ## specify the first input histology file
-    - path: <path_to_1st_histology_file>        ## REQUIRED FIELD - path to the input histology file
-      magnification: <magnification>            ## Optional - specify the magnification of the input histology file, default is "10X"
-      figtype: <type>                           ## Optional - specify the type of the histology file. Options: "hne", "dapi", and "fl". 
+    - path: <path_to_1st_histology_file>        ## REQUIRED FIELD. Path to the input histology file
+      magnification: <magnification>            ## Optional. Magnification of the input histology file, default is "10X".
+      figtype: <type>                           ## Optional. Type of the histology file. Options: "hne", "dapi", and "fl". 
     ## if there is a second input histology file ...
     - path: <path_to_2nd_histology_file>       
       magnification: <magnification>                         
@@ -61,7 +62,7 @@ input:
 output: <output_directory>                      ## REQUIRED FIELD (e.g. /path/to/output/directory)
 request:                                        ## See the "Main Fields" below.
   - <required_output1>                          ## REQUIRED FIELD (e.g. sge-per-run)
-  - <required_output2>                          ## Optionally, you can request multiple outputs
+  - <required_output2>                          ## Optionally, you can request multiple outputs.
   # ...
 
 ## == Environment YAML == 
@@ -76,89 +77,100 @@ env_yml: <path_to_config_env.yaml_file>         ## If absent, NovaScope use the 
 ##
 ## ================================================
 ## == Upstream Parameters (from fastq files to SGE) == 
-#upstream:                    
-#  fastq2sbcd:                                  ## Specify the HDMI-oligo seed library. The example data uses DraI31, but DraI32 is a typical format.
+#upstream:                 
+#  stdfastq:                                    ## Specify whether to use FASTQ files. Set to True unless the user doesn't have FASTQ but has fastq2sbcd and smatch results.
+#    seq1st: True
+#    seq2nd: True           
+#
+#  fastq2sbcd:                                  ## Specify the HDMI-oligo seed library. DraI32 is the typical format. The example data uses DraI31.
 #    format: DraI32             
 #
-#  sbcd2chip:                                   ## Specify gaps among tiles and the duplicate setting for spatial barcodes. 
+#  sbcd_layout:                                 ## Specify parameters for sbcd layout examiniation if needed.
+#    tiles:                                     ## List tile pairs to examine. Ensure tiles exist in the input spatial map. By default, the two pairs below will be used. For the minimal test dataset with only two tiles (ID: 2456, 2556), use those for examination.
+#      - "1644,1544"
+#      - "2644,2544"
+#    colshift: 0.1715                           ## horizontal shift distance
+#
+#  sbcd2chip:                                   ## Specify tile gaps and duplicate settings for spatial barcodes. 
 #    gap_row: 0.0517
 #    gap_col: 0.0048
 #    dup_maxnum: 1
 #    dup_maxdist: 1
 #
-#  smatch:                                      ## 
+#  smatch:                                      
 #    skip_sbcd: 0                               ## The number of initial bases to omit from the read.
 #    match_len: 27                              ## Length of spatial barcode considered to be a perfect match.
 #
-#  align:                       
-#    min_match_len: 30                          ## A minimum number of matching bases.
-#    min_match_frac: 0.66                       ## A minimum fraction of matching bases.
-#    len_sbcd: 30                               ## Length of spatial barcode (in Read 1) to be copied to output FASTQ file (Read 1).
-#    len_umi: 9                                 ## Length of UMI barcode (in Read 2) to be copied to output FASTQ file (Read 1).
+#  align:                                       
+#    min_match_len: 30                          ## Minimum number of matching bases.
+#    min_match_frac: 0.66                       ## Minimum fraction of matching bases.
+#    len_sbcd: 30                               ## Length of spatial barcode (in Read 1) to copy to output FASTQ file (Read 1).
+#    len_umi: 9                                 ## Length of UMI barcode (in Read 2) to copy to output FASTQ file (Read 1).
 #    len_r2: 101                                ## Length of read 2 after trimming (including randomers).
-#    exist_action: overwrite                    ## Actions when an intermediate or output file exists. Options: "skip", and "overwrite".
-#    resource:                                  ## Specify the computing resources for alignment. Only applicable for HPC users. 
+#    exist_action: overwrite                    ## Actions when an intermediate or output file exists. Options: "skip" or "overwrite".
+#    resource:                                  ## Computing resources for alignment (HPC only). 
 #      assign_type: stdin
 #      stdin:
 #        partition: standard
 #        threads: 10
 #        memory: 70000m
 #
-#  visualization:            
-#    drawxy:                                    ## specify the parameters for visualization for sbcd and smatch images
+#  visualization:                               ## Visualization parameters.
+#    drawxy:                                    ## Parameters for visualization for Rule sbcd2chip and smatch.
 #      coord_per_pixel: 1000
 #      intensity_per_obs: 50
 #      icol_x: 3
 #      icol_y: 4
-#    drawsge:                                   ## specify the parameters for sdge visualization 
-#      genes:                                   ## specify sets of genes to be colored
-#        - red: nonMT                           ## the first set of genes
+#    drawsge:                                   ## Parameters for Rule sdge_visual.
+#      action: True                             ## When False, NovaScope skips spatial expression visualization, helpful if species-specific gene lists are not available.
+#      genes:                                   ## Gene sets for coloring.
+#        - red: nonMT                           ## First set of genes.
 #          green: Unspliced
 #          blue: MT
-#      # - ...                                  ## if more 1 set of genes are required
+#      # - ...                                  ## Additional gene sets if needed.
 #      coord_per_pixel: 1000
 #      auto_adjust: true
 #      adjust_quantile: 0.99
 #
 ## == Histology Alignment Parameters == 
-#histology:                  
-#    min_buffer_size: 1000                      ## min_buffer_size, max_buffer_size, and step_buffer_size to create a list of buffer size for the alignment
+#histology:                                     ## Parameters for Rule historef.
+#    min_buffer_size: 1000                      ## Use min_buffer_size, max_buffer_size, and step_buffer_size to create a list of buffer sizes for histology alignment.
 #    max_buffer_size: 2000
 #    step_buffer_size: 100
-#    raster_channel: 1                          ## roaster channel used for historef alignment
+#    raster_channel: 1                          ## Roaster channel used for historef alignment.
 #
 ## == Downstream Parameters (SGE filtering, reformatting, and segmentation) ==
 #downstream:                 
-#  mu_scale: 1000                               ## specify coordinate to um conversion
+#  mu_scale: 1000                               ## Coordinate to micron (um) conversion.
 #
-#  gene_filter:                                 ## specify the criteria for gene filtering in a manner compatible with regular expressions 
+#  gene_filter:                                 ## Criteria for gene filtering in a manner compatible with regular expressions.
 #    keep_gene_type: "protein_coding|lncRNA"    
 #    rm_gene_regex: "^Gm\\d+|^mt-|^MT-"         
 #    min_ct_per_feature: 50                     
 #
-#  polygon_density_filter:                      ## specify parameters for polygon filtering by density if applicable              
+#  polygon_density_filter:                      ## Parameters for polygon filtering by density, if applicable.
 #    radius: 15               
 #    hex_n_move: 1            
 #    polygon_min_size: 500    
 #    quartile: 2
 #
 #  segment:
-#    hex_n_move: 1                              ## specify the sliding step in segmentation
-#    precision: 2                               ## specify the precision for spatial location in segmentation
-#    10x:                                       ## specify the parameters for hexagon in 10x genomics format   
+#    hex_n_move: 1                              ## Sliding step in segmentation.
+#    precision: 2                               ## Precision for spatial location in segmentation.
+#    10x:                                       ## Parameters for hexagons in 10x Genomics format.
 #      min_pixel_per_unit: 10                   
-#      char:                                    ## specify the characteristics for hexagon segmentation
+#      char:                                    ## Characteristics for hexagon segmentation.
 #        - solo_feature: gn                     
 #          hexagon_width: 24                   
 #          quality_control: FALSE               
-#      # - ...                                  ## if more than 1 set of hexagon is needed 
-#    ficture:                                   ## specify the characteristics for hexagon in FICTURE-compatible format    
+#      # - ...                                  ## Add more hexagon sets if needed. 
+#    ficture:                                   ## Parameters fpr hexagons in FICTURE-compatible format.
 #      min_density: 0.3                         
 #      char:
 #        - solo_feature: gn
 #          hexagon_width: 24
 #          quality_control: TRUE                
-#      # - ...                                  ## if more than 1 set of hexagon is needed 
+#      # - ...                                  ## Add more hexagon sets if needed. 
 ```
 
 ### Main Fields
@@ -228,6 +240,7 @@ The options below are only for executing the [additional functionalities](../hom
 
 | Option                | Final Output Files                                                                                  | Details   |
 |-----------------------|---------------------------------------------------------------------------------------------------- |---|
+| `sbcdlo-per-flowcell` | Two spatial barcode maps each aligns tile pairs using one spatial map layout.| [sbcd_layout](../fulldoc/rules/sbcd_layout.md)|
 | `histology-per-run`   | Geotiff files for coordinate transformation between SGE matrix and histology image.| [historef](../fulldoc/rules/historef.md#output-files)                        |
 | `transcript-per-unit` | An SGE matrix in the TSV format that is compatible toFICTURE. | [sdgeAR_reformat](../fulldoc/rules/sdgeAR_reformat.md#output-files)          |
 | `filterftr-per-unit`  | A feature file for genes that pass gene-based filtering, formatted as a TSV file that contains detailed information about each gene. | [sdgeAR_featurefilter](../fulldoc/rules/sdgeAR_featurefilter.md#output-files)    |

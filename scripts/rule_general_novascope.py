@@ -175,12 +175,12 @@ def get_envmodules_for_rule(required_modules, module_config):
 
 # get python path
 
-def get_python(pyenv):
-    assert pyenv is not None, "Please provide a valid python environment."
-    assert os.path.exists(pyenv), f"Python environment does not exist: {pyenv}"
-    python = os.path.join(pyenv, "bin", "python")
-    assert os.path.exists(python), f"Python does not exist in your python environment: {python}"
-    return python
+# def get_python(pyenv):
+#     assert pyenv is not None, "Please provide a valid python environment."
+#     assert os.path.exists(pyenv), f"Python environment does not exist: {pyenv}"
+#     python = os.path.join(pyenv, "bin", "python")
+#     assert os.path.exists(python), f"Python does not exist in your python environment: {python}"
+#     return python
 
 # ===============================================================================
 #

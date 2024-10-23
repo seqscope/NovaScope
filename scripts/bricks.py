@@ -149,7 +149,7 @@ def check_request(input_request, valid_options):
     valid_requests = [task for task in valid_options if task in input_request]
     invalid_requests = [task for task in input_request if task not in valid_options]
     if not valid_requests:
-        raise ValueError(f"Please provide valid requests: {input_request}")
+        raise ValueError(f"Provide at least one valid request. Current request(s): {input_request}")
     if invalid_requests:
         logging.warning(f" - Invalid Request(s): {invalid_requests} (omitted).")
     return valid_requests

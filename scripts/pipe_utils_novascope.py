@@ -30,6 +30,9 @@ def read_config_for_ini(config, job_dir, smk_dir, silent=False):
     log_info(f" - Environment modules: {module_config}", silent)
     # - python env
     pyenv  = env_config.get("pyenv", None)
+    assert pyenv is not None, "Please provide a valid python environment."
+    assert os.path.exists(pyenv), f"Python environment does not exist: {pyenv}"
+    assert os.path.exists(os.path.join(pyenv, "bin", "python")), f"Python does not exist in your python environment: {pyenv}"
     log_info(f" - Python environment: {pyenv}", silent)
     # store env settings into config (make it easier for the later read_config functions)
     config["env"]=env_config 
@@ -211,7 +214,6 @@ def read_config_for_sbcdlo(df_run, config,silent =False):
         df_sbcdlo= pd.DataFrame( [{**row, 'tile_1': None} for _, row in df_sbcdlo.iterrows()])
         df_sbcdlo= pd.DataFrame( [{**row, 'tile_2': None} for _, row in df_sbcdlo.iterrows()])
     return df_sbcdlo
-    
 
 #  - sgevisual
 def transform_sge_visual(df, refgl_dir):
@@ -268,7 +270,7 @@ def define_refgenelist_by_sp(config):
             "human": os.path.join(smk_dir, "info", "genelists", "hg38")
         }
         refgl_dir = sp2refgl_dir.get(species, None)
-    assert refgl_dir is not None, f"Provide a valid gene list directory for species {species}."
+    assert refgl_dir is not None, f"Provide a valid gene list directory for species {species} or deactivate spatial expression visualization by setting `action` in `draw_sge` as `False`."
     return refgl_dir
 
 def read_config_for_sgevisual(config, df_run, silent=False):

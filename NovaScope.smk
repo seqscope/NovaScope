@@ -27,7 +27,7 @@ from bricks import list_outputfn_by_request, create_symlinks_by_list
 from pipe_utils_novascope import read_config_for_ini, read_config_for_runid, read_config_for_unitid, read_config_for_segment, read_config_for_hist, read_config_for_seq1, read_config_for_seq2, read_config_for_sbcdlo, read_config_for_sgevisual
 from pipe_condout_novascope import outfn_sbcdlo_per_tilepair, outfn_smatch_per_chip, outfn_sge_per_run, outfn_hist_per_run, outfnlist_by_seg, outfnlist_by_run
 from pipe_preconfig_novascope import id2req, df_seg_void, df_hist_void, df_seq2_void
-from rule_general_novascope import assign_resource_for_align, get_envmodules_for_rule, get_skip_sbcd, find_major_axis, get_python
+from rule_general_novascope import assign_resource_for_align, get_envmodules_for_rule, get_skip_sbcd, find_major_axis
 
 # set up 
 configure_pandas_display()
@@ -37,18 +37,20 @@ configfile: "config_job.yaml"
 # logging
 setup_logging(job_dir, smk_name+"_read-in")
 log_a_separator()
-debug=config.get("debug", False) # if debug, report details for each output file
-quite=config.get("quite", False) # if quite, skip the details for processing config
+mode_debug=config.get("debug", False) # if debug, report details for each output file
+mode_quite=config.get("quite", False) # if quite, skip the details for processing config
 
 # - env (store env setting into config)
-config = read_config_for_ini(config, job_dir, smk_dir, silent=False)
+config = read_config_for_ini(config, job_dir, smk_dir, silent=mode_quite)
 
 # - tools
+pyenv    = config.get("env",{}).get("pyenv", None)
+python   = os.path.join(pyenv, "bin", "python")
+
 spatula  = config.get("env",{}).get("tools", {}).get("spatula",   "spatula")
 samtools = config.get("env",{}).get("tools", {}).get("samtools",  "samtools")
 star     = config.get("env",{}).get("tools", {}).get("star",      "STAR")
 ficture  = os.path.join(smk_dir, "submodules", "ficture")
-
 #==============================================
 #
 # basic config
@@ -61,59 +63,62 @@ logging.info(f"2. Reading the job configuration file...")
 main_root = config.get("output", None)
 assert main_root is not None, "Provide a valid output directory."
 main_dirs = create_dirs_and_get_paths(main_root, ["seq1st", "seq2nd", "match", "align", "histology", "analysis"])
-logging.info(f" - Output root directory: {main_root}")
+logging.info(f" - Output directory: {main_root}")
 
 # flowcell
 flowcell = config.get("input", {}).get("flowcell", None)
-assert flowcell is not None, "Provide a valid Flowcell."
+assert flowcell is not None, "Provide a valid flowcell."
 logging.info(f" - Flowcell: {flowcell}")
 
 # chip
 chip =  config.get("input", {}).get("chip", None)
-assert chip is not None, "Provide a valid Section Chip."
+assert chip is not None, "Provide a valid section chip."
 logging.info(f" - Section chip: {chip}")
 
 # species
-species = config.get("input", {}).get("species", None) 
+species = config.get("input", {}).get("species", None)
+assert species is not None, "Provide a valid species."
 logging.info(f" - Species: {species}")
 
 # request
 request = check_request(input_request=config.get("request", ["sge-per-run"]), 
-                        valid_options=["sbcd-per-flowcell", "sbcdlo-per-flowcell", "sbcd-per-chip", "smatch-per-chip", "align-per-run", "sge-per-run", "histology-per-run", 
+                        valid_options=["sbcd-per-flowcell", "sbcdlo-per-flowcell", 
+                                        "sbcd-per-chip", "smatch-per-chip", 
+                                        "align-per-run", "sge-per-run", "histology-per-run", 
                                         "transcript-per-unit", "filterftr-per-unit", "filterpoly-per-unit", 
                                         "segment-10x-per-unit", "segment-ficture-per-unit", "segment-per-unit"])
-
 if  "segment-per-unit" in request:
     request = request + ["segment-10x-per-unit", "segment-ficture-per-unit"]
 
 logging.info(f" - Valid Request(s): {request}")
 
 # update config
-config["paths"]["output"]=main_dirs
+config["paths"]["output"] = main_dirs
 config["request"] = request
+
 #==============================================
 #
-# Process input
+# Process input by requests
 #
 #==============================================
+
 log_a_separator()
 logging.info(f"3. Processing configuration by requests...")
 
 # per-flowcell (all requests)
-seq1_id = read_config_for_seq1(config, silent=False)
+seq1_id = read_config_for_seq1(config, silent=mode_quite)
 sc2seq1 = {chip:seq1_id} 
 
 # per-chip: (smatch-per-chip, sbcd-per-chip (and above))
-df_seq2 = read_config_for_seq2(config, silent=False)
+df_seq2 = read_config_for_seq2(config, silent=mode_quite)
 
 # per-unit or per-run:
-run_id, rid2seq2 = read_config_for_runid(config, df_seq2, silent=False)
-print(run_id)
+# - run-id: to distinguish different sets of seq2.
+# - unit ID: to distinguish the "default" sge and the sge with boundary filtering.
+run_id, rid2seq2 = read_config_for_runid(config, df_seq2, silent=mode_quite)
 config["input"]["run_id"] = run_id
-print
 
-# unit ID: to distinguish the default sge and the sge with manual boundary filtering.
-unit_id, unit_ann, boundary = read_config_for_unitid(config, silent=False)
+unit_id, unit_ann, boundary = read_config_for_unitid(config, silent=mode_quite)
 config["input"]["unit_id"] = unit_id
 
 df_run = pd.DataFrame({
@@ -125,24 +130,26 @@ df_run = pd.DataFrame({
     'unit_id': [unit_id],
 })
 
-# sbcd layout 
+# sbcd layout
 df_sbcdlo= read_config_for_sbcdlo(df_run, config)
 
 # sge visualization
 drawsge=config.get("upstream",{}).get("visualization",{}).get("drawsge",{}).get("action", True)
-df_sge, sgevisual_id2params, rid2sgevisual_id = read_config_for_sgevisual(config, df_run, silent=False)
+df_sge, sgevisual_id2params, rid2sgevisual_id = read_config_for_sgevisual(config, df_run, silent=mode_quite)
 
 # hist
-df_hist = read_config_for_hist(config, df_run, silent=False)
+df_hist = read_config_for_hist(config, df_run, silent=mode_quite)
 
 # downstream
 if any(task in request for task in["filterpoly-per-unit", "segment-10x-per-unit", "segment-ficture-per-unit"]):
     logging.info(f" - Downstream segmentation:")
+    mu_scale         = config.get("downstream", {}).get("mu_scale", 1000),
+    logging.info(f"     - mu_scale: {mu_scale}")
 else:
     logging.info(f" - Downstream segmentation: Skipping")
 
-df_seg10x = read_config_for_segment(config, run_id, unit_id, "10x", silent=False) if any(task in request for task in ["filterpoly-per-unit", "segment-10x-per-unit"]) else df_seg_void
-df_segfict = read_config_for_segment(config, run_id, unit_id, "ficture", silent=False) if any(task in request for task in ["filterpoly-per-unit", "segment-ficture-per-unit"]) else df_seg_void
+df_seg10x = read_config_for_segment(config, run_id, unit_id, "10x", silent=mode_quite) if any(task in request for task in ["filterpoly-per-unit", "segment-10x-per-unit"]) else df_seg_void
+df_segfict = read_config_for_segment(config, run_id, unit_id, "ficture", silent=mode_quite) if any(task in request for task in ["filterpoly-per-unit", "segment-ficture-per-unit"]) else df_seg_void
 df_seg = pd.concat([df_seg10x, df_segfict], ignore_index=True).drop_duplicates()
 
 #==============================================
@@ -173,7 +180,7 @@ output_filename_conditions = [
 output_filename_conditions.extend(outfnlist_by_run(main_dirs, df_run))
 output_filename_conditions.extend(outfnlist_by_seg(main_dirs, df_seg))   
 
-requested_files = list_outputfn_by_request(output_filename_conditions, request, debug)
+requested_files = list_outputfn_by_request(output_filename_conditions, request, mode_debug)
 
 rule all:
     input:
@@ -208,7 +215,7 @@ if set(id2req["unit_id"]).intersection(set(request)):
     include: "rules/c03_sdgeAR_minmax.smk"
     include: "rules/c03_sdgeAR_featurefilter.smk"
 
-if any(task in request for task in [ "filterpoly-per-unit", "segment-10x-per-unit", "segment-ficture-per-unit"]):
+if any(task in request for task in ["filterpoly-per-unit", "segment-10x-per-unit", "segment-ficture-per-unit"]):
     include: "rules/c03_sdgeAR_polygonfilter.smk"
 
 if "segment-10x-per-unit" in request:

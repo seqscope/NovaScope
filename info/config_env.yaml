@@ -5,7 +5,7 @@ tools:
   samtools: "/path/to/samtools/samtools"
   star: "/path/to/STAR_2_7_11b/bin/Linux_x86_64_static/STAR"
 
-# module-specific configuration:
+# tools-specific configuration:
 # If your system supports module loading, you may specify the module names for the required software tools.
 envmodules:
   python: "python/3.9.12"

@@ -13,11 +13,10 @@ rule c04_sdgeAR_segment_10x:
         solo_feature        = "{solo_feature}",
         hexagon_width       = "{hexagon_width}",
         sge_qc              = "{sge_qc}",
-        mu_scale            = config.get("downstream", {}).get("mu_scale", 1000),
         hex_n_move          = config.get("downstream", {}).get('segment', {}).get('hex_n_move', 1), 
         precision           = config.get("downstream", {}).get('segment', {}).get('precision', 2), 
         min_pixel_per_unit  = config.get("downstream", {}).get('segment', {}).get('10x', {}).get('min_pixel_per_unit', 10), 
-        # module
+        # tools
         module_cmd          = get_envmodules_for_rule(["python", "samtools"], config.get("env",{}).get("envmodules", {})),
     resources:
         mem  = "7000MB", 

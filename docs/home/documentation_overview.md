@@ -2,7 +2,7 @@ The current documentation of [NovaScope](../index.md) includes the following sec
 
 [**Home**](../index.md):
 
-* [Documentation Overview](./documentation_overview.md): Summarizes the contents and structure of the NovaScope documentation.
+* [Documentation Overview](./documentation_overview.md): Contents and structure of this documentation.
 * [Workflow Structure](./workflow_structure.md): Describes NovaScope's workflow, including rules and their dependencies.
 
 [**Installation**](../installation/requirement.md):

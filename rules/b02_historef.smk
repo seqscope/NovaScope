@@ -6,10 +6,12 @@ rule b02_historef:
         hist_aligned      = os.path.join(main_dirs["histology"],  "{flowcell}", "{chip}", "aligned", "{run_id}", "{hist_std_prefix}.tif"),
         hist_fit          = os.path.join(main_dirs["histology"],  "{flowcell}", "{chip}", "aligned", "{run_id}", "{hist_std_prefix}-fit.tif"),
     params:
+        # params
         hist_buffer_start   = config.get("histology",{}).get("min_buffer_size", 1000),
         hist_buffer_end     = config.get("histology",{}).get("max_buffer_size", None),
         hist_buffer_step    = config.get("histology",{}).get("buffer_step", 100),
         hist_raster_channel = config.get("histology",{}).get("raster_channel", 1),
+        # tools
         module_cmd          = get_envmodules_for_rule(["python", "gcc", "gdal"], config.get("env",{}).get("envmodules", {}))
     threads: 3
     resources:

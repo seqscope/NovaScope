@@ -11,7 +11,7 @@ rule c02_sdgeAR_reformat:
     params:
         sp2geneinfo       = config.get("env",{}).get("ref", {}).get("geneinfo", None),
         species           = species,
-        # module
+        # tools
         module_cmd        = get_envmodules_for_rule(["samtools"], config.get("env",{}).get("envmodules", {}))
     threads: 2
     resources:

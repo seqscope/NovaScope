@@ -20,8 +20,8 @@ rule a05_dge2sdge:
         sdge_xyrange  = os.path.join(main_dirs["align"],  "{flowcell}", "{chip}", "{run_id}", "sge", "barcodes.minmax.tsv"),
         sdge_3in1_png = os.path.join(main_dirs["align"],  "{flowcell}", "{chip}", "{run_id}", "sge", "{run_id}.sge_match_sbcd.png"),
     params:
-        # module
-        module_cmd       = get_envmodules_for_rule(["python", "imagemagick"], config.get("env",{}).get("envmodules", {}))
+        # tools
+        module_cmd       = get_envmodules_for_rule(["imagemagick"], config.get("env",{}).get("envmodules", {}))
     resources: 
         mem           = "24000MB", 
         time          = "3:00:00"  
@@ -41,8 +41,6 @@ rule a05_dge2sdge:
         r"""
         set -euo pipefail
         {params.module_cmd}
-
-        source {pyenv}/bin/activate
         
         echo -e "Creating sdge files...\\n"
         command time -v {spatula} dge2sdge \

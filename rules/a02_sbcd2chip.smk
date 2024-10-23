@@ -20,9 +20,8 @@ rule a02_sbcd2chip:
         visual_intensity_per_obs  = config.get("upstream", {}).get("visualization", {}).get("drawxy",{}).get("intensity_per_obs", 50),
         visual_icol_x             = config.get("upstream", {}).get("visualization", {}).get("drawxy",{}).get("icol_x", 3),
         visual_icol_y             = config.get("upstream", {}).get("visualization", {}).get("drawxy",{}).get("icol_y", 4),
-        # module
+        # tools
         module_cmd    = get_envmodules_for_rule(["imagemagick"], config.get("env",{}).get("envmodules", {}))
-        spatula       = config.get("env",{}).get("tools", {}).get("spatula", "spatula"),
     resources:
         time = "5:00:00",
         mem  = "6500m"
@@ -48,7 +47,7 @@ rule a02_sbcd2chip:
 
         # s1
         echo -e "Combinding sbcds from tile to chip.\\n"
-        command time -v  {params.spatula} combine-sbcds \
+        command time -v  {spatula} combine-sbcds \
             --layout {sbcd_layout} \
             --manifest {input.sbcd_mnfst} \
             --sbcd {sbcd_dir} \
@@ -60,7 +59,7 @@ rule a02_sbcd2chip:
 
         # s2
         echo -e "Runing draw-xy...\\n"
-        command time -v  {params.spatula} draw-xy \
+        command time -v  {spatula} draw-xy \
             --tsv {output.nbcd_tsv} \
             --out {output.nbcd_png} \
             --coord-per-pixel {params.visual_coord_per_pixel} \
