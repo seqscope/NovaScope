@@ -31,8 +31,8 @@ The rule graph illustrates the relationships between rules:
 
 In addition to the main functions, NovaScope offers **additional capabilities** as outlined below:
 
-1. Spatial map layout examination (Rule `b03_sbcd_layout`)
-2. Histology alignment (Rule `b02_historef`)
+1. Histology alignment (Rule `b02_historef`)
+2. Spatial map layout examination (Rule `b03_sbcd_layout`)
 3. SGE matrix filtering by gene type, gene name, UMI count, or UMI density (Rules `c03_sdgeAR_featurefilter` and `c03_sdge_polygonfilter`)
 4. SGE matrix reformatting from 10x Genomics format to a TSV format compatible with FICTURE (Rule `c02_sdgeAR_reformat`)
 5. SGE matrix segmentation from transcript-indexed SGE to hexagon-indexed SGE in 10x Genomics or FICTURE-compatible TSV format (Rules `c04_sdgeAR_segment_10x` and `c04_sdgeAR_segment_ficture`)
