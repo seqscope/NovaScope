@@ -393,6 +393,7 @@ def read_config_for_hist(config, df_run, silent=False):
     else:
         log_info(f" - Histology alignment: Skipping...", silent)
         df_hist = df_hist_void
+    log_dataframe(df_hist)
     return df_hist
 
    

@@ -10,7 +10,6 @@ For further details on the rules, their execution, and the workflow's structure,
 ??? note "What are 'rule dependencies' and a 'rule graph'?"
     Rule dependencies, determined by input and output files, ensure tasks are executed in the correct sequence within a workflow. Below, we use [rule graphs](../fulldoc/execution_guide/core_concepts.md#rulegraph) illustrate these dependencies in the main and plus workflows, showing how tasks are interconnected and the order of execution.
 
-
 ## Main Workflow
 
 For the **main function** of NovaScope, the mapping of each step to its specific rule is as follows:
@@ -32,10 +31,11 @@ The rule graph illustrates the relationships between rules:
 
 In addition to the main functions, NovaScope offers **additional capabilities** as outlined below:
 
-1. Histology alignment (Rule `b02_historef`)
-2. SGE matrix filtering by gene type, gene name, UMI count, or UMI density (Rules `c03_sdgeAR_featurefilter` and `c03_sdge_polygonfilter`)
-3. SGE matrix reformatting from 10x Genomics format to a TSV format compatible with FICTURE (Rule `c02_sdgeAR_reformat`)
-4. SGE matrix segmentation from transcript-indexed SGE to hexagon-indexed SGE in 10x Genomics or FICTURE-compatible TSV format (Rules `c04_sdgeAR_segment_10x` and `c04_sdgeAR_segment_ficture`)
+1. Spatial map layout examination (Rule `b03_sbcd_layout`)
+2. Histology alignment (Rule `b02_historef`)
+3. SGE matrix filtering by gene type, gene name, UMI count, or UMI density (Rules `c03_sdgeAR_featurefilter` and `c03_sdge_polygonfilter`)
+4. SGE matrix reformatting from 10x Genomics format to a TSV format compatible with FICTURE (Rule `c02_sdgeAR_reformat`)
+5. SGE matrix segmentation from transcript-indexed SGE to hexagon-indexed SGE in 10x Genomics or FICTURE-compatible TSV format (Rules `c04_sdgeAR_segment_10x` and `c04_sdgeAR_segment_ficture`)
 
 The plus workflow, detailing both main and additional rules and their interdependencies, is depicted below.
 
