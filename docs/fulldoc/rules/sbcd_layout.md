@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The `sbcd_layout` rule helps determine the correct spatial map layout for the input flowcell using tile pairs. Specifically, it applies all layouts on tile pairs and visualizes the corresponding spatial maps, allowing the user to review and choose the correct one based on the alignment of fiducial marks across tiles in a straight line.
+The `sbcd_layout` rule helps determine the correct spatial map layout for the input flowcell using tile pairs. Specifically, it applies all layouts types on tile pairs and visualizes the corresponding spatial maps, allowing the user to review and choose the correct one based on the alignment of fiducial marks across tiles in a straight line.
 
 !!! info "Spatial Barcode Map Layout"
 

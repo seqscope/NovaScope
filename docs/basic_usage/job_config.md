@@ -1,6 +1,6 @@
 # Configuring a NovaScope Run
 
-Once you have [installed NovaScope](../installation/requirement.md) and [downloaded the input data](access_data.md), the next step is to prepare a job configuration file to specify input, output, and parameters.
+After [installing NovaScope](../installation/requirement.md) and [downloading the input data](access_data.md), prepare a job configuration file to specify inputs, outputs, and parameters.
 
 !!! info "Job Configuration File Specifications"
     The job configuration file must adhere to the following guidelines:
@@ -11,17 +11,17 @@ Once you have [installed NovaScope](../installation/requirement.md) and [downloa
 
 ### Prepare the Job Configuration file
 
-Prepare your job configuration file following the template below:
+Prepare your job configuration file following the template below.
 
-* For parameters in the "Main Fields", more details are provided at the [Main Fields](#main-fields) section below. Mandatory fields are marked as "REQUIRED FIELD".
-* For additional parameters, below only includes minimal descriptions. More details are outlined in the [NovaScope Full Documentation](../fulldoc/intro.md), under the specific rule pages to which they apply.
+!!! tip "Example job configuration files"
 
-For user's convenience, we provide separate example `config_job.yaml` files for the [Minimal Test Run](https://github.com/seqscope/NovaScope/blob/main/testrun/minimal_test_run/config_job.yaml), [Shallow Liver Test Run](https://github.com/seqscope/NovaScope/blob/main/testrun/shallow_liver_section/config_job.yaml), and [Deep Liver Test Run](https://github.com/seqscope/NovaScope/blob/main/testrun/deep_liver_section/config_job.yaml).
+    For user's convenience, we provide separate example `config_job.yaml` files for the [Minimal Test Run](https://github.com/seqscope/NovaScope/blob/main/testrun/minimal_test_run/config_job.yaml), [Shallow Liver Test Run](https://github.com/seqscope/NovaScope/blob/main/testrun/shallow_liver_section/config_job.yaml), and [Deep Liver Test Run](https://github.com/seqscope/NovaScope/blob/main/testrun/deep_liver_section/config_job.yaml).
 
 ```yaml
 ## ================================================
 ##
 ##  Main Fields:
+##  Detailed explanations for the "Main Fields" parameters are available at the bottom of this page.
 ##
 ## ================================================
 ## == Input Data ==
@@ -72,11 +72,14 @@ env_yml: <path_to_config_env.yaml_file>         ## If absent, NovaScope use the 
 ##
 ##  Additional Fields:
 ## 
-##    The "upstream", "histology", and "downstream" parameters are included below, along side the default values.
-##    Revise and enable the following parameters ONLY IF you wish to utilize values different than the default.
+##    * All parameters below are defined by their default values.
+##    * Modify and enable the following parameters ONLY if you want to use values other than the defaults.
+##    * Each parameter is briefly described here, with more details available in the NovaScope Full Documentation under the relevant rule pages.
 ##
 ## ================================================
+#
 ## == Upstream Parameters (from fastq files to SGE) == 
+#
 #upstream:                 
 #  stdfastq:                                    ## Specify whether to use FASTQ files. Set to True unless the user doesn't have FASTQ but has fastq2sbcd and smatch results.
 #    seq1st: True
@@ -133,6 +136,7 @@ env_yml: <path_to_config_env.yaml_file>         ## If absent, NovaScope use the 
 #      adjust_quantile: 0.99
 #
 ## == Histology Alignment Parameters == 
+# 
 #histology:                                     ## Parameters for Rule historef.
 #    min_buffer_size: 1000                      ## Use min_buffer_size, max_buffer_size, and step_buffer_size to create a list of buffer sizes for histology alignment.
 #    max_buffer_size: 2000
@@ -140,6 +144,7 @@ env_yml: <path_to_config_env.yaml_file>         ## If absent, NovaScope use the 
 #    raster_channel: 1                          ## Roaster channel used for historef alignment.
 #
 ## == Downstream Parameters (SGE filtering, reformatting, and segmentation) ==
+#
 #downstream:                 
 #  mu_scale: 1000                               ## Coordinate to micron (um) conversion.
 #
@@ -173,7 +178,7 @@ env_yml: <path_to_config_env.yaml_file>         ## If absent, NovaScope use the 
 #      # - ...                                  ## Add more hexagon sets if needed. 
 ```
 
-### Main Fields
+### `Main Fields` Parameters
 
 #### Input
 !!! tip "Relative Path"
@@ -182,16 +187,25 @@ env_yml: <path_to_config_env.yaml_file>         ## If absent, NovaScope use the 
 * **`seq1st`**:
     * *`id`*: The `id` will be used to organize the 1st-seq FASTQ files. Make sure the `id` field for 1st-seq in the corresponding flow cell is unique.  
 
-    * *`layout`*: A spatial barcode (sbcd) layout file to provide the layout of tiles in a chip with the following format. If absent, [NovaScope](https://seqscope.github.io/NovaScope/) will automatically look for the sbcd layout within the NovaScope repository at [info/assets/layout_per_tile_basis](https://github.com/seqscope/NovaScope/tree/main/info/assets/layout_per_tile_basis), using the section chip ID for reference.
-        ```yaml
-        lane  tile  row  col  rowshift  colshift
-        3     2556  1    1    0         0
-        3     2456  2    1    0         0.1715
-        ```
-        * `lane`: Lane IDs;
-        * `tile`: Tile IDs;
-        * `row` & `col`: The layout position;
-        * `rowshift` & `colshift`: The gap information
+    * **`layout`** & **`layout_shift`**: These parameters identify the spatial barcode (sbcd) layout file to provide the layout of tiles in a chip.
+        * To use a specific layout file, set **`layout`** with the path to the desired layout file.
+        * To use pre-built layout files in NovaScope, leave `layout` empty and define the **`layout_shift`**. The `layout_shift` defaults to `"tobe"`. [NovaScope](https://seqscope.github.io/NovaScope/) will then automatically identify the layout file from [info/assets/layout_per_tile_basis](https://github.com/seqscope/NovaScope/tree/main/info/assets/layout_per_tile_basis), using `layout_shift` and `chip` as reference. NovaScope supports two types of layout: `"tobe"` and `"tebo"`, which shift tiles in different ways (see [sbcd_layout.md#purpose](../fulldoc/rules/sbcd_layout.md#purpose)).
+
+        !!! tip "Spatial layout examination"
+
+            If the `layout_shift` is unclear or if misaligned fiducial marks are observed in the ["sbcd" image](../fulldoc/rules/sbcd2chip.md#3-an-sbcd-image), perform a spatial layout examination by setting `request` to `sbcdlo-per-flowcell`.
+    
+        ??? note "The spatial barcode (sbcd) layout format"
+
+            ```yaml
+            lane  tile  row  col  rowshift  colshift
+            3     2556  1    1    0         0
+            3     2456  2    1    0         0.1715
+            ```
+            * `lane`: Lane IDs;
+            * `tile`: Tile IDs;
+            * `row` & `col`: The layout position;
+            * `rowshift` & `colshift`: The gap information
 
 * **`seq2nd`**: This field requires all FASTQ pairs associated with the input section chip to be provided under `seq2nd`. 
 
@@ -240,8 +254,8 @@ The options below are only for executing the [additional functionalities](../hom
 
 | Option                | Final Output Files                                                                                  | Details   |
 |-----------------------|---------------------------------------------------------------------------------------------------- |---|
-| `sbcdlo-per-flowcell` | Two spatial barcode maps each aligns tile pairs using one spatial map layout.| [sbcd_layout](../fulldoc/rules/sbcd_layout.md)|
 | `histology-per-run`   | Geotiff files for coordinate transformation between SGE matrix and histology image.| [historef](../fulldoc/rules/historef.md#output-files)                        |
+| `sbcdlo-per-flowcell` | Two spatial barcode maps each aligns tile pairs using one spatial map layout.| [sbcd_layout](../fulldoc/rules/sbcd_layout.md)|
 | `transcript-per-unit` | An SGE matrix in the TSV format that is compatible toFICTURE. | [sdgeAR_reformat](../fulldoc/rules/sdgeAR_reformat.md#output-files)          |
 | `filterftr-per-unit`  | A feature file for genes that pass gene-based filtering, formatted as a TSV file that contains detailed information about each gene. | [sdgeAR_featurefilter](../fulldoc/rules/sdgeAR_featurefilter.md#output-files)    |
 | `filterpoly-per-unit` | An SGE matrix, a coordinate metadata file, a feature file, and a boundary JSON file, all reflecting the SGE matrix that passed the polygon-based density filtering.| [sdgeAR_polygonfilter](../fulldoc/rules/sdgeAR_polygonfilter.md#output-files)|
