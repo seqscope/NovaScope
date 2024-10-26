@@ -53,7 +53,7 @@ The output file can serve as input for Latent Dirichlet Allocation in FICTURE.
 ```yaml
 downstream:
   mu_scale: 1000        
- segment:
+  segment:
    hex_n_move: 1                              ## specify the sliding step in segmentation
    precision: 2                               ## specify the precision parameter for segmentation                   
    ficture:                                   ## specify the parameters for creating hexagon-indexed SGE in FICTURE-compatible format    

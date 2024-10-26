@@ -18,8 +18,8 @@ rule a03_smatch:
         visual_intensity_per_obs  = config.get("upstream", {}).get("visualization", {}).get("drawxy",{}).get("intensity_per_obs", 50),
         visual_icol_x             = config.get("upstream", {}).get("visualization", {}).get("drawxy",{}).get("icol_x", 3),
         visual_icol_y             = config.get("upstream", {}).get("visualization", {}).get("drawxy",{}).get("col_y", 4),
-        # module
-        module_cmd        = get_envmodules_for_rule(["python", "imagemagick"], module_config)
+        # tools
+        module_cmd        = get_envmodules_for_rule(["imagemagick"], config.get("env",{}).get("envmodules", {}))
     resources:
         time = "50:00:00",
         mem  = "13000m"
@@ -30,7 +30,6 @@ rule a03_smatch:
         r"""
         set -euo pipefail
         {params.module_cmd}
-        source {pyenv}/bin/activate
 
         echo "Runing step1 match-sbcds.\\n"
         command time -v {spatula} match-sbcds \

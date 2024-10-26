@@ -6,8 +6,8 @@ def align_get_exist_action(config):
     elif action_option == "overwrite":
         return " --overwrite-existing "
 
-def align_get_ref_idx(env_config, species):
-    sp2alignref = env_config.get("ref", {}).get("align", None)
+def align_get_ref_idx(config, species):
+    sp2alignref = config.get("env",{}).get("ref", {}).get("align", None),
     refidx = sp2alignref[species]
     assert refidx is not None, "The alignment reference file is not provided. Check your environment configuration file."
     assert os.path.exists(refidx), f"The alignment reference file for {species} does not exist: {refidx}. Check your environment configuration file."
@@ -40,17 +40,17 @@ rule a04_align:
         revcomp        = "--revcomp-r2" if config.get("upstream", {}).get("align", {}).get('revcomp', None) else "",    # only used for ffpe data
         exist_action   = align_get_exist_action(config),
         # ref
-        refidx         = align_get_ref_idx(env_config, species),
+        refidx         = align_get_ref_idx(config, species),
         # resource
-        ram             = lambda wildcards: assign_resource_for_align(wildcards.run_id, config, env_config, rid2seq2, main_dirs)["ram"],
-        # module
-        module_cmd      = get_envmodules_for_rule(["python", "samtools"], module_config),
+        ram             = lambda wildcards: assign_resource_for_align(wildcards.run_id, config, rid2seq2, main_dirs)["ram"],
+        # tools
+        module_cmd      = get_envmodules_for_rule(["python", "samtools"], config.get("env",{}).get("envmodules", {})),
     threads: 
-        lambda wildcards:  assign_resource_for_align(wildcards.run_id, config, env_config, rid2seq2, main_dirs)["threads"], 
+        lambda wildcards:  assign_resource_for_align(wildcards.run_id, config, rid2seq2, main_dirs)["threads"], 
     resources: 
         time      = "100:00:00",
-        mem       = lambda wildcards: assign_resource_for_align(wildcards.run_id, config, env_config, rid2seq2, main_dirs)["mem"],
-        partition = lambda wildcards: assign_resource_for_align(wildcards.run_id, config, env_config, rid2seq2, main_dirs)["partition"],
+        mem       = lambda wildcards: assign_resource_for_align(wildcards.run_id, config, rid2seq2, main_dirs)["mem"],
+        partition = lambda wildcards: assign_resource_for_align(wildcards.run_id, config, rid2seq2, main_dirs)["partition"],
     run:
         shell(
         r"""

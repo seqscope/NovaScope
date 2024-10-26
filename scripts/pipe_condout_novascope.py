@@ -13,10 +13,6 @@ def outfn_sbcd_per_fc(main_dirs, df_run):
         'root': main_dirs["seq1st"],
         'subfolders_patterns': [
                                 (["{flowcell}", "sbcds", "{seq1_id}", "manifest.tsv"], None),
-                                (["{flowcell}", "images", "{flowcell}_1_1644_1544.evenshift.nbcds.png"], None),
-                                (["{flowcell}", "images", "{flowcell}_1_1644_1544.oddshift.nbcds.png"], None),
-                                (["{flowcell}", "images", "{flowcell}_1_2644_2544.evenshift.nbcds.png"], None),
-                                (["{flowcell}", "images", "{flowcell}_1_2644_2544.oddshift.nbcds.png"], None),
         ],
         'zip_args': {
             'flowcell':    df_run["flowcell"].values,
@@ -24,22 +20,6 @@ def outfn_sbcd_per_fc(main_dirs, df_run):
         },
     }
     return outfn
-
-# def outfn_sbcdlo_per_fc(main_dirs, df_run):
-#     outfn= {
-#         'flag': 'sbcdlayout-per-flowcell',
-#         'root': main_dirs["seq1st"],
-#         'subfolders_patterns': [
-#                                 (["{flowcell}", "images", "{flowcell}_1_1644_1544.evenshift.nbcds.png"], None),
-#                                 (["{flowcell}", "images", "{flowcell}_1_1644_1544.oddshift.nbcds.png"], None),
-#                                 (["{flowcell}", "images", "{flowcell}_1_2644_2544.evenshift.nbcds.png"], None),
-#                                 (["{flowcell}", "images", "{flowcell}_1_2644_2544.oddshift.nbcds.png"], None),
-#         ],
-#         'zip_args': {
-#             'flowcell':    df_run["flowcell"].values,
-#         },
-#     }
-#     return outfn
 
 def outfn_sbcd_per_chip(main_dirs, df_run):
     outfn = {
@@ -77,7 +57,6 @@ def outfn_align_per_run(main_dirs, df_run):
         },
     }
     return outfn
-
 
 def outfn_trans_per_unit(main_dirs, df_run):
     out_fn = {
@@ -118,13 +97,33 @@ def outfnlist_by_run(main_dirs, df_run):
     ]
     return outfnlist
 
-
 #===============================================================================
 #
-#        Output files for each seq2 id, sgevisual id, histology id
+#        Output files for each lane & tile pair, seq2 id, sgevisual id, histology id
 #
 #===============================================================================
 
+# - lane & tile1 & tile2
+def outfn_sbcdlo_per_tilepair(main_dirs, df_sbcdlo):
+    df_sbcdlo["lane"]=df_sbcdlo["seq1_id"].str.replace("L", "", regex=False)
+    outfn= {
+        'flag': 'sbcdlo-per-flowcell',
+        'root': main_dirs["seq1st"],
+        'subfolders_patterns': [
+                                (["{flowcell}", "images", "{flowcell}.{lane}.{layer}.{tile_1}_{tile_2}.evenshift.nbcds.png"], None),
+                                (["{flowcell}", "images", "{flowcell}.{lane}.{layer}.{tile_1}_{tile_2}.oddshift.nbcds.png"], None),
+        ],
+        'zip_args': {
+            'flowcell':    df_sbcdlo["flowcell"].values,
+            'lane':        df_sbcdlo["lane"].values,
+            'layer':       df_sbcdlo["layer"].values,
+            'tile_1':      df_sbcdlo["tile_1"].values,
+            'tile_2':      df_sbcdlo["tile_2"].values,
+        },
+    }
+    return outfn
+
+# seq2id
 def outfn_smatch_per_chip(main_dirs, df_seq2):
     outfn = {
         'flag': 'smatch-per-chip',
@@ -143,6 +142,7 @@ def outfn_smatch_per_chip(main_dirs, df_seq2):
     }
     return outfn
 
+# run_id & (optional) sgevisual_id 
 def outfn_sge_per_run(main_dirs, df_sge, drawsge):
     out_fn ={
         'flag': 'sge-per-run',
@@ -207,7 +207,6 @@ def outfn_filterpoly_per_unit(main_dirs, df_segchar, resilient):
                 'run_id':        df_segchar["run_id"].values,  
                 'unit_id':       df_segchar["unit_id"].values,
                 'solo_feature':  df_segchar["solo_feature"].values,
-                'sge_qc':        df_segchar["sge_qc"].values,
             },
     }
     return out_fn

@@ -5,13 +5,12 @@ rule c03_sdgeAR_minmax:
     output:
         xyrange_raw      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.raw.coordinate_minmax.tsv"),
     params:
-        # module
-        module_cmd       = get_envmodules_for_rule(["python", "samtools"], module_config),
+        # tools
+        module_cmd       = get_envmodules_for_rule(["samtools"], config.get("env",{}).get("envmodules", {})),
     run:
         shell(
         r"""
         {params.module_cmd}
-        source {pyenv}/bin/activate
 
         gzip -cd {input.transcript} | \
             awk 'BEGIN{{FS=OFS="\t"}} NR==1{{for(i=1;i<=NF;i++){{if($i=="X")x=i;if($i=="Y")y=i}}print $x,$y;next}}{{print $x,$y}}' | \

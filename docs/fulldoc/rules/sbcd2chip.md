@@ -81,8 +81,9 @@ Each duplicate barcode reports its count and the maximum distance between duplic
 
 ## Output Guidelines
 Recommended review steps:
+
 1. Examine [`manifest.tsv`](#2-per-chip-manifest-file) to ensure there are a sufficient number of matched barcodes, and all mismatched barcodes are removed.
-2. Inspect [`1_1.sbcds.sorted.png`](#3-an-sbcd-image) to verify that fiducial marks appear empty and align with other fiducial marks both horizontally and vertically.
+2. Inspect [`1_1.sbcds.sorted.png`](#3-an-sbcd-image) to verify that fiducial marks appear empty and align with other fiducial marks both horizontally and vertically. Misaligned fiducial marks indicate incorrect spatial map layout. To identify the right spatial map layout, use [sbcd_layout](./sbcd_layout.md) to identify spatial map layout.
 
 ## Parameters
 The following parameter in the [job configuration](../../basic_usage/job_config.md) file will be applied in this rule. 

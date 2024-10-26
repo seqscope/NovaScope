@@ -79,6 +79,7 @@ nav:
         - dge2sdge: fulldoc/rules/dge2sdge.md
         - sdge_visual: fulldoc/rules/sdge_visual.md
       - Plus Rules:
+        - sbcd_layout: fulldoc/rules/sbcd_layout.md
         - historef: fulldoc/rules/historef.md
         - sdge2sdgeAR: fulldoc/rules/sdge2sdgeAR.md
         - sdgeAR_reformat: fulldoc/rules/sdgeAR_reformat.md

@@ -11,12 +11,12 @@ rule b01_sdge_visual:
         time          = "5:00:00"  
     params:
         sgevisual_id    = "{sgevisual_id}",
-        # module
-        module_cmd      = get_envmodules_for_rule(["python", "imagemagick"], module_config),
-        # config
+        # params
         visual_coord_per_pixel = config.get("upstream", {}).get("visualization", {}).get("drawsge",{}).get("coord_per_pixel", 1000),
         visual_auto_adjust     = " --auto-adjust " if config.get("upstream", {}).get("visualization", {}).get("drawsge",{}).get("auto_adjust", True) else "",
         visual_adjust_quantile = config.get("upstream", {}).get("visualization", {}).get("drawsge",{}).get("adjust_quantile", 0.99),
+        # tools
+        module_cmd      = get_envmodules_for_rule(["imagemagick"], config.get("env",{}).get("envmodules", {})),
     run: 
         sdge_dir = os.path.dirname(input.sdge_bcd)
 
@@ -26,7 +26,6 @@ rule b01_sdge_visual:
         r"""
         set -e
         {params.module_cmd}
-        source {pyenv}/bin/activate
 
         echo "Creating sge image: {output.sdge_png} ..."
         command time -v {spatula} draw-sge \
