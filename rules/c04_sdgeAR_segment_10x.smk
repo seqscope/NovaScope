@@ -18,7 +18,7 @@ rule c04_sdgeAR_segment_10x:
         min_density_per_unit = config.get("downstream", {}).get('segment', {}).get('10x', {}).get('min_density_per_unit', 0.01), 
         min_ct_per_unit     = config.get("downstream", {}).get('segment', {}).get('10x', {}).get('min_ct_per_unit', 10),
         # tools
-        module_cmd          = get_envmodules_for_rule(["python", "samtools"], config)w,
+        module_cmd          = get_envmodules_for_rule(["python", "samtools"], config),
     resources:
         mem  = "7000MB", 
         time = "12:00:00",

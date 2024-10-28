@@ -12,7 +12,7 @@ rule b02_historef:
         hist_buffer_step    = config.get("histology",{}).get("buffer_step", 100),
         hist_raster_channel = config.get("histology",{}).get("raster_channel", 1),
         # tools
-        module_cmd          = get_envmodules_for_rule(["python", "gcc", "gdal"], config)
+        module_cmd          = get_envmodules_for_rule(["python", "gcc", "gdal"], config),
     threads: 3
     resources:
         time = "5:00:00",

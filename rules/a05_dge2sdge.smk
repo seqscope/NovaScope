@@ -21,7 +21,7 @@ rule a05_dge2sdge:
         sdge_3in1_png = os.path.join(main_dirs["align"],  "{flowcell}", "{chip}", "{run_id}", "sge", "{run_id}.sge_match_sbcd.png"),
     params:
         # tools
-        module_cmd       = get_envmodules_for_rule(["imagemagick"], config)
+        module_cmd       = get_envmodules_for_rule(["imagemagick"], config),
     resources: 
         mem           = "24000MB", 
         time          = "3:00:00"  

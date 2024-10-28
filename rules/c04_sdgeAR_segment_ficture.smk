@@ -15,7 +15,7 @@ rule c04_sdgeAR_segment_ficture:
         min_density_per_unit= config.get("downstream", {}).get('segment', {}).get('ficture', {}).get('min_density_per_unit', 0.01),
         min_ct_per_unit     = config.get("downstream", {}).get('segment', {}).get('ficture', {}).get('min_ct_per_unit', 10),
         # tools
-        module_cmd          = get_envmodules_for_rule(["python", "samtools"], config)w
+        module_cmd          = get_envmodules_for_rule(["python", "samtools"], config),
     resources:
         mem  = "28000MB", 
         time = "72:00:00"

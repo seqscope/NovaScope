@@ -21,7 +21,7 @@ rule a02_sbcd2chip:
         visual_icol_x             = config.get("upstream", {}).get("visualization", {}).get("drawxy",{}).get("icol_x", 3),
         visual_icol_y             = config.get("upstream", {}).get("visualization", {}).get("drawxy",{}).get("icol_y", 4),
         # tools
-        module_cmd    = get_envmodules_for_rule(["imagemagick"], config)
+        module_cmd    = get_envmodules_for_rule(["imagemagick"], config),
     resources:
         time = "5:00:00",
         mem  = "6500m"
