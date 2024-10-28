@@ -44,7 +44,7 @@ rule a04_align:
         # resource
         ram             = lambda wildcards: assign_resource_for_align(wildcards.run_id, config, rid2seq2, main_dirs)["ram"],
         # tools
-        module_cmd      = get_envmodules_for_rule(["python", "samtools"], config.get("env",{}).get("envmodules", {})),
+        module_cmd      = get_envmodules_for_rule(["python", "samtools"], config),
     threads: 
         lambda wildcards:  assign_resource_for_align(wildcards.run_id, config, rid2seq2, main_dirs)["threads"], 
     resources: 

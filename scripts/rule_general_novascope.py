@@ -156,7 +156,8 @@ def assign_resource_for_align(run, config, rid2seq2, main_dirs):
 
 # Update: 
 # * 20240326: Updated function to correctly load nested modules, e.g., 'samtools' under 'Bioinformatics'.
-def get_envmodules_for_rule(required_modules, module_config):
+def get_envmodules_for_rule(required_modules, config):
+    module_config = config.get("env",{}).get("envmodules", {})
     if module_config:
         # Environment with module system and configuration is available
         module_cmd = []

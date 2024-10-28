@@ -16,7 +16,7 @@ rule b01_sdge_visual:
         visual_auto_adjust     = " --auto-adjust " if config.get("upstream", {}).get("visualization", {}).get("drawsge",{}).get("auto_adjust", True) else "",
         visual_adjust_quantile = config.get("upstream", {}).get("visualization", {}).get("drawsge",{}).get("adjust_quantile", 0.99),
         # tools
-        module_cmd      = get_envmodules_for_rule(["imagemagick"], config.get("env",{}).get("envmodules", {})),
+        module_cmd      = get_envmodules_for_rule(["imagemagick"], config),
     run: 
         sdge_dir = os.path.dirname(input.sdge_bcd)
 

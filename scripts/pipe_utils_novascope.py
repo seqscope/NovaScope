@@ -242,7 +242,6 @@ def convert_sgevisual_list2df(config_upstream, refgl_dir):
     sge_visual_params = config_upstream.get("visualization",{}).get("drawsge",{}).get("genes", sge_visual_defparams)
     df_sge_visual = pd.DataFrame(sge_visual_params).drop_duplicates()
     # Transform the DataFrame
-    assert refgl_dir is not None, f"Provide a valid gene list directory for your species."
     df_sge_visual['params'] = transform_sge_visual(df_sge_visual, refgl_dir)
     df_sge_visual['sgevisual_id'] = df_sge_visual.apply(lambda x: f"{x['red']}_{x['green']}_{x['blue']}", axis=1)
     return df_sge_visual[['sgevisual_id', 'params']]
@@ -340,6 +339,7 @@ def define_segchar_df(info, run_id, unit_id, format):
             "quality_control": [sge_qc_def]
         })
     df_char["sge_qc"] = df_char["quality_control"].apply(lambda x: "filtered" if x else "raw")
+    df_char = df_char.drop(columns=["quality_control"])
     return df_char
 
 def read_config_for_segment(config, run_id, unit_id, format, silent=False):

@@ -20,7 +20,7 @@ rule c03_sdgeAR_polygonfilter:
         hex_n_move          = config.get("downstream", {}).get('polygon_density_filter', {}).get('hex_n_move', 1),   
         polygon_min_size    = config.get("downstream", {}).get('polygon_density_filter', {}).get('polygon_min_size', 500),  
         # tools
-        module_cmd          = get_envmodules_for_rule(["python", "samtools"], config.get("env",{}).get("envmodules", {})),
+        module_cmd          = get_envmodules_for_rule(["python", "samtools"], config),
     resources:
         mem  = lambda params:  "14000MB",
         time = lambda params:  "10:00:00",

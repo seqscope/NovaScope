@@ -25,7 +25,7 @@ rule c03_sdgeAR_featurefilter:
         rm_gene_regex     = r"{0}".format(config.get("downstream", {}).get('gene_filter', {}).get('rm_gene_regex', "^Gm\\d+|^mt-|^MT-")), 
         min_ct_per_feature= config.get("downstream", {}).get('gene_filter', {}).get('min_ct_per_feature', 50),
         # tools
-        module_cmd        = get_envmodules_for_rule(["python", "samtools"], config.get("env",{}).get("envmodules", {}))
+        module_cmd        = get_envmodules_for_rule(["python", "samtools"], config)
     threads: 2
     resources:
         mem  = "14000MB",

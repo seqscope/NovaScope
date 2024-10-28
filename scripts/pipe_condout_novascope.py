@@ -1,6 +1,6 @@
 # Generate output file name by request
-# for upstream pipeline (NovaScope)
 import pandas as pd
+
 #===============================================================================
 #
 #        Output files for each run

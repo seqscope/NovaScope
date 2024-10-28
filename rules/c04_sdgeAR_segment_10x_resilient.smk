@@ -37,7 +37,7 @@ rule c04_sdgeAR_segment_10x_resilient:
         min_ct_per_unit     = config.get("downstream", {}).get('segment', {}).get('10x', {}).get('min_ct_per_unit', 10),
         exist_action        = config.get("downstream", {}).get('segment', {}).get('10x', {}).get('exist_action', "overwrite"), # ["skip", "overwrite"]
         # modules
-        module_cmd          = get_envmodules_for_rule(["python", "samtools"], module_config),
+        module_cmd          = get_envmodules_for_rule(["python", "samtools"], config),
     resources:
         mem  = "7000MB", 
         time = "6:00:00",

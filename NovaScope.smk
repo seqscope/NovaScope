@@ -88,7 +88,8 @@ request = check_request(input_request=config.get("request", ["sge-per-run"]),
                                         "sbcd-per-chip", "smatch-per-chip", 
                                         "align-per-run", "sge-per-run", "histology-per-run", 
                                         "transcript-per-unit", "filterftr-per-unit", "filterpoly-per-unit", 
-                                        "segment-10x-per-unit", "segment-ficture-per-unit", "segment-per-unit", "segment-viz-per-unit"])
+                                        "segment-10x-per-unit", "segment-ficture-per-unit", "segment-per-unit", 
+                                        "segment-viz-per-unit"])
 
 
 if  "segment-per-unit" in request:
@@ -152,7 +153,7 @@ if any(task in request for task in["filterpoly-per-unit", "segment-10x-per-unit"
 else:
     logging.info(f" - Downstream segmentation: Skipping")
 
-df_seg10x = read_config_for_segment(config, run_id, unit_id, "10x", silent=mode_quite)     if any(task in request for task in ["filterpoly-per-unit", "segment-10x-per-unit"]) else df_seg_void
+df_seg10x = read_config_for_segment(config, run_id, unit_id, "10x", silent=mode_quite)      if any(task in request for task in ["filterpoly-per-unit", "segment-10x-per-unit"]) else df_seg_void
 df_segfict = read_config_for_segment(config, run_id, unit_id, "ficture", silent=mode_quite) if any(task in request for task in ["filterpoly-per-unit", "segment-ficture-per-unit"]) else df_seg_void
 df_seg = pd.concat([df_seg10x, df_segfict], ignore_index=True).drop_duplicates().reset_index(drop=True)
 
@@ -196,7 +197,7 @@ output_filename_conditions = [
 output_filename_conditions.extend(outfnlist_by_run(main_dirs, df_run))
 output_filename_conditions.extend(outfnlist_by_seg(main_dirs, df_seg, resilient, segmentviz))    # segment & segmentviz
 
-requested_files = list_outputfn_by_request(output_filename_conditions, request, debug=mode_debug)
+requested_files = list_outputfn_by_request(output_filename_conditions, request, mode_debug)
 
 rule all:
     input:
@@ -239,18 +240,14 @@ if any(task in request for task in [ "filterpoly-per-unit", "segment-10x-per-uni
         
 if "segment-10x-per-unit" in request:
     if resilient:
-        #print("segment-10x: resilient")
         include: "rules/c04_sdgeAR_segment_10x_resilient.smk"
     else:
-        #print("segment-10x: standard")
         include: "rules/c04_sdgeAR_segment_10x.smk"
 
 if "segment-ficture-per-unit" in request:
     if resilient:
-        #print("segment-ficture: resilient")
         include: "rules/c04_sdgeAR_segment_ficture_resilient.smk"
     else:
-        #print("segment-ficture: standard")
         include: "rules/c04_sdgeAR_segment_ficture.smk"
 
 if segmentviz:

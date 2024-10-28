@@ -19,7 +19,7 @@ rule b04_sdgeAR_segmentviz:
         # prefix
         png_title      = "{unit_id}_{sge_format}_{sge_qc}",
         # module
-        module_cmd     = get_envmodules_for_rule(["python", "R"], module_config)
+        module_cmd     = get_envmodules_for_rule(["python", "R"], config)
     resources:
         mem  = "28000MB", 
         time = "72:00:00"

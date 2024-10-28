@@ -32,7 +32,7 @@ rule b03_sbcd_layout:
         visual_icol_x             = config.get("upstream", {}).get("visualization", {}).get("drawxy",{}).get("icol_x", 3),
         visual_icol_y             = config.get("upstream", {}).get("visualization", {}).get("drawxy",{}).get("icol_y", 4),
         # env
-        module_cmd          = get_envmodules_for_rule(["imagemagick"], config.get("env",{}).get("envmodules", {})),
+        module_cmd          = get_envmodules_for_rule(["imagemagick"], config),
     resources:
         time = "50:00:00",
         mem  = "70g",

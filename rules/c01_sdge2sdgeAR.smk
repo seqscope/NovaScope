@@ -18,7 +18,6 @@ rule c01_sdge2sdgeAR:
         unit_id         = unit_id, 
         boundary        = boundary,
         unit_ann        = unit_ann,
-        #sdge_rgb_list  = lambda wildcards: [ os.path.join(main_dirs["align"],  flowcell, chip, "{run_id}", "sge", "{run_id}.sge_visual", sgevisual_id+".png") for sgevisual_id in rid2sgevisual_id[wildcards.run_id]],
     threads: 2
     resources:
         mem  = "6500MB",

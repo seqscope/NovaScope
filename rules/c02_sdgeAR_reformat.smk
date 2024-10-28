@@ -12,7 +12,7 @@ rule c02_sdgeAR_reformat:
         sp2geneinfo       = config.get("env",{}).get("ref", {}).get("geneinfo", None),
         species           = species,
         # tools
-        module_cmd        = get_envmodules_for_rule(["samtools"], config.get("env",{}).get("envmodules", {}))
+        module_cmd        = get_envmodules_for_rule(["samtools"], config)
     threads: 2
     resources:
         mem  = "14000MB",

@@ -18,7 +18,7 @@ rule c04_sdgeAR_segment_ficture_resilient:
         exist_action        = config.get("downstream", {}).get('segment', {}).get('ficture', {}).get('exist_action', "overwrite"), # ["skip", "overwrite"] # for the inhouse production pipeline, because the parameters has been changed: density from 0.3 to 0.01, ct from 20 to 10, do not use the previous hexagon file.
         transcript_filtered = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.transcripts.tsv.gz"), 
         # module
-        module_cmd          = get_envmodules_for_rule(["python", "samtools"], module_config)
+        module_cmd          = get_envmodules_for_rule(["python", "samtools"], config)
     resources:
         mem  = "28000MB", 
         time = "10:00:00"
