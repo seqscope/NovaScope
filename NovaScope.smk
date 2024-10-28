@@ -138,17 +138,17 @@ df_run = pd.DataFrame({
 # sbcd layout
 df_sbcdlo= read_config_for_sbcdlo(df_run, config)
 
-# sge visualization
+# sge gene set visualization
 drawsge=config.get("upstream",{}).get("visualization",{}).get("drawsge",{}).get("action", True)
 df_sge, sgevisual_id2params, rid2sgevisual_id = read_config_for_sgevisual(config, df_run, silent=mode_quite)
 
-# hist
+# histology alignment
 df_hist = read_config_for_hist(config, df_run, silent=mode_quite)
 
 # downstream
 if any(task in request for task in["filterpoly-per-unit", "segment-10x-per-unit", "segment-ficture-per-unit"]):
     logging.info(f" - Downstream segmentation:")
-    mu_scale         = config.get("downstream", {}).get("mu_scale", 1000),
+    mu_scale = config.get("downstream", {}).get("mu_scale", 1000)
     logging.info(f"     - mu_scale: {mu_scale}")
 else:
     logging.info(f" - Downstream segmentation: Skipping")
@@ -157,13 +157,12 @@ df_seg10x = read_config_for_segment(config, run_id, unit_id, "10x", silent=mode_
 df_segfict = read_config_for_segment(config, run_id, unit_id, "ficture", silent=mode_quite) if any(task in request for task in ["filterpoly-per-unit", "segment-ficture-per-unit"]) else df_seg_void
 df_seg = pd.concat([df_seg10x, df_segfict], ignore_index=True).drop_duplicates().reset_index(drop=True)
 
-# - segmentviz or not 
+# - segmentviz or not (default: NOT)
 segmentviz = config.get("downstream", {}).get("segmentviz", None)
-
 if "segment-viz-per-unit" in request and segmentviz is None:
     segmentviz=["10x"] # use 10x as default
 
-# - resilient or not
+# - resilient or not (default: NOT)
 resilient = config.get("resilient", False)  
 if segmentviz:
     resilient = True
@@ -174,11 +173,9 @@ logging.info(f" - Resilient: {resilient}")
 # Rule all
 #
 # - If all variable in the zip_args is a list of one element, it's ok to use the list directly. Otherwise, use a dataframe will be safer to avoid wrong combination.
-#   Currently, only the df_seq2 and df_segment_char are in the dataframe format.
 # - Please note that the order of results affects the order of execution.
 #
 #==============================================
-# required df: df_run, df_seq2, df_sbcdlo, df_sge, df_hist, df_segment_char
 
 log_a_separator()
 logging.info(f"4. Expected output filenames...")
