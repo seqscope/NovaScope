@@ -5,7 +5,9 @@
 Below is a brief description of all the items in the YAML file.
 
 !!! tip
-    To create your own `config_env.yaml` file for the environment setup, you may copy from [our example available in our GitHub repository](https://github.com/seqscope/NovaScope/blob/main/info/config_env.yaml). Remember to replace the placeholders with your specific input variables to customize it according to your needs.
+    To create your own `config_env.yaml` file for the environment setup, you may copy from [our example](https://github.com/seqscope/NovaScope/blob/main/info/config_env.yaml). 
+    
+    Please replace the placeholders with your specific input variables.
 
 ## Tools
 
@@ -50,33 +52,10 @@ envmodules:
 
 ## Reference Databases
 
-Define all necessary reference databases for the input species in the `ref` field.
-
-### (1) Reference Genome Index for Alignment
-Specify the alignment reference genome index in the `align` field. Reference genome indices can be accessed via the [cellranger download](https://www.10xgenomics.com/support/software/cell-ranger/downloads) page. Users can also generate their own reference genome index. Detailed instructions for building the STAR index are provided in the [Requirements](./requirement.md) section.
-
-### (2) (Optional) Reference Gene List Files for Spatial Expression Visualization
-
-!!! info
-    By default, NovaScope requires reference gene list files to visualize the spatial expression for gene sets. If the reference files are not available, users could skip the visualization by set `action` in `draw_sge` as `False`.
-
-The `genelists` field should point to the directory containing species-specific gene lists, which are crucial for visualizing spatial expression patterns in Rule [sdge_visual](../fulldoc/rules/sdge_visual.md). This directory must include files named `<gene_group>.genes.tsv` (e.g., `MT.genes.tsv`), with each file listing gene names line-by-line.
-
-NovaScope provides precompiled gene lists for [mouse (version: mm39)](https://github.com/seqscope/NovaScope/tree/main/info/genelists/mm39) and [human (version: hg38)](https://github.com/seqscope/NovaScope/tree/main/info/genelists/hg38). If the `genelists` field is not specified in the `config_env.yaml`, NovaScope defaults to using these files. Alternatively, users may provide their own custom gene list files.
-
-### (3) (Optional) Reference Gene Information for Gene Filtering 
-
-!!! info
-    Gene information files are necessary only if additional functionalities of NovaScope are utilized.
-
-The `geneinfo` field specifies the path of gene information files needed for gene filtering. 
-
-By Default, NovaScope use the precompiled gene information files, including one for [mouse (version: mm39)](https://github.com/seqscope/NovaScope/blob/dev/info/geneinfo/Mus_musculus.GRCm39.107.names.tsv.gz), one for [human (version: hg38)](https://github.com/seqscope/NovaScope/blob/dev/info/geneinfo/Homo_sapiens.GRCh38.107.names.tsv.gz), and one for [chick (version: g6a)](https://github.com/seqscope/NovaScope/blob/dev/info/geneinfo/Gallus_gallus.GRCg6a.106.names.tsv.gz). I
-
-Only under the following conditions, users need to prepare and specify a gene information file in the `geneinfo` field: a. the input datasets are from species other than human or mouse; b. the version of the dataset is different from that of the precompiled files (human: hg38; mouse: mm39, chick: g6a).
-
 !!! tip
     Ensure that the reference files match the species of your input data.
+
+Define all necessary reference databases for the input species in the `ref` field.
 
 ```yaml
 ref:
@@ -88,11 +67,33 @@ ref:
     mouse: "/path/to/ref_gene_list_directory_for_mouse"
     human: "/path/to/ref_gene_list_directory_for_human"
     #...
-  #geneinfo:                                        ## (optional) no need to define the geneinfo if the users prefer to use the precompiled files from FICTURE
+  #geneinfo:                                        ## (optional) skip if the users prefer to use precompiled files
     #mouse: "/path/to/ref_gene_info_file_for_mouse"
     #human: "/path/to/ref_gene_info_file_for_human"
     #...
 ```
+
+### (1) Reference Genome Index for Alignment
+
+Specify the alignment reference genome index in the `align` field. Reference genome indices can be accessed via the [cellranger download](https://www.10xgenomics.com/support/software/cell-ranger/downloads) page. Users may also generate their own genome index, with detailed instructions for building a STAR index provided in the [Requirements](./requirement.md) section.
+
+### (2) (Optional) Reference Gene List Files for Spatial Expression Visualization
+
+!!! tip
+    By default, NovaScope requires reference gene list files for visualizing spatial expression patterns. If these files are unavailable, users can disable this feature by setting `action` in `draw_sge` to `False`.
+
+The `genelists` field should specify the directory containing species-specific gene lists, which are essential for visualizing spatial expression in Rule [sdge_visual](../fulldoc/rules/sdge_visual.md). Each file in this directory must be named `<gene_group>.genes.tsv` (e.g., `MT.genes.tsv`) and list gene names line by line.
+
+NovaScope provides precompiled gene lists for [mouse (mm39)](https://github.com/seqscope/NovaScope/tree/main/info/genelists/mm39) and [human (hg38)](https://github.com/seqscope/NovaScope/tree/main/info/genelists/hg38). If not specified, these defaults will be used. Users may also supply custom gene lists or disable the visualization of gene sets.
+
+### (3) (Optional) Reference Gene Information for Gene Filtering 
+
+Gene information files are needed for if additional functionalities are utilized, specified in the `geneinfo` field for filtering. The `geneinfo` field should point to the gene information file used for gene filtering. By default, NovaScope uses precompiled files for: [mouse (mm39)](https://github.com/seqscope/NovaScope/blob/dev/info/geneinfo/Mus_musculus.GRCm39.107.names.tsv.gz), [human (hg38)](https://github.com/seqscope/NovaScope/blob/dev/info/geneinfo/Homo_sapiens.GRCh38.107.names.tsv.gz), and [chick (g6a)](https://github.com/seqscope/NovaScope/blob/dev/info/geneinfo/Gallus_gallus.GRCg6a.106.names.tsv.gz)
+
+Users need to specify a gene information file in the `geneinfo` field only if:
+
+- The dataset is from a species other than human or mouse.
+- The dataset version differs from the precompiled files.
 
 ## Python Environment
 
@@ -105,23 +106,20 @@ pyenv: "/path/to/python/virtual/env"
 ## (Optional) Computing Capabilities
 
 !!! info
-    Only applicable to HPC environments.
+    Only applicable to HPC environments and when the `filesize` resource allocation method is applied.
 
-NovaScope provides two methods for specifying resources for the alignment process:
+NovaScope offers two resource allocation methods for alignment:
 
-* **Option `stdin`** allows users to define resources manually in the [job configuration file](../basic_usage/job_config.md/#a-template-of-the-config-file).
-* **Option `filesize`** allows NovaScope to automatically allocate resources based on the size of the input files and the available computational resources defined in this environment configuration file. **ONLY** when using Option `filesize` must users specify the computing resources available. 
+* **`stdin`**: Manually define resources in the [job configuration file](../basic_usage/job_config.md/#a-template-of-the-config-file).
+* **`filesize`**: Automatically allocate resources based on input file size and available computational resources, which must be specified in `available_nodes` when using this option (see an example below):
+    ```yaml
+    available_nodes:
+      - partition: standard     # partition name
+        max_n_cpus: 20          # the maximum number of CPUs per node
+        mem_per_cpu: 7g         # the memory allocation per CPU 
+      - partition: largemem
+        max_n_cpus: 10
+        mem_per_cpu: 25g
+    ```
 
-For more information on activating Option `stdin` or `filesize` and the resource allocation strategy for Option `filesize`, visit the [Job Configuration](../basic_usage/job_config.md/#upstream) page.
-
-An example of how to configure these settings.
-
-```yaml
-available_nodes:
-  - partition: standard     # partition name
-    max_n_cpus: 20          # the maximum number of CPUs per node
-    mem_per_cpu: 7g         # the memory allocation per CPU 
-  - partition: largemem
-    max_n_cpus: 10
-    mem_per_cpu: 25g
-```
+For details on activating `stdin` or `filesize` and understanding the `filesize` strategy, see the [Job Configuration](../basic_usage/job_config.md/#upstream) page. 

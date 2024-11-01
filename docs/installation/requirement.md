@@ -12,13 +12,13 @@ This document provides instructions on how to install the necessary software too
 
 ### Checking Snakemake Installation
 
-If you are unsure whether [Snakemake](https://snakemake.readthedocs.io/en/stable/) is installed in your system, you can check by running the following command:
+If you are unsure if [Snakemake](https://snakemake.readthedocs.io/en/stable/) is installed, run:
 
 ```sh
 snakemake --version
 ```
 
-On systems that support the `module` command, you can load the `snakemake` module using the following command:
+On systems that support the `module` command, you can load the `snakemake` module using:
 
 ```sh
 ## check if snakemake is available as a module
@@ -30,10 +30,9 @@ module load snakemake
 
 ### Installing Snakemake Using Conda and Mamba
 
-If you need to install [Snakemake](https://snakemake.readthedocs.io/en/stable/), below is a simplified sequence of instruction. Please refer to [official Snakemake documentation](https://snakemake.readthedocs.io/en/stable/basic_usage/installation.html) for detailed instructions.
+To install [Snakemake](https://snakemake.readthedocs.io/en/stable/), follow the simplified steps below. For more details, refer to the [official Snakemake documentation](https://snakemake.readthedocs.io/en/stable/basic_usage/installation.html).
 
 !!! tip
-
 	It is recommended to install [Snakemake](https://snakemake.readthedocs.io/en/stable/) using [conda](https://docs.conda.io/en/latest/) and/or [mamba](https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html). 
 
 !!! info
@@ -81,9 +80,9 @@ snakemake --version
 !!! info
 	[NovaScope](../index.md) has been tested for compatibility with [Python](https://www.python.org/) v3.9.12, v3.10, and v3.12.2.
 
-If you don't have Python installed on your system and you follow the above [Snakemake installation instructions](#installing-snakemake-using-conda-and-mamba), Python of the specified version should be installed during the process.
+If you don't have Python installed and you follow the above [Snakemake installation instructions](#installing-snakemake-using-conda-and-mamba), Python of the specified version should be installed during the process.
 
-To verify the installation or the version of Python on your system, run the following command:
+To verify the installation or the version, run:
 
 ```bash
 python --version
@@ -129,13 +128,13 @@ We provide an [example work log](https://github.com/seqscope/NovaScope/blob/main
 
 ## Installing NovaScope
 
-To install [NovaScope](../index.md), clone the repository from GitHub using the following command. Use `--recursive` to initializes and updates each submodule in NovaScope.
+To install [NovaScope](../index.md), clone the repository from GitHub with the following command, use `--recursive` to initialize and update all submodules.
 
 ```bash
 git clone --recursive https://github.com/seqscope/NovaScope.git 
 ```
 
-If you've already cloned NovaScope without its submodules (by forgetting to use the `--recursive` option), you can initialize and update the submodules afterwards with the following commands:
+If you've already cloned NovaScope without its submodules (by forgetting to use the `--recursive` option), initialize and update submodules by running:
 
 ```bash
 smk_dir=/path/to/the/novascope/directory

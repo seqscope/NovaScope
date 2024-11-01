@@ -81,7 +81,7 @@ env_yml: <path_to_config_env.yaml_file>         ## If absent, NovaScope use the 
 ## == Upstream Parameters (from fastq files to SGE) == 
 #
 #upstream:                 
-#  stdfastq:                                    ## Specify whether to use FASTQ files. Set to True unless the user doesn't have FASTQ but has fastq2sbcd and smatch results.
+#  stdfastq:                                    ## Specify whether to use FASTQ files. Set to True unless the user doesn't have FASTQ but has all output files from FASTQ are available.
 #    seq1st: True
 #    seq2nd: True           
 #

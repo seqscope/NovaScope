@@ -1,7 +1,9 @@
-# Additional Installations
+# (Optional) Additional Installations
 
 !!! info
-	The installations below are **OPTIONAL** and are **ONLY** necessary for who looking to utilize the [additional functionalities](../home/workflow_structure.md#plus-workflow). To solely utilize the [main functionalities](../home/workflow_structure.md#main-workflow), skip this step.
+	The installations below are only necessary for who looking to utilize the [additional functionalities](../home/workflow_structure.md#plus-workflow). 
+	
+	To solely utilize the [main functionalities](../home/workflow_structure.md#main-workflow), skip this step.
 
 ## Install the historef Package
 !!! info

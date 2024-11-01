@@ -1,14 +1,14 @@
 
 # Accessing Example Datasets
 
-## Dataset Overview
-
 There are three example datasets published with the NovaScope protocol.
 
 Each input dataset contains two types of FASTQ files:
 
 * 1st-seq (single-end) FASTQ file that contains spatial barcodes to construct a barcode map,
 * 2nd-seq (paired-end) FASTQ files that contain spatial barcodes in Read 1, and cDNA sequences in Read 2.
+
+## Dataset Overview
 
 ### Minimal Test Run Dataset
 

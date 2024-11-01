@@ -1,16 +1,16 @@
-# Snakemake with SLURM
+# (Optional) Snakemake with SLURM
 
 !!! tip
-    We recommended to integrate SLURM scheduler with NovaScope, which can automate the process of submitting your jobs.
+    We recommended to integrate SLURM scheduler with NovaScope to automate the process of job submission.
 
 !!! info
-    Please be aware that Snakemake introduced significant updates for cluster configuration starting from **version 8**. Thus, we advise checking to verify your Snakemake version using `snakemake --version`.
+    Please be aware that Snakemake introduced significant updates for cluster configuration starting from **version 8**. So, please verify your Snakemake version using `snakemake --version`.
 
-In NovaScope, we utilized a cluster configuration profile to define the details of the cluster and resources given its consistency and time-saving benefits. More details are provided below. Those files were crafted with inspiration from the [smk-simple-slurm](https://github.com/jdblischak/smk-simple-slurm) repository.
+In NovaScope, we utilized a cluster configuration profile to define the details of the cluster and resources given its consistency and time-saving benefits (see details below). Those files were crafted with inspiration from the [smk-simple-slurm](https://github.com/jdblischak/smk-simple-slurm) repository.
 
 ## A Cluster Configuration File for Snakemake v7.29.0
 
-Create a `config.yaml` with the following settings. Please substitute the placeholders, which are marked with `<>`, to suit your specific case. Please see our example file at [slurm/v7.29.0/config.yaml](https://github.com/seqscope/NovaScope/blob/main/info/slurm/v7.29.0/config.yaml). 
+Create a `config.yaml` with the following settings. Please substitute the placeholders, which are marked with `<>`, to suit your specific case. An example file is provided at [slurm/v7.29.0/config.yaml](https://github.com/seqscope/NovaScope/blob/main/info/slurm/v7.29.0/config.yaml). 
 
 ```yaml
 ## Cluster Configuration

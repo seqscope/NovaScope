@@ -15,10 +15,10 @@ For further details on the rules, their execution, and the workflow's structure,
 For the **main function** of NovaScope, the mapping of each step to its specific rule is as follows:
 
 1. Generate spatial maps from the 1st sequencing data (Rules `a01_fastq2sbcd`, `a02_sbcd2chip`)
-2. Map the 2nd sequencing data with the spatial map from the 1st step (Rule `a03_smatch`)
+2. Map the 2nd sequencing data with the spatial map (Rule `a03_smatch`)
 3. Align the 2nd sequencing reads to the reference genome (Rule `a04_align`)
 4. Generate a spatial digital gene expression (SGE) matrix, indexed by transcripts, at submicron resolution (Rule `a05_dge2sdge`)
-5. Visualize the spatial expression of specific genes (Rule `b01_sdge_visual`)
+5. (Optional) Visualize the spatial expression of specific genes (Rule `b01_sdge_visual`)
 
 The rule graph illustrates the relationships between rules:
 
@@ -35,9 +35,7 @@ In addition to the main functions, NovaScope offers **additional capabilities** 
 2. Spatial map layout examination (Rule `b03_sbcd_layout`)
 3. SGE matrix filtering by gene type, gene name, UMI count, or UMI density (Rules `c03_sdgeAR_featurefilter` and `c03_sdge_polygonfilter`)
 4. SGE matrix reformatting from 10x Genomics format to a TSV format compatible with FICTURE (Rule `c02_sdgeAR_reformat`)
-5. SGE matrix segmentation from transcript-indexed SGE to hexagon-indexed SGE in 10x Genomics or FICTURE-compatible TSV format (Rules `c04_sdgeAR_segment_10x` and `c04_sdgeAR_segment_ficture`)
-
-The plus workflow, detailing both main and additional rules and their interdependencies, is depicted below.
+5. SGE matrix segmentation from transcript-indexed to hexagon-indexed in 10x Genomics or FICTURE-compatible TSV format (Rules `c04_sdgeAR_segment_10x` and `c04_sdgeAR_segment_ficture`)
 
 <figure markdown="span">
 ![rulegraph](../images/rulegraphs/rulegraph_plus.png){ width="70%" }

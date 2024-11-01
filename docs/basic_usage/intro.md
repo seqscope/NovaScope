@@ -1,4 +1,4 @@
-This tutorial provides instructions for running [NovaScope](../index.md) using [three example datasets](https://github.com/seqscope/NovaScope/tree/main/testrun) provided with the published protocol.
+This tutorial provides instructions for running [NovaScope](../index.md) using [three example datasets](https://github.com/seqscope/NovaScope/tree/main/testrun).
 
 Before downloading the example datasets, you must [install](../installation/requirement.md) NovaScope in your computing environment and set up your [environment config file](../installation/env_setup.md).
 
