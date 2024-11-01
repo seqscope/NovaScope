@@ -4,7 +4,7 @@ NovaScope is a [Snakemake](https://snakemake.readthedocs.io/en/stable/)-based pi
 
 For a detailed tutorial, please visit [NovaScope Tutorial](https://seqscope.github.io/NovaScope).
 
-You can find the preprint at [DOI: 10.1101/2024.03.29.587285](https://www.biorxiv.org/content/10.1101/2024.03.29.587285v1).
+You can find the protocol paper at [DOI : 10.1038/s41596-024-01065-0](https://www.nature.com/articles/s41596-024-01065-0).
 
 ## Installation
 
