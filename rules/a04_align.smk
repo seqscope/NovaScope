@@ -1,3 +1,18 @@
+def align_get_exist_action(config):
+    action_option= config.get("upstream", {}).get("align", {}).get('exist_action', "overwrite")
+    assert action_option in ["skip", "overwrite"], '"exist_action" in align in upstream field should be skip or overwrite.'
+    if action_option == "skip":
+        return " --skip-existing "
+    elif action_option == "overwrite":
+        return " --overwrite-existing "
+
+def align_get_ref_idx(config, species):
+    sp2alignref = config.get("env",{}).get("ref", {}).get("align", None)
+    refidx = sp2alignref[species]
+    assert refidx is not None, "The alignment reference file is not provided. Check your environment configuration file."
+    assert os.path.exists(refidx), f"The alignment reference file for {species} does not exist: {refidx}. Check your environment configuration file."
+    return refidx
+
 rule a04_align:
     input:
         seq2_fqr1  = lambda wildcards: [os.path.join(main_dirs["seq2nd"], seq2_id, seq2_id + ".R1.fastq.gz" ) for seq2_id in rid2seq2[wildcards.run_id]],
@@ -21,37 +36,22 @@ rule a04_align:
         skip_sbcd      = get_skip_sbcd(config), 
         len_sbcd       = config.get("upstream", {}).get("align", {}).get('len_sbcd', 30),
         len_umi        = config.get("upstream", {}).get("align", {}).get('len_umi', 9),
-        len_r2         = config.get("upstream", {}).get("align", {}).get('len_r2', 101),
-        exist_action   = config.get("upstream", {}).get("align", {}).get('exist_action', "overwrite"),
+        len_r2         = config.get("upstream", {}).get("align", {}).get('len_r2', 101), # use 101 for standard data, use 50 for ffpe data
+        revcomp        = "--revcomp-r2" if config.get("upstream", {}).get("align", {}).get('revcomp', None) else "",    # only used for ffpe data
+        exist_action   = align_get_exist_action(config),
         # ref
-        #refidx         = sp2alignref[species],
-        sp2alignref     = env_config.get("ref", {}).get("align", None),
-        species         = species,
+        refidx         = align_get_ref_idx(config, species),
         # resource
-        ram            = lambda wildcards: assign_resource_for_align(wildcards.run_id, config, env_config, rid2seq2, main_dirs)["ram"],
-        # module
-        module_cmd        = get_envmodules_for_rule(["python", "samtools"], module_config),
+        ram             = lambda wildcards: assign_resource_for_align(wildcards.run_id, config, rid2seq2, main_dirs)["ram"],
+        # tools
+        module_cmd      = get_envmodules_for_rule(["python", "samtools"], config),
     threads: 
-        lambda wildcards:  assign_resource_for_align(wildcards.run_id, config, env_config, rid2seq2, main_dirs)["threads"], 
+        lambda wildcards:  assign_resource_for_align(wildcards.run_id, config, rid2seq2, main_dirs)["threads"], 
     resources: 
         time      = "100:00:00",
-        mem       = lambda wildcards: assign_resource_for_align(wildcards.run_id, config, env_config, rid2seq2, main_dirs)["mem"],
-        partition = lambda wildcards: assign_resource_for_align(wildcards.run_id, config, env_config, rid2seq2, main_dirs)["partition"],
+        mem       = lambda wildcards: assign_resource_for_align(wildcards.run_id, config, rid2seq2, main_dirs)["mem"],
+        partition = lambda wildcards: assign_resource_for_align(wildcards.run_id, config, rid2seq2, main_dirs)["partition"],
     run:
-        # exist action
-        exist_action = ""
-        assert params.exist_action in ["skip", "overwrite"], "exist_action should be skip or overwrite"
-
-        if params.exist_action == "skip":
-            exist_action = " --skip-existing "
-        elif params.exist_action == "overwrite":
-            exist_action =" --overwrite-existing "
-        
-        # refidx
-        refidx = params.sp2alignref[params.species]
-        assert refidx is not None, "The alignment reference file is not provided. Check your environment configuration file."
-        assert os.path.exists(refidx), f"The alignment reference file does not exist: {refidx}. Check your environment configuration file."
-        
         shell(
         r"""
         set -euo pipefail
@@ -63,7 +63,7 @@ rule a04_align:
             --fq2 {input.seq2_fqr2} \
             --whitelist-match {input.smatch_tsv} \
             --filter-match {input.smatch_tsv} \
-            --star-index {refidx} \
+            --star-index {params.refidx} \
             --star-bin {star} \
             --min-match-len  {params.min_match_len} \
             --min-match-frac {params.min_match_frac} \
@@ -77,7 +77,7 @@ rule a04_align:
             --out {params.bam_dir} \
             --threads {threads}  \
             --star-add-options "--limitBAMsortRAM {params.ram}" \
-            {exist_action} 
+            {params.exist_action} {params.revcomp}
 
         """)
 

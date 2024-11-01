@@ -11,6 +11,13 @@ Each `request` option triggers a specific set of rules. Thus, below provides a r
 ![rg_sbcdperfc](../../images/rulegraphs/rulegraph_sbcd_per_flowcell.png){ width="100%" }
 </figure>
 
+### `"sbcdlo-per-flowcell"`
+
+<figure markdown="span">
+![rg_sbcdperfc](../../images/rulegraphs/rulegraph_sbcdlo_per_flowcell.png){ width="100%" }
+</figure>
+
+
 ### `"sbcd-per-chip"`
 
 <figure markdown="span">

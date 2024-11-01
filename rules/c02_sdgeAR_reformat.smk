@@ -9,10 +9,10 @@ rule c02_sdgeAR_reformat:
         transcript        = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.transcripts.tsv.gz"),
         transcript_tbi    = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.transcripts.tsv.gz.tbi"),
     params:
-        sp2geneinfo       = env_config.get("ref", {}).get("geneinfo", None),
+        sp2geneinfo       = config.get("env",{}).get("ref", {}).get("geneinfo", None),
         species           = species,
-        # module
-        module_cmd        = get_envmodules_for_rule(["samtools"], module_config)
+        # tools
+        module_cmd        = get_envmodules_for_rule(["samtools"], config),
     threads: 2
     resources:
         mem  = "14000MB",

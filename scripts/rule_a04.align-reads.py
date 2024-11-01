@@ -1,3 +1,4 @@
+# update 2024-09-11:  Add options to support FFPE alignment
 import os, sys, gzip, argparse, subprocess, random, glob
 from utils import read_maybe_gzip, check_iupac, revcomp
 
@@ -43,6 +44,8 @@ aux_params.add_argument("--skip-sbcd", type=int, default=0, help="Skip first bas
 aux_params.add_argument("--len-sbcd", type=int, default=30, help="Length of spatial barcode (in Read 1) to be copied to output FASTQ file (Read 1)")
 aux_params.add_argument("--len-umi", type=int, default=9, help="Length of UMI barcode (in Read 2) to be copied to output FASTQ file (Read 1)")
 aux_params.add_argument("--len-r2", type=int, default=101, help="Length of read 2 after trimming (including randomers)")
+aux_params.add_argument("--revcomp-r1", action='store_true', default=False, help="Reverse complement read 1")
+aux_params.add_argument("--revcomp-r2", action='store_true', default=False, help="Reverse complement read 2")
 aux_params.add_argument("--tmpdir", type=str, default="/tmp", help="Temporary directory to sort the file")
 aux_params.add_argument("--sortmem", type=str, default="5G", help="Max memory to use for sorting")
 aux_params.add_argument("--batch-size", type=int, default=300000000, help="Batch size in --write-match")
@@ -152,6 +155,10 @@ fq2s = " ".join(args.fq2)
 
 ## command to write FASTQ files
 cmd_writefq = f"{args.spatula} reformat-fastqs --fq1 <({args.gzip} -cd {fq1s}) --fq2 <({args.gzip} -cd {fq2s}) --skip-sbcd {args.skip_sbcd} --len-match {args.match_len} --len-sbcd {args.len_sbcd} --len-umi {args.len_umi} --len-r2 {args.len_r2} --out1 {outprefix}{fifo_R1_suffix} --out2 {outprefix}{fifo_R2_suffix}"
+if args.revcomp_r1:
+    cmd_writefq += " --revcomp-r1"
+if args.revcomp_r2:
+    cmd_writefq += " --revcomp-r2"
 if args.filter_match is not None and len(args.filter_match) > 0:
     for matchf in args.filter_match:
         cmd_writefq += f" --match-tsv {matchf}"

@@ -12,9 +12,10 @@ rule c04_sdgeAR_segment_ficture:
         sge_qc              = "{sge_qc}",
         hex_n_move          = config.get("downstream", {}).get('segment', {}).get('hex_n_move', 1), 
         precision           = config.get("downstream", {}).get('segment', {}).get('precision', 2), 
-        min_density         = config.get("downstream", {}).get('segment', {}).get('ficture', {}).get('min_density', 0.3),
-        # module
-        module_cmd          = get_envmodules_for_rule(["python", "samtools"], module_config)
+        min_density_per_unit= config.get("downstream", {}).get('segment', {}).get('ficture', {}).get('min_density_per_unit', 0.01),
+        min_ct_per_unit     = config.get("downstream", {}).get('segment', {}).get('ficture', {}).get('min_ct_per_unit', 10),
+        # tools
+        module_cmd          = get_envmodules_for_rule(["python", "samtools"], config),
     resources:
         mem  = "28000MB", 
         time = "72:00:00"
@@ -44,7 +45,8 @@ rule c04_sdgeAR_segment_ficture:
             --mu_scale {mu_scale} \
             --key {params.solo_feature} \
             --hex_width {params.train_width} \
-            --min_density_per_unit {params.min_density} \
+            --min_ct_per_unit {params.min_ct_per_unit} \
+            --min_density_per_unit {params.min_density_per_unit} \
             --n_move {params.hex_n_move} \
             --precision {params.precision} \
             --major_axis {major_axis} {boundary_args}

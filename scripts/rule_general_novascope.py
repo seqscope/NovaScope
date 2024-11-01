@@ -116,8 +116,9 @@ def cal_resource_by_filesize(run, rid2seq2, main_dirs, avail_resource_list):
             "partition": resource["partition"],
         }
 
-def assign_resource_for_align(run, config, env_config, rid2seq2, main_dirs):
+def assign_resource_for_align(run, config, rid2seq2, main_dirs):
     assign_option=config.get("upstream", {}).get("align", {}).get("resource", {}).get("assign_type", "stdin") 
+    env_config=config.get("env_config", {})
     
     if assign_option=="filesize":
         avail_resource_list=env_config.get("available_nodes", None)
@@ -155,7 +156,8 @@ def assign_resource_for_align(run, config, env_config, rid2seq2, main_dirs):
 
 # Update: 
 # * 20240326: Updated function to correctly load nested modules, e.g., 'samtools' under 'Bioinformatics'.
-def get_envmodules_for_rule(required_modules, module_config):
+def get_envmodules_for_rule(required_modules, config):
+    module_config = config.get("env",{}).get("envmodules", {})
     if module_config:
         # Environment with module system and configuration is available
         module_cmd = []
@@ -169,6 +171,17 @@ def get_envmodules_for_rule(required_modules, module_config):
     else:
         # For local execution or HPC without a modules system, return an empty list
         return ""
+
+# ===============================================================================
+
+# get python path
+
+# def get_python(pyenv):
+#     assert pyenv is not None, "Please provide a valid python environment."
+#     assert os.path.exists(pyenv), f"Python environment does not exist: {pyenv}"
+#     python = os.path.join(pyenv, "bin", "python")
+#     assert os.path.exists(python), f"Python does not exist in your python environment: {python}"
+#     return python
 
 # ===============================================================================
 #
