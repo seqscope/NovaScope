@@ -921,13 +921,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#main-fields" class="md-nav__link">
+  <a href="#main-fields-parameters" class="md-nav__link">
     <span class="md-ellipsis">
-      Main Fields
+      Main Fields Parameters
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Main Fields">
+    <nav class="md-nav" aria-label="Main Fields Parameters">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1424,6 +1424,8 @@
       
         
       
+        
+      
     
     
       
@@ -1456,6 +1458,27 @@
             Plus Rules
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fulldoc/rules/sbcd_layout/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    sbcd_layout
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -1676,13 +1699,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#main-fields" class="md-nav__link">
+  <a href="#main-fields-parameters" class="md-nav__link">
     <span class="md-ellipsis">
-      Main Fields
+      Main Fields Parameters
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Main Fields">
+    <nav class="md-nav" aria-label="Main Fields Parameters">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1760,7 +1783,7 @@
 
 
 <h1 id="configuring-a-novascope-run">Configuring a NovaScope Run<a class="headerlink" href="#configuring-a-novascope-run" title="Permanent link">&para;</a></h1>
-<p>Once you have <a href="../../installation/requirement/">installed NovaScope</a> and <a href="../access_data/">downloaded the input data</a>, the next step is to prepare a job configuration file to specify input, output, and parameters.</p>
+<p>After <a href="../../installation/requirement/">installing NovaScope</a> and <a href="../access_data/">downloading the input data</a>, prepare a job configuration file to specify inputs, outputs, and parameters.</p>
 <div class="admonition info">
 <p class="admonition-title">Job Configuration File Specifications</p>
 <p>The job configuration file must adhere to the following guidelines:</p>
@@ -1771,12 +1794,11 @@
 </ul>
 </div>
 <h3 id="prepare-the-job-configuration-file">Prepare the Job Configuration file<a class="headerlink" href="#prepare-the-job-configuration-file" title="Permanent link">&para;</a></h3>
-<p>Prepare your job configuration file following the template below:</p>
-<ul>
-<li>For parameters in the "Main Fields", more details are provided at the <a href="#main-fields">Main Fields</a>. Mandatory fields are marked as "REQUIRED FIELD".</li>
-<li>For additional parameters, below only includes minimal descriptions. More details are outlined in the <a href="../../fulldoc/intro/">NovaScope Full Documentation</a>, under the specific rule pages to which they apply.</li>
-</ul>
+<p>Prepare your job configuration file following the template below.</p>
+<div class="admonition tip">
+<p class="admonition-title">Example job configuration files</p>
 <p>For user's convenience, we provide separate example <code>config_job.yaml</code> files for the <a href="https://github.com/seqscope/NovaScope/blob/main/testrun/minimal_test_run/config_job.yaml">Minimal Test Run</a>, <a href="https://github.com/seqscope/NovaScope/blob/main/testrun/shallow_liver_section/config_job.yaml">Shallow Liver Test Run</a>, and <a href="https://github.com/seqscope/NovaScope/blob/main/testrun/deep_liver_section/config_job.yaml">Deep Liver Test Run</a>.</p>
+</div>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">  1</span>
 <span class="normal">  2</span>
 <span class="normal">  3</span>
@@ -1916,9 +1938,28 @@
 <span class="normal">137</span>
 <span class="normal">138</span>
 <span class="normal">139</span>
-<span class="normal">140</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1">## ================================================</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1">## ================================================</span>
 <span class="c1">##</span>
 <span class="c1">##  Main Fields:</span>
+<span class="c1">##  Detailed explanations for the &quot;Main Fields&quot; parameters are available at the bottom of this page.</span>
 <span class="c1">##</span>
 <span class="c1">## ================================================</span>
 <span class="c1">## == Input Data ==</span>
@@ -1931,11 +1972,12 @@
 <span class="w">    </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;seq1st_id&gt;</span><span class="w">                             </span><span class="c1">## Optional. Defaults to &quot;L{lane}&quot; if absent.</span>
 <span class="w">    </span><span class="nt">fastq</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;path_to_seq1st_fastq_file&gt;</span><span class="w">          </span><span class="c1">## REQUIRED FIELD</span>
 <span class="w">    </span><span class="nt">layout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;path_to_sbcd_layout&gt;</span><span class="w">               </span><span class="c1">## Optional. Default based on chip_id</span>
+<span class="w">    </span><span class="nt">layout_shift</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;shift_type&gt;</span><span class="w">                  </span><span class="c1">## Optional. Default to &quot;tobe&quot;, which shifts odd-row tiles in the top layer and even-row tiles in the bottom layer horizontally.</span>
 <span class="w">  </span><span class="nt">seq2nd</span><span class="p">:</span><span class="w">                                       </span><span class="c1">## 2nd-seq information. See the &quot;Main Fields&quot; below.</span>
 <span class="w">    </span><span class="c1">## specify the first pair of FASTQs.</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;seq2nd_pair1_id&gt;</span><span class="w">                     </span><span class="c1">## Optional. If provided, must be unique among all 2nd-seq pairs. Defaults to automatic assignment based on fastq_R1 if absent (see details below).</span>
-<span class="w">      </span><span class="nt">fastq_R1</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;path_to_seq2nd_pair1_fastq_Read1_file&gt;</span><span class="w"> </span><span class="c1">## REQUIRED FIELD - path to Read 1 FASTQ file,</span>
-<span class="w">      </span><span class="nt">fastq_R2</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;path_to_seq2nd_pair1_fastq_Read2_file&gt;</span><span class="w"> </span><span class="c1">## REQUIRED FIELD - path to Read 2 FASTQ file</span>
+<span class="w">      </span><span class="nt">fastq_R1</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;path_to_seq2nd_pair1_fastq_Read1_file&gt;</span><span class="w"> </span><span class="c1">## REQUIRED FIELD. Path to Read 1 FASTQ file.</span>
+<span class="w">      </span><span class="nt">fastq_R2</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;path_to_seq2nd_pair1_fastq_Read2_file&gt;</span><span class="w"> </span><span class="c1">## REQUIRED FIELD. Path to Read 2 FASTQ file.</span>
 <span class="w">    </span><span class="c1">## if there is a second pair of FASTQs ...</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;seq2nd_pair2_id&gt;</span><span class="w">                     </span>
 <span class="w">      </span><span class="nt">fastq_R1</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;path_to_seq2nd_pair2_fastq_Read1_file&gt;</span>
@@ -1945,9 +1987,9 @@
 <span class="w">  </span><span class="nt">unit_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;unit_id&gt;</span><span class="w">                            </span><span class="c1">## Optional. See the &quot;Main Fields&quot; below.</span>
 <span class="w">  </span><span class="nt">histology</span><span class="p">:</span><span class="w">                                    </span><span class="c1">## Optional. Histology information. Only required if histology alignment is needed. See the &quot;Main Fields&quot; below.</span>
 <span class="w">    </span><span class="c1">## specify the first input histology file</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;path_to_1st_histology_file&gt;</span><span class="w">        </span><span class="c1">## REQUIRED FIELD - path to the input histology file</span>
-<span class="w">      </span><span class="nt">magnification</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;magnification&gt;</span><span class="w">            </span><span class="c1">## Optional - specify the magnification of the input histology file, default is &quot;10X&quot;</span>
-<span class="w">      </span><span class="nt">figtype</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;type&gt;</span><span class="w">                           </span><span class="c1">## Optional - specify the type of the histology file. Options: &quot;hne&quot;, &quot;dapi&quot;, and &quot;fl&quot;. </span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;path_to_1st_histology_file&gt;</span><span class="w">        </span><span class="c1">## REQUIRED FIELD. Path to the input histology file</span>
+<span class="w">      </span><span class="nt">magnification</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;magnification&gt;</span><span class="w">            </span><span class="c1">## Optional. Magnification of the input histology file, default is &quot;10X&quot;.</span>
+<span class="w">      </span><span class="nt">figtype</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;type&gt;</span><span class="w">                           </span><span class="c1">## Optional. Type of the histology file. Options: &quot;hne&quot;, &quot;dapi&quot;, and &quot;fl&quot;. </span>
 <span class="w">    </span><span class="c1">## if there is a second input histology file ...</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;path_to_2nd_histology_file&gt;</span><span class="w">       </span>
 <span class="w">      </span><span class="nt">magnification</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;magnification&gt;</span><span class="w">                         </span>
@@ -1958,7 +2000,7 @@
 <span class="nt">output</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;output_directory&gt;</span><span class="w">                      </span><span class="c1">## REQUIRED FIELD (e.g. /path/to/output/directory)</span>
 <span class="nt">request</span><span class="p">:</span><span class="w">                                        </span><span class="c1">## See the &quot;Main Fields&quot; below.</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;required_output1&gt;</span><span class="w">                          </span><span class="c1">## REQUIRED FIELD (e.g. sge-per-run)</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;required_output2&gt;</span><span class="w">                          </span><span class="c1">## Optionally, you can request multiple outputs</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;required_output2&gt;</span><span class="w">                          </span><span class="c1">## Optionally, you can request multiple outputs.</span>
 <span class="w">  </span><span class="c1"># ...</span>
 
 <span class="c1">## == Environment YAML == </span>
@@ -1968,96 +2010,112 @@
 <span class="c1">##</span>
 <span class="c1">##  Additional Fields:</span>
 <span class="c1">## </span>
-<span class="c1">##    The &quot;upstream&quot;, &quot;histology&quot;, and &quot;downstream&quot; parameters are included below, along side the default values.</span>
-<span class="c1">##    Revise and enable the following parameters ONLY IF you wish to utilize values different than the default.</span>
+<span class="c1">##    * All parameters below are defined by their default values.</span>
+<span class="c1">##    * Modify and enable the following parameters ONLY if you want to use values other than the defaults.</span>
+<span class="c1">##    * Each parameter is briefly described here, with more details available in the NovaScope Full Documentation under the relevant rule pages.</span>
 <span class="c1">##</span>
 <span class="c1">## ================================================</span>
+<span class="c1">#</span>
 <span class="c1">## == Upstream Parameters (from fastq files to SGE) == </span>
-<span class="c1">#upstream:                    </span>
-<span class="c1">#  fastq2sbcd:                                  ## Specify the HDMI-oligo seed library. The example data uses DraI31, but DraI32 is a typical format.</span>
+<span class="c1">#</span>
+<span class="c1">#upstream:                 </span>
+<span class="c1">#  stdfastq:                                    ## Specify whether to use FASTQ files. Set to True unless the user doesn&#39;t have FASTQ but has fastq2sbcd and smatch results.</span>
+<span class="c1">#    seq1st: True</span>
+<span class="c1">#    seq2nd: True           </span>
+<span class="c1">#</span>
+<span class="c1">#  fastq2sbcd:                                  ## Specify the HDMI-oligo seed library. DraI32 is the typical format. The example data uses DraI31.</span>
 <span class="c1">#    format: DraI32             </span>
 <span class="c1">#</span>
-<span class="c1">#  sbcd2chip:                                   ## Specify gaps among tiles and the duplicate setting for spatial barcodes. </span>
+<span class="c1">#  sbcd_layout:                                 ## Specify parameters for sbcd layout examiniation if needed.</span>
+<span class="c1">#    tiles:                                     ## List tile pairs to examine. Ensure tiles exist in the input spatial map. By default, the two pairs below will be used. For the minimal test dataset with only two tiles (ID: 2456, 2556), use those for examination.</span>
+<span class="c1">#      - &quot;1644,1544&quot;</span>
+<span class="c1">#      - &quot;2644,2544&quot;</span>
+<span class="c1">#    colshift: 0.1715                           ## horizontal shift distance</span>
+<span class="c1">#</span>
+<span class="c1">#  sbcd2chip:                                   ## Specify tile gaps and duplicate settings for spatial barcodes. </span>
 <span class="c1">#    gap_row: 0.0517</span>
 <span class="c1">#    gap_col: 0.0048</span>
 <span class="c1">#    dup_maxnum: 1</span>
 <span class="c1">#    dup_maxdist: 1</span>
 <span class="c1">#</span>
-<span class="c1">#  smatch:                                      ## </span>
+<span class="c1">#  smatch:                                      </span>
 <span class="c1">#    skip_sbcd: 0                               ## The number of initial bases to omit from the read.</span>
 <span class="c1">#    match_len: 27                              ## Length of spatial barcode considered to be a perfect match.</span>
 <span class="c1">#</span>
-<span class="c1">#  align:                       </span>
-<span class="c1">#    min_match_len: 30                          ## A minimum number of matching bases.</span>
-<span class="c1">#    min_match_frac: 0.66                       ## A minimum fraction of matching bases.</span>
-<span class="c1">#    len_sbcd: 30                               ## Length of spatial barcode (in Read 1) to be copied to output FASTQ file (Read 1).</span>
-<span class="c1">#    len_umi: 9                                 ## Length of UMI barcode (in Read 2) to be copied to output FASTQ file (Read 1).</span>
+<span class="c1">#  align:                                       </span>
+<span class="c1">#    min_match_len: 30                          ## Minimum number of matching bases.</span>
+<span class="c1">#    min_match_frac: 0.66                       ## Minimum fraction of matching bases.</span>
+<span class="c1">#    len_sbcd: 30                               ## Length of spatial barcode (in Read 1) to copy to output FASTQ file (Read 1).</span>
+<span class="c1">#    len_umi: 9                                 ## Length of UMI barcode (in Read 2) to copy to output FASTQ file (Read 1).</span>
 <span class="c1">#    len_r2: 101                                ## Length of read 2 after trimming (including randomers).</span>
-<span class="c1">#    exist_action: overwrite                    ## Actions when an intermediate or output file exists. Options: &quot;skip&quot;, and &quot;overwrite&quot;.</span>
-<span class="c1">#    resource:                                  ## Specify the computing resources for alignment. Only applicable for HPC users. </span>
+<span class="c1">#    exist_action: overwrite                    ## Actions when an intermediate or output file exists. Options: &quot;skip&quot; or &quot;overwrite&quot;.</span>
+<span class="c1">#    resource:                                  ## Computing resources for alignment (HPC only). </span>
 <span class="c1">#      assign_type: stdin</span>
 <span class="c1">#      stdin:</span>
 <span class="c1">#        partition: standard</span>
 <span class="c1">#        threads: 10</span>
 <span class="c1">#        memory: 70000m</span>
 <span class="c1">#</span>
-<span class="c1">#  visualization:            </span>
-<span class="c1">#    drawxy:                                    ## specify the parameters for visualization for sbcd and smatch images</span>
+<span class="c1">#  visualization:                               ## Visualization parameters.</span>
+<span class="c1">#    drawxy:                                    ## Parameters for visualization for Rule sbcd2chip and smatch.</span>
 <span class="c1">#      coord_per_pixel: 1000</span>
 <span class="c1">#      intensity_per_obs: 50</span>
 <span class="c1">#      icol_x: 3</span>
 <span class="c1">#      icol_y: 4</span>
-<span class="c1">#    drawsge:                                   ## specify the parameters for sdge visualization </span>
-<span class="c1">#      genes:                                   ## specify sets of genes to be colored</span>
-<span class="c1">#        - red: nonMT                           ## the first set of genes</span>
+<span class="c1">#    drawsge:                                   ## Parameters for Rule sdge_visual.</span>
+<span class="c1">#      action: True                             ## When False, NovaScope skips spatial expression visualization, helpful if species-specific gene lists are not available.</span>
+<span class="c1">#      genes:                                   ## Gene sets for coloring.</span>
+<span class="c1">#        - red: nonMT                           ## First set of genes.</span>
 <span class="c1">#          green: Unspliced</span>
 <span class="c1">#          blue: MT</span>
-<span class="c1">#      # - ...                                  ## if more 1 set of genes are required</span>
+<span class="c1">#      # - ...                                  ## Additional gene sets if needed.</span>
 <span class="c1">#      coord_per_pixel: 1000</span>
 <span class="c1">#      auto_adjust: true</span>
 <span class="c1">#      adjust_quantile: 0.99</span>
 <span class="c1">#</span>
 <span class="c1">## == Histology Alignment Parameters == </span>
-<span class="c1">#histology:                  </span>
-<span class="c1">#    min_buffer_size: 1000                      ## min_buffer_size, max_buffer_size, and step_buffer_size to create a list of buffer size for the alignment</span>
+<span class="c1"># </span>
+<span class="c1">#histology:                                     ## Parameters for Rule historef.</span>
+<span class="c1">#    min_buffer_size: 1000                      ## Use min_buffer_size, max_buffer_size, and step_buffer_size to create a list of buffer sizes for histology alignment.</span>
 <span class="c1">#    max_buffer_size: 2000</span>
 <span class="c1">#    step_buffer_size: 100</span>
-<span class="c1">#    raster_channel: 1                          ## roaster channel used for historef alignment</span>
+<span class="c1">#    raster_channel: 1                          ## Roaster channel used for historef alignment.</span>
 <span class="c1">#</span>
 <span class="c1">## == Downstream Parameters (SGE filtering, reformatting, and segmentation) ==</span>
-<span class="c1">#downstream:                 </span>
-<span class="c1">#  mu_scale: 1000                               ## specify coordinate to um conversion</span>
 <span class="c1">#</span>
-<span class="c1">#  gene_filter:                                 ## specify the criteria for gene filtering in a manner compatible with regular expressions </span>
+<span class="c1">#downstream:                 </span>
+<span class="c1">#  mu_scale: 1000                               ## Coordinate to micron (um) conversion.</span>
+<span class="c1">#</span>
+<span class="c1">#  gene_filter:                                 ## Criteria for gene filtering in a manner compatible with regular expressions.</span>
 <span class="c1">#    keep_gene_type: &quot;protein_coding|lncRNA&quot;    </span>
 <span class="c1">#    rm_gene_regex: &quot;^Gm\\d+|^mt-|^MT-&quot;         </span>
 <span class="c1">#    min_ct_per_feature: 50                     </span>
 <span class="c1">#</span>
-<span class="c1">#  polygon_density_filter:                      ## specify parameters for polygon filtering by density if applicable              </span>
+<span class="c1">#  polygon_density_filter:                      ## Parameters for polygon filtering by density, if applicable.</span>
 <span class="c1">#    radius: 15               </span>
 <span class="c1">#    hex_n_move: 1            </span>
 <span class="c1">#    polygon_min_size: 500    </span>
 <span class="c1">#    quartile: 2</span>
 <span class="c1">#</span>
 <span class="c1">#  segment:</span>
-<span class="c1">#    hex_n_move: 1                              ## specify the sliding step in segmentation</span>
-<span class="c1">#    precision: 2                               ## specify the precision for spatial location in segmentation</span>
-<span class="c1">#    10x:                                       ## specify the parameters for hexagon in 10x genomics format   </span>
+<span class="c1">#    hex_n_move: 1                              ## Sliding step in segmentation.</span>
+<span class="c1">#    precision: 2                               ## Precision for spatial location in segmentation.</span>
+<span class="c1">#    10x:                                       ## Parameters for hexagons in 10x Genomics format.</span>
 <span class="c1">#      min_pixel_per_unit: 10                   </span>
-<span class="c1">#      char:                                    ## specify the characteristics for hexagon segmentation</span>
+<span class="c1">#      char:                                    ## Characteristics for hexagon segmentation.</span>
 <span class="c1">#        - solo_feature: gn                     </span>
 <span class="c1">#          hexagon_width: 24                   </span>
 <span class="c1">#          quality_control: FALSE               </span>
-<span class="c1">#      # - ...                                  ## if more than 1 set of hexagon is needed </span>
-<span class="c1">#    ficture:                                   ## specify the characteristics for hexagon in FICTURE-compatible format    </span>
+<span class="c1">#      # - ...                                  ## Add more hexagon sets if needed. </span>
+<span class="c1">#    ficture:                                   ## Parameters fpr hexagons in FICTURE-compatible format.</span>
 <span class="c1">#      min_density: 0.3                         </span>
 <span class="c1">#      char:</span>
 <span class="c1">#        - solo_feature: gn</span>
 <span class="c1">#          hexagon_width: 24</span>
 <span class="c1">#          quality_control: TRUE                </span>
-<span class="c1">#      # - ...                                  ## if more than 1 set of hexagon is needed </span>
+<span class="c1">#      # - ...                                  ## Add more hexagon sets if needed. </span>
 </code></pre></div></td></tr></table></div>
-<h3 id="main-fields">Main Fields<a class="headerlink" href="#main-fields" title="Permanent link">&para;</a></h3>
+<h3 id="main-fields-parameters"><code>Main Fields</code> Parameters<a class="headerlink" href="#main-fields-parameters" title="Permanent link">&para;</a></h3>
 <h4 id="input">Input<a class="headerlink" href="#input" title="Permanent link">&para;</a></h4>
 <div class="admonition tip">
 <p class="admonition-title">Relative Path</p>
@@ -2071,19 +2129,28 @@
 <p><em><code>id</code></em>: The <code>id</code> will be used to organize the 1st-seq FASTQ files. Make sure the <code>id</code> field for 1st-seq in the corresponding flow cell is unique.  </p>
 </li>
 <li>
-<p><em><code>layout</code></em>: A spatial barcode (sbcd) layout file to provide the layout of tiles in a chip with the following format. If absent, <a href="https://seqscope.github.io/NovaScope/">NovaScope</a> will automatically look for the sbcd layout within the NovaScope repository at <a href="https://github.com/seqscope/NovaScope/tree/main/info/assets/layout_per_tile_basis">info/assets/layout_per_tile_basis</a>, using the section chip ID for reference.
-    <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<p><strong><code>layout</code></strong> &amp; <strong><code>layout_shift</code></strong>: These parameters identify the spatial barcode (sbcd) layout file to provide the layout of tiles in a chip.</p>
+<ul>
+<li>To use a specific layout file, set <strong><code>layout</code></strong> with the path to the desired layout file.</li>
+<li>To use pre-built layout files in NovaScope, leave <code>layout</code> empty and define the <strong><code>layout_shift</code></strong>. The <code>layout_shift</code> defaults to <code>"tobe"</code>. <a href="https://seqscope.github.io/NovaScope/">NovaScope</a> will then automatically identify the layout file from <a href="https://github.com/seqscope/NovaScope/tree/main/info/assets/layout_per_tile_basis">info/assets/layout_per_tile_basis</a>, using <code>layout_shift</code> and <code>chip</code> as reference. NovaScope supports two types of layout: <code>"tobe"</code> and <code>"tebo"</code>, which shift tiles in different ways (see <a href="../../fulldoc/rules/sbcd_layout/#purpose">sbcd_layout.md#purpose</a>).</li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">Spatial layout examination</p>
+<p>If the <code>layout_shift</code> is unclear or if misaligned fiducial marks are observed in the <a href="../../fulldoc/rules/sbcd2chip/#3-an-sbcd-image">"sbcd" image</a>, perform a spatial layout examination by setting <code>request</code> to <code>sbcdlo-per-flowcell</code>.</p>
+</div>
+<details class="note">
+<summary>The spatial barcode (sbcd) layout format</summary>
+<p><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="l l-Scalar l-Scalar-Plain">lane  tile  row  col  rowshift  colshift</span>
 <span class="l l-Scalar l-Scalar-Plain">3     2556  1    1    0         0</span>
 <span class="l l-Scalar l-Scalar-Plain">3     2456  2    1    0         0.1715</span>
-</code></pre></div></td></tr></table></div></p>
-<ul>
-<li><code>lane</code>: Lane IDs;</li>
-<li><code>tile</code>: Tile IDs;</li>
-<li><code>row</code> &amp; <code>col</code>: The layout position;</li>
-<li><code>rowshift</code> &amp; <code>colshift</code>: The gap information</li>
-</ul>
+</code></pre></div></td></tr></table></div>
+* <code>lane</code>: Lane IDs;
+* <code>tile</code>: Tile IDs;
+* <code>row</code> &amp; <code>col</code>: The layout position;
+* <code>rowshift</code> &amp; <code>colshift</code>: The gap information</p>
+</details>
 </li>
 </ul>
 </li>
@@ -2179,6 +2246,11 @@
 <td><code>histology-per-run</code></td>
 <td>Geotiff files for coordinate transformation between SGE matrix and histology image.</td>
 <td><a href="../../fulldoc/rules/historef/#output-files">historef</a></td>
+</tr>
+<tr>
+<td><code>sbcdlo-per-flowcell</code></td>
+<td>Two spatial barcode maps each aligns tile pairs using one spatial map layout.</td>
+<td><a href="../../fulldoc/rules/sbcd_layout/">sbcd_layout</a></td>
 </tr>
 <tr>
 <td><code>transcript-per-unit</code></td>

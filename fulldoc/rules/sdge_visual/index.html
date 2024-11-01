@@ -14,7 +14,7 @@
         <link rel="prev" href="../dge2sdge/">
       
       
-        <link rel="next" href="../historef/">
+        <link rel="next" href="../sbcd_layout/">
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
@@ -1420,6 +1420,8 @@
       
         
       
+        
+      
     
     
       
@@ -1455,6 +1457,27 @@
             Plus Rules
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sbcd_layout/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    sbcd_layout
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -1749,6 +1772,11 @@
 <h1 id="rule-sdge_visual">Rule <code>sdge_visual</code><a class="headerlink" href="#rule-sdge_visual" title="Permanent link">&para;</a></h1>
 <h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">&para;</a></h2>
 <p>Rule <code>sdge_visual</code> is designed to display the spatial expression of specific gene categories in colors red, green, and blue via <a href="https://seqscope.github.io/spatula/"><code>spatula</code></a>. NovaScope enables the visualization of &gt;=1 gene sets. The gene categories for visualization can be defined in the <a href="../../../basic_usage/job_config/"><code>config_job.yaml</code></a> file (refer to <a href="#parameters">Parameters</a>).</p>
+<div class="admonition info">
+<p class="admonition-title">Required Reference Files</p>
+<p><a href="../../../installation/env_setup/#reference-databases">Species-specific reference gene list files</a> are required. By default, NovaScope provides precompiled gene lists for mouse and human. Users could provide their own custom gene list files. </p>
+<p>If reference files are not available, the users could skip this visualization by setting <code>action</code> in <code>drawsge</code> as <code>False</code> (see details in <a href="#parameters">Parameters</a> section).</p>
+</div>
 <h2 id="input-files">Input Files<a class="headerlink" href="#input-files" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>Spatial Digital Gene Expression (SGE) Matrix and Associated Files</strong>
@@ -1780,9 +1808,11 @@ The necessary inputs include a spatial digital gene expression (SGE) matrix, gen
 <span class="normal"> 8</span>
 <span class="normal"> 9</span>
 <span class="normal">10</span>
-<span class="normal">11</span></pre></div></td><td class="code"><div><pre><span></span><code>upstream:
+<span class="normal">11</span>
+<span class="normal">12</span></pre></div></td><td class="code"><div><pre><span></span><code>upstream:
   visualization:            ## specify the parameters for visualization
     drawsge:                ## specify the parameters for sdge visualization 
+      action: True          ## specify whether to visualize the gene expression
       genes:                ## specify what sets of genes to be colored
         - red: nonMT        ## the first set of genes
           green: Unspliced
@@ -1794,7 +1824,11 @@ The necessary inputs include a spatial digital gene expression (SGE) matrix, gen
 </code></pre></div></td></tr></table></div>
 <ul>
 <li>
-<p><strong>The <code>genes</code> Parameter in <code>drawsge</code></strong>
+<p><strong>The <code>action</code> Parameter</strong>
+Defaults to <code>True</code>. If False, NovaScope skips visualizing spatial expression for user-defined gene sets.</p>
+</li>
+<li>
+<p><strong>The <code>genes</code> Parameters</strong>
 NovaScope includes a selection of predefined gene lists with the following options: all (all genes); nonMT (non-mitochondrial genes); ribosomal (ribosomal genes); MT (mitochondrial genes); and nuclear (nuclear genes). To visualize additional specific gene groups, users can create gene list files (<code>&lt;prefix&gt;.genes.tsv</code>) in the directory specified in their <a href="../../../installation/env_setup/"><code>config_env.yaml</code></a>. Additionally, it is possible to visualize individual genes or groups of genes using specific names or regular expressions with <a href="https://seqscope.github.io/spatula/"><code>spatula</code></a> directly.</p>
 </li>
 <li>

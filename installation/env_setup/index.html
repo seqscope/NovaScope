@@ -806,9 +806,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-reference-gene-list-files-for-spatial-expression-visualization" class="md-nav__link">
+  <a href="#2-optional-reference-gene-list-files-for-spatial-expression-visualization" class="md-nav__link">
     <span class="md-ellipsis">
-      (2) Reference Gene List Files for Spatial Expression Visualization
+      (2) (Optional) Reference Gene List Files for Spatial Expression Visualization
     </span>
   </a>
   
@@ -1427,6 +1427,8 @@
       
         
       
+        
+      
     
     
       
@@ -1459,6 +1461,27 @@
             Plus Rules
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fulldoc/rules/sbcd_layout/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    sbcd_layout
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -1707,9 +1730,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-reference-gene-list-files-for-spatial-expression-visualization" class="md-nav__link">
+  <a href="#2-optional-reference-gene-list-files-for-spatial-expression-visualization" class="md-nav__link">
     <span class="md-ellipsis">
-      (2) Reference Gene List Files for Spatial Expression Visualization
+      (2) (Optional) Reference Gene List Files for Spatial Expression Visualization
     </span>
   </a>
   
@@ -1823,7 +1846,11 @@
 <p>Define all necessary reference databases for the input species in the <code>ref</code> field.</p>
 <h3 id="1-reference-genome-index-for-alignment">(1) Reference Genome Index for Alignment<a class="headerlink" href="#1-reference-genome-index-for-alignment" title="Permanent link">&para;</a></h3>
 <p>Specify the alignment reference genome index in the <code>align</code> field. Reference genome indices can be accessed via the <a href="https://www.10xgenomics.com/support/software/cell-ranger/downloads">cellranger download</a> page. Users can also generate their own reference genome index. Detailed instructions for building the STAR index are provided in the <a href="../requirement/">Requirements</a> section.</p>
-<h3 id="2-reference-gene-list-files-for-spatial-expression-visualization">(2) Reference Gene List Files for Spatial Expression Visualization<a class="headerlink" href="#2-reference-gene-list-files-for-spatial-expression-visualization" title="Permanent link">&para;</a></h3>
+<h3 id="2-optional-reference-gene-list-files-for-spatial-expression-visualization">(2) (Optional) Reference Gene List Files for Spatial Expression Visualization<a class="headerlink" href="#2-optional-reference-gene-list-files-for-spatial-expression-visualization" title="Permanent link">&para;</a></h3>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>By default, NovaScope requires reference gene list files to visualize the spatial expression for gene sets. If the reference files are not available, users could skip the visualization by set <code>action</code> in <code>draw_sge</code> as <code>False</code>.</p>
+</div>
 <p>The <code>genelists</code> field should point to the directory containing species-specific gene lists, which are crucial for visualizing spatial expression patterns in Rule <a href="../../fulldoc/rules/sdge_visual/">sdge_visual</a>. This directory must include files named <code>&lt;gene_group&gt;.genes.tsv</code> (e.g., <code>MT.genes.tsv</code>), with each file listing gene names line-by-line.</p>
 <p>NovaScope provides precompiled gene lists for <a href="https://github.com/seqscope/NovaScope/tree/main/info/genelists/mm39">mouse (version: mm39)</a> and <a href="https://github.com/seqscope/NovaScope/tree/main/info/genelists/hg38">human (version: hg38)</a>. If the <code>genelists</code> field is not specified in the <code>config_env.yaml</code>, NovaScope defaults to using these files. Alternatively, users may provide their own custom gene list files.</p>
 <h3 id="3-optional-reference-gene-information-for-gene-filtering">(3) (Optional) Reference Gene Information for Gene Filtering<a class="headerlink" href="#3-optional-reference-gene-information-for-gene-filtering" title="Permanent link">&para;</a></h3>
