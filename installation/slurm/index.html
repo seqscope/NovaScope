@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#snakemake-with-slurm" class="md-skip">
+        <a href="#optional-snakemake-with-slurm" class="md-skip">
           Skip to content
         </a>
       
@@ -1686,18 +1686,18 @@
   
 
 
-<h1 id="snakemake-with-slurm">Snakemake with SLURM<a class="headerlink" href="#snakemake-with-slurm" title="Permanent link">&para;</a></h1>
+<h1 id="optional-snakemake-with-slurm">(Optional) Snakemake with SLURM<a class="headerlink" href="#optional-snakemake-with-slurm" title="Permanent link">&para;</a></h1>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>We recommended to integrate SLURM scheduler with NovaScope, which can automate the process of submitting your jobs.</p>
+<p>We recommended to integrate SLURM scheduler with NovaScope to automate the process of job submission.</p>
 </div>
 <div class="admonition info">
 <p class="admonition-title">Info</p>
-<p>Please be aware that Snakemake introduced significant updates for cluster configuration starting from <strong>version 8</strong>. Thus, we advise checking to verify your Snakemake version using <code>snakemake --version</code>.</p>
+<p>Please be aware that Snakemake introduced significant updates for cluster configuration starting from <strong>version 8</strong>. So, please verify your Snakemake version using <code>snakemake --version</code>.</p>
 </div>
-<p>In NovaScope, we utilized a cluster configuration profile to define the details of the cluster and resources given its consistency and time-saving benefits. More details are provided below. Those files were crafted with inspiration from the <a href="https://github.com/jdblischak/smk-simple-slurm">smk-simple-slurm</a> repository.</p>
+<p>In NovaScope, we utilized a cluster configuration profile to define the details of the cluster and resources given its consistency and time-saving benefits (see details below). Those files were crafted with inspiration from the <a href="https://github.com/jdblischak/smk-simple-slurm">smk-simple-slurm</a> repository.</p>
 <h2 id="a-cluster-configuration-file-for-snakemake-v7290">A Cluster Configuration File for Snakemake v7.29.0<a class="headerlink" href="#a-cluster-configuration-file-for-snakemake-v7290" title="Permanent link">&para;</a></h2>
-<p>Create a <code>config.yaml</code> with the following settings. Please substitute the placeholders, which are marked with <code>&lt;&gt;</code>, to suit your specific case. Please see our example file at <a href="https://github.com/seqscope/NovaScope/blob/main/info/slurm/v7.29.0/config.yaml">slurm/v7.29.0/config.yaml</a>. </p>
+<p>Create a <code>config.yaml</code> with the following settings. Please substitute the placeholders, which are marked with <code>&lt;&gt;</code>, to suit your specific case. An example file is provided at <a href="https://github.com/seqscope/NovaScope/blob/main/info/slurm/v7.29.0/config.yaml">slurm/v7.29.0/config.yaml</a>. </p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>

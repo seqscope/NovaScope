@@ -1683,10 +1683,10 @@
 <p>For the <strong>main function</strong> of NovaScope, the mapping of each step to its specific rule is as follows:</p>
 <ol>
 <li>Generate spatial maps from the 1st sequencing data (Rules <code>a01_fastq2sbcd</code>, <code>a02_sbcd2chip</code>)</li>
-<li>Map the 2nd sequencing data with the spatial map from the 1st step (Rule <code>a03_smatch</code>)</li>
+<li>Map the 2nd sequencing data with the spatial map (Rule <code>a03_smatch</code>)</li>
 <li>Align the 2nd sequencing reads to the reference genome (Rule <code>a04_align</code>)</li>
 <li>Generate a spatial digital gene expression (SGE) matrix, indexed by transcripts, at submicron resolution (Rule <code>a05_dge2sdge</code>)</li>
-<li>Visualize the spatial expression of specific genes (Rule <code>b01_sdge_visual</code>)</li>
+<li>(Optional) Visualize the spatial expression of specific genes (Rule <code>b01_sdge_visual</code>)</li>
 </ol>
 <p>The rule graph illustrates the relationships between rules:</p>
 <figure>
@@ -1700,9 +1700,8 @@
 <li>Spatial map layout examination (Rule <code>b03_sbcd_layout</code>)</li>
 <li>SGE matrix filtering by gene type, gene name, UMI count, or UMI density (Rules <code>c03_sdgeAR_featurefilter</code> and <code>c03_sdge_polygonfilter</code>)</li>
 <li>SGE matrix reformatting from 10x Genomics format to a TSV format compatible with FICTURE (Rule <code>c02_sdgeAR_reformat</code>)</li>
-<li>SGE matrix segmentation from transcript-indexed SGE to hexagon-indexed SGE in 10x Genomics or FICTURE-compatible TSV format (Rules <code>c04_sdgeAR_segment_10x</code> and <code>c04_sdgeAR_segment_ficture</code>)</li>
+<li>SGE matrix segmentation from transcript-indexed to hexagon-indexed in 10x Genomics or FICTURE-compatible TSV format (Rules <code>c04_sdgeAR_segment_10x</code> and <code>c04_sdgeAR_segment_ficture</code>)</li>
 </ol>
-<p>The plus workflow, detailing both main and additional rules and their interdependencies, is depicted below.</p>
 <figure>
 <img alt="rulegraph" src="../../images/rulegraphs/rulegraph_plus.png" width="70%" />
 </figure>

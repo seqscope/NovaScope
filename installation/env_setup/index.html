@@ -1793,7 +1793,8 @@
 <p>Below is a brief description of all the items in the YAML file.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>To create your own <code>config_env.yaml</code> file for the environment setup, you may copy from <a href="https://github.com/seqscope/NovaScope/blob/main/info/config_env.yaml">our example available in our GitHub repository</a>. Remember to replace the placeholders with your specific input variables to customize it according to your needs.</p>
+<p>To create your own <code>config_env.yaml</code> file for the environment setup, you may copy from <a href="https://github.com/seqscope/NovaScope/blob/main/info/config_env.yaml">our example</a>. </p>
+<p>Please replace the placeholders with your specific input variables.</p>
 </div>
 <h2 id="tools">Tools<a class="headerlink" href="#tools" title="Permanent link">&para;</a></h2>
 <p>The pipeline detects and includes undefined tools in the system path automatically.</p>
@@ -1843,28 +1844,11 @@
 <p>The given example is designed for instances where <code>samtools</code> is integrated into the <code>Bioinformatics</code> module system, which necessitates loading the <code>Bioinformatics</code> module prior to loading <code>samtools</code>. In this case, provide all modules that required to be loaded in the correct order, joint by <code>&amp;&amp;</code>.</p>
 </details>
 <h2 id="reference-databases">Reference Databases<a class="headerlink" href="#reference-databases" title="Permanent link">&para;</a></h2>
-<p>Define all necessary reference databases for the input species in the <code>ref</code> field.</p>
-<h3 id="1-reference-genome-index-for-alignment">(1) Reference Genome Index for Alignment<a class="headerlink" href="#1-reference-genome-index-for-alignment" title="Permanent link">&para;</a></h3>
-<p>Specify the alignment reference genome index in the <code>align</code> field. Reference genome indices can be accessed via the <a href="https://www.10xgenomics.com/support/software/cell-ranger/downloads">cellranger download</a> page. Users can also generate their own reference genome index. Detailed instructions for building the STAR index are provided in the <a href="../requirement/">Requirements</a> section.</p>
-<h3 id="2-optional-reference-gene-list-files-for-spatial-expression-visualization">(2) (Optional) Reference Gene List Files for Spatial Expression Visualization<a class="headerlink" href="#2-optional-reference-gene-list-files-for-spatial-expression-visualization" title="Permanent link">&para;</a></h3>
-<div class="admonition info">
-<p class="admonition-title">Info</p>
-<p>By default, NovaScope requires reference gene list files to visualize the spatial expression for gene sets. If the reference files are not available, users could skip the visualization by set <code>action</code> in <code>draw_sge</code> as <code>False</code>.</p>
-</div>
-<p>The <code>genelists</code> field should point to the directory containing species-specific gene lists, which are crucial for visualizing spatial expression patterns in Rule <a href="../../fulldoc/rules/sdge_visual/">sdge_visual</a>. This directory must include files named <code>&lt;gene_group&gt;.genes.tsv</code> (e.g., <code>MT.genes.tsv</code>), with each file listing gene names line-by-line.</p>
-<p>NovaScope provides precompiled gene lists for <a href="https://github.com/seqscope/NovaScope/tree/main/info/genelists/mm39">mouse (version: mm39)</a> and <a href="https://github.com/seqscope/NovaScope/tree/main/info/genelists/hg38">human (version: hg38)</a>. If the <code>genelists</code> field is not specified in the <code>config_env.yaml</code>, NovaScope defaults to using these files. Alternatively, users may provide their own custom gene list files.</p>
-<h3 id="3-optional-reference-gene-information-for-gene-filtering">(3) (Optional) Reference Gene Information for Gene Filtering<a class="headerlink" href="#3-optional-reference-gene-information-for-gene-filtering" title="Permanent link">&para;</a></h3>
-<div class="admonition info">
-<p class="admonition-title">Info</p>
-<p>Gene information files are necessary only if additional functionalities of NovaScope are utilized.</p>
-</div>
-<p>The <code>geneinfo</code> field specifies the path of gene information files needed for gene filtering. </p>
-<p>By Default, NovaScope use the precompiled gene information files, including one for <a href="https://github.com/seqscope/NovaScope/blob/dev/info/geneinfo/Mus_musculus.GRCm39.107.names.tsv.gz">mouse (version: mm39)</a>, one for <a href="https://github.com/seqscope/NovaScope/blob/dev/info/geneinfo/Homo_sapiens.GRCh38.107.names.tsv.gz">human (version: hg38)</a>, and one for <a href="https://github.com/seqscope/NovaScope/blob/dev/info/geneinfo/Gallus_gallus.GRCg6a.106.names.tsv.gz">chick (version: g6a)</a>. I</p>
-<p>Only under the following conditions, users need to prepare and specify a gene information file in the <code>geneinfo</code> field: a. the input datasets are from species other than human or mouse; b. the version of the dataset is different from that of the precompiled files (human: hg38; mouse: mm39, chick: g6a).</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>Ensure that the reference files match the species of your input data.</p>
 </div>
+<p>Define all necessary reference databases for the input species in the <code>ref</code> field.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -1886,11 +1870,27 @@
 <span class="w">    </span><span class="nt">mouse</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/to/ref_gene_list_directory_for_mouse&quot;</span>
 <span class="w">    </span><span class="nt">human</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/to/ref_gene_list_directory_for_human&quot;</span>
 <span class="w">    </span><span class="c1">#...</span>
-<span class="w">  </span><span class="c1">#geneinfo:                                        ## (optional) no need to define the geneinfo if the users prefer to use the precompiled files from FICTURE</span>
+<span class="w">  </span><span class="c1">#geneinfo:                                        ## (optional) skip if the users prefer to use precompiled files</span>
 <span class="w">    </span><span class="c1">#mouse: &quot;/path/to/ref_gene_info_file_for_mouse&quot;</span>
 <span class="w">    </span><span class="c1">#human: &quot;/path/to/ref_gene_info_file_for_human&quot;</span>
 <span class="w">    </span><span class="c1">#...</span>
 </code></pre></div></td></tr></table></div>
+<h3 id="1-reference-genome-index-for-alignment">(1) Reference Genome Index for Alignment<a class="headerlink" href="#1-reference-genome-index-for-alignment" title="Permanent link">&para;</a></h3>
+<p>Specify the alignment reference genome index in the <code>align</code> field. Reference genome indices can be accessed via the <a href="https://www.10xgenomics.com/support/software/cell-ranger/downloads">cellranger download</a> page. Users may also generate their own genome index, with detailed instructions for building a STAR index provided in the <a href="../requirement/">Requirements</a> section.</p>
+<h3 id="2-optional-reference-gene-list-files-for-spatial-expression-visualization">(2) (Optional) Reference Gene List Files for Spatial Expression Visualization<a class="headerlink" href="#2-optional-reference-gene-list-files-for-spatial-expression-visualization" title="Permanent link">&para;</a></h3>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>By default, NovaScope requires reference gene list files for visualizing spatial expression patterns. If these files are unavailable, users can disable this feature by setting <code>action</code> in <code>draw_sge</code> to <code>False</code>.</p>
+</div>
+<p>The <code>genelists</code> field should specify the directory containing species-specific gene lists, which are essential for visualizing spatial expression in Rule <a href="../../fulldoc/rules/sdge_visual/">sdge_visual</a>. Each file in this directory must be named <code>&lt;gene_group&gt;.genes.tsv</code> (e.g., <code>MT.genes.tsv</code>) and list gene names line by line.</p>
+<p>NovaScope provides precompiled gene lists for <a href="https://github.com/seqscope/NovaScope/tree/main/info/genelists/mm39">mouse (mm39)</a> and <a href="https://github.com/seqscope/NovaScope/tree/main/info/genelists/hg38">human (hg38)</a>. If not specified, these defaults will be used. Users may also supply custom gene lists or disable the visualization of gene sets.</p>
+<h3 id="3-optional-reference-gene-information-for-gene-filtering">(3) (Optional) Reference Gene Information for Gene Filtering<a class="headerlink" href="#3-optional-reference-gene-information-for-gene-filtering" title="Permanent link">&para;</a></h3>
+<p>Gene information files are needed for if additional functionalities are utilized, specified in the <code>geneinfo</code> field for filtering. The <code>geneinfo</code> field should point to the gene information file used for gene filtering. By default, NovaScope uses precompiled files for: <a href="https://github.com/seqscope/NovaScope/blob/dev/info/geneinfo/Mus_musculus.GRCm39.107.names.tsv.gz">mouse (mm39)</a>, <a href="https://github.com/seqscope/NovaScope/blob/dev/info/geneinfo/Homo_sapiens.GRCh38.107.names.tsv.gz">human (hg38)</a>, and <a href="https://github.com/seqscope/NovaScope/blob/dev/info/geneinfo/Gallus_gallus.GRCg6a.106.names.tsv.gz">chick (g6a)</a></p>
+<p>Users need to specify a gene information file in the <code>geneinfo</code> field only if:</p>
+<ul>
+<li>The dataset is from a species other than human or mouse.</li>
+<li>The dataset version differs from the precompiled files.</li>
+</ul>
 <h2 id="python-environment">Python Environment<a class="headerlink" href="#python-environment" title="Permanent link">&para;</a></h2>
 <p>Specify the path of Python virtual environment by modifying the following line:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nt">pyenv</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/to/python/virtual/env&quot;</span>
@@ -1898,16 +1898,13 @@
 <h2 id="optional-computing-capabilities">(Optional) Computing Capabilities<a class="headerlink" href="#optional-computing-capabilities" title="Permanent link">&para;</a></h2>
 <div class="admonition info">
 <p class="admonition-title">Info</p>
-<p>Only applicable to HPC environments.</p>
+<p>Only applicable to HPC environments and when the <code>filesize</code> resource allocation method is applied.</p>
 </div>
-<p>NovaScope provides two methods for specifying resources for the alignment process:</p>
+<p>NovaScope offers two resource allocation methods for alignment:</p>
 <ul>
-<li><strong>Option <code>stdin</code></strong> allows users to define resources manually in the <a href="../../basic_usage/job_config/#a-template-of-the-config-file">job configuration file</a>.</li>
-<li><strong>Option <code>filesize</code></strong> allows NovaScope to automatically allocate resources based on the size of the input files and the available computational resources defined in this environment configuration file. <strong>ONLY</strong> when using Option <code>filesize</code> must users specify the computing resources available. </li>
-</ul>
-<p>For more information on activating Option <code>stdin</code> or <code>filesize</code> and the resource allocation strategy for Option <code>filesize</code>, visit the <a href="../../basic_usage/job_config/#upstream">Job Configuration</a> page.</p>
-<p>An example of how to configure these settings.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<li><strong><code>stdin</code></strong>: Manually define resources in the <a href="../../basic_usage/job_config/#a-template-of-the-config-file">job configuration file</a>.</li>
+<li><strong><code>filesize</code></strong>: Automatically allocate resources based on input file size and available computational resources, which must be specified in <code>available_nodes</code> when using this option (see an example below):
+    <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
 <span class="normal">4</span>
@@ -1920,7 +1917,9 @@
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">partition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">largemem</span>
 <span class="w">    </span><span class="nt">max_n_cpus</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
 <span class="w">    </span><span class="nt">mem_per_cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">25g</span>
-</code></pre></div></td></tr></table></div>
+</code></pre></div></td></tr></table></div></li>
+</ul>
+<p>For details on activating <code>stdin</code> or <code>filesize</code> and understanding the <code>filesize</code> strategy, see the <a href="../../basic_usage/job_config/#upstream">Job Configuration</a> page. </p>
 
 
 

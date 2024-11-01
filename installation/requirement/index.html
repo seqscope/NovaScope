@@ -1827,10 +1827,10 @@
 <p><a href="../../">NovaScope</a> has been tested for compatibility with <a href="https://snakemake.readthedocs.io/en/stable/">Snakemake</a> v7.29.0 and v8.6.0.</p>
 </div>
 <h3 id="checking-snakemake-installation">Checking Snakemake Installation<a class="headerlink" href="#checking-snakemake-installation" title="Permanent link">&para;</a></h3>
-<p>If you are unsure whether <a href="https://snakemake.readthedocs.io/en/stable/">Snakemake</a> is installed in your system, you can check by running the following command:</p>
+<p>If you are unsure if <a href="https://snakemake.readthedocs.io/en/stable/">Snakemake</a> is installed, run:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>snakemake<span class="w"> </span>--version
 </code></pre></div></td></tr></table></div>
-<p>On systems that support the <code>module</code> command, you can load the <code>snakemake</code> module using the following command:</p>
+<p>On systems that support the <code>module</code> command, you can load the <code>snakemake</code> module using:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
@@ -1842,7 +1842,7 @@ module<span class="w"> </span>avail<span class="w"> </span>snakemake
 module<span class="w"> </span>load<span class="w"> </span>snakemake
 </code></pre></div></td></tr></table></div>
 <h3 id="installing-snakemake-using-conda-and-mamba">Installing Snakemake Using Conda and Mamba<a class="headerlink" href="#installing-snakemake-using-conda-and-mamba" title="Permanent link">&para;</a></h3>
-<p>If you need to install <a href="https://snakemake.readthedocs.io/en/stable/">Snakemake</a>, below is a simplified sequence of instruction. Please refer to <a href="https://snakemake.readthedocs.io/en/stable/basic_usage/installation.html">official Snakemake documentation</a> for detailed instructions.</p>
+<p>To install <a href="https://snakemake.readthedocs.io/en/stable/">Snakemake</a>, follow the simplified steps below. For more details, refer to the <a href="https://snakemake.readthedocs.io/en/stable/basic_usage/installation.html">official Snakemake documentation</a>.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>It is recommended to install <a href="https://snakemake.readthedocs.io/en/stable/">Snakemake</a> using <a href="https://docs.conda.io/en/latest/">conda</a> and/or <a href="https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html">mamba</a>. </p>
@@ -1923,8 +1923,8 @@ snakemake<span class="w"> </span>--version
 <p class="admonition-title">Info</p>
 <p><a href="../../">NovaScope</a> has been tested for compatibility with <a href="https://www.python.org/">Python</a> v3.9.12, v3.10, and v3.12.2.</p>
 </div>
-<p>If you don't have Python installed on your system and you follow the above <a href="#installing-snakemake-using-conda-and-mamba">Snakemake installation instructions</a>, Python of the specified version should be installed during the process.</p>
-<p>To verify the installation or the version of Python on your system, run the following command:</p>
+<p>If you don't have Python installed and you follow the above <a href="#installing-snakemake-using-conda-and-mamba">Snakemake installation instructions</a>, Python of the specified version should be installed during the process.</p>
+<p>To verify the installation or the version, run:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>python<span class="w"> </span>--version
 </code></pre></div></td></tr></table></div>
 <h3 id="python-environment">Python Environment<a class="headerlink" href="#python-environment" title="Permanent link">&para;</a></h3>
@@ -1978,10 +1978,10 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 </ul>
 <p>We provide an <a href="https://github.com/seqscope/NovaScope/blob/main/installation/requirement_install_log.md">example work log</a> documenting the installation of the aforementioned software tools.</p>
 <h2 id="installing-novascope_1">Installing NovaScope<a class="headerlink" href="#installing-novascope_1" title="Permanent link">&para;</a></h2>
-<p>To install <a href="../../">NovaScope</a>, clone the repository from GitHub using the following command. Use <code>--recursive</code> to initializes and updates each submodule in NovaScope.</p>
+<p>To install <a href="../../">NovaScope</a>, clone the repository from GitHub with the following command, use <code>--recursive</code> to initialize and update all submodules.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>--recursive<span class="w"> </span>https://github.com/seqscope/NovaScope.git<span class="w"> </span>
 </code></pre></div></td></tr></table></div>
-<p>If you've already cloned NovaScope without its submodules (by forgetting to use the <code>--recursive</code> option), you can initialize and update the submodules afterwards with the following commands:</p>
+<p>If you've already cloned NovaScope without its submodules (by forgetting to use the <code>--recursive</code> option), initialize and update submodules by running:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nv">smk_dir</span><span class="o">=</span>/path/to/the/novascope/directory
