@@ -114,7 +114,7 @@ def process_config_for_runid(config_input, job_dir, main_dirs, df_seq2=None, sil
     run_id = config_input.get("run_id", None)
 
     if df_seq2 is None:
-        df_seq2 = read_config_for_seq2(config_input, {'seq2nd': False}, job_dir, main_dirs, silent=True)
+        df_seq2 = process_config_for_seq2(config_input, False, job_dir, main_dirs, silent=True)
     
     if run_id is None:
         # get run_id from seq2nd info
