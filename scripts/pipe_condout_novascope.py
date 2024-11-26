@@ -58,6 +58,27 @@ def outfn_align_per_run(main_dirs, df_run):
     }
     return outfn
 
+def outfn_sge_per_unit(main_dirs, df_run):
+    out_fn ={
+            'flag': 'sge-per-unit',
+            'root': main_dirs["analysis"],
+            'subfolders_patterns': [
+                                    (["{run_id}", "{unit_id}", "sgeAR", "barcodes.tsv.gz"], None),
+                                    (["{run_id}", "{unit_id}", "sgeAR", "features.tsv.gz"], None),
+                                    (["{run_id}", "{unit_id}", "sgeAR", "matrix.mtx.gz"], None),
+                                    (["{run_id}", "{unit_id}", "sgeAR", "{unit_id}.sge_match_sbcd.png"], None),
+                                    (["{run_id}", "{unit_id}", "sgeAR", "barcodes.minmax.tsv"], None),
+                                    (["{run_id}", "{unit_id}", "sgeAR", "sge_visual.flag"], None),
+                                    (["{run_id}", "{unit_id}", "major_axis.tsv"], None),
+
+            ],
+            'zip_args': {
+                'run_id':       df_run["run_id"].values,  
+                'unit_id':      df_run["unit_id"].values,
+            },
+    }
+    return out_fn
+
 def outfn_trans_per_unit(main_dirs, df_run):
     out_fn = {
             'flag': 'transcript-per-unit',
@@ -92,6 +113,7 @@ def outfnlist_by_run(main_dirs, df_run):
     outfn_sbcd_per_fc(main_dirs, df_run),
     outfn_sbcd_per_chip(main_dirs, df_run),
     outfn_align_per_run(main_dirs, df_run),
+    outfn_sge_per_unit(main_dirs, df_run),
     outfn_trans_per_unit(main_dirs, df_run),
     outfn_filterftr_per_unit(main_dirs, df_run)
     ]

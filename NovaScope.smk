@@ -28,7 +28,7 @@ from bricks import list_outputfn_by_request, create_symlinks_by_list
 
 from pipe_utils_novascope import read_config_for_ini, read_config_for_runid, read_config_for_unitid, read_config_for_segment, read_config_for_hist, read_config_for_seq1, read_config_for_seq2, read_config_for_sbcdlo, read_config_for_sgevisual
 from pipe_condout_novascope import outfn_sbcdlo_per_tilepair, outfn_smatch_per_chip, outfn_sge_per_run, outfn_hist_per_run, outfnlist_by_seg, outfnlist_by_run
-from pipe_preconfig_novascope import id2req, df_seg_void, df_hist_void, df_seq2_void
+from pipe_preconfig_novascope import id2req, df_seg_void
 from rule_general_novascope import assign_resource_for_align, get_envmodules_for_rule, get_skip_sbcd, find_major_axis
 
 # set up 
@@ -113,7 +113,7 @@ logging.info(f"3. Processing configuration by requests...")
 
 # per-flowcell (all requests)
 seq1_id = read_config_for_seq1(config, silent=mode_quite)
-sc2seq1 = {chip:seq1_id} 
+sc2seq1 = {chip:seq1_id}
 
 # per-chip: (smatch-per-chip, sbcd-per-chip (and above))
 df_seq2 = read_config_for_seq2(config, silent=mode_quite)
@@ -140,7 +140,7 @@ df_run = pd.DataFrame({
 df_sbcdlo= read_config_for_sbcdlo(df_run, config)
 
 # sge gene set visualization
-drawsge=config.get("upstream",{}).get("visualization",{}).get("drawsge",{}).get("action", True)
+drawsge = config.get("upstream",{}).get("visualization",{}).get("drawsge",{}).get("action", True)
 df_sge, sgevisual_id2params, rid2sgevisual_id = read_config_for_sgevisual(config, df_run, silent=mode_quite)
 
 # histology alignment
