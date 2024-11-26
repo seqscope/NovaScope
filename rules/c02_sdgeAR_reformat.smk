@@ -3,7 +3,7 @@ rule c02_sdgeAR_reformat:
         sdgeAR_bcd        = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "sgeAR", "barcodes.tsv.gz"),
         sdgeAR_ftr        = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "sgeAR", "features.tsv.gz"),
         sdgeAR_mtx        = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "sgeAR", "matrix.mtx.gz"),
-        sdgeAR_xyrange    = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "sgeAR", "barcodes.minmax.tsv"),
+        sdgeAR_axis       = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "major_axis.tsv"),
     output:
         ftr               = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.feature.tsv.gz"),
         transcript        = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.transcripts.tsv.gz"),
@@ -18,15 +18,16 @@ rule c02_sdgeAR_reformat:
         mem  = "14000MB",
         time = "20:00:00", 
     run:
+        major_axis = pd.read_csv(input.sdgeAR_axis, sep='\t', header=None).iloc[0, 0]
+
         # Determine the sort column based on the major_axis value
-        major_axis=find_major_axis(input.sdgeAR_xyrange, format="col")
         if major_axis == "Y":
             sort_column="-k4,4n"
             tabix_column="-b4 -e4"
         else:
             sort_column="-k3,3n"
             tabix_column="-b3 -e3"
-        
+
         shell(
         r"""
         {params.module_cmd}

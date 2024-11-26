@@ -168,6 +168,15 @@ if segmentviz:
     resilient = True
 logging.info(f" - Resilient: {resilient}")
 
+# - major axis
+major_axis = config.get("downstream", {}).get("major_axis", "auto")
+
+# take the major_axis from projeciton data if "auto"
+if major_axis == "auto":
+    sdgeAR_xyrange = os.path.join(main_dirs["analysis"], run_id, unit_id, "sgeAR", "barcodes.minmax.tsv")
+    assert os.path.exists(sdgeAR_xyrange), f"Cannot automatically find major axis when the xyrange file is missing ({sdgeAR_xyrange}). Provide the major axis via the job_config file or add the xyrange file."
+    major_axis = find_major_axis(sdgeAR_xyrange, format="col")
+
 #==============================================
 #
 # Rule all

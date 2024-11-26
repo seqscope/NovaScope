@@ -18,13 +18,13 @@ def get_nbcd_from_mtx(file_path):
 
 rule c04_sdgeAR_segment_10x_resilient:
     input:
-        sdgeAR_xyrange      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "sgeAR", "barcodes.minmax.tsv"),    # The reason for using sdgeAR_xyrange instead of xyrange_in to determine the main axis is that the transcript was sorted by the longer axis in sdgeAR_xyrange, and the longer axis may differ between sdgeAR_xyrange and xyrange_in.
         transcript_raw      = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.transcripts.tsv.gz") if wildcards.sge_qc=="raw" else [],  
         polygonfilter_log   = lambda wildcards: [] if wildcards.sge_qc=="raw" else os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.filtered.log"), 
-        xyrange_in          = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.coordinate_minmax.tsv")  if wildcards.sge_qc=="raw" else [],    # This file is not used but is required to make sure every transcript file has a corresponding xyrange_in file.
-        ftr_in              = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", ("{unit_id}.feature.tsv.gz"     if wildcards.sge_qc=="raw" else "{unit_id}.feature.clean.tsv.gz")),        
+        xyrange_in          = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.{sge_qc}.coordinate_minmax.tsv")  if wildcards.sge_qc=="raw" else [],    
+        ftr_in              = lambda wildcards: os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", ("{unit_id}.feature.tsv.gz"     if wildcards.sge_qc=="raw" else "{unit_id}.feature.clean.tsv.gz")), 
+        sdgeAR_axis         = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "major_axis.tsv"),
     output:
-        hexagon_log     = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.10x.d_{hexagon_width}.log")
+        hexagon_log         = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "segment", "{solo_feature}.{sge_qc}.d_{hexagon_width}", "{unit_id}.{solo_feature}.{sge_qc}.10x.d_{hexagon_width}.log")
     params:
         # basic params
         solo_feature        = "{solo_feature}",
@@ -42,14 +42,14 @@ rule c04_sdgeAR_segment_10x_resilient:
         mem  = "7000MB", 
         time = "6:00:00",
     run:
-        # major axis
-        major_axis=find_major_axis(input.sdgeAR_xyrange, format="col") 
         # dirs/files
         hexagon_dir = os.path.join(os.path.dirname(output.hexagon_log), "10x")
         os.makedirs(hexagon_dir, exist_ok=True)
         hexagon_bcd = os.path.join(hexagon_dir, "barcodes.tsv.gz")
         hexagon_ftr = os.path.join(hexagon_dir, "features.tsv.gz")
         hexagon_mtx = os.path.join(hexagon_dir, "matrix.mtx.gz")
+
+        major_axis = pd.read_csv(input.sdgeAR_axis, sep='\t', header=None).iloc[0, 0]
 
         # 1) If polygonfilter failed, skip the segmentation
         if params.sge_qc == "filtered":
@@ -70,7 +70,6 @@ rule c04_sdgeAR_segment_10x_resilient:
             boundary_args = ""
             transcript_in = input.transcript_raw
 
-        
         # 2) If the segmentation exists and the exist_action is "skip", skip the segmentation
         if params.exist_action == "skip" and os.path.exists(hexagon_bcd) and os.path.exists(hexagon_ftr) and os.path.exists(hexagon_mtx):
             print("Skip hexagon segmentation: The segmentation exists.")
@@ -80,9 +79,6 @@ rule c04_sdgeAR_segment_10x_resilient:
 
         # 3) Start the hexagon segmentation
         print("Start hexagon segmentation...")
-
-        major_axis = find_major_axis(input.sdgeAR_xyrange, format="col")
-
         try:
             shell(
             r"""

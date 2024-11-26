@@ -1,9 +1,9 @@
 rule c03_sdgeAR_polygonfilter:
     input:
-        sdgeAR_xyrange      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "sgeAR", "barcodes.minmax.tsv"),
         transcript          = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.transcripts.tsv.gz"),
         transcript_tbi      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.transcripts.tsv.gz.tbi"),
         ftr_clean           = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.feature.clean.tsv.gz"),
+        sdgeAR_axis         = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "major_axis.tsv"),
     output:
         transcript_qc       = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.transcripts.tsv.gz"),       # lenient 
         transcript_qc_tbi   = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "preprocess", "{unit_id}.{solo_feature}.filtered.transcripts.tsv.gz.tbi"),   # lenient
@@ -27,7 +27,8 @@ rule c03_sdgeAR_polygonfilter:
     run:
         qc_pref         = output.transcript_qc.replace(".transcripts.tsv.gz", ""),
 
-        major_axis=find_major_axis(input.sdgeAR_xyrange, format="col")
+        major_axis = pd.read_csv(input.sdgeAR_axis, sep='\t', header=None).iloc[0, 0]
+
         shell(
         r"""
         {params.module_cmd}

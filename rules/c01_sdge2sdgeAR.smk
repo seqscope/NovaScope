@@ -12,6 +12,7 @@ rule c01_sdge2sdgeAR:
         sdgeAR_mtx      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "sgeAR", "matrix.mtx.gz"),
         sdgeAR_3in1_png = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "sgeAR", "{unit_id}"+".sge_match_sbcd.png"),
         sdgeAR_xyrange  = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "sgeAR", "barcodes.minmax.tsv"),
+        sdgeAR_axis     = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "major_axis.tsv"),
         #sdgeAR_rgbflag  = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "sgeAR", "sge_visual.flag")
     params:
         run_id          = run_id,
@@ -27,6 +28,11 @@ rule c01_sdge2sdgeAR:
         sdgeAR_dir = os.path.dirname(output.sdgeAR_bcd)
         sdge_rgbdir     = os.path.join(sdge_dir, f"{params.run_id}.sge_visual")
         #sdgeAR_rgbdir   = os.path.join(sdgeAR_dir, f"{params.unit_id}.sge_visual")
+
+        major_axis = find_major_axis(input.sdge_xyrange, format="col")
+        # write the major axis to the output file
+        with open(output.sdgeAR_axis, "w") as f:
+            f.write(major_axis)
 
         if unit_ann == "default":
             os.makedirs(sdgeAR_dir, exist_ok=True)
