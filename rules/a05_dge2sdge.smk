@@ -37,6 +37,7 @@ rule a05_dge2sdge:
         df_mnfst=pd.read_csv(input.nbcd_mnfst, sep="\t")
         df_minmax=df_mnfst[["xmin", "xmax", "ymin", "ymax"]]
         df_minmax.to_csv(output.sdge_xyrange, sep="\t", index=False)
+        
         shell(
         r"""
         set -euo pipefail

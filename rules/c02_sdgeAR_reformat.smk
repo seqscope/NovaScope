@@ -19,7 +19,6 @@ rule c02_sdgeAR_reformat:
         time = "20:00:00", 
     run:
         major_axis = pd.read_csv(input.sdgeAR_axis, sep='\t', header=None).iloc[0, 0]
-
         # Determine the sort column based on the major_axis value
         if major_axis == "Y":
             sort_column="-k4,4n"
@@ -33,14 +32,14 @@ rule c02_sdgeAR_reformat:
         {params.module_cmd}
 
         # Prepare the feature file
-        zcat {input.sdgeAR_ftr} | cut -f 1,2,4 | sed 's/,/\t/g' | sed '1 s/^/gene_id\tgene\tgn\tgt\tspl\tunspl\tambig\n/' | gzip -c > {output.ftr}
+        gzip -dc {input.sdgeAR_ftr} | cut -f 1,2,4 | sed 's/,/\t/g' | sed '1 s/^/gene_id\tgene\tgn\tgt\tspl\tunspl\tambig\n/' | gzip -c > {output.ftr}
 
         # Merge the feature, barcode, and matrix files
         awk 'BEGIN{{FS=OFS="\t"}} NR==FNR{{ft[$3]=$1 FS $2 ;next}} ($1 in ft) {{print $2 FS $3 FS $4 FS $5 FS ft[$1] FS $6 FS $7 FS $8 FS $9 FS $10 }}' \
-            <(zcat {input.sdgeAR_ftr}) \
+            <(gzip -dc {input.sdgeAR_ftr}) \
             <(join -t $'\t' -1 1 -2 2 -o '2.1,1.2,1.3,1.4,1.5,2.3,2.4,2.5,2.6,2.7' \
-                <(zcat {input.sdgeAR_bcd}   | cut -f 2,4-8) \
-                <(zcat {input.sdgeAR_mtx}     | tail -n +4 | sed 's/ /\t/g' )) | \
+                <(gzip -dc {input.sdgeAR_bcd}   | cut -f 2,4-8) \
+                <(gzip -dc {input.sdgeAR_mtx}     | tail -n +4 | sed 's/ /\t/g' )) | \
             sed -E 's/\t[[:alnum:]]+_/\t/' | \
             sort -S 10G -k1,1n {sort_column}| \
             sed '1 s/^/#lane\ttile\tX\tY\tgene_id\tgene\tgn\tgt\tspl\tunspl\tambig\n/' | \

@@ -27,8 +27,13 @@ rule c03_sdgeAR_polygonfilter:
     run:
         qc_pref         = output.transcript_qc.replace(".transcripts.tsv.gz", ""),
 
+        # major_axis to determine the tabix column
         major_axis = pd.read_csv(input.sdgeAR_axis, sep='\t', header=None).iloc[0, 0]
-
+        if major_axis == "Y":
+            tabix_column="-b4 -e4"
+        else:
+            tabix_column="-b3 -e3"
+        
         shell(
         r"""
         {params.module_cmd}
@@ -46,14 +51,7 @@ rule c03_sdgeAR_polygonfilter:
                 --hex_n_move {params.hex_n_move} \
                 --remove_small_polygons {params.polygon_min_size} 
 
-        # Determine the sort column based on the major_axis value
-        if [ {major_axis} == "Y" ]; then
-            tabix_column="-b4 -e4"
-        else
-            tabix_column="-b3 -e3"
-        fi
-
-        zcat {output.transcript_qc} | bgzip -c > {output.transcript_qc}.tmp.gz
+        gzip -dc {output.transcript_qc} | bgzip -c > {output.transcript_qc}.tmp.gz
         mv {output.transcript_qc}.tmp.gz {output.transcript_qc}
         tabix -0 -f -s1 $tabix_column {output.transcript_qc}
         

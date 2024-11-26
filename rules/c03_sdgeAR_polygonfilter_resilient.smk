@@ -24,7 +24,12 @@ rule c03_sdgeAR_polygonfilter_resilient:
         qc_pref         = output.polygonfilter_log.replace(".log", "")
         transcript_qc   = f"{qc_pref}.transcripts.tsv.gz"
 
+        # major_axis to determine the tabix column
         major_axis = pd.read_csv(input.sdgeAR_axis, sep='\t', header=None).iloc[0, 0]
+        if major_axis == "Y":
+            tabix_column="-b4 -e4"
+        else:
+            tabix_column="-b3 -e3"
 
         # Attempt 
         try:
@@ -45,14 +50,7 @@ rule c03_sdgeAR_polygonfilter_resilient:
                     --hex_n_move {params.hex_n_move} \
                     --remove_small_polygons {params.polygon_min_size} 
 
-            # Determine the sort column based on the major_axis value
-            if [ {major_axis} == "Y" ]; then
-                tabix_column="-b4 -e4"
-            else
-                tabix_column="-b3 -e3"
-            fi
-
-            zcat {transcript_qc} | bgzip -c > {transcript_qc}.tmp.gz
+            gzip -dc {transcript_qc} | bgzip -c > {transcript_qc}.tmp.gz
             mv {transcript_qc}.tmp.gz {transcript_qc}
             tabix -0 -f -s1 $tabix_column {transcript_qc}
             """
