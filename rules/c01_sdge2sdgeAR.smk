@@ -12,7 +12,7 @@ rule c01_sdge2sdgeAR:
         sdgeAR_mtx      = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "sgeAR", "matrix.mtx.gz"),
         sdgeAR_3in1_png = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "sgeAR", "{unit_id}"+".sge_match_sbcd.png"),
         sdgeAR_xyrange  = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "sgeAR", "barcodes.minmax.tsv"),
-        sdgeAR_rgbflag  = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "sgeAR", "sge_visual.flag")
+        sdgeAR_rgbflag  = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "sgeAR", "sge_visual.flag"),
         sdgeAR_axis     = os.path.join(main_dirs["analysis"], "{run_id}", "{unit_id}", "major_axis.tsv"),
     params:
         run_id          = run_id,
