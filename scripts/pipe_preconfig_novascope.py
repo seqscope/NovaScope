@@ -4,12 +4,15 @@ uid_req = ["transcript-per-unit", "filterftr-per-unit", "filterpoly-per-unit", "
 rid_req = ["align-per-run", "sge-per-run", "histology-per-run"] + uid_req
 seq2id_req = ["sbcd-per-chip", "smatch-per-chip"] + rid_req
 sgevisual_req = ["sge-per-run", "histology-per-run"] + uid_req
+seg_req = ["filterpoly-per-unit", "segment-10x-per-unit", "segment-ficture-per-unit"]
 
 id2req={
-    "unit_id": uid_req,
-    "run_id": rid_req,
+    # seq1_id: all
     "seq2_id": seq2id_req,
-    "sgevisual_id": sgevisual_req
+    "run_id": rid_req,
+    "sgevisual_id": sgevisual_req,
+    "unit_id": uid_req,
+    "seg_id": seg_req,
 }
 
 df_hist_void = pd.DataFrame({

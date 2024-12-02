@@ -98,8 +98,8 @@ def process_config_for_seq2(config_input, arch_fq, job_dir, main_dirs, silent=Fa
             create_symlink(row["seq2_fqr2_raw"], row["seq2_fqr2_std"], silent=True)
     return df_seq2
 
-def read_config_for_seq2(config, silent=False):
-    if set(id2req["seq2_id"]).intersection(set(config["request"])):
+def read_config_for_seq2(cond, config, silent=False):
+    if cond:
         config_input = config.get("input", {})
         arch_fq_seq2 = config.get('upstream', {}).get('stdfastq', {}).get('seq2nd', True)
         main_dirs=config.get("paths", {}).get("output", {})
@@ -131,8 +131,8 @@ def process_config_for_runid(config_input, job_dir, main_dirs, df_seq2=None, sil
     log_info(f" - Run ID: {run_id}", silent)
     return run_id, rid2seq2
 
-def read_config_for_runid(config, df_seq2=None, silent=False):
-    if set(id2req["run_id"]).intersection(set(config["request"])):   
+def read_config_for_runid(cond, config, df_seq2=None, silent=False):
+    if cond:   
         config_input = config.get("input", {})
         main_dirs=config.get("paths", {}).get("output", {})
         job_dir=config.get("paths", {}).get("job_dir", None)
@@ -163,8 +163,8 @@ def process_config_for_unitid(config_input, job_dir, run_id, silent=False):
     log_info(f" - Boundary: {boundary}", silent)
     return unit_id, unit_ann, boundary
 
-def read_config_for_unitid(config, silent=False):
-    if set(id2req["unit_id"]).intersection(set(config["request"])):
+def read_config_for_unitid(cond, config, silent=False):
+    if cond:
         job_dir=config.get("paths", {}).get("job_dir", None)
         config_input = config.get("input", {})
         run_id = config_input.get("run_id", None)
@@ -193,8 +193,8 @@ def validate_and_determine_layer(tile_1, tile_2):
     else:
         raise ValueError(f"Invalid first digit '{tile_1[0]}' in tile_1 '{tile_1}'.")
 
-def read_config_for_sbcdlo(df_run, config,silent =False):
-    if "sbcdlo-per-flowcell" in config["request"]:
+def read_config_for_sbcdlo(cond, config, df_run,silent =False):
+    if cond:
         log_info(f" - SBCD examination: ", silent)
         tilelist = config.get("upstream", {}).get("sbcd_layout", {}).get('tiles', ["1644,1544", "2644,2544"])
         log_info(f"   - Input tiles: {tilelist}", silent)
@@ -273,10 +273,9 @@ def define_refgenelist_by_sp(config):
     assert refgl_dir is not None, f"Provide a valid gene list directory for species {species} or deactivate spatial expression visualization by setting `action` in `draw_sge` as `False`."
     return refgl_dir
 
-def read_config_for_sgevisual(config, df_run, silent=False):
+def read_config_for_sgevisual(cond, config, df_run, silent=False):
     df_run=df_run[['flowcell', 'chip', 'run_id']]
-    drawsge=config.get("upstream",{}).get("visualization",{}).get("drawsge",{}).get("action", True)
-    if drawsge and set(id2req["sgevisual_id"]).intersection(set(config["request"])) :
+    if cond:
         log_info(f" - SGE visualization: ", silent)
         refgl_dir = define_refgenelist_by_sp(config)
         run_id = config.get("input",{}).get("run_id", None)
@@ -342,14 +341,30 @@ def define_segchar_df(info, run_id, unit_id, format):
     df_char = df_char.drop(columns=["quality_control"])
     return df_char
 
-def read_config_for_segment(config, run_id, unit_id, format, silent=False):
+def process_config_for_segment(config, run_id, unit_id, format, silent=False):
     seg_info = config.get("downstream", {}).get("segment",{}).get(format, {}).get("char", None)
     df_segchar = define_segchar_df(seg_info, run_id, unit_id, format)
     df_segchar["sge_format"]=format
     df_segchar = df_segchar[["run_id", "unit_id", "solo_feature", "sge_qc", "sge_format", "hexagon_width"]].drop_duplicates()
     if not silent:
-        log_dataframe(df_segchar, log_message=f"   - Segmentation parameters (format: {format}): ", indentation="     ")
+        log_dataframe(df_segchar, log_message=f"     - Segmentation parameters (format: {format}): ", indentation="     ")
     return df_segchar
+
+def read_config_for_segment(cond, config, silent=False):
+    if cond:
+        logging.info(f" - Downstream segmentation:")
+        mu_scale = config.get("downstream", {}).get("mu_scale", 1000)
+        logging.info(f"     - mu_scale: {mu_scale}")
+    else:
+        logging.info(f" - Downstream segmentation: Skipping")
+
+    run_id = config.get("input", {}).get("run_id", None)
+    unit_id = config.get("input", {}).get("unit_id", None)
+    df_seg10x = process_config_for_segment(config, run_id, unit_id, "10x", silent=silent)      if any(task in config["request"] for task in ["filterpoly-per-unit", "segment-10x-per-unit"]) else df_seg_void
+    df_segfict = process_config_for_segment(config, run_id, unit_id, "ficture", silent=silent) if any(task in config["request"] for task in ["filterpoly-per-unit", "segment-ficture-per-unit"]) else df_seg_void
+    df_seg = pd.concat([df_seg10x, df_segfict], ignore_index=True).drop_duplicates().reset_index(drop=True)
+    return df_seg
+
 
 #================================================================================================
 # Histology
@@ -378,8 +393,8 @@ def process_config_for_hist(df_hist, job_dir, main_dirs, silent=False):
     df_hist = df_hist[["flowcell", "chip", "run_id", "hist_std_prefix", "figtype", "magnification"]]
     return df_hist
 
-def read_config_for_hist(config, df_run, silent=False):
-    if "histology-per-run" in config["request"]:
+def read_config_for_hist(cond, config, df_run, silent=False):
+    if cond:
         main_dirs=config.get("paths", {}).get("output", {})
         job_dir=config.get("paths", {}).get("job_dir", None)
         hist_info = config.get("input", {}).get("histology", None)

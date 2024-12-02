@@ -90,8 +90,8 @@ request = check_request(input_request=config.get("request", ["sge-per-run"]),
                                         "align-per-run", "sge-per-run", "histology-per-run", 
                                         "transcript-per-unit", "filterftr-per-unit", "filterpoly-per-unit", 
                                         "segment-10x-per-unit", "segment-ficture-per-unit", "segment-per-unit", 
-                                        "segment-viz-per-unit"])
-
+                                        "segment-viz-per-unit", "sge-per-unit" #additional request options
+                                        ])
 
 if  "segment-per-unit" in request:
     request = request + ["segment-10x-per-unit", "segment-ficture-per-unit"]
@@ -100,7 +100,7 @@ logging.info(f" - Valid Request(s): {request}")
 
 # update config
 config["paths"]["output"] = main_dirs
-config["request"] = request
+request = request
 
 #==============================================
 #
@@ -116,15 +116,18 @@ seq1_id = read_config_for_seq1(config, silent=mode_quite)
 sc2seq1 = {chip:seq1_id}
 
 # per-chip: (smatch-per-chip, sbcd-per-chip (and above))
-df_seq2 = read_config_for_seq2(config, silent=mode_quite)
+df_seq2 = read_config_for_seq2(set(id2req["seq2_id"]).intersection(set(request)), 
+                                config, silent=mode_quite)
 
 # per-unit or per-run:
 # - run-id: to distinguish different sets of seq2.
 # - unit ID: to distinguish the "default" sge and the sge with boundary filtering.
-run_id, rid2seq2 = read_config_for_runid(config, df_seq2, silent=mode_quite)
+run_id, rid2seq2 = read_config_for_runid(set(id2req["run_id"]).intersection(set(request)), 
+                                         config, df_seq2, silent=mode_quite)
 config["input"]["run_id"] = run_id
 
-unit_id, unit_ann, boundary = read_config_for_unitid(config, silent=mode_quite)
+unit_id, unit_ann, boundary = read_config_for_unitid(set(id2req["unit_id"]).intersection(set(request)), 
+                                                    config, silent=mode_quite)
 config["input"]["unit_id"] = unit_id
 
 df_run = pd.DataFrame({
@@ -137,26 +140,19 @@ df_run = pd.DataFrame({
 })
 
 # sbcd layout
-df_sbcdlo= read_config_for_sbcdlo(df_run, config)
+df_sbcdlo= read_config_for_sbcdlo("sbcdlo-per-flowcell" in request, config, df_run, silent=mode_quite)
 
 # sge gene set visualization
 drawsge = config.get("upstream",{}).get("visualization",{}).get("drawsge",{}).get("action", True)
-df_sge, sgevisual_id2params, rid2sgevisual_id = read_config_for_sgevisual(config, df_run, silent=mode_quite)
+df_sge, sgevisual_id2params, rid2sgevisual_id = read_config_for_sgevisual(drawsge and set(id2req["sgevisual_id"]).intersection(set(request)),
+                                                                        config,  df_run, silent=mode_quite)
 
 # histology alignment
-df_hist = read_config_for_hist(config, df_run, silent=mode_quite)
+df_hist = read_config_for_hist("histology-per-run" in request, config, df_run, silent=mode_quite)
 
 # downstream
-if any(task in request for task in["filterpoly-per-unit", "segment-10x-per-unit", "segment-ficture-per-unit"]):
-    logging.info(f" - Downstream segmentation:")
-    mu_scale = config.get("downstream", {}).get("mu_scale", 1000)
-    logging.info(f"     - mu_scale: {mu_scale}")
-else:
-    logging.info(f" - Downstream segmentation: Skipping")
-
-df_seg10x = read_config_for_segment(config, run_id, unit_id, "10x", silent=mode_quite)      if any(task in request for task in ["filterpoly-per-unit", "segment-10x-per-unit"]) else df_seg_void
-df_segfict = read_config_for_segment(config, run_id, unit_id, "ficture", silent=mode_quite) if any(task in request for task in ["filterpoly-per-unit", "segment-ficture-per-unit"]) else df_seg_void
-df_seg = pd.concat([df_seg10x, df_segfict], ignore_index=True).drop_duplicates().reset_index(drop=True)
+df_seg = read_config_for_segment(set(id2req["seg_id"]).intersection(set(request)), 
+                                config, silent=mode_quite)
 
 # - segmentviz or not (default: NOT)
 segmentviz = config.get("downstream", {}).get("segmentviz", None)
