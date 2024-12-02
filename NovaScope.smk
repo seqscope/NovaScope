@@ -153,6 +153,8 @@ df_hist = read_config_for_hist("histology-per-run" in request, config, df_run, s
 # downstream
 df_seg = read_config_for_segment(set(id2req["seg_id"]).intersection(set(request)), 
                                 config, silent=mode_quite)
+                                
+mu_scale = config.get("downstream", {}).get("mu_scale", 1000)
 
 # - segmentviz or not (default: NOT)
 segmentviz = config.get("downstream", {}).get("segmentviz", None)
