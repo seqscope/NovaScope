@@ -29,10 +29,10 @@ df_seg_void = pd.DataFrame({
         'run_id': pd.Series(dtype='object'),
         'unit_id': pd.Series(dtype='object'),
         'solo_feature': pd.Series(dtype='object'),
-        'hexagon_width': pd.Series(dtype='int64'), 
-        'sge_qc': pd.Series(dtype='object') 
+        'sge_qc': pd.Series(dtype='object'),
+        'sge_format': pd.Series(dtype='object'),
+        'hexagon_width': pd.Series(dtype='int64')
     })
-
 
 df_seq2_void = pd.DataFrame({
     'id': pd.Series(dtype='object'),
