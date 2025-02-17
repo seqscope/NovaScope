@@ -7,9 +7,10 @@ def align_get_exist_action(config):
         return " --overwrite-existing "
 
 def align_get_ref_idx(config, species):
-    sp2alignref = config.get("env",{}).get("ref", {}).get("align", None)
+    sp2alignref = config.get("env",{}).get("ref", {}).get("align", {})
+    assert sp2alignref, "Missing alignment reference information. Please specify <species>:<path_to_alignment_reference> pairs in the align field under the ref section of the environment configuration file."
     refidx = sp2alignref[species]
-    assert refidx is not None, "The alignment reference file is not provided. Check your environment configuration file."
+    assert refidx is not None, f"The alignment reference file for species {species} is not provided. Check your environment configuration file."
     assert os.path.exists(refidx), f"The alignment reference file for {species} does not exist: {refidx}. Check your environment configuration file."
     return refidx
 
