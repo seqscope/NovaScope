@@ -6,6 +6,8 @@ For a detailed tutorial, please visit [NovaScope Tutorial](https://seqscope.gith
 
 You can find the protocol paper at [DOI : 10.1038/s41596-024-01065-0](https://www.nature.com/articles/s41596-024-01065-0).
 
+The DOI for this repository is created via Zenodo at [DOI:10.5281/zenodo.18292675](https://doi.org/10.5281/zenodo.18292675)
+
 ## Installation
 
 To install and set up NovaScope, please follow these steps:
